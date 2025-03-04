@@ -7,6 +7,32 @@ function App() {
   const [cityInfo, setCityInfo] = useState<any>(null);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [votesData, setVotesData] = useState<Record<string, Record<string, [number, number][]>>>({});
+
+  const fetchVotes = async () => {
+    try {
+      const response = await fetch(VOTE_HOST, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          action: 'getVotes',
+          token
+        })
+      });
+
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to fetch votes');
+      }
+
+      setVotesData(data.votes);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to fetch votes');
+    }
+  };
 
   const handleSubmit = async () => {
     setError('');
@@ -31,6 +57,7 @@ function App() {
       }
 
       setCityInfo(data.city);
+      await fetchVotes();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to authenticate');
       setCityInfo(null);
@@ -98,13 +125,50 @@ function App() {
         >
           <Typography variant="h4">Welcome, {cityInfo.name}!</Typography>
           <Typography>Population: {cityInfo.population}</Typography>
-          {/* Add more city information display here */}
+          
+          {/* Votes Display */}
+          <Typography variant="h5" sx={{ mt: 4 }}>Voting History</Typography>
+          {Object.keys(votesData).length > 0 ? (
+            Object.entries(votesData).map(([pollId, citiesVotes]) => (
+              <Box 
+                key={pollId} 
+                sx={{ 
+                  width: '100%',
+                  maxWidth: 600,
+                  bgcolor: 'background.paper',
+                  p: 2,
+                  borderRadius: 1,
+                  boxShadow: 1,
+                  mb: 2
+                }}
+              >
+                <Typography variant="h6">Poll ID: {pollId}</Typography>
+                {Object.entries(citiesVotes).map(([cityId, votes]) => (
+                  <Box key={cityId} sx={{ mt: 2 }}>
+                    <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
+                      City: {cityId}
+                    </Typography>
+                    {votes.map(([timestamp, option], index) => (
+                      <Typography key={index} sx={{ ml: 2 }}>
+                        {new Date(timestamp).toLocaleString()}: Voted {option === 1 ? 'Yes' : 'No'}
+                      </Typography>
+                    ))}
+                  </Box>
+                ))}
+              </Box>
+            ))
+          ) : (
+            <Typography color="text.secondary">No voting history available</Typography>
+          )}
+
           <Button 
             variant="outlined" 
             onClick={() => {
               setCityInfo(null);
               setToken('');
+              setVotesData({});
             }}
+            sx={{ mt: 2 }}
           >
             Logout
           </Button>
