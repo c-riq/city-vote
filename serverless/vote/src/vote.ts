@@ -99,21 +99,38 @@ async function releaseLock(sessionId: string): Promise<void> {
 }
 
 export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-    const sessionId = Buffer.from(crypto.getRandomValues(new Uint8Array(16))).toString('base64');
-    let lockAcquired = false;
-    
     try {
         if (!event.body) {
-            throw new Error('Missing request body');
+            return {
+                statusCode: 400,
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    message: 'Missing request body'
+                })
+            };
         }
 
-        const { pollId, cityId, option, token } = JSON.parse(event.body);
+        const { action, cityId, token, pollId, option } = JSON.parse(event.body);
         
-        if (!pollId || !cityId || option === undefined || !token) {
-            throw new Error('Missing required parameters');
+        if (!action || !token) {
+            return {
+                statusCode: 400,
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    message: `Missing required parameters: ${[
+                        !action && 'action',
+                        !token && 'token'
+                    ].filter(Boolean).join(', ')}`
+                })
+            };
         }
 
-        // Validate city token
+        // Get auth data
+        let resolvedCityId: string;
         try {
             const authData = await s3Client.send(new GetObjectCommand({
                 Bucket: BUCKET_NAME,
@@ -121,13 +138,22 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
             }));
             
             if (!authData.Body) {
-                throw new Error('Auth file not found');
+                return {
+                    statusCode: 500,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: 'Authentication system unavailable'
+                    })
+                };
             }
 
             const authString = await streamToString(authData.Body as Readable);
             const auth: Record<string, string> = JSON.parse(authString);
 
-            if (auth[cityId] !== token) {
+            resolvedCityId = auth[token];
+            if (!resolvedCityId) {
                 return {
                     statusCode: 403,
                     headers: {
@@ -138,85 +164,178 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
                     })
                 };
             }
+
+            // For vote action, verify provided cityId matches token
+            if (action === 'vote' && cityId && cityId !== resolvedCityId) {
+                return {
+                    statusCode: 403,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: 'Token does not match the specified city'
+                    })
+                };
+            }
         } catch (error) {
             console.error('Error validating token:', error);
-            throw new Error('Authentication failed');
-        }
-
-        // Acquire lock
-        lockAcquired = await acquireLock(sessionId);
-        if (!lockAcquired) {
             return {
-                statusCode: 429,
+                statusCode: 500,
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    message: 'Failed to acquire lock, please try again'
+                    message: 'Authentication system error',
+                    details: error instanceof Error ? error.message : 'Unknown error'
                 })
             };
         }
 
-        // Get existing votes or create new structure
-        let votes: Record<string, Record<string, [number, number][]>> = {};
-        try {
-            const existingData = await s3Client.send(new GetObjectCommand({
+        // Handle different actions
+        if (action === 'validateToken') {
+            // Get city information using resolved cityId
+            const cityData = await s3Client.send(new GetObjectCommand({
                 Bucket: BUCKET_NAME,
-                Key: VOTES_KEY
+                Key: 'cities/cities.json'
             }));
-            
-            if (existingData.Body) {
-                const dataString = await streamToString(existingData.Body as Readable);
-                votes = JSON.parse(dataString);
+
+            if (!cityData.Body) {
+                throw new Error('City data not found');
             }
-        } catch (error: any) {
-            if (error.name !== 'NoSuchKey') {
-                throw error;
+
+            const citiesString = await streamToString(cityData.Body as Readable);
+            const cities: Record<string, any> = JSON.parse(citiesString);
+
+            if (!cities[resolvedCityId]) {
+                return {
+                    statusCode: 404,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: 'City not found'
+                    })
+                };
             }
+
+            return {
+                statusCode: 200,
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    city: cities[resolvedCityId],
+                    cityId: resolvedCityId
+                })
+            };
+        } else if (action === 'vote') {
+            if (!pollId || option === undefined) {
+                return {
+                    statusCode: 400,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: `Missing required parameters for voting: ${[
+                            !pollId && 'pollId',
+                            option === undefined && 'option'
+                        ].filter(Boolean).join(', ')}`
+                    })
+                };
+            }
+
+            const sessionId = Buffer.from(crypto.getRandomValues(new Uint8Array(16))).toString('base64');
+            let lockAcquired = false;
+
+            // Acquire lock
+            lockAcquired = await acquireLock(sessionId);
+            if (!lockAcquired) {
+                return {
+                    statusCode: 429,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: 'Failed to acquire lock, please try again'
+                    })
+                };
+            }
+
+            try {
+                // Get existing votes or create new structure
+                let votes: Record<string, Record<string, [number, number][]>> = {};
+                try {
+                    const existingData = await s3Client.send(new GetObjectCommand({
+                        Bucket: BUCKET_NAME,
+                        Key: VOTES_KEY
+                    }));
+                    
+                    if (existingData.Body) {
+                        const dataString = await streamToString(existingData.Body as Readable);
+                        votes = JSON.parse(dataString);
+                    }
+                } catch (error: any) {
+                    if (error.name !== 'NoSuchKey') {
+                        throw error;
+                    }
+                }
+
+                // Initialize poll and city if they don't exist
+                if (!votes[pollId]) {
+                    votes[pollId] = {};
+                }
+                if (!votes[pollId][resolvedCityId]) {
+                    votes[pollId][resolvedCityId] = [];
+                }
+
+                // Add new vote with timestamp
+                votes[pollId][resolvedCityId].push([Date.now(), option]);
+
+                // Save updated votes back to S3
+                await s3Client.send(new PutObjectCommand({
+                    Bucket: BUCKET_NAME,
+                    Key: VOTES_KEY,
+                    Body: JSON.stringify(votes),
+                    ContentType: 'application/json'
+                }));
+
+                await releaseLock(sessionId);
+
+                return {
+                    statusCode: 200,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: 'Vote recorded successfully'
+                    })
+                };
+            } finally {
+                if (lockAcquired) {
+                    await releaseLock(sessionId);
+                }
+            }
+        } else {
+            return {
+                statusCode: 400,
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    message: `Invalid action: ${action}. Supported actions are 'validateToken' and 'vote'`
+                })
+            };
         }
-
-        // Initialize poll and city if they don't exist
-        if (!votes[pollId]) {
-            votes[pollId] = {};
-        }
-        if (!votes[pollId][cityId]) {
-            votes[pollId][cityId] = [];
-        }
-
-        // Add new vote with timestamp
-        votes[pollId][cityId].push([Date.now(), option]);
-
-        // Save updated votes back to S3
-        await s3Client.send(new PutObjectCommand({
-            Bucket: BUCKET_NAME,
-            Key: VOTES_KEY,
-            Body: JSON.stringify(votes),
-            ContentType: 'application/json'
-        }));
-
-        await releaseLock(sessionId);
-
-        return {
-            statusCode: 200,
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                message: 'Vote recorded successfully'
-            })
-        };
     } catch (error) {
         console.error('Error:', error);
-        if (lockAcquired) {
-            await releaseLock(sessionId);
-        }
         return {
             statusCode: 500,
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                message: 'Internal server error'
+                message: 'Internal server error',
+                details: error instanceof Error ? error.message : 'Unknown error'
             })
         };
     }

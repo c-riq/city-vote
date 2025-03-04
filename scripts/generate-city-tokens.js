@@ -5,7 +5,7 @@ const crypto = require('crypto');
 const cityData = JSON.parse(fs.readFileSync('./data/cities/cities.json', 'utf8'));
 
 // Generate tokens for each city
-const tokenMap = {};
+const invertedTokenMap = {};
 const ONE_YEAR_IN_SECONDS = 365 * 24 * 60 * 60;
 const expiryTime = Math.floor(Date.now() / 1000) + ONE_YEAR_IN_SECONDS;
 
@@ -18,14 +18,15 @@ Object.keys(cityData).forEach(cityId => {
         .replace(/=/g, '');
     
     // Append expiry timestamp to token
-    tokenMap[cityId] = `${token}_${expiryTime}`;
+    const fullToken = `${token}_${expiryTime}`;
+    invertedTokenMap[fullToken] = cityId;
 });
 
-// Write the token map to a new JSON file
+// Write inverted map to JSON file
 fs.writeFileSync(
     './data/auth/auth.json',
-    JSON.stringify(tokenMap, null, 2),
+    JSON.stringify(invertedTokenMap, null, 2),
     'utf8'
 );
 
-console.log('Generated tokens for', Object.keys(tokenMap).length, 'cities'); 
+console.log('Generated tokens for', Object.keys(invertedTokenMap).length, 'cities'); 
