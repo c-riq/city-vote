@@ -271,10 +271,46 @@ const handleGetVotes = async ({ resolvedCityId, cityId }: ActionParams): Promise
     }
 };
 
+const handleGetCities = async ({ resolvedCityId }: ActionParams): Promise<APIGatewayProxyResult> => {
+    try {
+        const cityData = await s3Client.send(new GetObjectCommand({
+            Bucket: BUCKET_NAME,
+            Key: 'cities/cities.json'
+        }));
+
+        if (!cityData.Body) {
+            return {
+                statusCode: 404,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: 'Cities data not found' })
+            };
+        }
+
+        const citiesString = await streamToString(cityData.Body as Readable);
+        const cities = JSON.parse(citiesString);
+
+        return {
+            statusCode: 200,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ cities })
+        };
+    } catch (error: any) {
+        if (error.name === 'NoSuchKey') {
+            return {
+                statusCode: 404,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: 'Cities data not found' })
+            };
+        }
+        throw error;
+    }
+};
+
 const actionHandlers: Record<string, ActionHandler> = {
     validateToken: handleValidateToken,
     vote: handleVote,
     getVotes: handleGetVotes,
+    getCities: handleGetCities,
 };
 
 export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
