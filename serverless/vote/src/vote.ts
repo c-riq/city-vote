@@ -4,6 +4,7 @@ import { Readable } from 'stream';
 
 const s3Client = new S3Client({ region: 'us-east-1' });
 const BUCKET_NAME = 'city-vote-data';
+const VOTES_KEY = 'votes/votes.json';
 
 async function streamToString(stream: Readable): Promise<string> {
     return new Promise((resolve, reject) => {
@@ -27,11 +28,11 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
         }
 
         // Get existing votes or create new structure
-        let votes: Record<string, [number, number][]> = {};
+        let votes: Record<string, Record<string, [number, number][]>> = {};
         try {
             const existingData = await s3Client.send(new GetObjectCommand({
                 Bucket: BUCKET_NAME,
-                Key: `${pollId}/votes.json`
+                Key: VOTES_KEY
             }));
             
             if (existingData.Body) {
@@ -44,18 +45,21 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
             }
         }
 
-        // Initialize city array if it doesn't exist
-        if (!votes[cityId]) {
-            votes[cityId] = [];
+        // Initialize poll and city if they don't exist
+        if (!votes[pollId]) {
+            votes[pollId] = {};
+        }
+        if (!votes[pollId][cityId]) {
+            votes[pollId][cityId] = [];
         }
 
         // Add new vote with timestamp
-        votes[cityId].push([Date.now(), option]);
+        votes[pollId][cityId].push([Date.now(), option]);
 
         // Save updated votes back to S3
         await s3Client.send(new PutObjectCommand({
             Bucket: BUCKET_NAME,
-            Key: `${pollId}/votes.json`,
+            Key: VOTES_KEY,
             Body: JSON.stringify(votes),
             ContentType: 'application/json'
         }));
