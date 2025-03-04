@@ -207,16 +207,18 @@ const handleVote = async ({ cityId, resolvedCityId, pollId, option }: ActionPara
             Body: JSON.stringify(votes),
             ContentType: 'application/json'
         }));
+        await releaseLock(sessionId);
 
         return {
             statusCode: 200,
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ message: 'Vote recorded successfully' })
         };
-    } finally {
+    } catch (error) {
         if (lockAcquired) {
             await releaseLock(sessionId);
         }
+        throw error;
     }
 };
 

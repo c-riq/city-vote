@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Box, Typography, Button, List, ListItem, ListItemText, Divider } from '@mui/material';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Box, Typography, Button, List, ListItem, ListItemText, Divider, Dialog, DialogTitle, DialogContent, DialogActions, TextField } from '@mui/material';
 import { VOTE_HOST } from '../constants';
 
 interface PollProps {
@@ -12,16 +12,20 @@ interface PollProps {
   cities?: Record<string, any>;
 }
 
-function Poll({ token, cityInfo, pollData, onVoteComplete, votesData, cities }: PollProps) {
+function Poll({ token, pollData, onVoteComplete, votesData, cities }: PollProps) {
   const navigate = useNavigate();
+  const { pollId } = useParams();
   const [error, setError] = useState('');
   const [voting, setVoting] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(!pollData);
+  const [question, setQuestion] = useState(pollData ? '' : decodeURIComponent(pollId || ''));
 
-  // Get votes for this specific poll
-  const pollVotes = votesData?.[pollData.id] || {};
+  // Get votes for this specific poll - use pollData.id or URL pollId
+  const pollVotes = votesData?.[pollData?.id || pollId] || {};
 
   const handleVote = async (option: number) => {
     setVoting(true);
+    setError('');
     try {
       const response = await fetch(VOTE_HOST, {
         method: 'POST',
@@ -31,7 +35,7 @@ function Poll({ token, cityInfo, pollData, onVoteComplete, votesData, cities }: 
         body: JSON.stringify({
           action: 'vote',
           token,
-          pollId: pollData.id,
+          pollId: pollData?.id || pollId,
           option
         })
       });
@@ -51,21 +55,57 @@ function Poll({ token, cityInfo, pollData, onVoteComplete, votesData, cities }: 
     }
   };
 
+  const handleCreatePoll = () => {
+    if (question.trim()) {
+      setIsModalOpen(false);
+      navigate(`/poll/${encodeURIComponent(question)}`);
+    }
+  };
+
   return (
     <Box sx={{ mt: 4, mb: 4 }}>
-      <Button onClick={() => navigate('/')} variant="outlined" sx={{ mb: 2 }}>
-        Back to Dashboard
-      </Button>
-      
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
+        <Button onClick={() => navigate('/')} variant="outlined">
+          Back to Dashboard
+        </Button>
+        <Button onClick={() => setIsModalOpen(true)} variant="contained" color="primary">
+          Create New Poll
+        </Button>
+      </Box>
+
+      {/* Question Input Modal */}
+      <Dialog open={isModalOpen} onClose={() => navigate('/')}>
+        <DialogTitle component="div">New Poll Question</DialogTitle>
+        <DialogContent>
+          <TextField
+            fullWidth
+            label="Question"
+            value={question}
+            onChange={(e) => setQuestion(e.target.value)}
+            margin="normal"
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => navigate('/')}>Cancel</Button>
+          <Button 
+            onClick={handleCreatePoll}
+            disabled={!question.trim()}
+          >
+            Create Poll
+          </Button>
+        </DialogActions>
+      </Dialog>
+
       {error ? (
         <Typography color="error" sx={{ mt: 2 }}>{error}</Typography>
       ) : (
         <Box>
-          <Typography variant="h4" sx={{ mb: 2 }}>{pollData.title}</Typography>
-          <Typography sx={{ mb: 3 }}>{pollData.description}</Typography>
+          <Typography variant="h4" sx={{ mb: 2 }}>
+            {pollData?.title || decodeURIComponent(pollId || '')}
+          </Typography>
           
           <Box sx={{ display: 'flex', gap: 2, flexDirection: 'column', mb: 4 }}>
-            {pollData.options.map((option: string, index: number) => (
+            {(pollData?.options || ['Yes', 'No']).map((option: string, index: number) => (
               <Button
                 key={index}
                 variant="contained"
@@ -85,19 +125,19 @@ function Poll({ token, cityInfo, pollData, onVoteComplete, votesData, cities }: 
                   <ListItemText
                     primary={cities?.[cityId]?.name || cityId}
                     secondary={
-                      <Box>
+                      <>
                         {votes.map(([timestamp, option], index) => (
                           <Typography 
                             key={index} 
                             variant="body2" 
                             color="text.secondary"
-                            component="span"
+                            component="div"
                             sx={{ display: 'block' }}
                           >
-                            {new Date(timestamp).toLocaleString()}: Voted {pollData.options[option] || option}
+                            {new Date(timestamp).toLocaleString()}: Voted {pollData?.options?.[option] || option}
                           </Typography>
                         ))}
-                      </Box>
+                      </>
                     }
                   />
                 </ListItem>

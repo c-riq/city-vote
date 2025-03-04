@@ -249,18 +249,27 @@ function App() {
 
 function PollWrapper({ token, cityInfo, polls, onVoteComplete, votesData, cities }: any) {
   const { pollId } = useParams();
-  if (!polls || !polls[pollId]) {
+  
+  // If it's an existing poll ID
+  if (polls[pollId]) {
     return (
-      <Box sx={{ mt: 4, textAlign: 'center' }}>
-        <Typography>Loading poll data...</Typography>
-      </Box>
+      <Poll 
+        token={token} 
+        cityInfo={cityInfo} 
+        pollData={polls[pollId]}
+        onVoteComplete={onVoteComplete}
+        votesData={votesData}
+        cities={cities}
+      />
     );
   }
+
+  // If it's a new poll (pollId contains the question)
   return (
     <Poll 
       token={token} 
       cityInfo={cityInfo} 
-      pollData={polls[pollId]}
+      pollData={null}
       onVoteComplete={onVoteComplete}
       votesData={votesData}
       cities={cities}
