@@ -1,0 +1,127 @@
+{
+  "Q803": {
+    "name": "Utrecht",
+    "population": 376000,
+    "country": "NL"
+  },
+  "Q574558": {
+    "name": "Heerenveen",
+    "population": 51000,
+    "country": "NL"
+  },
+  "Q4031": {
+    "name": "Rüsselheim",
+    "population": 65000,
+    "country": "DE"
+  },
+  "Q6869": {
+    "name": "Heidenheim",
+    "population": 50000,
+    "country": "DE"
+  },
+  "Q196163": {
+    "name": "Łobez",
+    "population": 10000,
+    "country": "PL"
+  },
+  "Q1278608": {
+    "name": "Oldham",
+    "population": 243000,
+    "country": "UK"
+  },
+  "Q586179": {
+    "name": "Boden",
+    "population": 28000,
+    "country": "SE"
+  },
+  "Q972564": {
+    "name": "Sundbyberg",
+    "population": 56000,
+    "country": "SE"
+  },
+  "Q655363": {
+    "name": "Jacareí",
+    "population": 240000,
+    "country": "BR"
+  },
+  "Q191652": {
+    "name": "Santo André",
+    "population": 748000,
+    "country": "BR"
+  },
+  "Q83247": {
+    "name": "Braga",
+    "population": 193000,
+    "country": "PT"
+  },
+  "Q215374": {
+    "name": "Askøy",
+    "population": 29000,
+    "country": "NO"
+  },
+  "Q499896": {
+    "name": "Rebild",
+    "population": 29000,
+    "country": "DK"
+  },
+  "Q514844": {
+    "name": "Vallensbæk",
+    "population": 17000,
+    "country": "DK"
+  },
+  "Q500076": {
+    "name": "Gentofte",
+    "population": 75000,
+    "country": "DK"
+  },
+  "Q1425064": {
+    "name": "Odsherred",
+    "population": 32000,
+    "country": "DK"
+  },
+  "Q2966": {
+    "name": "Heidelberg",
+    "population": 162000,
+    "country": "DE"
+  },
+  "Q9934": {
+    "name": "Hilversum",
+    "population": 94000,
+    "country": "NL"
+  },
+  "Q10005": {
+    "name": "Hellendoorn",
+    "population": 36000,
+    "country": "NL"
+  },
+  "Q4035": {
+    "name": "Osasco",
+    "population": 728000,
+    "country": "BR"
+  },
+  "Q424984": {
+    "name": "Oakville",
+    "population": 213000,
+    "country": "CA"
+  },
+  "Q23661": {
+    "name": "Wellington",
+    "population": 215000,
+    "country": "NZ"
+  },
+  "Q258447": {
+    "name": "Äänekoski",
+    "population": 17000,
+    "country": "FI"
+  },
+  "Q736586": {
+    "name": "Burnsville",
+    "population": 64000,
+    "country": "US"
+  },
+  "Q4656": {
+    "name": "Pula",
+    "population": 52000,
+    "country": "HR"
+  }
+} 

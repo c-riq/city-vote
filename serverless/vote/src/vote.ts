@@ -7,6 +7,7 @@ const s3Client = new S3Client({ region: 'us-east-1' });
 const BUCKET_NAME = 'city-vote-data';
 const VOTES_KEY = 'votes/votes.json';
 const LOCK_KEY = 'votes/lock.csv';
+const AUTH_KEY = 'auth/auth.json';
 const LOCK_TIMEOUT_MS = 10000; // 10 seconds
 const LOCK_CHECK_DELAY_MS = 50;
 
@@ -106,10 +107,40 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
             throw new Error('Missing request body');
         }
 
-        const { pollId, cityId, option } = JSON.parse(event.body);
+        const { pollId, cityId, option, token } = JSON.parse(event.body);
         
-        if (!pollId || !cityId || option === undefined) {
+        if (!pollId || !cityId || option === undefined || !token) {
             throw new Error('Missing required parameters');
+        }
+
+        // Validate city token
+        try {
+            const authData = await s3Client.send(new GetObjectCommand({
+                Bucket: BUCKET_NAME,
+                Key: AUTH_KEY
+            }));
+            
+            if (!authData.Body) {
+                throw new Error('Auth file not found');
+            }
+
+            const authString = await streamToString(authData.Body as Readable);
+            const auth: Record<string, string> = JSON.parse(authString);
+
+            if (auth[cityId] !== token) {
+                return {
+                    statusCode: 403,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: 'Invalid token'
+                    })
+                };
+            }
+        } catch (error) {
+            console.error('Error validating token:', error);
+            throw new Error('Authentication failed');
         }
 
         // Acquire lock
