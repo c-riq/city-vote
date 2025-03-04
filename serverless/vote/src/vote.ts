@@ -76,26 +76,11 @@ async function acquireLock(sessionId: string): Promise<boolean> {
     }
 }
 
-async function releaseLock(sessionId: string): Promise<void> {
-    try {
-        // Verify we still own the lock before deleting
-        const lockData = await s3Client.send(new GetObjectCommand({
-            Bucket: BUCKET_NAME,
-            Key: LOCK_KEY
-        }));
-        
-        const lockContent = await streamToString(lockData.Body as Readable);
-        const [_, lockSession] = lockContent.split(',');
-        
-        if (lockSession === sessionId) {
-            await s3Client.send(new DeleteObjectCommand({
-                Bucket: BUCKET_NAME,
-                Key: LOCK_KEY
-            }));
-        }
-    } catch (error) {
-        console.error('Error releasing lock:', error);
-    }
+async function releaseLock(): Promise<void> {
+    await s3Client.send(new DeleteObjectCommand({
+        Bucket: BUCKET_NAME,
+        Key: LOCK_KEY
+    }));
 }
 
 // Add these type definitions and action handlers above the main handler
@@ -207,7 +192,7 @@ const handleVote = async ({ cityId, resolvedCityId, pollId, option }: ActionPara
             Body: JSON.stringify(votes),
             ContentType: 'application/json'
         }));
-        await releaseLock(sessionId);
+        await releaseLock();
 
         return {
             statusCode: 200,
@@ -216,7 +201,7 @@ const handleVote = async ({ cityId, resolvedCityId, pollId, option }: ActionPara
         };
     } catch (error) {
         if (lockAcquired) {
-            await releaseLock(sessionId);
+            await releaseLock();
         }
         throw error;
     }

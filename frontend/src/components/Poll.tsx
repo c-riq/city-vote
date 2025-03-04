@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Box, Typography, Button, List, ListItem, ListItemText, Divider, Dialog, DialogTitle, DialogContent, DialogActions, TextField } from '@mui/material';
 import { VOTE_HOST } from '../constants';
@@ -17,13 +17,11 @@ function Poll({ token, pollData, onVoteComplete, votesData, cities }: PollProps)
   const { pollId } = useParams();
   const [error, setError] = useState('');
   const [voting, setVoting] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(!pollData);
-  const [question, setQuestion] = useState(pollData ? '' : decodeURIComponent(pollId || ''));
 
-  // Get votes for this specific poll - use pollData.id or URL pollId
+  // Remove modal-related state and handlers
   const pollVotes = votesData?.[pollData?.id || pollId] || {};
 
-  const handleVote = async (option: number) => {
+  const handleVote = async (option: string) => {
     setVoting(true);
     setError('');
     try {
@@ -55,46 +53,13 @@ function Poll({ token, pollData, onVoteComplete, votesData, cities }: PollProps)
     }
   };
 
-  const handleCreatePoll = () => {
-    if (question.trim()) {
-      setIsModalOpen(false);
-      navigate(`/poll/${encodeURIComponent(question)}`);
-    }
-  };
-
   return (
     <Box sx={{ mt: 4, mb: 4 }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
         <Button onClick={() => navigate('/')} variant="outlined">
           Back to Dashboard
         </Button>
-        <Button onClick={() => setIsModalOpen(true)} variant="contained" color="primary">
-          Create New Poll
-        </Button>
       </Box>
-
-      {/* Question Input Modal */}
-      <Dialog open={isModalOpen} onClose={() => navigate('/')}>
-        <DialogTitle component="div">New Poll Question</DialogTitle>
-        <DialogContent>
-          <TextField
-            fullWidth
-            label="Question"
-            value={question}
-            onChange={(e) => setQuestion(e.target.value)}
-            margin="normal"
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => navigate('/')}>Cancel</Button>
-          <Button 
-            onClick={handleCreatePoll}
-            disabled={!question.trim()}
-          >
-            Create Poll
-          </Button>
-        </DialogActions>
-      </Dialog>
 
       {error ? (
         <Typography color="error" sx={{ mt: 2 }}>{error}</Typography>
@@ -109,7 +74,7 @@ function Poll({ token, pollData, onVoteComplete, votesData, cities }: PollProps)
               <Button
                 key={index}
                 variant="contained"
-                onClick={() => handleVote(index)}
+                onClick={() => handleVote(option)}
                 disabled={voting}
               >
                 {option}
@@ -125,19 +90,19 @@ function Poll({ token, pollData, onVoteComplete, votesData, cities }: PollProps)
                   <ListItemText
                     primary={cities?.[cityId]?.name || cityId}
                     secondary={
-                      <>
+                      <Box component="div">
                         {votes.map(([timestamp, option], index) => (
                           <Typography 
                             key={index} 
                             variant="body2" 
                             color="text.secondary"
-                            component="div"
+                            component="span"
                             sx={{ display: 'block' }}
                           >
-                            {new Date(timestamp).toLocaleString()}: Voted {pollData?.options?.[option] || option}
+                            {new Date(timestamp).toLocaleString()}: Voted {option}
                           </Typography>
                         ))}
-                      </>
+                      </Box>
                     }
                   />
                 </ListItem>

@@ -1,21 +1,47 @@
-import { Button, Container, Typography, TextField, Box } from '@mui/material';
+import { Button, Container, Typography, TextField, Box, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import { useState } from 'react';
 import { VOTE_HOST } from './constants';
-import { BrowserRouter, Routes, Route, Link, Navigate, useParams } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useParams, Link, useNavigate } from 'react-router-dom';
 import Poll from './components/Poll';
+
+interface CityInfo {
+  name: string;
+  population: number;
+  country: string;
+}
+
+interface TokenResponse {
+  city: CityInfo;
+  cityId: string;
+  message?: string;
+  details?: string;
+}
+
+interface CitiesResponse {
+  cities: Record<string, CityInfo>;
+}
+
+type Vote = [number, string];  // [timestamp, option]
+type CityVotes = Record<string, Vote[]>;  // cityId -> votes
+type PollVotes = Record<string, CityVotes>;  // pollId -> city votes
+
+interface VotesResponse {
+  votes: PollVotes;
+}
 
 function App() {
   const [token, setToken] = useState('');
-  const [cityInfo, setCityInfo] = useState<any>(null);
+  const [cityInfo, setCityInfo] = useState<CityInfo | null>(null);
+  const [cityId, setCityId] = useState<string | null>(null);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [votesData, setVotesData] = useState<Record<string, Record<string, [number, number][]>>>({});
-  const [cities, setCities] = useState<Record<string, any>>({});
+  const [votesData, setVotesData] = useState<PollVotes>({});
+  const [cities, setCities] = useState<Record<string, CityInfo>>({});
   const [polls, setPolls] = useState<Record<string, any>>({});
 
   const fetchVotes = async () => {
     try {
-      const response = await fetch(VOTE_HOST, {
+      const response = await fetch(`${VOTE_HOST}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -25,36 +51,20 @@ function App() {
           token
         })
       });
-
-      const data = await response.json();
-      
+      const data: VotesResponse = await response.json();
       if (!response.ok) {
         throw new Error(data.message || 'Failed to fetch votes');
       }
-
       setVotesData(data.votes);
-      // Extract unique poll IDs from the votes data
-      const pollIds = Object.keys(data.votes);
-      // Create a simple polls object with IDs
-      const pollsData = pollIds.reduce((acc, id) => ({
-        ...acc,
-        [id]: {
-          id,
-          title: `Poll ${id}`,
-          description: "Vote on this poll",
-          options: ["Yes", "No"]  // Default options
-        }
-      }), {});
-      setPolls(pollsData);
-      console.log('Created polls from votes:', pollsData);
     } catch (err) {
+      console.error('Failed to fetch votes:', err);
       setError(err instanceof Error ? err.message : 'Failed to fetch votes');
     }
   };
 
   const fetchCities = async () => {
     try {
-      const response = await fetch(VOTE_HOST, {
+      const response = await fetch(`${VOTE_HOST}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -64,15 +74,13 @@ function App() {
           token
         })
       });
-
-      const data = await response.json();
-      
+      const data: CitiesResponse = await response.json();
       if (!response.ok) {
-        throw new Error(data.message || 'Failed to fetch cities');
+        throw new Error('Failed to fetch cities');
       }
-
       setCities(data.cities);
     } catch (err) {
+      console.error('Failed to fetch cities:', err);
       setError(err instanceof Error ? err.message : 'Failed to fetch cities');
     }
   };
@@ -93,25 +101,85 @@ function App() {
         })
       });
 
-      const data = await response.json();
+      const data: TokenResponse = await response.json();
       
       if (!response.ok) {
         throw new Error(data.message || data.details || 'Authentication failed');
       }
 
       setCityInfo(data.city);
+      setCityId(data.cityId);
       await Promise.all([fetchVotes(), fetchCities()]);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to authenticate');
       setCityInfo(null);
+      setCityId(null);
     } finally {
       setIsLoading(false);
     }
   };
 
+  function AuthenticatedContent() {
+    const navigate = useNavigate();
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [question, setQuestion] = useState('');
+
+    const handleCreatePoll = () => {
+      if (question.trim()) {
+        setIsModalOpen(false);
+        navigate(`/poll/${encodeURIComponent(question)}`);
+        setQuestion('');
+      }
+    };
+
+    const handleCancel = () => {
+      setQuestion('');
+      setIsModalOpen(false);
+    };
+
+    return (
+      <>
+        <Dialog open={isModalOpen} onClose={handleCancel}>
+          <DialogTitle component="div">New Poll Question</DialogTitle>
+          <DialogContent>
+            <TextField
+              fullWidth
+              label="Question"
+              value={question}
+              onChange={(e) => setQuestion(e.target.value)}
+              margin="normal"
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCancel}>Cancel</Button>
+            <Button 
+              onClick={handleCreatePoll}
+              disabled={!question.trim()}
+            >
+              Create Poll
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+        {cityInfo && (
+          <Box sx={{ position: 'fixed', top: 16, right: 16, zIndex: 1000 }}>
+            <Button 
+              onClick={() => setIsModalOpen(true)} 
+              variant="contained" 
+              color="primary"
+            >
+              Create New Poll
+            </Button>
+          </Box>
+        )}
+      </>
+    );
+  }
+
   return (
     <BrowserRouter>
       <Container>
+        <AuthenticatedContent />
         <Routes>
           <Route path="/" element={
             !cityInfo ? (
@@ -169,8 +237,27 @@ function App() {
                   gap: 2
                 }}
               >
-                <Typography variant="h4">Welcome, {cityInfo.name}!</Typography>
-                <Typography>Population: {cityInfo.population}</Typography>
+                <Box sx={{ 
+                  width: '100%', 
+                  textAlign: 'center',
+                  mb: 4,
+                  p: 2,
+                  bgcolor: 'background.paper',
+                  borderRadius: 1,
+                  boxShadow: 1
+                }}>
+                  <Typography variant="h4">{cityInfo?.name}</Typography>
+                  <Typography variant="body1">Population: {cityInfo?.population.toLocaleString()}</Typography>
+                  <Typography variant="body2">
+                    ID: <Link 
+                      to={`https://www.wikidata.org/wiki/${cityId}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {cityId}
+                    </Link>
+                  </Typography>
+                </Box>
                 
                 {/* Votes Display */}
                 <Typography variant="h5" sx={{ mt: 4 }}>Voting History</Typography>
@@ -213,6 +300,7 @@ function App() {
                   variant="outlined" 
                   onClick={() => {
                     setCityInfo(null);
+                    setCityId(null);
                     setToken('');
                     setVotesData({});
                     setCities({});
@@ -250,8 +338,7 @@ function App() {
 function PollWrapper({ token, cityInfo, polls, onVoteComplete, votesData, cities }: any) {
   const { pollId } = useParams();
   
-  // If it's an existing poll ID
-  if (polls[pollId]) {
+  if (pollId && polls[pollId]) {
     return (
       <Poll 
         token={token} 
