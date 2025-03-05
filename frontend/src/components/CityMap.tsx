@@ -20,9 +20,10 @@ interface CityInfo {
 
 interface CityMapProps {
   cities: Record<string, CityInfo>;
+  currentCity?: CityInfo;
 }
 
-const CityMap: React.FC<CityMapProps> = ({ cities }) => {
+const CityMap: React.FC<CityMapProps> = ({ cities, currentCity }) => {
   const [zoomEnabled, setZoomEnabled] = useState(false);
   const [selectedCity, setSelectedCity] = useState<CityInfo | null>(null);
 
@@ -75,6 +76,7 @@ const CityMap: React.FC<CityMapProps> = ({ cities }) => {
               <MapContent 
                 cities={cities}
                 setSelectedCity={setSelectedCity}
+                currentCity={currentCity}
               />
             </ZoomableGroup>
           ) : (
@@ -82,6 +84,7 @@ const CityMap: React.FC<CityMapProps> = ({ cities }) => {
               <MapContent 
                 cities={cities}
                 setSelectedCity={setSelectedCity}
+                currentCity={currentCity}
               />
             </g>
           )}
@@ -100,9 +103,14 @@ const CityMap: React.FC<CityMapProps> = ({ cities }) => {
 interface MapContentProps {
   cities: Record<string, CityInfo>;
   setSelectedCity: (city: CityInfo | null) => void;
+  currentCity?: CityInfo;
 }
 
-const MapContent: React.FC<MapContentProps> = ({ cities, setSelectedCity }) => (
+const MapContent: React.FC<MapContentProps> = ({ 
+  cities, 
+  setSelectedCity, 
+  currentCity 
+}) => (
   <>
     <Geographies geography={countryBorders}>
       {({ geographies }) =>
@@ -122,25 +130,21 @@ const MapContent: React.FC<MapContentProps> = ({ cities, setSelectedCity }) => (
       }
     </Geographies>
     
-    {Object.values(cities).map((city) => {
-      if (!city.lon || !city.lat) return null;
-      
-      return (
-        <Marker 
-          key={city.id}
-          coordinates={[city.lon, city.lat]}
-          onMouseEnter={() => setSelectedCity(city)}
-          onMouseLeave={() => setSelectedCity(null)}
-        >
-          <circle
-            r={4}
-            fill="#FF5533"
-            stroke="#FFFFFF"
-            strokeWidth={2}
-          />
-        </Marker>
-      );
-    })}
+    {currentCity && currentCity.lon && currentCity.lat && (
+      <Marker 
+        key={currentCity.id}
+        coordinates={[currentCity.lon, currentCity.lat]}
+        onMouseEnter={() => setSelectedCity(currentCity)}
+        onMouseLeave={() => setSelectedCity(null)}
+      >
+        <circle
+          r={6}
+          fill="#FF5533"
+          stroke="#FFFFFF"
+          strokeWidth={2}
+        />
+      </Marker>
+    )}
   </>
 );
 

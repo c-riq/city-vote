@@ -1,10 +1,11 @@
-import { Button, Container, Typography, TextField, Box, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
+import { Button, Container, Typography, TextField, Box, Dialog, DialogTitle, DialogContent, DialogActions, createTheme, ThemeProvider } from '@mui/material';
 import { useState } from 'react';
 import { VOTE_HOST } from './constants';
 import { BrowserRouter, Routes, Route, Navigate, useParams, Link, useNavigate } from 'react-router-dom';
 import Poll from './components/Poll';
 import Header from './components/Header';
 import CityMap from './components/CityMap';
+import WorldMap from './components/WorldMap';
 
 interface CityInfo {
   id: string;
@@ -36,6 +37,17 @@ interface VotesResponse {
 }
 
 function App() {
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: '#757575',
+        dark: '#424242',
+        light: '#9e9e9e',
+        contrastText: '#ffffff',
+      },
+    },
+  });
+
   const [token, setToken] = useState('');
   const [cityInfo, setCityInfo] = useState<CityInfo | null>(null);
   const [cityId, setCityId] = useState<string | null>(null);
@@ -46,53 +58,7 @@ function App() {
   const [polls, _] = useState<Record<string, any>>({});
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const fetchVotes = async () => {
-    try {
-      const response = await fetch(`${VOTE_HOST}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          action: 'getVotes',
-          token
-        })
-      });
-      const data: VotesResponse = await response.json();
-      if (!response.ok) {
-        throw new Error(data.message || 'Failed to fetch votes');
-      }
-      setVotesData(data.votes);
-    } catch (err) {
-      console.error('Failed to fetch votes:', err);
-      setError(err instanceof Error ? err.message : 'Failed to fetch votes');
-    }
-  };
-
-  const fetchCities = async () => {
-    try {
-      const response = await fetch(`${VOTE_HOST}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          action: 'getCities',
-          token
-        })
-      });
-      const data: CitiesResponse = await response.json();
-      if (!response.ok) {
-        throw new Error('Failed to fetch cities');
-      }
-      setCities(data.cities);
-    } catch (err) {
-      console.error('Failed to fetch cities:', err);
-      setError(err instanceof Error ? err.message : 'Failed to fetch cities');
-    }
-  };
-
-  const handleSubmit = async () => {
+  const fetchData = async () => {
     setError('');
     setIsLoading(true);
     
@@ -114,16 +80,53 @@ function App() {
         throw new Error(data.message || data.details || 'Authentication failed');
       }
 
+      // First set the city info
       setCityInfo(data.city);
       setCityId(data.cityId);
-      await Promise.all([fetchVotes(), fetchCities()]);
+      
+      // Then fetch cities data
+      const citiesResponse = await fetch(`${VOTE_HOST}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'getCities', token })
+      });
+
+      const citiesData: CitiesResponse = await citiesResponse.json();
+
+      if (!citiesResponse.ok) {
+        throw new Error('Failed to fetch cities');
+      }
+
+      // Update cities data
+      setCities(citiesData.cities);
+
+      // Finally fetch votes data
+      const votesResponse = await fetch(`${VOTE_HOST}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'getVotes', token })
+      });
+
+      const votesData: VotesResponse = await votesResponse.json();
+
+      if (!votesResponse.ok) {
+        throw new Error(votesData.message || 'Failed to fetch votes');
+      }
+
+      setVotesData(votesData.votes);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to authenticate');
       setCityInfo(null);
       setCityId(null);
+      setVotesData({});
+      setCities({});
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleSubmit = () => {
+    fetchData();
   };
 
   const handleLogout = () => {
@@ -191,170 +194,200 @@ function App() {
   }
 
   return (
-    <BrowserRouter>
-      <Header
-        cityInfo={cityInfo}
-        onLogout={handleLogout}
-        onCreatePoll={() => setIsModalOpen(true)}
-      />
-      <Container sx={{ pt: '80px' }}>
-        <AuthenticatedContent />
-        <Routes>
-          <Route path="/" element={
-            !cityInfo ? (
-              <Box
-                sx={{
-                  height: '100vh',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: 2
-                }}
-              >
-                <Typography variant="h4">Please enter your access token</Typography>
-                <TextField
-                  label="Access Token"
-                  variant="outlined"
-                  fullWidth
-                  sx={{ maxWidth: 400 }}
-                  value={token}
-                  onChange={(e) => setToken(e.target.value)}
-                  error={!!error}
-                />
-                {error && (
-                  <Typography 
-                    color="error" 
-                    sx={{ 
-                      maxWidth: 400, 
-                      textAlign: 'center',
-                      backgroundColor: 'error.light',
-                      color: 'error.contrastText',
-                      padding: 1,
-                      borderRadius: 1,
-                      width: '100%'
-                    }}
-                  >
-                    {error}
-                  </Typography>
-                )}
-                <Button 
-                  variant="contained" 
-                  onClick={handleSubmit}
-                  disabled={isLoading}
+    <ThemeProvider theme={theme}>
+      <BrowserRouter>
+        <Header
+          cityInfo={cityInfo}
+          onLogout={handleLogout}
+          onCreatePoll={() => setIsModalOpen(true)}
+        />
+        <Container sx={{ pt: '80px' }}>
+          <AuthenticatedContent />
+          <Routes>
+            <Route path="/" element={
+              !cityInfo ? (
+                <Box
+                  sx={{
+                    height: '100vh',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: 2
+                  }}
                 >
-                  {isLoading ? 'Validating...' : 'Submit'}
-                </Button>
-              </Box>
-            ) : (
-              <Box
-                sx={{
-                  padding: 4,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  gap: 2
-                }}
-              >
-                <Box sx={{ 
-                  width: '100%', 
-                  textAlign: 'center',
-                  mb: 4,
-                  p: 2,
-                  bgcolor: 'background.paper',
-                  borderRadius: 1,
-                  boxShadow: 1
-                }}>
-                  <Typography variant="h4">{cityInfo?.name}</Typography>
-                  <Typography variant="body2">
-                    ID: <Link 
-                      to={`https://www.wikidata.org/wiki/${cityId}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {cityId}
-                    </Link>
-                  </Typography>
-                </Box>
-                
-                {/* Votes Display */}
-                <Typography variant="h5" sx={{ mt: 4 }}>Voting History</Typography>
-                {Object.keys(votesData).length > 0 ? (
-                  Object.entries(votesData).map(([pollId, citiesVotes]) => (
-                    <Box 
-                      key={pollId} 
+                  <WorldMap />
+                  <Typography variant="h5">Please enter your access token</Typography>
+                  <Box sx={{ 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    maxWidth: 400, 
+                    width: '100%' 
+                  }}>
+                    <TextField
+                      label="Access Token"
+                      variant="outlined"
+                      fullWidth
                       sx={{ 
-                        width: '100%',
-                        maxWidth: 600,
-                        bgcolor: 'background.paper',
-                        p: 2,
+                        '& input': { fontSize: '0.9rem' },
+                        '& .MuiOutlinedInput-root': {
+                          borderTopRightRadius: 0,
+                          borderBottomRightRadius: 0,
+                        }
+                      }}
+                      value={token}
+                      onChange={(e) => setToken(e.target.value)}
+                      error={!!error}
+                    />
+                    <Button 
+                      variant="contained" 
+                      onClick={handleSubmit}
+                      disabled={isLoading}
+                      sx={{ 
+                        height: '56px', 
+                        minWidth: '120px',
+                        px: 6,
+                        backgroundColor: 'primary.dark',
+                        '&:hover': {
+                          backgroundColor: 'primary.main',
+                        },
+                        textTransform: 'none',
+                        boxShadow: 2,
+                        borderTopLeftRadius: 0,
+                        borderBottomLeftRadius: 0,
+                      }}
+                      startIcon={<span className="material-icons">key</span>}
+                    >
+                      {isLoading ? 'Validating...' : 'Authenticate'}
+                    </Button>
+                  </Box>
+                  {error && (
+                    <Typography 
+                      color="error" 
+                      sx={{ 
+                        maxWidth: 400, 
+                        textAlign: 'center',
+                        backgroundColor: 'error.light',
+                        color: 'error.contrastText',
+                        padding: 1,
                         borderRadius: 1,
-                        boxShadow: 1,
-                        mb: 2
+                        width: '100%'
                       }}
                     >
-                      <Link to={`/poll/${pollId}`} style={{ textDecoration: 'none' }}>
-                        <Typography variant="h6">{pollId}</Typography>
-                      </Link>
-                      {Object.entries(citiesVotes).map(([cityId, votes]) => (
-                        <Box key={cityId} sx={{ mt: 2 }}>
-                          <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
-                            City: {cities[cityId]?.name || cityId}
-                          </Typography>
-                          {votes.map(([timestamp, option], index) => (
-                            <Typography key={index} sx={{ ml: 2 }}>
-                              {new Date(timestamp).toLocaleString()}: Voted {option}
-                            </Typography>
-                          ))}
-                        </Box>
-                      ))}
-                    </Box>
-                  ))
-                ) : (
-                  <Typography color="text.secondary">No voting history available</Typography>
-                )}
-
-                <Button 
-                  variant="outlined" 
-                  onClick={() => {
-                    setCityInfo(null);
-                    setCityId(null);
-                    setToken('');
-                    setVotesData({});
-                    setCities({});
-                  }}
-                  sx={{ mt: 2 }}
-                >
-                  Logout
-                </Button>
-              </Box>
-            )
-          } />
-          <Route 
-            path="/poll/:pollId" 
-            element={
-              cityInfo ? (
-                <PollWrapper 
-                  token={token} 
-                  cityInfo={cityInfo} 
-                  polls={polls}
-                  onVoteComplete={fetchVotes}
-                  votesData={votesData}
-                  cities={cities}
-                />
+                      {error}
+                    </Typography>
+                  )}
+                </Box>
               ) : (
-                <Navigate to="/" replace />
+                <Box
+                  sx={{
+                    padding: 4,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    gap: 2
+                  }}
+                >
+                  <Box sx={{ 
+                    width: '100%', 
+                    textAlign: 'center',
+                    mb: 4,
+                    p: 2,
+                    bgcolor: 'background.paper',
+                    borderRadius: 1,
+                    boxShadow: 1
+                  }}>
+                    <Typography variant="h4">{cityInfo?.name}</Typography>
+                    <Typography variant="body2">
+                      ID: <Link 
+                        to={`https://www.wikidata.org/wiki/${cityId}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {cityId}
+                      </Link>
+                    </Typography>
+                  </Box>
+                  
+                  {/* Votes Display */}
+                  <Typography variant="h5" sx={{ mt: 4 }}>Voting History</Typography>
+                  {Object.keys(votesData).length > 0 ? (
+                    Object.entries(votesData).map(([pollId, citiesVotes]) => (
+                      <Box 
+                        key={pollId} 
+                        sx={{ 
+                          width: '100%',
+                          maxWidth: 600,
+                          bgcolor: 'background.paper',
+                          p: 2,
+                          borderRadius: 1,
+                          boxShadow: 1,
+                          mb: 2
+                        }}
+                      >
+                        <Link to={`/poll/${pollId}`} style={{ textDecoration: 'none' }}>
+                          <Typography variant="h6">{pollId}</Typography>
+                        </Link>
+                        {Object.entries(citiesVotes).map(([cityId, votes]) => (
+                          <Box key={cityId} sx={{ mt: 2 }}>
+                            <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
+                              City: {cities[cityId]?.name || cityId}
+                            </Typography>
+                            {votes.map(([timestamp, option], index) => (
+                              <Typography key={index} sx={{ ml: 2 }}>
+                                {new Date(timestamp).toLocaleString()}: Voted {option}
+                              </Typography>
+                            ))}
+                          </Box>
+                        ))}
+                      </Box>
+                    ))
+                  ) : (
+                    <Typography color="text.secondary">No voting history available</Typography>
+                  )}
+
+                  <Button 
+                    variant="outlined" 
+                    onClick={() => {
+                      setCityInfo(null);
+                      setCityId(null);
+                      setToken('');
+                      setVotesData({});
+                      setCities({});
+                    }}
+                    sx={{ mt: 2 }}
+                  >
+                    Logout
+                  </Button>
+                </Box>
               )
-            } 
-          />
-        </Routes>
-        {cityInfo && (
-          <Box sx={{ mb: 4 }}>
-            <CityMap cities={cities} />
-          </Box>
-        )}
-      </Container>
-    </BrowserRouter>
+            } />
+            <Route 
+              path="/poll/:pollId" 
+              element={
+                cityInfo ? (
+                  <PollWrapper 
+                    token={token} 
+                    cityInfo={cityInfo} 
+                    polls={polls}
+                    onVoteComplete={fetchData}
+                    votesData={votesData}
+                    cities={cities}
+                  />
+                ) : (
+                  <Navigate to="/" replace />
+                )
+              } 
+            />
+          </Routes>
+          {cityInfo && (
+            <Box sx={{ mb: 4 }}>
+              <CityMap cities={cities} currentCity={cityInfo} />
+            </Box>
+          )}
+        </Container>
+      </BrowserRouter>
+    </ThemeProvider>
   );
 }
 
