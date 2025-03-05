@@ -2,126 +2,176 @@
   "Q803": {
     "name": "Utrecht",
     "population": 376000,
-    "country": "NL"
+    "country": "NL",
+    "lat": 52.091,
+    "lon": 5.122
   },
   "Q574558": {
     "name": "Heerenveen",
     "population": 51000,
-    "country": "NL"
+    "country": "NL",
+    "lat": 52.966,
+    "lon": 6.050
   },
   "Q4031": {
     "name": "Rüsselheim",
     "population": 65000,
-    "country": "DE"
+    "country": "DE",
+    "lat": 49.995,
+    "lon": 8.412
   },
   "Q6869": {
     "name": "Heidenheim",
     "population": 50000,
-    "country": "DE"
+    "country": "DE",
+    "lat": 48.676,
+    "lon": 10.154
   },
   "Q196163": {
     "name": "Łobez",
     "population": 10000,
-    "country": "PL"
+    "country": "PL",
+    "lat": 53.639,
+    "lon": 15.621
   },
   "Q1278608": {
     "name": "Oldham",
     "population": 243000,
-    "country": "UK"
+    "country": "UK",
+    "lat": 53.542,
+    "lon": -2.119
   },
   "Q586179": {
     "name": "Boden",
     "population": 28000,
-    "country": "SE"
+    "country": "SE",
+    "lat": 65.818,
+    "lon": 21.705
   },
   "Q972564": {
     "name": "Sundbyberg",
     "population": 56000,
-    "country": "SE"
+    "country": "SE",
+    "lat": 59.363,
+    "lon": 17.966
   },
   "Q655363": {
     "name": "Jacareí",
     "population": 240000,
-    "country": "BR"
+    "country": "BR",
+    "lat": -23.305,
+    "lon": -45.966
   },
   "Q191652": {
     "name": "Santo André",
     "population": 748000,
-    "country": "BR"
+    "country": "BR",
+    "lat": -23.653,
+    "lon": -46.528
   },
   "Q83247": {
     "name": "Braga",
     "population": 193000,
-    "country": "PT"
+    "country": "PT",
+    "lat": 41.533,
+    "lon": -8.417
   },
   "Q215374": {
     "name": "Askøy",
     "population": 29000,
-    "country": "NO"
+    "country": "NO",
+    "lat": 60.467,
+    "lon": 5.150
   },
   "Q499896": {
     "name": "Rebild",
     "population": 29000,
-    "country": "DK"
+    "country": "DK",
+    "lat": 56.886,
+    "lon": 9.819
   },
   "Q514844": {
     "name": "Vallensbæk",
     "population": 17000,
-    "country": "DK"
+    "country": "DK",
+    "lat": 55.633,
+    "lon": 12.367
   },
   "Q500076": {
     "name": "Gentofte",
     "population": 75000,
-    "country": "DK"
+    "country": "DK",
+    "lat": 55.750,
+    "lon": 12.552
   },
   "Q1425064": {
     "name": "Odsherred",
     "population": 32000,
-    "country": "DK"
+    "country": "DK",
+    "lat": 55.931,
+    "lon": 11.662
   },
   "Q2966": {
     "name": "Heidelberg",
     "population": 162000,
-    "country": "DE"
+    "country": "DE",
+    "lat": 49.412,
+    "lon": 8.710
   },
   "Q9934": {
     "name": "Hilversum",
     "population": 94000,
-    "country": "NL"
+    "country": "NL",
+    "lat": 52.230,
+    "lon": 5.180
   },
   "Q10005": {
     "name": "Hellendoorn",
     "population": 36000,
-    "country": "NL"
+    "country": "NL",
+    "lat": 52.389,
+    "lon": 6.450
   },
   "Q4035": {
     "name": "Osasco",
     "population": 728000,
-    "country": "BR"
+    "country": "BR",
+    "lat": -23.533,
+    "lon": -46.792
   },
   "Q424984": {
     "name": "Oakville",
     "population": 213000,
-    "country": "CA"
+    "country": "CA",
+    "lat": 43.450,
+    "lon": -79.683
   },
   "Q23661": {
     "name": "Wellington",
     "population": 215000,
-    "country": "NZ"
+    "country": "NZ",
+    "lat": -41.289,
+    "lon": 174.777
   },
   "Q258447": {
     "name": "Äänekoski",
     "population": 17000,
-    "country": "FI"
+    "country": "FI",
+    "lat": 62.600,
+    "lon": 25.725
   },
   "Q736586": {
     "name": "Burnsville",
     "population": 64000,
-    "country": "US"
+    "country": "US",
+    "lat": 44.768,
+    "lon": -93.278
   },
   "Q4656": {
     "name": "Pula",
     "population": 52000,
-    "country": "HR"
+    "country": "HR",
+    "lat": 44.870,
+    "lon": 13.846
   }
 } 

@@ -19,7 +19,11 @@ Object.keys(cityData).forEach(cityId => {
     
     // Append expiry timestamp to token
     const fullToken = `${token}_${expiryTime}`;
-    invertedTokenMap[fullToken] = cityId;
+    // Store both cityId and name in the token mapping
+    invertedTokenMap[fullToken] = {
+        id: cityId,
+        name: cityData[cityId].name || 'Unknown'
+    };
 });
 
 // Write inverted map to JSON file
