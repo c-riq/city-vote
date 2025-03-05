@@ -3,11 +3,16 @@ import { useState } from 'react';
 import { VOTE_HOST } from './constants';
 import { BrowserRouter, Routes, Route, Navigate, useParams, Link, useNavigate } from 'react-router-dom';
 import Poll from './components/Poll';
+import Header from './components/Header';
+import CityMap from './components/CityMap';
 
 interface CityInfo {
+  id: string;
   name: string;
   population: number;
   country: string;
+  lat: number;
+  lon: number;
 }
 
 interface TokenResponse {
@@ -39,6 +44,7 @@ function App() {
   const [votesData, setVotesData] = useState<PollVotes>({});
   const [cities, setCities] = useState<Record<string, CityInfo>>({});
   const [polls, _] = useState<Record<string, any>>({});
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const fetchVotes = async () => {
     try {
@@ -120,9 +126,16 @@ function App() {
     }
   };
 
+  const handleLogout = () => {
+    setCityInfo(null);
+    setCityId(null);
+    setToken('');
+    setVotesData({});
+    setCities({});
+  };
+
   function AuthenticatedContent() {
     const navigate = useNavigate();
-    const [isModalOpen, setIsModalOpen] = useState(false);
     const [question, setQuestion] = useState('');
 
     const handleCreatePoll = () => {
@@ -179,7 +192,12 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Container>
+      <Header
+        cityInfo={cityInfo}
+        onLogout={handleLogout}
+        onCreatePoll={() => setIsModalOpen(true)}
+      />
+      <Container sx={{ pt: '80px' }}>
         <AuthenticatedContent />
         <Routes>
           <Route path="/" element={
@@ -248,7 +266,6 @@ function App() {
                   boxShadow: 1
                 }}>
                   <Typography variant="h4">{cityInfo?.name}</Typography>
-                  <Typography variant="body1">Population: {cityInfo?.population.toLocaleString()}</Typography>
                   <Typography variant="body2">
                     ID: <Link 
                       to={`https://www.wikidata.org/wiki/${cityId}`}
@@ -277,7 +294,7 @@ function App() {
                       }}
                     >
                       <Link to={`/poll/${pollId}`} style={{ textDecoration: 'none' }}>
-                        <Typography variant="h6">Poll ID: {pollId}</Typography>
+                        <Typography variant="h6">{pollId}</Typography>
                       </Link>
                       {Object.entries(citiesVotes).map(([cityId, votes]) => (
                         <Box key={cityId} sx={{ mt: 2 }}>
@@ -331,6 +348,11 @@ function App() {
             } 
           />
         </Routes>
+        {cityInfo && (
+          <Box sx={{ mb: 4 }}>
+            <CityMap cities={cities} />
+          </Box>
+        )}
       </Container>
     </BrowserRouter>
   );

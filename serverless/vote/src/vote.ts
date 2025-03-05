@@ -83,49 +83,56 @@ async function releaseLock(): Promise<void> {
     }));
 }
 
-// Add these type definitions and action handlers above the main handler
-type ActionHandler = (params: ActionParams) => Promise<APIGatewayProxyResult>;
-
-interface ActionParams {
-    cityId?: string;
-    resolvedCityId: string;
+// Specific interfaces for each action
+interface ValidateTokenParams {
+    resolvedCity: {
+        id: string;
+        name: string;
+    };
     token: string;
-    pollId?: string;
-    option?: number;
 }
 
-const handleValidateToken = async ({ resolvedCityId }: ActionParams): Promise<APIGatewayProxyResult> => {
-    const cityData = await s3Client.send(new GetObjectCommand({
-        Bucket: BUCKET_NAME,
-        Key: 'cities/cities.json'
-    }));
+interface VoteParams {
+    cityId?: string;
+    resolvedCity: {
+        id: string;
+        name: string;
+    };
+    token: string;
+    pollId: string;
+    option: number;
+}
 
-    if (!cityData.Body) {
-        throw new Error('City data not found');
-    }
+interface GetVotesParams {
+    cityId?: string;
+    resolvedCity: {
+        id: string;
+        name: string;
+    };
+    token: string;
+}
 
-    const citiesString = await streamToString(cityData.Body as Readable);
-    const cities: Record<string, any> = JSON.parse(citiesString);
+interface GetCitiesParams {
+    resolvedCity: {
+        id: string;
+        name: string;
+    };
+    token: string;
+}
 
-    if (!cities[resolvedCityId]) {
-        return {
-            statusCode: 404,
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: 'City not found' })
-        };
-    }
-
+// Update action handlers with specific types
+const handleValidateToken = async ({ resolvedCity }: ValidateTokenParams): Promise<APIGatewayProxyResult> => {
     return {
         statusCode: 200,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-            city: cities[resolvedCityId],
-            cityId: resolvedCityId
+            city: resolvedCity,
+            cityId: resolvedCity.id
         })
     };
 };
 
-const handleVote = async ({ cityId, resolvedCityId, pollId, option }: ActionParams): Promise<APIGatewayProxyResult> => {
+const handleVote = async ({ cityId, resolvedCity, pollId, option }: VoteParams): Promise<APIGatewayProxyResult> => {
     if (!pollId || option === undefined) {
         return {
             statusCode: 400,
@@ -139,7 +146,7 @@ const handleVote = async ({ cityId, resolvedCityId, pollId, option }: ActionPara
         };
     }
 
-    if (cityId && cityId !== resolvedCityId) {
+    if (cityId && cityId !== resolvedCity.id) {
         return {
             statusCode: 403,
             headers: { 'Content-Type': 'application/json' },
@@ -182,9 +189,9 @@ const handleVote = async ({ cityId, resolvedCityId, pollId, option }: ActionPara
         }
 
         if (!votes[pollId]) votes[pollId] = {};
-        if (!votes[pollId][resolvedCityId]) votes[pollId][resolvedCityId] = [];
+        if (!votes[pollId][resolvedCity.id]) votes[pollId][resolvedCity.id] = [];
 
-        votes[pollId][resolvedCityId].push([Date.now(), option]);
+        votes[pollId][resolvedCity.id].push([Date.now(), option]);
 
         await s3Client.send(new PutObjectCommand({
             Bucket: BUCKET_NAME,
@@ -207,7 +214,7 @@ const handleVote = async ({ cityId, resolvedCityId, pollId, option }: ActionPara
     }
 };
 
-const handleGetVotes = async ({ resolvedCityId, cityId }: ActionParams): Promise<APIGatewayProxyResult> => {
+const handleGetVotes = async ({ resolvedCity, cityId }: GetVotesParams): Promise<APIGatewayProxyResult> => {
     try {
         const votesData = await s3Client.send(new GetObjectCommand({
             Bucket: BUCKET_NAME,
@@ -258,7 +265,7 @@ const handleGetVotes = async ({ resolvedCityId, cityId }: ActionParams): Promise
     }
 };
 
-const handleGetCities = async ({ resolvedCityId }: ActionParams): Promise<APIGatewayProxyResult> => {
+const handleGetCities = async ({ resolvedCity }: GetCitiesParams): Promise<APIGatewayProxyResult> => {
     try {
         const cityData = await s3Client.send(new GetObjectCommand({
             Bucket: BUCKET_NAME,
@@ -293,7 +300,15 @@ const handleGetCities = async ({ resolvedCityId }: ActionParams): Promise<APIGat
     }
 };
 
-const actionHandlers: Record<string, ActionHandler> = {
+// Update action handlers type
+type ActionHandlers = {
+    validateToken: (params: ValidateTokenParams) => Promise<APIGatewayProxyResult>;
+    vote: (params: VoteParams) => Promise<APIGatewayProxyResult>;
+    getVotes: (params: GetVotesParams) => Promise<APIGatewayProxyResult>;
+    getCities: (params: GetCitiesParams) => Promise<APIGatewayProxyResult>;
+};
+
+const actionHandlers: ActionHandlers = {
     validateToken: handleValidateToken,
     vote: handleVote,
     getVotes: handleGetVotes,
@@ -325,8 +340,8 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
             };
         }
 
-        // Validate token and get resolvedCityId
-        let resolvedCityId: string;
+        // Validate token and get resolvedCity
+        let resolvedCity: { id: string; name: string };
         try {
             const authData = await s3Client.send(new GetObjectCommand({
                 Bucket: BUCKET_NAME,
@@ -342,10 +357,10 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
             }
 
             const authString = await streamToString(authData.Body as Readable);
-            const auth: Record<string, string> = JSON.parse(authString);
+            const auth: Record<string, { id: string; name: string }> = JSON.parse(authString);
 
-            resolvedCityId = auth[token];
-            if (!resolvedCityId) {
+            resolvedCity = auth[token];
+            if (!resolvedCity) {
                 return {
                     statusCode: 403,
                     headers: { 'Content-Type': 'application/json' },
@@ -364,7 +379,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
             };
         }
 
-        const handler = actionHandlers[action];
+        const handler = actionHandlers[action as keyof ActionHandlers];
         if (!handler) {
             return {
                 statusCode: 400,
@@ -375,7 +390,8 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
             };
         }
 
-        return await handler({ cityId, resolvedCityId, token, pollId, option });
+        // Type assertion to ensure correct params are passed to each handler
+        return await handler({ cityId, resolvedCity, token, pollId, option } as any);
     } catch (error) {
         console.error('Error:', error);
         return {
