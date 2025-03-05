@@ -1,7 +1,9 @@
-import { Button, Container, Typography, TextField, Box, Dialog, DialogTitle, DialogContent, DialogActions, createTheme, ThemeProvider } from '@mui/material';
+import { Button, Container, Typography, TextField, Box, Dialog, 
+  DialogTitle, DialogContent, DialogActions, createTheme, 
+  ThemeProvider, Link as MuiLink, Tooltip } from '@mui/material';
 import { useState } from 'react';
 import { VOTE_HOST } from './constants';
-import { BrowserRouter, Routes, Route, Navigate, useParams, Link, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useParams, useNavigate, Link } from 'react-router-dom';
 import Poll from './components/Poll';
 import Header from './components/Header';
 // import CityMap from './components/CityMap';
@@ -179,7 +181,8 @@ function App() {
     const handleCreatePoll = () => {
       if (question.trim()) {
         setIsModalOpen(false);
-        navigate(`/poll/${encodeURIComponent(question)}`);
+        const encodedQuestion = encodeURIComponent(question.trim());
+        navigate(`/poll/${encodedQuestion}`);
         setQuestion('');
       }
     };
@@ -190,7 +193,7 @@ function App() {
     };
 
     return (
-      <>
+      <Box component="div">
         <Dialog open={isModalOpen} onClose={handleCancel}>
           <DialogTitle component="div">New Poll Question</DialogTitle>
           <DialogContent>
@@ -224,7 +227,7 @@ function App() {
             </Button>
           </Box>
         )}
-      </>
+      </Box>
     );
   }
 
@@ -307,6 +310,11 @@ function App() {
                         value={token}
                         onChange={(e) => setToken(e.target.value)}
                         error={!!error}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' && !isLoading) {
+                            handleSubmit();
+                          }
+                        }}
                       />
                       <Button 
                         variant="contained" 
@@ -392,26 +400,123 @@ function App() {
                 >
                   <Box sx={{ 
                     width: '100%', 
-                    textAlign: 'center',
+                    maxWidth: 800,  // Limit maximum width
+                    textAlign: 'left',  // Align text to left
                     mb: 4,
-                    p: 3,
+                    p: 4,  // Increased padding
                     bgcolor: 'background.paper',
                     borderRadius: 2,
-                    boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.05)',  // Subtler shadow
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 1,  // Consistent spacing between elements
                   }}>
-                    <Typography variant="h4" sx={{ color: 'primary.main' }}>
-                      {cityInfo?.name}
+                    <Typography variant="h5" sx={{ 
+                      color: 'primary.main',
+                      fontWeight: 600,
+                      mb: 1,
+                    }}>
+                      {cities[cityId!]?.name || cityInfo.name}
                     </Typography>
-                    <Typography variant="body2" sx={{ mt: 1, color: 'text.secondary' }}>
-                      ID: <Link 
-                        to={`https://www.wikidata.org/wiki/${cityId}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        sx={{ color: 'primary.main' }}
-                      >
-                        {cityId}
-                      </Link>
-                    </Typography>
+                    
+                    <Box sx={{ 
+                      display: 'grid',
+                      gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' },
+                      gap: 2,
+                    }}>
+                      <Box>
+                        <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+                          Country
+                        </Typography>
+                        <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                          {cities[cityId!]?.country || cityInfo.country}
+                        </Typography>
+                      </Box>
+                      
+                      <Box>
+                        <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+                          Population
+                        </Typography>
+                        <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                          {cities[cityId!]?.population?.toLocaleString() || 'N/A'} ± 10%
+                        </Typography>
+                      </Box>
+
+                      <Box>
+                        <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+                          Verification method
+                        </Typography>
+                        <Typography variant="body2" sx={{ 
+                          fontWeight: 500,
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 0.5
+                        }}>
+                          Mayor' Linkedin account
+                          <Tooltip title="Authentication via the official city website will soon be required">
+                            <span 
+                              className="material-icons"
+                              style={{ 
+                                fontSize: '16px',
+                                color: theme.palette.primary.main,
+                                cursor: 'help'
+                              }}
+                            >
+                              info
+                            </span>
+                          </Tooltip>
+                        </Typography>
+                      </Box>
+
+                      <Box>
+                        <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+                          Verified by
+                        </Typography>
+                        <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                          Rix Data NL B.V.
+                        </Typography>
+                      </Box>
+
+                      <Box>
+                        <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+                          Verification confidence level
+                        </Typography>
+                        <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                          90%
+                        </Typography>
+                      </Box>
+
+                      <Box>
+                        <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+                          Coordinates
+                        </Typography>
+                        <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                          {cities[cityId!]?.lat?.toFixed(4) || 'N/A'}°N, {cities[cityId!]?.lon?.toFixed(4) || 'N/A'}°E
+                        </Typography>
+                      </Box>
+
+                      <Box>
+                        <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+                          Wikidata identifier
+                        </Typography>
+                        <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                          <MuiLink 
+                            href={`https://www.wikidata.org/wiki/${cityId}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            sx={{ 
+                              color: 'primary.main',
+                              textDecoration: 'none',
+                              '&:hover': {
+                                textDecoration: 'underline'
+                              }
+                            }}
+                          >
+                            {cityId}
+                          </MuiLink>
+                        </Typography>
+                      </Box>
+                    </Box>
                   </Box>
                   
                   {/* Votes Display */}
@@ -434,7 +539,7 @@ function App() {
                           }
                         }}
                       >
-                        <Link to={`/poll/${pollId}`} style={{ textDecoration: 'none' }}>
+                        <Link to={`/poll/${encodeURIComponent(pollId)}`} style={{ textDecoration: 'none' }}>
                           <Typography variant="h6">{pollId}</Typography>
                         </Link>
                         {Object.entries(citiesVotes).map(([cityId, votes]) => (

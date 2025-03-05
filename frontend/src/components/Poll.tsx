@@ -172,22 +172,19 @@ function Poll({ token, pollData, onVoteComplete, votesData, cities }: PollProps)
                       </Typography>
                     }
                     secondary={
-                      <Box component="div" sx={{ mt: 1 }}>
-                        {votes.map(([timestamp, option], index) => (
-                          <Typography
-                            key={index}
-                            variant="body2"
-                            color="text.secondary"
-                            component="span"
-                            sx={{ 
-                              display: 'block',
-                              py: 0.5
-                            }}
-                          >
-                            {new Date(timestamp).toLocaleString()}: Voted {option}
-                          </Typography>
-                        ))}
-                      </Box>
+                      votes.map(([timestamp, option], index) => (
+                        <Typography
+                          key={index}
+                          variant="body2"
+                          color="text.secondary"
+                          component="div"
+                          sx={{ 
+                            py: 0.5
+                          }}
+                        >
+                          {new Date(timestamp).toLocaleString()}: Voted {option}
+                        </Typography>
+                      ))
                     }
                   />
                 </ListItem>
