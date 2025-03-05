@@ -2,6 +2,10 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { S3Client, GetObjectCommand, PutObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3';
 import { Readable } from 'stream';
 import crypto from 'crypto';
+import {
+    City,
+    VoteData,
+} from './types';
 
 const s3Client = new S3Client({ region: 'us-east-1' });
 const BUCKET_NAME = 'city-vote-data';
@@ -83,21 +87,15 @@ async function releaseLock(): Promise<void> {
     }));
 }
 
-// Specific interfaces for each action
+// Update interface to use imported type
 interface ValidateTokenParams {
-    resolvedCity: {
-        id: string;
-        name: string;
-    };
+    resolvedCity: City;
     token: string;
 }
 
 interface VoteParams {
     cityId?: string;
-    resolvedCity: {
-        id: string;
-        name: string;
-    };
+    resolvedCity: City;
     token: string;
     pollId: string;
     option: string;
@@ -108,27 +106,17 @@ interface VoteParams {
 
 interface GetVotesParams {
     cityId?: string;
-    resolvedCity: {
-        id: string;
-        name: string;
-    };
+    resolvedCity: City;
     token: string;
 }
 
 interface GetCitiesParams {
-    resolvedCity: {
-        id: string;
-        name: string;
-    };
+    resolvedCity: City;
     token: string;
 }
 
-// Add new interface for createPoll
 interface CreatePollParams {
-    resolvedCity: {
-        id: string;
-        name: string;
-    };
+    resolvedCity: City;
     token: string;
     pollId: string;
 }
@@ -187,11 +175,7 @@ const handleVote = async ({ cityId, resolvedCity, pollId, option, title, name, a
     }
 
     try {
-        let votes: Record<string, Record<string, [number, string, { 
-            title: string; 
-            name: string; 
-            actingCapacity: 'individual' | 'representingCityAdministration' 
-        }][]>> = {};
+        let votes: VoteData = {};
         try {
             const existingData = await s3Client.send(new GetObjectCommand({
                 Bucket: BUCKET_NAME,
@@ -346,7 +330,7 @@ const handleCreatePoll = async ({ pollId }: CreatePollParams): Promise<APIGatewa
     }
 
     try {
-        let votes: Record<string, Record<string, [number, string][]>> = {};
+        let votes: VoteData = {};
         try {
             const existingData = await s3Client.send(new GetObjectCommand({
                 Bucket: BUCKET_NAME,
@@ -440,7 +424,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
         }
 
         // Validate token and get resolvedCity
-        let resolvedCity: { id: string; name: string };
+        let resolvedCity: City;
         try {
             const authData = await s3Client.send(new GetObjectCommand({
                 Bucket: BUCKET_NAME,
@@ -456,7 +440,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
             }
 
             const authString = await streamToString(authData.Body as Readable);
-            const auth: Record<string, { id: string; name: string }> = JSON.parse(authString);
+            const auth: Record<string, City> = JSON.parse(authString);
 
             resolvedCity = auth[token];
             if (!resolvedCity) {

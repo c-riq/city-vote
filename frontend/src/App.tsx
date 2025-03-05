@@ -10,39 +10,20 @@ import Header from './components/Header';
 import WorldMap from './components/WorldMap';
 import CityInfoBox from './components/CityInfoBox';
 import VoteList from './components/VoteList';
+import {
+  City,
+  ValidateTokenResponse,
+  GetCitiesResponse,
+  GetVotesResponse
+} from './voteBackendTypes';
 
-interface CityInfo {
-  id: string;
-  name: string;
-  population: number;
-  country: string;
-  lat: number;
-  lon: number;
-}
-
-interface TokenResponse {
-  city: CityInfo;
-  cityId: string;
-  message?: string;
-  details?: string;
-}
-
-interface CitiesResponse {
-  cities: Record<string, CityInfo>;
-}
-
-type Vote = [number, string, { title: string; name: string; actingCapacity: 'individual' | 'representingCity' }];
+type Vote = [number, string, { title: string; name: string; actingCapacity: 'individual' | 'representingCityAdministration' }];
 type CityVotes = Record<string, Vote[]>;  // cityId -> votes
 type PollVotes = Record<string, CityVotes>;  // pollId -> city votes
 
-interface VotesResponse {
-  votes: PollVotes;
-  message?: string;
-}
-
 function CityRoute({ cityInfo, cities, theme }: { 
-  cityInfo: CityInfo | null,
-  cities: Record<string, CityInfo>,
+  cityInfo: City | null,
+  cities: Record<string, City>,
   theme: any
 }) {
   const { cityId } = useParams();
@@ -120,12 +101,12 @@ function App() {
   });
 
   const [token, setToken] = useState('');
-  const [cityInfo, setCityInfo] = useState<CityInfo | null>(null);
+  const [cityInfo, setCityInfo] = useState<City | null>(null);
   const [cityId, setCityId] = useState<string | null>(null);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [votesData, setVotesData] = useState<PollVotes>({});
-  const [cities, setCities] = useState<Record<string, CityInfo>>({});
+  const [cities, setCities] = useState<Record<string, City>>({});
   const [polls, _] = useState<Record<string, any>>({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isRefreshingVotes, setIsRefreshingVotes] = useState(false);
@@ -146,7 +127,7 @@ function App() {
         })
       });
 
-      const data: TokenResponse = await response.json();
+      const data: ValidateTokenResponse = await response.json();
       
       if (!response.ok) {
         throw new Error(data.message || data.details || 'Authentication failed');
@@ -163,7 +144,7 @@ function App() {
         body: JSON.stringify({ action: 'getCities', token })
       });
 
-      const citiesData: CitiesResponse = await citiesResponse.json();
+      const citiesData: GetCitiesResponse = await citiesResponse.json();
 
       if (!citiesResponse.ok) {
         throw new Error('Failed to fetch cities');
@@ -179,7 +160,7 @@ function App() {
         body: JSON.stringify({ action: 'getVotes', token })
       });
 
-      const votesData: VotesResponse = await votesResponse.json();
+      const votesData: GetVotesResponse = await votesResponse.json();
 
       if (!votesResponse.ok) {
         console.error(votesData.message || 'Failed to fetch votes');
@@ -206,7 +187,7 @@ function App() {
         body: JSON.stringify({ action: 'getVotes', token })
       });
 
-      const votesData: VotesResponse = await votesResponse.json();
+      const votesData: GetVotesResponse = await votesResponse.json();
 
       if (!votesResponse.ok) {
         console.error(votesData.message || 'Failed to fetch votes');
@@ -563,7 +544,6 @@ function App() {
                           votes={allVotes} 
                           cities={cities} 
                           variant="cell" 
-                          pollId={pollId}
                         />
                       </Box>
                     );
@@ -610,7 +590,21 @@ function App() {
   );
 }
 
-function PollWrapper({ token, cityInfo, polls, onVoteComplete, votesData, cities }: any) {
+function PollWrapper({ 
+  token, 
+  cityInfo, 
+  polls, 
+  onVoteComplete, 
+  votesData, 
+  cities 
+}: {
+  token: string;
+  cityInfo: City;
+  polls: Record<string, any>;
+  onVoteComplete: () => void;
+  votesData: PollVotes;
+  cities: Record<string, City>;
+}) {
   const { pollId } = useParams();
   
   if (pollId && polls[pollId]) {

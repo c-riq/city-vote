@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { 
   ComposableMap, 
   Geographies, 
   Geography, 
-  ZoomableGroup,
   Marker
 } from 'react-simple-maps';
 import { Box } from '@mui/material';
@@ -181,7 +180,7 @@ const WorldMap: React.FC = () => {
 const PopulationDots: React.FC = () => (
   <>
     {POPULATION_POINTS.map(({ coordinates, size }, i) => (
-      <Marker key={i} coordinates={coordinates}>
+      <Marker key={i} coordinates={coordinates as [number, number]}>
         <circle
           r={size / 2}
           fill="#1a237e"  // Primary color

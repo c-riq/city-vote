@@ -17,26 +17,19 @@ import {
 } from '@mui/material';
 import { VOTE_HOST } from '../constants';
 import VoteList from './VoteList';
-
-// Update the interface to include capacityAs
-interface Vote {
-  cityId: string;
-  timestamp: number;
-  option: string;
-  voteInfo: {
-    title: string;
-    name: string;
-    actingCapacity: 'individual' | 'representingCity';  // Changed from 'representingCityAdministration'
-  };
-}
+import {
+  City,
+  VoteData,
+  VoteRequest
+} from '../voteBackendTypes';
 
 interface PollProps {
   token: string;
-  cityInfo: any;
+  cityInfo: City;
   pollData: any;
   onVoteComplete?: () => void;
-  votesData?: Record<string, Vote>;
-  cities?: Record<string, any>;
+  votesData?: VoteData;
+  cities?: Record<string, City>;
 }
 
 function Poll({ token, pollData, onVoteComplete, votesData, cities, cityInfo }: PollProps) {
@@ -60,20 +53,22 @@ function Poll({ token, pollData, onVoteComplete, votesData, cities, cityInfo }: 
     setVoting(true);
     setError('');
     try {
+      const voteRequest: VoteRequest = {
+        action: 'vote',
+        token,
+        pollId: pollData?.id || pollId,
+        option,
+        title: personalInfo.title,
+        name: personalInfo.name,
+        actingCapacity: isPersonal ? 'individual' : 'representingCityAdministration'
+      };
+
       const response = await fetch(VOTE_HOST, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          action: 'vote',
-          token,
-          pollId: pollData?.id || pollId,
-          option,
-          title: personalInfo.title,
-          name: personalInfo.name,
-          actingCapacity: isPersonal ? 'individual' : 'representingCity'
-        })
+        body: JSON.stringify(voteRequest)
       });
 
       const data = await response.json();
@@ -82,7 +77,6 @@ function Poll({ token, pollData, onVoteComplete, votesData, cities, cityInfo }: 
         throw new Error(data.message || 'Failed to submit vote');
       }
 
-      // Notify parent component to refresh data
       onVoteComplete?.();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to submit vote');
@@ -256,7 +250,7 @@ function Poll({ token, pollData, onVoteComplete, votesData, cities, cityInfo }: 
               )
               .sort((a, b) => b.timestamp - a.timestamp)
             }
-            cities={cities}
+            cities={cities || {}}
             variant="list"
           />
 

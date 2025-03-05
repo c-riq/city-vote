@@ -8,7 +8,7 @@ interface Vote {
   voteInfo: {
     title: string;
     name: string;
-    actingCapacity: 'individual' | 'representingCity';
+    actingCapacity: 'individual' | 'representingCityAdministration';
   };
 }
 
@@ -16,11 +16,10 @@ interface VoteListProps {
   votes: Vote[];
   cities: Record<string, any>;
   variant?: 'list' | 'cell';
-  pollId?: string;  // Optional poll ID
   containerStyle?: React.CSSProperties;  // Optional container styles
 }
 
-const VoteList = ({ votes, cities, variant = 'list', pollId, containerStyle }: VoteListProps) => {
+const VoteList = ({ votes, cities, variant = 'list', containerStyle }: VoteListProps) => {
   const VoteContent = variant === 'cell' ? (
     <Box>
       {votes.map((vote, _) => (

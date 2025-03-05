@@ -106,8 +106,7 @@ interface MapContentProps {
   currentCity?: CityInfo;
 }
 
-const MapContent: React.FC<MapContentProps> = ({ 
-  cities, 
+const MapContent: React.FC<MapContentProps> = ({  
   setSelectedCity, 
   currentCity 
 }) => (
