@@ -180,10 +180,10 @@ function App() {
       const votesData: VotesResponse = await votesResponse.json();
 
       if (!votesResponse.ok) {
-        throw new Error(votesData.message || 'Failed to fetch votes');
+        console.error(votesData.message || 'Failed to fetch votes');
       }
 
-      setVotesData(votesData.votes);
+      setVotesData(votesData?.votes || {});
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to authenticate');
       setCityInfo(null);
@@ -250,9 +250,16 @@ function App() {
 
     return (
         <Box component="div">
-            <Dialog open={isModalOpen} onClose={handleCancel}>
-                <DialogTitle component="div">New Poll Question</DialogTitle>
-                <DialogContent>
+            <Dialog 
+                open={isModalOpen} 
+                onClose={handleCancel}
+                maxWidth="sm"
+                fullWidth
+            >
+                <DialogTitle component="div" sx={{ pb: 2, pt: 3, px: 3 }}>
+                    New Poll Question
+                </DialogTitle>
+                <DialogContent sx={{ px: 3, pb: 3 }}>
                     <TextField
                         fullWidth
                         label="Question"
@@ -261,7 +268,7 @@ function App() {
                         margin="normal"
                     />
                 </DialogContent>
-                <DialogActions>
+                <DialogActions sx={{ px: 3, pb: 3 }}>
                     <Button onClick={handleCancel}>Cancel</Button>
                     <Button 
                         onClick={handleCreatePoll}
