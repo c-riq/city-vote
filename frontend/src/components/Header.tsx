@@ -39,7 +39,7 @@ function Header({ cityInfo, onLogout, onCreatePoll }: HeaderProps) {
           src="/img/logo.png" 
           alt="City Vote Logo" 
           style={{ 
-            height: '32px',
+            height: '40px',
             width: 'auto'
           }} 
         />
@@ -81,7 +81,7 @@ function Header({ cityInfo, onLogout, onCreatePoll }: HeaderProps) {
         {cityInfo ? (
           <>
             <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'right', mr: 2 }}>
-              <LocationCityIcon sx={{ mr: 1 }} />
+              <LocationCityIcon sx={{ mr: 1, color: 'primary.main', opacity: 0.4 }} />
               <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
                 {cityInfo.name}
               </Typography>

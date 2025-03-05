@@ -15,14 +15,32 @@ interface CityInfoBoxProps {
   cityInfo: CityInfo | null;
   cities: Record<string, CityInfo>;
   theme: any;
+  token?: string;
 }
 
-function CityInfoBox({ cityId, cityInfo, cities, theme }: CityInfoBoxProps) {
+function CityInfoBox({ cityId, cityInfo, cities, theme, token }: CityInfoBoxProps) {
   const navigate = useNavigate();
   const location = useLocation();
   const city = cityId ? cities[cityId] : cityInfo;
   const showBackButton = location.pathname.startsWith('/city/');
   
+  // Extract expiration timestamp from token if it's the current city
+  const getExpirationInfo = () => {
+    if (!token || !cityId) {
+      return null;
+    }
+    
+    const match = token.match(/_(\d{10})$/);
+    if (!match) {
+      return null;
+    }
+    
+    const timestamp = parseInt(match[1]) * 1000;
+    return new Date(timestamp).toLocaleString();
+  };
+
+  const expirationTime = getExpirationInfo();
+
   return (
     <Box sx={{ 
       width: '100%', 
@@ -101,7 +119,7 @@ function CityInfoBox({ cityId, cityInfo, cities, theme }: CityInfoBoxProps) {
               alignItems: 'center',
               gap: 0.5
             }}>
-              Mayor linkedin account
+              Mayor's Linkedin account
               <Tooltip title="Authentication via the official city website will soon be required">
                 <span 
                   className="material-icons"
@@ -165,6 +183,17 @@ function CityInfoBox({ cityId, cityInfo, cities, theme }: CityInfoBoxProps) {
               </MuiLink>
             </Typography>
           </Box>
+
+          {expirationTime && (
+            <Box>
+              <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+                Access Token Expiration
+              </Typography>
+              <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                {expirationTime}
+              </Typography>
+            </Box>
+          )}
         </Box>
       </Box>
     </Box>

@@ -46,6 +46,10 @@ function CityRoute({ cityInfo, cities, theme }: {
 }) {
   const { cityId } = useParams();
   
+  if (!cityInfo) {
+    return <Navigate to="/" replace />;
+  }
+  
   return (
     <Box
       sx={{
@@ -299,7 +303,6 @@ function App() {
                       height: { xs: '250px', sm: '450px' },
                       borderRadius: 4,
                       overflow: 'hidden',
-                      boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
                       display: 'flex',
                       justifyContent: 'center',
                       alignItems: 'center',
@@ -427,10 +430,10 @@ function App() {
                     backgroundColor: 'background.default',
                   }}
                 >
-                  <CityInfoBox cityId={cityId} cityInfo={cityInfo} cities={cities} theme={theme} />
+                  <CityInfoBox cityId={cityId} cityInfo={cityInfo} cities={cities} theme={theme} token={token} />
                   
                   {/* Votes Display */}
-                  <Typography variant="h5" sx={{ mt: 4 }}>Voting History</Typography>
+                  <Typography variant="h5" sx={{ mt: 4 }}>All votes</Typography>
                   {Object.keys(votesData).length > 0 ? (
                     Object.entries(votesData).map(([pollId, citiesVotes]) => (
                       <Box 

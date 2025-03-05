@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Box, Typography, Button, List, ListItem, ListItemText, Divider } from '@mui/material';
+import { Box, Typography, Button, List, ListItem, ListItemText, Divider, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import { VOTE_HOST } from '../constants';
 
 interface PollProps {
@@ -12,14 +12,20 @@ interface PollProps {
   cities?: Record<string, any>;
 }
 
-function Poll({ token, pollData, onVoteComplete, votesData, cities }: PollProps) {
+function Poll({ token, pollData, onVoteComplete, votesData, cities, cityInfo }: PollProps) {
   const navigate = useNavigate();
   const { pollId } = useParams();
   const [error, setError] = useState('');
   const [voting, setVoting] = useState(false);
+  const [confirmDialog, setConfirmDialog] = useState<{ open: boolean; option: string | null }>({
+    open: false,
+    option: null
+  });
 
   // Remove modal-related state and handlers
   const pollVotes = votesData?.[pollData?.id || pollId] || {};
+
+  const hasVoted = pollVotes[cityInfo?.id]?.length > 0;
 
   const handleVote = async (option: string) => {
     setVoting(true);
@@ -51,6 +57,17 @@ function Poll({ token, pollData, onVoteComplete, votesData, cities }: PollProps)
     } finally {
       setVoting(false);
     }
+  };
+
+  const handleVoteClick = (option: string) => {
+    setConfirmDialog({ open: true, option });
+  };
+
+  const handleConfirmVote = async () => {
+    if (!confirmDialog.option) return;
+    
+    setConfirmDialog({ open: false, option: null });
+    await handleVote(confirmDialog.option);
   };
 
   return (
@@ -123,7 +140,7 @@ function Poll({ token, pollData, onVoteComplete, votesData, cities }: PollProps)
               <Button
                 key={index}
                 variant="contained"
-                onClick={() => handleVote(option)}
+                onClick={() => handleVoteClick(option)}
                 disabled={voting}
                 sx={{
                   py: 1.5,
@@ -192,6 +209,41 @@ function Poll({ token, pollData, onVoteComplete, votesData, cities }: PollProps)
               </Box>
             ))}
           </List>
+
+          <Dialog
+            open={confirmDialog.open}
+            onClose={() => setConfirmDialog({ open: false, option: null })}
+          >
+            <DialogTitle>Confirm Vote</DialogTitle>
+            <DialogContent>
+              <Typography>
+                Are you sure you want to vote "{confirmDialog.option}" for {cityInfo?.name}?
+              </Typography>
+              {hasVoted && (
+                <Typography
+                  sx={{ mt: 2, color: 'warning.main' }}
+                >
+                  Note: {cityInfo?.name} has already voted on this poll. This will add another vote to the history.
+                </Typography>
+              )}
+            </DialogContent>
+            <DialogActions>
+              <Button
+                onClick={() => setConfirmDialog({ open: false, option: null })}
+                color="inherit"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleConfirmVote}
+                variant="contained"
+                color="primary"
+                autoFocus
+              >
+                Confirm Vote
+              </Button>
+            </DialogActions>
+          </Dialog>
         </Box>
       )}
     </Box>
