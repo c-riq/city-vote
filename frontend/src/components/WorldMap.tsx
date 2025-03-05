@@ -184,9 +184,9 @@ const PopulationDots: React.FC = () => (
       <Marker key={i} coordinates={coordinates}>
         <circle
           r={size / 2}
-          fill="#333333"
-          opacity={0.5}
-          stroke="none"
+          fill="#1a237e"  // Primary color
+          opacity={0.75}
+          stroke="none"   // Remove border
         />
       </Marker>
     ))}

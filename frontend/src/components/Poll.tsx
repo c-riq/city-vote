@@ -1,16 +1,33 @@
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Box, Typography, Button, List, ListItem, ListItemText, Divider, Dialog, DialogTitle,
-  DialogContent, DialogActions, TextField, Radio, RadioGroup, FormControlLabel, FormControl } from '@mui/material';
+import { 
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Divider,
+  FormControl,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
+  TextField,
+  Typography
+} from '@mui/material';
 import { VOTE_HOST } from '../constants';
+import VoteList from './VoteList';
 
 // Update the interface to include capacityAs
 interface Vote {
-  [cityId: string]: [number, string, { 
-    title: string; 
-    name: string; 
-    actingCapacity: 'individual' | 'representingCityAdministration' 
-  }][];
+  cityId: string;
+  timestamp: number;
+  option: string;
+  voteInfo: {
+    title: string;
+    name: string;
+    actingCapacity: 'individual' | 'representingCity';  // Changed from 'representingCityAdministration'
+  };
 }
 
 interface PollProps {
@@ -55,7 +72,7 @@ function Poll({ token, pollData, onVoteComplete, votesData, cities, cityInfo }: 
           option,
           title: personalInfo.title,
           name: personalInfo.name,
-          actingCapacity: isPersonal ? 'individual' : 'representingCityAdministration'
+          actingCapacity: isPersonal ? 'individual' : 'representingCity'
         })
       });
 
@@ -227,55 +244,21 @@ function Poll({ token, pollData, onVoteComplete, votesData, cities, cityInfo }: 
             Voting History
           </Typography>
           
-          <List sx={{ 
-            bgcolor: 'background.default',
-            borderRadius: 2,
-            p: 0,
-            overflow: 'hidden'
-          }}>
-            {Object.entries(pollVotes).map(([cityId, votes], index) => (
-              <Box key={cityId}>
-                <ListItem sx={{ 
-                  py: 2,
-                  px: 3,
-                  bgcolor: index % 2 === 0 ? 'background.default' : 'background.paper'
-                }}>
-                  <ListItemText
-                    primary={
-                      <Typography sx={{ fontWeight: 500, color: 'primary.main' }}>
-                        {cities?.[cityId]?.name || cityId}
-                      </Typography>
-                    }
-                    secondary={
-                      votes.map(([timestamp, option, voteInfo], voteIndex) => (
-                        <Typography
-                          key={voteIndex}
-                          variant="body2"
-                          color="text.secondary"
-                          component="div"
-                          sx={{ py: 0.5 }}
-                        >
-                          {new Date(timestamp).toLocaleString()}: {' '}
-                          <span>
-                            {voteInfo.title} {voteInfo.name}
-                            {' '}
-                            <em>
-                              ({voteInfo.actingCapacity === 'individual' ? 
-                                'personal opinion' : 
-                                'representing City Administration'})
-                            </em>
-                          </span>
-                          {' voted '}
-                          <strong>{option}</strong>
-                        </Typography>
-                      ))
-                    }
-                  />
-                </ListItem>
-                {index < Object.entries(pollVotes).length - 1 && <Divider />}
-              </Box>
-            ))}
-          </List>
+          <VoteList 
+            votes={Object.entries(pollVotes)
+              .flatMap(([cityId, votes]) => 
+                votes.map(([timestamp, option, voteInfo]) => ({
+                  cityId,
+                  timestamp,
+                  option,
+                  voteInfo
+                }))
+              )
+              .sort((a, b) => b.timestamp - a.timestamp)
+            }
+            cities={cities}
+            variant="list"
+          />
 
           <Dialog
             open={confirmDialog.open}
@@ -284,11 +267,11 @@ function Poll({ token, pollData, onVoteComplete, votesData, cities, cityInfo }: 
             <DialogTitle>Confirm Vote</DialogTitle>
             <DialogContent>
               <Typography>
-                Are you sure you want to vote "{confirmDialog.option}"{' '}
+                Are you sure you want to vote "<strong>{confirmDialog.option}</strong>"{' '}
                 {isPersonal ? (
-                  <>as a personal vote from <strong>{personalInfo.title} {personalInfo.name}</strong></>
+                  <>as a <strong>personal</strong> vote from {personalInfo.title} <strong>{personalInfo.name}</strong></>
                 ) : (
-                  <>on behalf of the City Administration as <strong>{personalInfo.title} {personalInfo.name}</strong></>
+                  <>on <strong>behalf of the City Administration </strong> as {personalInfo.title} <strong>{personalInfo.name}</strong></>
                 )}?
               </Typography>
               {hasVoted && !isPersonal && (

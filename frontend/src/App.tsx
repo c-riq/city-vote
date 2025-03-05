@@ -9,6 +9,7 @@ import Header from './components/Header';
 // import CityMap from './components/CityMap';
 import WorldMap from './components/WorldMap';
 import CityInfoBox from './components/CityInfoBox';
+import VoteList from './components/VoteList';
 
 interface CityInfo {
   id: string;
@@ -374,7 +375,7 @@ function App() {
                         px: 2,
                       }}
                     >
-                      Please enter your access token
+                      Please enter your city access token
                     </Typography>
                     <Box sx={{ 
                       display: 'flex', 
@@ -524,14 +525,25 @@ function App() {
                       {isRefreshingVotes ? 'Refreshing...' : 'Refresh'}
                     </Button>
                   </Box>
-                  {Object.keys(votesData).length > 0 ? (
-                    Object.entries(votesData).map(([pollId, citiesVotes]) => (
+                  {Object.entries(votesData).map(([pollId, citiesVotes]) => {
+                    const allVotes = Object.entries(citiesVotes)
+                      .flatMap(([cityId, votes]) => 
+                        votes.map(([timestamp, option, voteInfo]) => ({
+                          cityId,
+                          timestamp,
+                          option,
+                          voteInfo
+                        }))
+                      )
+                      .sort((a, b) => b.timestamp - a.timestamp);
+
+                    return (
                       <Box 
                         key={pollId} 
                         sx={{ 
                           width: '100%',
                           maxWidth: 800,
-                          bgcolor: 'background.paper',
+                          backgroundColor: 'background.paper',
                           p: 3,
                           borderRadius: 2,
                           boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
@@ -543,52 +555,19 @@ function App() {
                         }}
                       >
                         <Link to={`/poll/${encodeURIComponent(pollId)}`} style={{ textDecoration: 'none' }}>
-                          <Typography variant="h6" sx={{ color: 'primary.main', fontWeight: 500 }}>
+                          <Typography variant="h6" sx={{ color: 'primary.main', fontWeight: 500, mb: 2 }}>
                             {pollId}
                           </Typography>
                         </Link>
-                        {Object.entries(citiesVotes).map(([cityId, votes]) => (
-                          <Box key={cityId} sx={{ mt: 2 }}>
-                            <Typography sx={{ fontWeight: 500, color: 'primary.main' }}>
-                              <Link 
-                                to={`/city/${cityId}`}
-                                style={{ 
-                                  color: 'inherit',
-                                  textDecoration: 'none'
-                                }}
-                              >
-                                {cities[cityId]?.name || cityId}
-                              </Link>
-                            </Typography>
-                            {votes.map(([timestamp, option, voteInfo], index) => (
-                              <Typography
-                                key={index}
-                                variant="body2"
-                                color="text.secondary"
-                                component="div"
-                                sx={{ py: 0.5 }}
-                              >
-                                {new Date(timestamp).toLocaleString()}: {' '}
-                                <span>
-                                  {voteInfo.title} {voteInfo.name}
-                                  {' '}
-                                  <em>
-                                    ({voteInfo.actingCapacity === 'individual' ? 
-                                      'personal opinion' : 
-                                      'representing City Administration'})
-                                  </em>
-                                </span>
-                                {' voted '}
-                                <strong>{option}</strong>
-                              </Typography>
-                            ))}
-                          </Box>
-                        ))}
+                        <VoteList 
+                          votes={allVotes} 
+                          cities={cities} 
+                          variant="cell" 
+                          pollId={pollId}
+                        />
                       </Box>
-                    ))
-                  ) : (
-                    <Typography color="text.secondary">No voting history available</Typography>
-                  )}
+                    );
+                  })}
                 </Box>
               )
             } />
