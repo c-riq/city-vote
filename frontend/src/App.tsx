@@ -210,57 +210,80 @@ function App() {
   function AuthenticatedContent() {
     const navigate = useNavigate();
     const [question, setQuestion] = useState('');
+    const [isCreatingPoll, setIsCreatingPoll] = useState(false);
 
-    const handleCreatePoll = () => {
-      if (question.trim()) {
-        setIsModalOpen(false);
-        const encodedQuestion = encodeURIComponent(question.trim());
-        navigate(`/poll/${encodedQuestion}`);
-        setQuestion('');
-      }
+    const handleCreatePoll = async () => {
+        if (!question.trim()) return;
+        
+        setIsCreatingPoll(true);
+        try {
+            const response = await fetch(VOTE_HOST, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    action: 'createPoll',
+                    token,
+                    pollId: question.trim()
+                })
+            });
+
+            if (!response.ok) {
+                const data = await response.json();
+                throw new Error(data.message || 'Failed to create poll');
+            }
+
+            setIsModalOpen(false);
+            const encodedQuestion = encodeURIComponent(question.trim());
+            navigate(`/poll/${encodedQuestion}`);
+            setQuestion('');
+        } catch (err) {
+            alert(err instanceof Error ? err.message : 'Failed to create poll');
+        } finally {
+            setIsCreatingPoll(false);
+        }
     };
 
     const handleCancel = () => {
-      setQuestion('');
-      setIsModalOpen(false);
+        setQuestion('');
+        setIsModalOpen(false);
     };
 
     return (
-      <Box component="div">
-        <Dialog open={isModalOpen} onClose={handleCancel}>
-          <DialogTitle component="div">New Poll Question</DialogTitle>
-          <DialogContent>
-            <TextField
-              fullWidth
-              label="Question"
-              value={question}
-              onChange={(e) => setQuestion(e.target.value)}
-              margin="normal"
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleCancel}>Cancel</Button>
-            <Button 
-              onClick={handleCreatePoll}
-              disabled={!question.trim()}
-            >
-              Create Poll
-            </Button>
-          </DialogActions>
-        </Dialog>
+        <Box component="div">
+            <Dialog open={isModalOpen} onClose={handleCancel}>
+                <DialogTitle component="div">New Poll Question</DialogTitle>
+                <DialogContent>
+                    <TextField
+                        fullWidth
+                        label="Question"
+                        value={question}
+                        onChange={(e) => setQuestion(e.target.value)}
+                        margin="normal"
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCancel}>Cancel</Button>
+                    <Button 
+                        onClick={handleCreatePoll}
+                        disabled={!question.trim() || isCreatingPoll}
+                    >
+                        {isCreatingPoll ? 'Creating...' : 'Create Poll'}
+                    </Button>
+                </DialogActions>
+            </Dialog>
 
-        {cityInfo && (
-          <Box sx={{ position: 'fixed', top: 16, right: 16, zIndex: 1000 }}>
-            <Button 
-              onClick={() => setIsModalOpen(true)} 
-              variant="contained" 
-              color="primary"
-            >
-              Create New Poll
-            </Button>
-          </Box>
-        )}
-      </Box>
+            {cityInfo && (
+                <Box sx={{ position: 'fixed', top: 16, right: 16, zIndex: 1000 }}>
+                    <Button 
+                        onClick={() => setIsModalOpen(true)} 
+                        variant="contained" 
+                        color="primary"
+                    >
+                        Create New Poll
+                    </Button>
+                </Box>
+            )}
+        </Box>
     );
   }
 
@@ -433,7 +456,7 @@ function App() {
                   <CityInfoBox cityId={cityId} cityInfo={cityInfo} cities={cities} theme={theme} token={token} />
                   
                   {/* Votes Display */}
-                  <Typography variant="h5" sx={{ mt: 4 }}>All votes</Typography>
+                  <Typography variant="h5" sx={{ mt: 4 }}>All Polls</Typography>
                   {Object.keys(votesData).length > 0 ? (
                     Object.entries(votesData).map(([pollId, citiesVotes]) => (
                       <Box 

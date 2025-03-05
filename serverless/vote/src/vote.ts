@@ -100,7 +100,7 @@ interface VoteParams {
     };
     token: string;
     pollId: string;
-    option: number;
+    option: boolean;
 }
 
 interface GetVotesParams {
@@ -118,6 +118,16 @@ interface GetCitiesParams {
         name: string;
     };
     token: string;
+}
+
+// Add new interface for createPoll
+interface CreatePollParams {
+    resolvedCity: {
+        id: string;
+        name: string;
+    };
+    token: string;
+    pollId: string;
 }
 
 // Update action handlers with specific types
@@ -171,7 +181,7 @@ const handleVote = async ({ cityId, resolvedCity, pollId, option }: VoteParams):
     }
 
     try {
-        let votes: Record<string, Record<string, [number, number][]>> = {};
+        let votes: Record<string, Record<string, [number, boolean][]>> = {};
         try {
             const existingData = await s3Client.send(new GetObjectCommand({
                 Bucket: BUCKET_NAME,
@@ -234,7 +244,7 @@ const handleGetVotes = async ({ resolvedCity, cityId }: GetVotesParams): Promise
 
         // If cityId is specified, filter votes for that city only
         if (cityId) {
-            const cityVotes: Record<string, [number, number][]> = {};
+            const cityVotes: Record<string, [number, boolean][]> = {};
             Object.entries(votes).forEach(([pollId, pollData]: [string, any]) => {
                 if (pollData[cityId]) {
                     cityVotes[pollId] = pollData[cityId];
@@ -300,12 +310,86 @@ const handleGetCities = async ({ resolvedCity }: GetCitiesParams): Promise<APIGa
     }
 };
 
+const handleCreatePoll = async ({ pollId }: CreatePollParams): Promise<APIGatewayProxyResult> => {
+    if (!pollId) {
+        return {
+            statusCode: 400,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: 'Missing required parameter: pollId' })
+        };
+    }
+
+    const sessionId = Buffer.from(crypto.getRandomValues(new Uint8Array(16))).toString('base64');
+    let lockAcquired = false;
+
+    lockAcquired = await acquireLock(sessionId);
+    if (!lockAcquired) {
+        return {
+            statusCode: 429,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: 'Failed to acquire lock, please try again' })
+        };
+    }
+
+    try {
+        let votes: Record<string, Record<string, [number, boolean][]>> = {};
+        try {
+            const existingData = await s3Client.send(new GetObjectCommand({
+                Bucket: BUCKET_NAME,
+                Key: VOTES_KEY
+            }));
+            
+            if (existingData.Body) {
+                const dataString = await streamToString(existingData.Body as Readable);
+                votes = JSON.parse(dataString);
+            }
+        } catch (error: any) {
+            if (error.name !== 'NoSuchKey') {
+                throw error;
+            }
+        }
+
+        // Check if poll already exists
+        if (votes[pollId]) {
+            await releaseLock();
+            return {
+                statusCode: 409,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: 'Poll already exists' })
+            };
+        }
+
+        // Initialize empty poll
+        votes[pollId] = {};
+
+        await s3Client.send(new PutObjectCommand({
+            Bucket: BUCKET_NAME,
+            Key: VOTES_KEY,
+            Body: JSON.stringify(votes),
+            ContentType: 'application/json'
+        }));
+        await releaseLock();
+
+        return {
+            statusCode: 200,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: 'Poll created successfully' })
+        };
+    } catch (error) {
+        if (lockAcquired) {
+            await releaseLock();
+        }
+        throw error;
+    }
+};
+
 // Update action handlers type
 type ActionHandlers = {
     validateToken: (params: ValidateTokenParams) => Promise<APIGatewayProxyResult>;
     vote: (params: VoteParams) => Promise<APIGatewayProxyResult>;
     getVotes: (params: GetVotesParams) => Promise<APIGatewayProxyResult>;
     getCities: (params: GetCitiesParams) => Promise<APIGatewayProxyResult>;
+    createPoll: (params: CreatePollParams) => Promise<APIGatewayProxyResult>;
 };
 
 const actionHandlers: ActionHandlers = {
@@ -313,6 +397,7 @@ const actionHandlers: ActionHandlers = {
     vote: handleVote,
     getVotes: handleGetVotes,
     getCities: handleGetCities,
+    createPoll: handleCreatePoll,
 };
 
 export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {

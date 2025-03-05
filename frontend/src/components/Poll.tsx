@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Box, Typography, Button, List, ListItem, ListItemText, Divider, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
+import { Box, Typography, Button, List, ListItem, ListItemText, Divider, Dialog, DialogTitle,
+  DialogContent, DialogActions } from '@mui/material';
 import { VOTE_HOST } from '../constants';
 
 interface PollProps {
