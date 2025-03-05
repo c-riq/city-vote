@@ -127,6 +127,7 @@ function App() {
   const [cities, setCities] = useState<Record<string, CityInfo>>({});
   const [polls, _] = useState<Record<string, any>>({});
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isRefreshingVotes, setIsRefreshingVotes] = useState(false);
 
   const fetchData = async () => {
     setError('');
@@ -192,6 +193,30 @@ function App() {
       setCities({});
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const fetchVotesOnly = async () => {
+    setIsRefreshingVotes(true);
+    try {
+      const votesResponse = await fetch(`${VOTE_HOST}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'getVotes', token })
+      });
+
+      const votesData: VotesResponse = await votesResponse.json();
+
+      if (!votesResponse.ok) {
+        console.error(votesData.message || 'Failed to fetch votes');
+        return;
+      }
+
+      setVotesData(votesData?.votes || {});
+    } catch (err) {
+      console.error('Failed to fetch votes:', err);
+    } finally {
+      setIsRefreshingVotes(false);
     }
   };
 
@@ -463,7 +488,42 @@ function App() {
                   <CityInfoBox cityId={cityId} cityInfo={cityInfo} cities={cities} theme={theme} token={token} />
                   
                   {/* Votes Display */}
-                  <Typography variant="h5" sx={{ mt: 4 }}>All Polls</Typography>
+                  <Box sx={{ 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    justifyContent: 'center',
+                    gap: 2,
+                    mt: 4,
+                    width: '100%',
+                    maxWidth: 800
+                  }}>
+                    <Typography variant="h5">All Polls</Typography>
+                    <Button
+                      onClick={fetchVotesOnly}
+                      startIcon={
+                        isRefreshingVotes ? (
+                          <span className="material-icons" style={{ animation: 'spin 1s linear infinite' }}>sync</span>
+                        ) : (
+                          <span className="material-icons">refresh</span>
+                        )
+                      }
+                      disabled={isRefreshingVotes}
+                      size="small"
+                      sx={{ 
+                        minWidth: 'auto',
+                        '@keyframes spin': {
+                          '0%': {
+                            transform: 'rotate(0deg)',
+                          },
+                          '100%': {
+                            transform: 'rotate(360deg)',
+                          },
+                        },
+                      }}
+                    >
+                      {isRefreshingVotes ? 'Refreshing...' : 'Refresh'}
+                    </Button>
+                  </Box>
                   {Object.keys(votesData).length > 0 ? (
                     Object.entries(votesData).map(([pollId, citiesVotes]) => (
                       <Box 
