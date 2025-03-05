@@ -43,18 +43,38 @@ function Header({ cityInfo, onLogout, onCreatePoll }: HeaderProps) {
             width: 'auto'
           }} 
         />
-        <Typography 
-          variant="h6" 
-          component="div"
-          sx={{ 
-            cursor: 'pointer',
-            fontWeight: 'bold',
-            '&:hover': { color: 'primary.main' }
-          }}
-          onClick={() => navigate('/')}
-        >
-          city-vote.com
-        </Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <Typography 
+            variant="h6" 
+            component="div"
+            sx={{ 
+              cursor: 'pointer',
+              fontWeight: 'bold',
+              '&:hover': { color: 'primary.main' }
+            }}
+            onClick={() => navigate('/')}
+          >
+            city-vote.com
+          </Typography>
+          <Box
+            sx={{
+              bgcolor: 'primary.main',
+              color: 'primary.contrastText',
+              px: 1,
+              py: 0.25,
+              borderRadius: 1,
+              fontSize: '0.65rem',
+              fontWeight: 500,
+              textTransform: 'uppercase',
+              letterSpacing: '0.05em',
+              display: 'inline-flex',
+              alignItems: 'center',
+              height: 'fit-content'
+            }}
+          >
+            Beta
+          </Box>
+        </Box>
       </Box>
 
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>

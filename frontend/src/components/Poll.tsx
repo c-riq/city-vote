@@ -54,50 +54,135 @@ function Poll({ token, pollData, onVoteComplete, votesData, cities }: PollProps)
   };
 
   return (
-    <Box sx={{ mt: 4, mb: 4 }}>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
-        <Button onClick={() => navigate('/')} variant="outlined">
+    <Box sx={{ 
+      mt: 4, 
+      mb: 4,
+      maxWidth: 800,
+      mx: 'auto'
+    }}>
+      <Box sx={{ 
+        display: 'flex', 
+        justifyContent: 'space-between', 
+        mb: 4,
+        alignItems: 'center'
+      }}>
+        <Button 
+          onClick={() => navigate('/')} 
+          variant="outlined"
+          startIcon={<span className="material-icons">arrow_back</span>}
+          sx={{
+            borderRadius: 2,
+            px: 3
+          }}
+        >
           Back to Dashboard
         </Button>
       </Box>
 
       {error ? (
-        <Typography color="error" sx={{ mt: 2 }}>{error}</Typography>
+        <Typography 
+          color="error" 
+          sx={{ 
+            mt: 2,
+            p: 2,
+            bgcolor: 'error.light',
+            borderRadius: 2,
+            color: 'error.contrastText'
+          }}
+        >
+          {error}
+        </Typography>
       ) : (
-        <Box>
-          <Typography variant="h4" sx={{ mb: 2 }}>
+        <Box sx={{ 
+          bgcolor: 'background.paper',
+          borderRadius: 3,
+          boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+          p: 4
+        }}>
+          <Typography 
+            variant="h4" 
+            sx={{ 
+              mb: 4,
+              color: 'primary.main',
+              textAlign: 'center',
+              fontWeight: 600
+            }}
+          >
             {pollData?.title || decodeURIComponent(pollId || '')}
           </Typography>
 
-          <Box sx={{ display: 'flex', gap: 2, flexDirection: 'column', mb: 4 }}>
+          <Box sx={{ 
+            display: 'flex', 
+            gap: 2, 
+            flexDirection: 'column', 
+            mb: 6,
+            maxWidth: 400,
+            mx: 'auto'
+          }}>
             {(pollData?.options || ['Yes', 'No']).map((option: string, index: number) => (
               <Button
                 key={index}
                 variant="contained"
                 onClick={() => handleVote(option)}
                 disabled={voting}
+                sx={{
+                  py: 1.5,
+                  fontSize: '1.1rem',
+                  backgroundColor: index === 0 ? 'primary.main' : 'primary.light',
+                  '&:hover': {
+                    backgroundColor: index === 0 ? 'primary.dark' : 'primary.main',
+                  }
+                }}
               >
                 {option}
               </Button>
             ))}
           </Box>
 
-          <Typography variant="h6" sx={{ mb: 2 }}>Voting History</Typography>
-          <List>
-            {Object.entries(pollVotes).map(([cityId, votes]) => (
+          <Divider sx={{ mb: 4 }} />
+
+          <Typography 
+            variant="h6" 
+            sx={{ 
+              mb: 3,
+              color: 'primary.main',
+              fontWeight: 500
+            }}
+          >
+            Voting History
+          </Typography>
+          
+          <List sx={{ 
+            bgcolor: 'background.default',
+            borderRadius: 2,
+            p: 0,
+            overflow: 'hidden'
+          }}>
+            {Object.entries(pollVotes).map(([cityId, votes], index) => (
               <Box key={cityId}>
-                <ListItem>
+                <ListItem sx={{ 
+                  py: 2,
+                  px: 3,
+                  bgcolor: index % 2 === 0 ? 'background.default' : 'background.paper'
+                }}>
                   <ListItemText
-                    primary={cities?.[cityId]?.name || cityId}
+                    primary={
+                      <Typography sx={{ fontWeight: 500, color: 'primary.main' }}>
+                        {cities?.[cityId]?.name || cityId}
+                      </Typography>
+                    }
                     secondary={
-                      <Box component="div">
+                      <Box component="div" sx={{ mt: 1 }}>
                         {votes.map(([timestamp, option], index) => (
                           <Typography
                             key={index}
                             variant="body2"
                             color="text.secondary"
                             component="span"
-                            sx={{ display: 'block' }}
+                            sx={{ 
+                              display: 'block',
+                              py: 0.5
+                            }}
                           >
                             {new Date(timestamp).toLocaleString()}: Voted {option}
                           </Typography>
@@ -106,7 +191,7 @@ function Poll({ token, pollData, onVoteComplete, votesData, cities }: PollProps)
                     }
                   />
                 </ListItem>
-                <Divider />
+                {index < Object.entries(pollVotes).length - 1 && <Divider />}
               </Box>
             ))}
           </List>

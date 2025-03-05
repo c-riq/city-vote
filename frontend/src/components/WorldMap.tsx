@@ -156,17 +156,21 @@ const WorldMap: React.FC = () => {
     <Box sx={{ 
       width: '100%',
       maxWidth: '800px',
-      height: '400px',
+      height: '100%',
       overflow: 'hidden',
       mb: 4
     }}>
       <ComposableMap
         projectionConfig={{ 
-          scale: 120,
-          center: [0, 0]
+          scale: 140,
+          center: [20, 20]
         }}
         width={800}
         height={400}
+        style={{
+          width: '100%',
+          height: 'auto'
+        }}
       >
         <MapContent />
       </ComposableMap>

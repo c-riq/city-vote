@@ -4,7 +4,7 @@ import { VOTE_HOST } from './constants';
 import { BrowserRouter, Routes, Route, Navigate, useParams, Link, useNavigate } from 'react-router-dom';
 import Poll from './components/Poll';
 import Header from './components/Header';
-import CityMap from './components/CityMap';
+// import CityMap from './components/CityMap';
 import WorldMap from './components/WorldMap';
 
 interface CityInfo {
@@ -40,10 +40,45 @@ function App() {
   const theme = createTheme({
     palette: {
       primary: {
-        main: '#757575',
-        dark: '#424242',
-        light: '#9e9e9e',
+        main: '#1a237e',
+        dark: '#000051',
+        light: '#534bae',
         contrastText: '#ffffff',
+      },
+      background: {
+        default: '#f5f5f7',
+        paper: '#ffffff',
+      },
+    },
+    typography: {
+      h4: {
+        fontWeight: 600,
+        letterSpacing: '0.02em',
+      },
+      h5: {
+        fontWeight: 500,
+        letterSpacing: '0.01em',
+      },
+    },
+    components: {
+      MuiButton: {
+        styleOverrides: {
+          root: {
+            borderRadius: 8,
+            textTransform: 'none',
+            fontWeight: 500,
+            boxShadow: 'none',
+          },
+        },
+      },
+      MuiTextField: {
+        styleOverrides: {
+          root: {
+            '& .MuiOutlinedInput-root': {
+              borderRadius: 8,
+            },
+          },
+        },
       },
     },
   });
@@ -213,28 +248,44 @@ function App() {
                     flexDirection: 'column',
                     alignItems: 'center',
                     justifyContent: 'flex-start',
-                    gap: 2,
+                    gap: 3,
                     overflow: 'hidden',
-                    pt: { xs: 2, sm: 4 }
+                    pt: { xs: 4, sm: 6 },
+                    backgroundColor: 'background.default',
                   }}
                 >
                   <Box sx={{ 
                     width: '100%',
-                    maxWidth: '800px',
+                    maxWidth: '1000px',
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
-                    gap: { xs: 1, sm: 2 }
+                    gap: { xs: 2, sm: 3 }
                   }}>
                     <Box sx={{ 
                       width: '100%', 
-                      height: { xs: '200px', sm: '400px' }
+                      height: { xs: '250px', sm: '450px' },
+                      borderRadius: 4,
+                      overflow: 'hidden',
+                      boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
                     }}>
                       <WorldMap />
                     </Box>
-                    <Typography variant="h5" sx={{ 
-                      mt: { xs: 4, sm: 2 }
-                    }}>Please enter your access token</Typography>
+                    <Typography 
+                      variant="body1" 
+                      sx={{ 
+                        mb: 2,
+                        color: 'text.secondary',
+                        textAlign: 'center',
+                        maxWidth: 600,
+                        px: 2,
+                      }}
+                    >
+                      Please enter your access token
+                    </Typography>
                     <Box sx={{ 
                       display: 'flex', 
                       alignItems: 'center', 
@@ -331,28 +382,32 @@ function App() {
               ) : (
                 <Box
                   sx={{
-                    padding: 4,
+                    padding: { xs: 2, sm: 4 },
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
-                    gap: 2
+                    gap: 3,
+                    backgroundColor: 'background.default',
                   }}
                 >
                   <Box sx={{ 
                     width: '100%', 
                     textAlign: 'center',
                     mb: 4,
-                    p: 2,
+                    p: 3,
                     bgcolor: 'background.paper',
-                    borderRadius: 1,
-                    boxShadow: 1
+                    borderRadius: 2,
+                    boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
                   }}>
-                    <Typography variant="h4">{cityInfo?.name}</Typography>
-                    <Typography variant="body2">
+                    <Typography variant="h4" sx={{ color: 'primary.main' }}>
+                      {cityInfo?.name}
+                    </Typography>
+                    <Typography variant="body2" sx={{ mt: 1, color: 'text.secondary' }}>
                       ID: <Link 
                         to={`https://www.wikidata.org/wiki/${cityId}`}
                         target="_blank"
                         rel="noopener noreferrer"
+                        sx={{ color: 'primary.main' }}
                       >
                         {cityId}
                       </Link>
@@ -367,12 +422,16 @@ function App() {
                         key={pollId} 
                         sx={{ 
                           width: '100%',
-                          maxWidth: 600,
+                          maxWidth: 800,
                           bgcolor: 'background.paper',
-                          p: 2,
-                          borderRadius: 1,
-                          boxShadow: 1,
-                          mb: 2
+                          p: 3,
+                          borderRadius: 2,
+                          boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+                          mb: 3,
+                          transition: 'transform 0.2s ease-in-out',
+                          '&:hover': {
+                            transform: 'translateY(-2px)',
+                          }
                         }}
                       >
                         <Link to={`/poll/${pollId}`} style={{ textDecoration: 'none' }}>
@@ -395,20 +454,6 @@ function App() {
                   ) : (
                     <Typography color="text.secondary">No voting history available</Typography>
                   )}
-
-                  <Button 
-                    variant="outlined" 
-                    onClick={() => {
-                      setCityInfo(null);
-                      setCityId(null);
-                      setToken('');
-                      setVotesData({});
-                      setCities({});
-                    }}
-                    sx={{ mt: 2 }}
-                  >
-                    Logout
-                  </Button>
                 </Box>
               )
             } />
@@ -430,11 +475,11 @@ function App() {
               } 
             />
           </Routes>
-          {cityInfo && (
+          {/* {cityInfo && (
             <Box sx={{ mb: 4 }}>
               <CityMap cities={cities} currentCity={cityInfo} />
             </Box>
-          )}
+          )} */}
         </Container>
       </BrowserRouter>
     </ThemeProvider>
