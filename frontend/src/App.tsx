@@ -27,6 +27,7 @@ type PollVotes = Record<string, CityVotes>;  // pollId -> city votes
 
 interface VotesResponse {
   votes: PollVotes;
+  message?: string;
 }
 
 function App() {
@@ -37,7 +38,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [votesData, setVotesData] = useState<PollVotes>({});
   const [cities, setCities] = useState<Record<string, CityInfo>>({});
-  const [polls, setPolls] = useState<Record<string, any>>({});
+  const [polls, _] = useState<Record<string, any>>({});
 
   const fetchVotes = async () => {
     try {

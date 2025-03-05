@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Box, Typography, Button, List, ListItem, ListItemText, Divider, Dialog, DialogTitle, DialogContent, DialogActions, TextField } from '@mui/material';
+import { Box, Typography, Button, List, ListItem, ListItemText, Divider } from '@mui/material';
 import { VOTE_HOST } from '../constants';
 
 interface PollProps {
@@ -39,7 +39,7 @@ function Poll({ token, pollData, onVoteComplete, votesData, cities }: PollProps)
       });
 
       const data = await response.json();
-      
+
       if (!response.ok) {
         throw new Error(data.message || 'Failed to submit vote');
       }
@@ -68,7 +68,7 @@ function Poll({ token, pollData, onVoteComplete, votesData, cities }: PollProps)
           <Typography variant="h4" sx={{ mb: 2 }}>
             {pollData?.title || decodeURIComponent(pollId || '')}
           </Typography>
-          
+
           <Box sx={{ display: 'flex', gap: 2, flexDirection: 'column', mb: 4 }}>
             {(pollData?.options || ['Yes', 'No']).map((option: string, index: number) => (
               <Button
@@ -92,9 +92,9 @@ function Poll({ token, pollData, onVoteComplete, votesData, cities }: PollProps)
                     secondary={
                       <Box component="div">
                         {votes.map(([timestamp, option], index) => (
-                          <Typography 
-                            key={index} 
-                            variant="body2" 
+                          <Typography
+                            key={index}
+                            variant="body2"
                             color="text.secondary"
                             component="span"
                             sx={{ display: 'block' }}
