@@ -30,7 +30,7 @@ interface CitiesResponse {
   cities: Record<string, CityInfo>;
 }
 
-type Vote = [number, string];  // [timestamp, option]
+type Vote = [number, string, { title: string; name: string; actingCapacity: 'individual' | 'representingCity' }];
 type CityVotes = Record<string, Vote[]>;  // cityId -> votes
 type PollVotes = Record<string, CityVotes>;  // pollId -> city votes
 
@@ -543,29 +543,44 @@ function App() {
                         }}
                       >
                         <Link to={`/poll/${encodeURIComponent(pollId)}`} style={{ textDecoration: 'none' }}>
-                          <Typography variant="h6">{pollId}</Typography>
+                          <Typography variant="h6" sx={{ color: 'primary.main', fontWeight: 500 }}>
+                            {pollId}
+                          </Typography>
                         </Link>
                         {Object.entries(citiesVotes).map(([cityId, votes]) => (
                           <Box key={cityId} sx={{ mt: 2 }}>
-                            <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
-                              City: {
-                                <Link 
-                                  to={`/city/${cityId}`}
-                                  style={{ 
-                                    color: theme.palette.primary.main,
-                                    textDecoration: 'none'
-                                  }}
-                                >
-                                  {cities[cityId]?.name || cityId}
-                                </Link>
-                              }
+                            <Typography sx={{ fontWeight: 500, color: 'primary.main' }}>
+                              <Link 
+                                to={`/city/${cityId}`}
+                                style={{ 
+                                  color: 'inherit',
+                                  textDecoration: 'none'
+                                }}
+                              >
+                                {cities[cityId]?.name || cityId}
+                              </Link>
                             </Typography>
-                            {votes.map(([timestamp, option], index) => (
-                              <Box key={index} sx={{ mt: 1 }}>
-                                <Typography>
-                                  {option} - {new Date(timestamp).toLocaleDateString()}
-                                </Typography>
-                              </Box>
+                            {votes.map(([timestamp, option, voteInfo], index) => (
+                              <Typography
+                                key={index}
+                                variant="body2"
+                                color="text.secondary"
+                                component="div"
+                                sx={{ py: 0.5 }}
+                              >
+                                {new Date(timestamp).toLocaleString()}: {' '}
+                                <span>
+                                  {voteInfo.title} {voteInfo.name}
+                                  {' '}
+                                  <em>
+                                    ({voteInfo.actingCapacity === 'individual' ? 
+                                      'personal opinion' : 
+                                      'representing City Administration'})
+                                  </em>
+                                </span>
+                                {' voted '}
+                                <strong>{option}</strong>
+                              </Typography>
                             ))}
                           </Box>
                         ))}

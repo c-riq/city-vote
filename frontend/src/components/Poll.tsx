@@ -1,15 +1,24 @@
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Box, Typography, Button, List, ListItem, ListItemText, Divider, Dialog, DialogTitle,
-  DialogContent, DialogActions } from '@mui/material';
+  DialogContent, DialogActions, TextField, Radio, RadioGroup, FormControlLabel, FormControl } from '@mui/material';
 import { VOTE_HOST } from '../constants';
+
+// Update the interface to include capacityAs
+interface Vote {
+  [cityId: string]: [number, string, { 
+    title: string; 
+    name: string; 
+    actingCapacity: 'individual' | 'representingCityAdministration' 
+  }][];
+}
 
 interface PollProps {
   token: string;
   cityInfo: any;
   pollData: any;
   onVoteComplete?: () => void;
-  votesData?: Record<string, Record<string, [number, number][]>>;
+  votesData?: Record<string, Vote>;
   cities?: Record<string, any>;
 }
 
@@ -18,6 +27,8 @@ function Poll({ token, pollData, onVoteComplete, votesData, cities, cityInfo }: 
   const { pollId } = useParams();
   const [error, setError] = useState('');
   const [voting, setVoting] = useState(false);
+  const [isPersonal, setIsPersonal] = useState(false);
+  const [personalInfo, setPersonalInfo] = useState({ title: 'Mayor', name: '' });
   const [confirmDialog, setConfirmDialog] = useState<{ open: boolean; option: string | null }>({
     open: false,
     option: null
@@ -41,7 +52,10 @@ function Poll({ token, pollData, onVoteComplete, votesData, cities, cityInfo }: 
           action: 'vote',
           token,
           pollId: pollData?.id || pollId,
-          option
+          option,
+          title: personalInfo.title,
+          name: personalInfo.name,
+          actingCapacity: isPersonal ? 'individual' : 'representingCityAdministration'
         })
       });
 
@@ -129,6 +143,49 @@ function Poll({ token, pollData, onVoteComplete, votesData, cities, cityInfo }: 
             {pollData?.title || decodeURIComponent(pollId || '')}
           </Typography>
 
+          <Box sx={{ mb: 4, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <Typography variant="subtitle1" sx={{ mb: 2 }}>Vote as:</Typography>
+            <FormControl>
+              <RadioGroup
+                value={isPersonal ? 'personal' : 'city'}
+                onChange={(e) => setIsPersonal(e.target.value === 'personal')}
+                sx={{ mb: 2 }}
+              >
+                <FormControlLabel 
+                  value="city" 
+                  control={<Radio />} 
+                  label={<>On behalf of the City Administration of <strong>{cityInfo?.name}</strong></>}
+                />
+                <FormControlLabel 
+                  value="personal"
+                  control={<Radio />} 
+                  label={<>As a <strong>person</strong> expressing their own opinion</>}
+                />
+              </RadioGroup>
+            </FormControl>
+
+            <Box sx={{ mt: 3, width: '100%', maxWidth: 400 }}>
+              <TextField
+                fullWidth
+                required
+                label="Title"
+                value={personalInfo.title}
+                onChange={(e) => setPersonalInfo(prev => ({ ...prev, title: e.target.value }))}
+                margin="normal"
+                size="small"
+              />
+              <TextField
+                fullWidth
+                required
+                label="Name"
+                value={personalInfo.name}
+                onChange={(e) => setPersonalInfo(prev => ({ ...prev, name: e.target.value }))}
+                margin="normal"
+                size="small"
+              />
+            </Box>
+          </Box>
+
           <Box sx={{ 
             display: 'flex', 
             gap: 2, 
@@ -142,7 +199,7 @@ function Poll({ token, pollData, onVoteComplete, votesData, cities, cityInfo }: 
                 key={index}
                 variant="contained"
                 onClick={() => handleVoteClick(option)}
-                disabled={voting}
+                disabled={voting || !personalInfo.title || !personalInfo.name}
                 sx={{
                   py: 1.5,
                   fontSize: '1.1rem',
@@ -190,17 +247,26 @@ function Poll({ token, pollData, onVoteComplete, votesData, cities, cityInfo }: 
                       </Typography>
                     }
                     secondary={
-                      votes.map(([timestamp, option], index) => (
+                      votes.map(([timestamp, option, voteInfo], voteIndex) => (
                         <Typography
-                          key={index}
+                          key={voteIndex}
                           variant="body2"
                           color="text.secondary"
                           component="div"
-                          sx={{ 
-                            py: 0.5
-                          }}
+                          sx={{ py: 0.5 }}
                         >
-                          {new Date(timestamp).toLocaleString()}: Voted {option}
+                          {new Date(timestamp).toLocaleString()}: {' '}
+                          <span>
+                            {voteInfo.title} {voteInfo.name}
+                            {' '}
+                            <em>
+                              ({voteInfo.actingCapacity === 'individual' ? 
+                                'personal opinion' : 
+                                'representing City Administration'})
+                            </em>
+                          </span>
+                          {' voted '}
+                          <strong>{option}</strong>
                         </Typography>
                       ))
                     }
@@ -218,9 +284,14 @@ function Poll({ token, pollData, onVoteComplete, votesData, cities, cityInfo }: 
             <DialogTitle>Confirm Vote</DialogTitle>
             <DialogContent>
               <Typography>
-                Are you sure you want to vote "{confirmDialog.option}" for {cityInfo?.name}?
+                Are you sure you want to vote "{confirmDialog.option}"{' '}
+                {isPersonal ? (
+                  <>as a personal vote from <strong>{personalInfo.title} {personalInfo.name}</strong></>
+                ) : (
+                  <>on behalf of the City Administration as <strong>{personalInfo.title} {personalInfo.name}</strong></>
+                )}?
               </Typography>
-              {hasVoted && (
+              {hasVoted && !isPersonal && (
                 <Typography
                   sx={{ mt: 2, color: 'warning.main' }}
                 >
@@ -240,6 +311,7 @@ function Poll({ token, pollData, onVoteComplete, votesData, cities, cityInfo }: 
                 variant="contained"
                 color="primary"
                 autoFocus
+                disabled={!personalInfo.title || !personalInfo.name}
               >
                 Confirm Vote
               </Button>

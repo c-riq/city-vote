@@ -100,7 +100,10 @@ interface VoteParams {
     };
     token: string;
     pollId: string;
-    option: boolean;
+    option: string;
+    title: string;
+    name: string;
+    actingCapacity: 'individual' | 'representingCityAdministration';
 }
 
 interface GetVotesParams {
@@ -142,15 +145,18 @@ const handleValidateToken = async ({ resolvedCity }: ValidateTokenParams): Promi
     };
 };
 
-const handleVote = async ({ cityId, resolvedCity, pollId, option }: VoteParams): Promise<APIGatewayProxyResult> => {
-    if (!pollId || option === undefined) {
+const handleVote = async ({ cityId, resolvedCity, pollId, option, title, name, actingCapacity }: VoteParams): Promise<APIGatewayProxyResult> => {
+    if (!pollId || option === undefined || !title || !name || !actingCapacity) {
         return {
             statusCode: 400,
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 message: `Missing required parameters for voting: ${[
                     !pollId && 'pollId',
-                    option === undefined && 'option'
+                    option === undefined && 'option',
+                    !title && 'title',
+                    !name && 'name',
+                    !actingCapacity && 'actingCapacity'
                 ].filter(Boolean).join(', ')}`
             })
         };
@@ -181,7 +187,11 @@ const handleVote = async ({ cityId, resolvedCity, pollId, option }: VoteParams):
     }
 
     try {
-        let votes: Record<string, Record<string, [number, boolean][]>> = {};
+        let votes: Record<string, Record<string, [number, string, { 
+            title: string; 
+            name: string; 
+            actingCapacity: 'individual' | 'representingCityAdministration' 
+        }][]>> = {};
         try {
             const existingData = await s3Client.send(new GetObjectCommand({
                 Bucket: BUCKET_NAME,
@@ -201,7 +211,11 @@ const handleVote = async ({ cityId, resolvedCity, pollId, option }: VoteParams):
         if (!votes[pollId]) votes[pollId] = {};
         if (!votes[pollId][resolvedCity.id]) votes[pollId][resolvedCity.id] = [];
 
-        votes[pollId][resolvedCity.id].push([Date.now(), option]);
+        votes[pollId][resolvedCity.id].push([
+            Date.now(), 
+            option, 
+            { title, name, actingCapacity }
+        ]);
 
         await s3Client.send(new PutObjectCommand({
             Bucket: BUCKET_NAME,
@@ -244,7 +258,7 @@ const handleGetVotes = async ({ resolvedCity, cityId }: GetVotesParams): Promise
 
         // If cityId is specified, filter votes for that city only
         if (cityId) {
-            const cityVotes: Record<string, [number, boolean][]> = {};
+            const cityVotes: Record<string, [number, string, { title: string; name: string; } | undefined][]> = {};
             Object.entries(votes).forEach(([pollId, pollData]: [string, any]) => {
                 if (pollData[cityId]) {
                     cityVotes[pollId] = pollData[cityId];
@@ -332,7 +346,7 @@ const handleCreatePoll = async ({ pollId }: CreatePollParams): Promise<APIGatewa
     }
 
     try {
-        let votes: Record<string, Record<string, [number, boolean][]>> = {};
+        let votes: Record<string, Record<string, [number, string][]>> = {};
         try {
             const existingData = await s3Client.send(new GetObjectCommand({
                 Bucket: BUCKET_NAME,
@@ -410,7 +424,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
             };
         }
 
-        const { action, cityId, token, pollId, option } = JSON.parse(event.body);
+        const { action, cityId, token, pollId, option, title, name, actingCapacity } = JSON.parse(event.body);
         
         if (!action || !token) {
             return {
@@ -476,7 +490,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
         }
 
         // Type assertion to ensure correct params are passed to each handler
-        return await handler({ cityId, resolvedCity, token, pollId, option } as any);
+        return await handler({ cityId, resolvedCity, token, pollId, option, title, name, actingCapacity } as any);
     } catch (error) {
         console.error('Error:', error);
         return {
