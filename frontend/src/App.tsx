@@ -369,6 +369,11 @@ function App() {
                         label="Access Token"
                         variant="outlined"
                         fullWidth
+                        autoComplete="off"
+                        inputProps={{
+                          autoComplete: 'off',
+                          'data-form-type': 'other',
+                        }}
                         sx={{ 
                           '& input': { fontSize: '0.9rem' },
                           '& .MuiOutlinedInput-root': {

@@ -173,5 +173,75 @@
     "country": "HR",
     "lat": 44.870,
     "lon": 13.846
+  },
+  "Q37043":{
+    "name": "Tallahassee",
+    "country": "US",
+    "lat": 30.438,
+    "lon": -84.281,
+    "population": 196169,
+    "wikidata": "Q37043"
+  },
+  "Q40844": {
+    "name": "Breda",
+    "country": "NL",
+    "lat": 51.589,
+    "lon": 4.776,
+    "population": 188078,
+    "wikidata": "Q40844"
+  },
+  "Q1724": {
+    "name": "Saarbrücken",
+    "country": "DE",
+    "lat": 49.233,
+    "lon": 7.000,
+    "population": 183509,
+    "wikidata": "Q1724"
+  },
+  "Q2575820": {
+    "name": "Skopje"
+  },
+  "Q1524": {
+    "name": "Athens",
+    "country": "GR",
+    "lat": 37.984,
+    "lon": 23.728,
+    "population": 643452,
+    "wikidata": "Q1524"
+  },
+  "Frederiksberg": {
+    "name": "Frederiksberg"
+  },
+  "Q645747": {
+    "name": "Esbjerg",
+    "country": "DK",
+    "lat": 55.467,
+    "lon": 8.450,
+    "population": 115748,
+    "wikidata": "Q645747"
+  },
+  "Q221214": {
+    "name": "Cugir",
+    "country": "RO",
+    "lat": 45.844,
+    "lon": 23.364,
+    "population": 19473,
+    "wikidata": "Q221214"
+  },
+  "Q1015672": {
+    "name": "Whanganui",
+    "country": "NZ",
+    "lat": -39.933,
+    "lon": 175.052,
+    "population": 42200,
+    "wikidata": "Q1015672"
+  },
+  "Q694822": {
+    "name": "Gravataí",
+    "country": "BR",
+    "lat": -29.943,
+    "lon": -50.994,
+    "population": 285564,
+    "wikidata": "Q694822"
   }
 } 
