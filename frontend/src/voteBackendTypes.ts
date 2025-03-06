@@ -13,6 +13,11 @@ export interface City {
     country: string;
     lat: number;
     lon: number;
+    authenticationKeyDistributionChannels: {
+        account: string;
+        type: 'linkedin' | 'email';
+        confidence: number;
+    }[];
 }
 
 // API Request/Response types

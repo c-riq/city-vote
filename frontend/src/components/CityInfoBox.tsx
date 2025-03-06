@@ -1,19 +1,11 @@
 import { Box, Typography, Tooltip, Link as MuiLink, Button } from '@mui/material';
 import { useNavigate, useLocation } from 'react-router-dom';
-
-interface CityInfo {
-  id: string;
-  name: string;
-  population: number;
-  country: string;
-  lat: number;
-  lon: number;
-}
+import { City } from '../voteBackendTypes';
 
 interface CityInfoBoxProps {
   cityId: string | null;
-  cityInfo: CityInfo | null;
-  cities: Record<string, CityInfo>;
+  cityInfo: City | null;
+  cities: Record<string, City>;
   theme: any;
   token?: string;
 }
@@ -111,28 +103,35 @@ function CityInfoBox({ cityId, cityInfo, cities, theme, token }: CityInfoBoxProp
 
           <Box>
             <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-              Verification method
+              Authentication key distribution channel
             </Typography>
-            <Typography variant="body2" sx={{ 
-              fontWeight: 500,
-              display: 'flex',
-              alignItems: 'center',
-              gap: 0.5
-            }}>
-              Mayor's Linkedin account
-              <Tooltip title="Authentication via the official city website will soon be required">
-                <span 
-                  className="material-icons"
-                  style={{ 
-                    fontSize: '16px',
-                    color: theme.palette.primary.main,
-                    cursor: 'help'
-                  }}
-                >
-                  info
-                </span>
-              </Tooltip>
-            </Typography>
+            {city?.authenticationKeyDistributionChannels.map((channel, index) => (
+              <Typography key={index} variant="body2" sx={{ 
+                fontWeight: 500,
+                display: 'flex',
+                alignItems: 'center',
+                gap: 0.5
+              }}>
+                {channel.type === 'linkedin' ? (
+                  <MuiLink 
+                    href={`${channel.account}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    sx={{ 
+                      color: 'primary.main',
+                      textDecoration: 'none',
+                      '&:hover': {
+                        textDecoration: 'underline'
+                      }
+                    }}
+                  >
+                    Mayor's presumed Linkedin account
+                  </MuiLink>
+                ) : (
+                  `${channel.type}: ${channel.account}`
+                )}
+              </Typography>
+            ))}
           </Box>
 
           <Box>
@@ -146,10 +145,10 @@ function CityInfoBox({ cityId, cityInfo, cities, theme, token }: CityInfoBoxProp
 
           <Box>
             <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-              Verification confidence level
+              Verification and authentication confidence level
             </Typography>
             <Typography variant="body2" sx={{ fontWeight: 500 }}>
-              90%
+              {Math.max(...(city?.authenticationKeyDistributionChannels.map(c => c.confidence * 100) || [0]))}%
             </Typography>
           </Box>
 
@@ -158,7 +157,24 @@ function CityInfoBox({ cityId, cityInfo, cities, theme, token }: CityInfoBoxProp
               Coordinates
             </Typography>
             <Typography variant="body2" sx={{ fontWeight: 500 }}>
-              {city?.lat?.toFixed(4) || 'N/A'}°N, {city?.lon?.toFixed(4) || 'N/A'}°E
+              {city?.lat && city?.lon ? (
+                <MuiLink 
+                  href={`https://www.google.com/maps?q=${city.lat},${city.lon}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  sx={{ 
+                    color: 'primary.main',
+                    textDecoration: 'none',
+                    '&:hover': {
+                      textDecoration: 'underline'
+                    }
+                  }}
+                >
+                  {city.lat.toFixed(4)}°N, {city.lon.toFixed(4)}°E
+                </MuiLink>
+              ) : (
+                'N/A'
+              )}
             </Typography>
           </Box>
 
