@@ -74,6 +74,21 @@ function Header({ cityInfo, onLogout, onCreatePoll }: HeaderProps) {
           >
             Beta
           </Box>
+          <Typography 
+            variant="body2" 
+            component="a"
+            href="/about.html"
+            sx={{ 
+              color: 'text.secondary',
+              textDecoration: 'none',
+              '&:hover': { 
+                color: 'primary.main',
+                textDecoration: 'underline'
+              }
+            }}
+          >
+            About
+          </Typography>
         </Box>
       </Box>
 

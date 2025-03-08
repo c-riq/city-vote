@@ -1,4 +1,4 @@
-import { Box, Typography, Tooltip, Link as MuiLink, Button } from '@mui/material';
+import { Box, Typography, Link as MuiLink, Button } from '@mui/material';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { City } from '../voteBackendTypes';
 
@@ -10,7 +10,7 @@ interface CityInfoBoxProps {
   token?: string;
 }
 
-function CityInfoBox({ cityId, cityInfo, cities, theme, token }: CityInfoBoxProps) {
+function CityInfoBox({ cityId, cityInfo, cities, token }: CityInfoBoxProps) {
   const navigate = useNavigate();
   const location = useLocation();
   const city = cityId ? cities[cityId] : cityInfo;
