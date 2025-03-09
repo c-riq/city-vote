@@ -127,9 +127,11 @@ function CityInfoBox({ cityId, cityInfo, cities, token }: CityInfoBoxProps) {
                   >
                     Mayor's presumed Linkedin account
                   </MuiLink>
-                ) : (
-                  `${channel.type}: ${channel.account}`
-                )}
+                ) : 
+                (
+                  null //`${channel.type}: ${channel.account}`
+                )
+                }
               </Typography>
             ))}
           </Box>
