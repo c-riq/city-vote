@@ -12,6 +12,7 @@ const BUCKET_NAME = 'city-vote-data';
 const VOTES_KEY = 'votes/votes.json';
 const LOCK_KEY = 'votes/lock.csv';
 const AUTH_KEY = 'auth/auth.json';
+const ACCESS_LOG_KEY = 'logs/access.json';
 const LOCK_TIMEOUT_MS = 10000; // 10 seconds
 const LOCK_CHECK_DELAY_MS = 50;
 
@@ -85,6 +86,45 @@ async function releaseLock(): Promise<void> {
         Bucket: BUCKET_NAME,
         Key: LOCK_KEY
     }));
+}
+
+async function logAccess(city: City, action: string): Promise<void> {
+    try {
+        const logEntry = {
+            time: new Date().toISOString(),
+            city: city.name,
+            action: action
+        };
+        
+        let logs: any[] = [];
+        try {
+            const logsData = await s3Client.send(new GetObjectCommand({
+                Bucket: BUCKET_NAME,
+                Key: ACCESS_LOG_KEY
+            }));
+            
+            if (logsData.Body) {
+                const logsString = await streamToString(logsData.Body as Readable);
+                logs = JSON.parse(logsString);
+            }
+        } catch (error: any) {
+            if (error.name !== 'NoSuchKey') {
+                throw error;
+            }
+        }
+
+        logs.push(logEntry);
+
+        await s3Client.send(new PutObjectCommand({
+            Bucket: BUCKET_NAME,
+            Key: ACCESS_LOG_KEY,
+            Body: JSON.stringify(logs),
+            ContentType: 'application/json'
+        }));
+    } catch (error) {
+        console.error('Error logging access:', error);
+        // Don't throw error to prevent disrupting the main flow
+    }
 }
 
 // Update interface to use imported type
@@ -450,6 +490,9 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
                     body: JSON.stringify({ message: 'Invalid token' })
                 };
             }
+
+            // Log successful access
+            await logAccess(resolvedCity, action);
         } catch (error) {
             console.error('Error validating token:', error);
             return {
@@ -486,4 +529,4 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
             })
         };
     }
-}; 
+};
