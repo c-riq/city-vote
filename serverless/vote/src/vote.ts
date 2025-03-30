@@ -118,7 +118,7 @@ async function logAccess(city: City, action: string): Promise<void> {
         await s3Client.send(new PutObjectCommand({
             Bucket: BUCKET_NAME,
             Key: ACCESS_LOG_KEY,
-            Body: JSON.stringify(logs),
+            Body: JSON.stringify(logs, null, 2),
             ContentType: 'application/json'
         }));
     } catch (error) {
