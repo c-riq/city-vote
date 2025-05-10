@@ -56,24 +56,6 @@ function Header({ cityInfo, onLogout, onCreatePoll }: HeaderProps) {
           >
             city-vote.com
           </Typography>
-          <Box
-            sx={{
-              bgcolor: 'primary.main',
-              color: 'primary.contrastText',
-              px: 1,
-              py: 0.25,
-              borderRadius: 1,
-              fontSize: '0.65rem',
-              fontWeight: 500,
-              textTransform: 'uppercase',
-              letterSpacing: '0.05em',
-              display: 'inline-flex',
-              alignItems: 'center',
-              height: 'fit-content'
-            }}
-          >
-            Beta
-          </Box>
           <Typography 
             variant="body2" 
             component="a"
