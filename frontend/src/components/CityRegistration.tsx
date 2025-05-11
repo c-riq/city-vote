@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Box,
   Button,
@@ -14,14 +14,26 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  List,
+  ListItem,
+  ListItemText,
+  Popper,
+  ClickAwayListener,
+  Autocomplete,
 } from '@mui/material';
-import { PUBLIC_API_HOST } from '../constants';
+import { PUBLIC_API_HOST, AUTOCOMPLETE_API_HOST } from '../constants';
 import { City } from '../voteBackendTypes';
 
 interface AuthChannel {
   account: string;
   type: 'linkedin' | 'email';
   confidence: number;
+}
+
+interface CityAutocompleteResult {
+  wikidataId: string;
+  name: string;
+  countryWikidataId: string;
 }
 
 const CityRegistration: React.FC = () => {
@@ -40,6 +52,88 @@ const CityRegistration: React.FC = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [token, setToken] = useState('');
+
+  // Autocomplete state
+  const [autocompleteResults, setAutocompleteResults] = useState<CityAutocompleteResult[]>([]);
+  const [isLoadingAutocomplete, setIsLoadingAutocomplete] = useState(false);
+  const [autocompleteOpen, setAutocompleteOpen] = useState(false);
+  const [autocompleteInputValue, setAutocompleteInputValue] = useState('');
+  const autocompleteTimeoutRef = useRef<number | null>(null);
+
+  // Fetch autocomplete results when the user types in the city name field
+  const fetchAutocompleteResults = async (query: string) => {
+    if (!query || query.length < 2) {
+      setAutocompleteResults([]);
+      return;
+    }
+
+    setIsLoadingAutocomplete(true);
+
+    try {
+      const response = await fetch(AUTOCOMPLETE_API_HOST, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          action: 'autocomplete',
+          query,
+          limit: 10
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        console.error('Autocomplete error:', data.message || 'Failed to fetch autocomplete results');
+        setAutocompleteResults([]);
+        return;
+      }
+
+      setAutocompleteResults(data.results || []);
+    } catch (err) {
+      console.error('Autocomplete error:', err);
+      setAutocompleteResults([]);
+    } finally {
+      setIsLoadingAutocomplete(false);
+    }
+  };
+
+  // Debounce the autocomplete API calls
+  useEffect(() => {
+    if (autocompleteTimeoutRef.current) {
+      clearTimeout(autocompleteTimeoutRef.current);
+    }
+
+    if (autocompleteInputValue.length >= 2) {
+      autocompleteTimeoutRef.current = setTimeout(() => {
+        fetchAutocompleteResults(autocompleteInputValue);
+      }, 300);
+    } else {
+      setAutocompleteResults([]);
+    }
+
+    return () => {
+      if (autocompleteTimeoutRef.current) {
+        clearTimeout(autocompleteTimeoutRef.current);
+      }
+    };
+  }, [autocompleteInputValue]);
+
+  // Handle selection of a city from autocomplete results
+  const handleCitySelect = (city: CityAutocompleteResult | null) => {
+    if (city) {
+      setCityName(city.name);
+      setCityId(city.wikidataId);
+      
+      // You would typically fetch more city details here
+      // For now, we'll just set some placeholder values
+      setCountry('');  // This would be fetched from a country lookup using city.countryWikidataId
+      setLat('');
+      setLon('');
+      setPopulation('');
+    }
+  };
 
   const handleAddChannel = () => {
     setAuthChannels([...authChannels, { account: '', type: 'email', confidence: 0.9 }]);
@@ -237,12 +331,37 @@ const CityRegistration: React.FC = () => {
             </Grid>
 
             <Grid item xs={12} sm={6}>
-              <TextField
-                label="City Name"
+              <Autocomplete
                 fullWidth
-                required
-                value={cityName}
-                onChange={(e) => setCityName(e.target.value)}
+                options={autocompleteResults}
+                getOptionLabel={(option) => option.name}
+                loading={isLoadingAutocomplete}
+                onInputChange={(_, newInputValue) => {
+                  setAutocompleteInputValue(newInputValue);
+                }}
+                onChange={(_, newValue) => {
+                  handleCitySelect(newValue);
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="City Name"
+                    required
+                    fullWidth
+                    disabled={isSubmitting}
+                    InputProps={{
+                      ...params.InputProps,
+                      endAdornment: (
+                        <>
+                          {isLoadingAutocomplete ? <CircularProgress color="inherit" size={20} /> : null}
+                          {params.InputProps.endAdornment}
+                        </>
+                      ),
+                    }}
+                  />
+                )}
+                noOptionsText="No cities found"
+                loadingText="Loading cities..."
                 disabled={isSubmitting}
               />
             </Grid>
