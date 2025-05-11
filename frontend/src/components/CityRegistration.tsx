@@ -14,11 +14,6 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  List,
-  ListItem,
-  ListItemText,
-  Popper,
-  ClickAwayListener,
   Autocomplete,
 } from '@mui/material';
 import { PUBLIC_API_HOST, AUTOCOMPLETE_API_HOST } from '../constants';
@@ -37,14 +32,13 @@ interface CityAutocompleteResult {
 }
 
 const CityRegistration: React.FC = () => {
-  const [registrationCode, setRegistrationCode] = useState('');
   const [cityName, setCityName] = useState('');
   const [country, setCountry] = useState('');
   const [population, setPopulation] = useState<number | ''>('');
   const [lat, setLat] = useState<number | ''>('');
   const [lon, setLon] = useState<number | ''>('');
   const [authChannels, setAuthChannels] = useState<AuthChannel[]>([
-    { account: '', type: 'email', confidence: 0.9 }
+    { account: '', type: 'email', confidence: 0 }
   ]);
   const [cityId, setCityId] = useState('');
   
@@ -136,7 +130,7 @@ const CityRegistration: React.FC = () => {
   };
 
   const handleAddChannel = () => {
-    setAuthChannels([...authChannels, { account: '', type: 'email', confidence: 0.9 }]);
+    setAuthChannels([...authChannels, { account: '', type: 'email', confidence: 0 }]);
   };
 
   const handleRemoveChannel = (index: number) => {
@@ -149,19 +143,14 @@ const CityRegistration: React.FC = () => {
     const newChannels = [...authChannels];
     if (field === 'type') {
       newChannels[index][field] = value as 'linkedin' | 'email';
-    } else if (field === 'confidence') {
-      newChannels[index][field] = Number(value);
-    } else {
+    } else if (field === 'account') {
       newChannels[index][field] = value as string;
     }
+    // Confidence is always 0, no need to handle it in this function
     setAuthChannels(newChannels);
   };
 
   const validateForm = (): boolean => {
-    if (!registrationCode.trim()) {
-      setError('Registration code is required');
-      return false;
-    }
     if (!cityName.trim()) {
       setError('City name is required');
       return false;
@@ -191,10 +180,6 @@ const CityRegistration: React.FC = () => {
     for (let i = 0; i < authChannels.length; i++) {
       if (!authChannels[i].account.trim()) {
         setError(`Authentication channel ${i + 1} account is required`);
-        return false;
-      }
-      if (authChannels[i].confidence < 0 || authChannels[i].confidence > 1) {
-        setError(`Authentication channel ${i + 1} confidence must be between 0 and 1`);
         return false;
       }
     }
@@ -231,7 +216,6 @@ const CityRegistration: React.FC = () => {
         },
         body: JSON.stringify({
           action: 'register',
-          registrationCode,
           cityData
         })
       });
@@ -246,14 +230,13 @@ const CityRegistration: React.FC = () => {
       setToken(data.token || '');
       
       // Reset form
-      setRegistrationCode('');
       setCityName('');
       setCountry('');
       setPopulation('');
       setLat('');
       setLon('');
       setCityId('');
-      setAuthChannels([{ account: '', type: 'email', confidence: 0.9 }]);
+      setAuthChannels([{ account: '', type: 'email', confidence: 0 }]);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Registration failed');
     } finally {
@@ -301,36 +284,14 @@ const CityRegistration: React.FC = () => {
           </Alert>
         )}
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} autoComplete="off">
           <Grid container spacing={3}>
-            <Grid item xs={12}>
-              <TextField
-                label="Registration Code"
-                fullWidth
-                required
-                value={registrationCode}
-                onChange={(e) => setRegistrationCode(e.target.value)}
-                disabled={isSubmitting}
-              />
-            </Grid>
-
             <Grid item xs={12}>
               <Divider sx={{ my: 1 }}>City Information</Divider>
             </Grid>
 
-            <Grid item xs={12}>
-              <TextField
-                label="City ID (Wikidata ID)"
-                fullWidth
-                required
-                value={cityId}
-                onChange={(e) => setCityId(e.target.value)}
-                disabled={isSubmitting}
-                helperText="Enter the Wikidata ID for your city (e.g., Q64)"
-              />
-            </Grid>
-
             <Grid item xs={12} sm={6}>
+
               <Autocomplete
                 fullWidth
                 options={autocompleteResults}
@@ -349,8 +310,18 @@ const CityRegistration: React.FC = () => {
                     required
                     fullWidth
                     disabled={isSubmitting}
+                    autoComplete="new-password"
+                    name={`city-name-${Math.random().toString(36).substring(2, 15)}`}
+                    inputProps={{
+                      ...params.inputProps,
+                      autoComplete: "new-password",
+                      autoCorrect: "off",
+                      autoCapitalize: "off",
+                      spellCheck: "false"
+                    }}
                     InputProps={{
                       ...params.InputProps,
+                      autoComplete: "new-password",
                       endAdornment: (
                         <>
                           {isLoadingAutocomplete ? <CircularProgress color="inherit" size={20} /> : null}
@@ -374,7 +345,29 @@ const CityRegistration: React.FC = () => {
                 value={country}
                 onChange={(e) => setCountry(e.target.value)}
                 disabled={isSubmitting}
+                autoComplete="new-password"
               />
+            </Grid>
+
+            <Grid item xs={12}>
+              {cityId ? (
+                <Box sx={{ mb: 2 }}>
+                  <Typography variant="subtitle2">City ID (Wikidata):</Typography>
+                  <Typography variant="body1">
+                    <a 
+                      href={`https://www.wikidata.org/wiki/${cityId}`} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                    >
+                      {cityId}
+                    </a>
+                  </Typography>
+                </Box>
+              ) : (
+                <Typography variant="body2" color="text.secondary">
+                  Select a city to display its Wikidata ID
+                </Typography>
+              )}
             </Grid>
 
             <Grid item xs={12} sm={4}>
@@ -387,6 +380,7 @@ const CityRegistration: React.FC = () => {
                 onChange={(e) => setPopulation(e.target.value === '' ? '' : Number(e.target.value))}
                 disabled={isSubmitting}
                 InputProps={{ inputProps: { min: 0 } }}
+                autoComplete="new-password"
               />
             </Grid>
 
@@ -400,6 +394,7 @@ const CityRegistration: React.FC = () => {
                 onChange={(e) => setLat(e.target.value === '' ? '' : Number(e.target.value))}
                 disabled={isSubmitting}
                 InputProps={{ inputProps: { min: -90, max: 90, step: 'any' } }}
+                autoComplete="new-password"
               />
             </Grid>
 
@@ -413,6 +408,7 @@ const CityRegistration: React.FC = () => {
                 onChange={(e) => setLon(e.target.value === '' ? '' : Number(e.target.value))}
                 disabled={isSubmitting}
                 InputProps={{ inputProps: { min: -180, max: 180, step: 'any' } }}
+                autoComplete="new-password"
               />
             </Grid>
 
@@ -434,6 +430,7 @@ const CityRegistration: React.FC = () => {
                     onChange={(e) => handleChannelChange(index, 'account', e.target.value)}
                     disabled={isSubmitting}
                     placeholder="Email address or LinkedIn profile"
+                    autoComplete="new-password"
                   />
                 </Grid>
                 <Grid item xs={12} sm={3}>
@@ -449,18 +446,6 @@ const CityRegistration: React.FC = () => {
                       <MenuItem value="linkedin">LinkedIn</MenuItem>
                     </Select>
                   </FormControl>
-                </Grid>
-                <Grid item xs={12} sm={3}>
-                  <TextField
-                    label="Confidence"
-                    fullWidth
-                    required
-                    type="number"
-                    value={channel.confidence}
-                    onChange={(e) => handleChannelChange(index, 'confidence', e.target.value)}
-                    disabled={isSubmitting}
-                    InputProps={{ inputProps: { min: 0, max: 1, step: 0.1 } }}
-                  />
                 </Grid>
                 <Grid item xs={12} sm={1} sx={{ display: 'flex', alignItems: 'center' }}>
                   {authChannels.length > 1 && (
