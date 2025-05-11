@@ -16,6 +16,8 @@ export interface AutocompleteResponse {
         wikidataId: string;
         name: string;
         countryWikidataId: string;
+        countryName: string;
+        countryCode: string;
     }[];
     message?: string;
 }

@@ -29,6 +29,8 @@ interface CityAutocompleteResult {
   wikidataId: string;
   name: string;
   countryWikidataId: string;
+  countryName: string;
+  countryCode: string;
 }
 
 const CityRegistration: React.FC = () => {
@@ -120,9 +122,11 @@ const CityRegistration: React.FC = () => {
       setCityName(city.name);
       setCityId(city.wikidataId);
       
+      // Set the country name from the autocomplete result
+      setCountry(city.countryName);
+      
       // You would typically fetch more city details here
       // For now, we'll just set some placeholder values
-      setCountry('');  // This would be fetched from a country lookup using city.countryWikidataId
       setLat('');
       setLon('');
       setPopulation('');
@@ -295,7 +299,7 @@ const CityRegistration: React.FC = () => {
               <Autocomplete
                 fullWidth
                 options={autocompleteResults}
-                getOptionLabel={(option) => option.name}
+                getOptionLabel={(option) => `${option.name}, ${option.countryCode}`}
                 loading={isLoadingAutocomplete}
                 onInputChange={(_, newInputValue) => {
                   setAutocompleteInputValue(newInputValue);

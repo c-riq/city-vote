@@ -1,6 +1,7 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { AutocompleteRequest, AutocompleteResponse } from './types';
 import { CITY_DATA } from './city-data';
+import { countries } from './countries';
 
 const handleAutocomplete = async (query: string, limit: number = 10): Promise<APIGatewayProxyResult> => {
     if (!query) {
@@ -17,15 +18,31 @@ const handleAutocomplete = async (query: string, limit: number = 10): Promise<AP
         // Normalize the query for case-insensitive search
         const normalizedQuery = query.toLowerCase();
         
+        // Create maps for country wikidata IDs to country names and ISO codes
+        const countryNameMap = new Map<string, string>();
+        const countryCodeMap = new Map<string, string>();
+        countries.countries.forEach(country => {
+            if (country[4]) { // Check if wikidata id exists
+                countryNameMap.set(country[4], country[0]);
+                countryCodeMap.set(country[4], country[1]); // Alpha-2 code
+            }
+        });
+
         // Filter cities based on the query
         const filteredCities = CITY_DATA.cities
             .filter((city: string[]) => city[1].toLowerCase().includes(normalizedQuery))
             .slice(0, limit)
-            .map((city: string[]) => ({
-                wikidataId: city[0],
-                name: city[1],
-                countryWikidataId: city[2]
-            }));
+            .map((city: string[]) => {
+                const countryName = countryNameMap.get(city[2]) || '';
+                const countryCode = countryCodeMap.get(city[2]) || '';
+                return {
+                    wikidataId: city[0],
+                    name: city[1],
+                    countryWikidataId: city[2],
+                    countryName: countryName,
+                    countryCode: countryCode
+                };
+            });
 
         return {
             statusCode: 200,
