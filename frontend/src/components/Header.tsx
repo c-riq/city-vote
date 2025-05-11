@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { Typography, Box, Button, IconButton } from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
+import LoginIcon from '@mui/icons-material/Login';
 import LocationCityIcon from '@mui/icons-material/LocationCity';
 
 interface HeaderProps {
@@ -120,7 +121,15 @@ function Header({ cityInfo, onLogout, onCreatePoll }: HeaderProps) {
               <LogoutIcon />
             </IconButton>
           </>
-        ) : null}
+        ) : (
+          <IconButton 
+            onClick={() => navigate('/')}
+            color="inherit"
+            title="Login"
+          >
+            <LoginIcon />
+          </IconButton>
+        )}
       </Box>
     </Box>
   );
