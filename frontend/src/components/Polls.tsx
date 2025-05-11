@@ -171,34 +171,7 @@ function Polls({ token, cityInfo, votesData: propVotesData, cities: propCities, 
         backgroundColor: 'background.default',
       }}
     >
-      {!isAuthenticated && (
-        <>
-          <Typography
-            variant="h4"
-            sx={{
-              mb: 2,
-              color: 'primary.main',
-              textAlign: 'center',
-              fontWeight: 600,
-            }}
-          >
-            Polls
-          </Typography>
-          
-          <Typography
-            variant="body1"
-            sx={{
-              mb: 4,
-              color: 'text.secondary',
-              textAlign: 'center',
-              maxWidth: 600,
-            }}
-          >
-            View all polls and votes from cities around the world.
-          </Typography>
-        </>
-      )}
-      
+   
       {/* Votes Display */}
       <Box sx={{ 
         display: 'flex', 

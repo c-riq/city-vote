@@ -25,7 +25,7 @@ function Header({ cityInfo, onLogout, onCreatePoll }: HeaderProps) {
         left: 0,
         right: 0,
         height: '64px',
-        backgroundColor: 'background.paper',
+        backgroundColor: cityInfo ? 'rgba(25, 118, 210, 0.15)' : 'background.paper',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
@@ -53,6 +53,7 @@ function Header({ cityInfo, onLogout, onCreatePoll }: HeaderProps) {
             sx={{ 
               cursor: 'pointer',
               fontWeight: 'bold',
+              fontSize: { xs: '1rem', sm: '1.25rem' },
               '&:hover': { color: 'primary.main' }
             }}
             onClick={() => navigate('/')}

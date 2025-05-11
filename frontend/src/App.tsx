@@ -286,18 +286,6 @@ function App() {
                     </Button>
                 </DialogActions>
             </Dialog>
-
-            {cityInfo && (
-                <Box sx={{ position: 'fixed', top: 16, right: 16, zIndex: 1000 }}>
-                    <Button 
-                        onClick={() => setIsModalOpen(true)} 
-                        variant="contained" 
-                        color="primary"
-                    >
-                        Create New Poll
-                    </Button>
-                </Box>
-            )}
         </Box>
     );
   }
