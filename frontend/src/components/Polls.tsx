@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Box, Typography, Button, CircularProgress } from '@mui/material';
 import VoteList from './VoteList';
 import { VoteData, GetVotesResponse, City } from '../voteBackendTypes';
-import { PUBLIC_API_HOST, VOTE_HOST } from '../constants';
+import { PUBLIC_API_HOST } from '../constants';
 
 interface PollsProps {
   theme?: any;
@@ -14,7 +14,7 @@ interface PollsProps {
   onRefresh?: () => void;
 }
 
-function Polls({ theme, token, cityInfo, votesData: propVotesData, cities: propCities, onRefresh }: PollsProps) {
+function Polls({ token, cityInfo, votesData: propVotesData, cities: propCities, onRefresh }: PollsProps) {
   const [votesData, setVotesData] = useState<VoteData>(propVotesData || {});
   const [cities, setCities] = useState<Record<string, any>>(propCities || {});
   const [isLoading, setIsLoading] = useState(!propVotesData);
