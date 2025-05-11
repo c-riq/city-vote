@@ -41,8 +41,10 @@ function Header({ cityInfo, onLogout, onCreatePoll }: HeaderProps) {
           alt="City Vote Logo" 
           style={{ 
             height: '40px',
-            width: 'auto'
+            width: 'auto',
+            cursor: 'pointer'
           }} 
+          onClick={() => navigate('/')}
         />
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           <Typography 
