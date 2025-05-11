@@ -425,17 +425,20 @@ const handleCreatePoll = async ({ pollId }: CreatePollParams): Promise<APIGatewa
 type ActionHandlers = {
     validateToken: (params: ValidateTokenParams) => Promise<APIGatewayProxyResult>;
     vote: (params: VoteParams) => Promise<APIGatewayProxyResult>;
+    createPoll: (params: CreatePollParams) => Promise<APIGatewayProxyResult>;
+    // These operations are now handled by the public function (no authentication required)
     getVotes: (params: GetVotesParams) => Promise<APIGatewayProxyResult>;
     getCities: (params: GetCitiesParams) => Promise<APIGatewayProxyResult>;
-    createPoll: (params: CreatePollParams) => Promise<APIGatewayProxyResult>;
 };
 
 const actionHandlers: ActionHandlers = {
     validateToken: handleValidateToken,
     vote: handleVote,
+    createPoll: handleCreatePoll,
+    // These operations are now handled by the public function (no authentication required)
+    // but kept here for backward compatibility
     getVotes: handleGetVotes,
     getCities: handleGetCities,
-    createPoll: handleCreatePoll,
 };
 
 export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
@@ -461,6 +464,11 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
                     ].filter(Boolean).join(', ')}`
                 })
             };
+        }
+
+        // For getVotes and getCities actions, inform the client about the new public API
+        if (action === 'getVotes' || action === 'getCities') {
+            console.log(`Note: ${action} action is now available without authentication via the public API`);
         }
 
         // Validate token and get resolvedCity

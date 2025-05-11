@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { VOTE_HOST } from './constants';
 import { BrowserRouter, Routes, Route, Navigate, useParams, useNavigate, Link } from 'react-router-dom';
 import Poll from './components/Poll';
+import Polls from './components/Polls';
 import Header from './components/Header';
 // import CityMap from './components/CityMap';
 import WorldMap from './components/WorldMap';
@@ -312,6 +313,21 @@ function App() {
         <Container sx={{ pt: '80px' }}>
           <AuthenticatedContent />
           <Routes>
+            <Route path="/polls" element={<Polls theme={theme} />} />
+            <Route path="/poll/:pollId" element={
+              cityInfo ? (
+                <PollWrapper 
+                  token={token} 
+                  cityInfo={cityInfo} 
+                  polls={polls}
+                  onVoteComplete={fetchData}
+                  votesData={votesData}
+                  cities={cities}
+                />
+              ) : (
+                <Poll />
+              )
+            } />
             <Route path="/" element={
               !cityInfo ? (
                 <Box
@@ -556,23 +572,6 @@ function App() {
                 </Box>
               )
             } />
-            <Route 
-              path="/poll/:pollId" 
-              element={
-                cityInfo ? (
-                  <PollWrapper 
-                    token={token} 
-                    cityInfo={cityInfo} 
-                    polls={polls}
-                    onVoteComplete={fetchData}
-                    votesData={votesData}
-                    cities={cities}
-                  />
-                ) : (
-                  <Navigate to="/" replace />
-                )
-              } 
-            />
             <Route 
               path="/city/:cityId" 
               element={

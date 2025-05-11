@@ -63,6 +63,8 @@ function Header({ cityInfo, onLogout, onCreatePoll }: HeaderProps) {
             sx={{ 
               color: 'text.secondary',
               textDecoration: 'none',
+              marginRight: '12px',
+              marginLeft: '12px',
               '&:hover': { 
                 color: 'primary.main',
                 textDecoration: 'underline'
@@ -70,6 +72,23 @@ function Header({ cityInfo, onLogout, onCreatePoll }: HeaderProps) {
             }}
           >
             About
+          </Typography>
+          <Typography 
+            variant="body2" 
+            component="div"
+            onClick={() => navigate('/polls')}
+            sx={{ 
+              color: 'text.secondary',
+              textDecoration: 'none',
+              cursor: 'pointer',
+              marginRight: '12px',
+              '&:hover': { 
+                color: 'primary.main',
+                textDecoration: 'underline'
+              }
+            }}
+          >
+            Polls
           </Typography>
         </Box>
       </Box>
@@ -107,4 +126,4 @@ function Header({ cityInfo, onLogout, onCreatePoll }: HeaderProps) {
   );
 }
 
-export default Header; 
+export default Header;

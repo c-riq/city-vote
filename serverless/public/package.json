@@ -1,0 +1,22 @@
+{
+  "name": "city-vote-public",
+  "version": "1.0.0",
+  "description": "Public Lambda function for City Vote application (unauthenticated access)",
+  "main": "dist/public.js",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "clean": "rm -rf dist",
+    "deploy": "npm run clean && npm run build && ./deploy.sh"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.0.0",
+    "@aws-sdk/client-s3": "^3.758.0",
+    "@aws-sdk/lib-dynamodb": "^3.0.0"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.130",
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  }
+}
