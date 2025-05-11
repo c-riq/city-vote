@@ -20,9 +20,14 @@ fi
 
 export AWS_PROFILE=$aws_profile
 
-if [ ! -d "dist" ]; then
-    echo "${red}dist folder not found${reset}"
-    exit 0;
+# Build the project
+echo "Building the project..."
+npm run build
+
+# Check if build was successful
+if [ $? -ne 0 ]; then
+    echo "Build failed"
+    exit 1
 fi
 
 # Check if index.html exists
