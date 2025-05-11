@@ -25,7 +25,7 @@ function Header({ cityInfo, onLogout, onCreatePoll }: HeaderProps) {
         left: 0,
         right: 0,
         height: '64px',
-        backgroundColor: cityInfo ? 'rgba(25, 118, 210, 0.15)' : 'background.paper',
+        backgroundColor: cityInfo ? '#e3f2fd' : 'background.paper',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
