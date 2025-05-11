@@ -37,8 +37,8 @@ if [ ! -f "dist/index.html" ]; then
 fi
 
 # Copy about.html to dist directory
-echo "Copying about.html to dist directory..."
-cp about.html dist/
+echo "Copying about-city-vote.html to dist directory..."
+cp about-city-vote.html dist/
 
 # Sync all files with minimal cache duration
 echo Synching Build Folder: $s3_bucket...

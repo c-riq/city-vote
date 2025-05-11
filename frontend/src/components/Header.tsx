@@ -62,7 +62,7 @@ function Header({ cityInfo, onLogout, onCreatePoll }: HeaderProps) {
           <Typography 
             variant="body2" 
             component="a"
-            href="/about.html"
+            href="/about-city-vote.html"
             sx={{ 
               color: 'text.secondary',
               textDecoration: 'none',
