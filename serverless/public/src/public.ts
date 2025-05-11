@@ -3,10 +3,6 @@ import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3';
 import { Readable } from 'stream';
 import {
     City,
-    VoteData,
-    GetPublicVotesRequest,
-    GetPublicCitiesRequest,
-    RegisterRequest
 } from './types';
 import { handleRegister } from './registration';
 

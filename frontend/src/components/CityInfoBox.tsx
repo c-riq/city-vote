@@ -1,6 +1,6 @@
 import { Box, Typography, Link as MuiLink, Button } from '@mui/material';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { City } from '../voteBackendTypes';
+import { City } from '../backendTypes';
 
 interface CityInfoBoxProps {
   cityId: string | null;

@@ -17,7 +17,7 @@ import {
   Autocomplete,
 } from '@mui/material';
 import { PUBLIC_API_HOST, AUTOCOMPLETE_API_HOST } from '../constants';
-import { City } from '../voteBackendTypes';
+import { City } from '../backendTypes';
 
 interface AuthChannel {
   account: string;
@@ -47,7 +47,6 @@ const CityRegistration: React.FC = () => {
   // Autocomplete state
   const [autocompleteResults, setAutocompleteResults] = useState<CityAutocompleteResult[]>([]);
   const [isLoadingAutocomplete, setIsLoadingAutocomplete] = useState(false);
-  const [autocompleteOpen, setAutocompleteOpen] = useState(false);
   const [autocompleteInputValue, setAutocompleteInputValue] = useState('');
   const autocompleteTimeoutRef = useRef<number | null>(null);
 
@@ -173,7 +172,7 @@ const CityRegistration: React.FC = () => {
     setIsSubmitting(true);
 
     try {
-      const cityData: City = {
+      const cityData: Partial<City> = {
         id: cityId,
         name: cityName,
         authenticationKeyDistributionChannels: authChannels

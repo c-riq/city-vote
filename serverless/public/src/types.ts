@@ -1,5 +1,5 @@
 // Vote storage format in S3
-export type VoteData = Record<string, Record<string, [number, string, {
+export type VoteData_ = Record<string, Record<string, [number, string, {
     title: string;
     name: string;
     actingCapacity: 'individual' | 'representingCityAdministration';
@@ -28,7 +28,7 @@ export interface GetPublicCitiesRequest {
 
 // API Response types
 export interface GetVotesResponse {
-    votes: VoteData;
+    votes: VoteData_;
     message?: string;
 }
 

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Box, Typography, Button, CircularProgress } from '@mui/material';
 import VoteList from './VoteList';
-import { VoteData, GetVotesResponse, City } from '../voteBackendTypes';
+import { VoteData, GetVotesResponse, City } from '../backendTypes';
 import { PUBLIC_API_HOST } from '../constants';
 
 interface PollsProps {

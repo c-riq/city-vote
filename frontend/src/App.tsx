@@ -17,7 +17,7 @@ import {
   ValidateTokenResponse,
   GetCitiesResponse,
   GetVotesResponse
-} from './voteBackendTypes';
+} from './backendTypes';
 
 type Vote = [number, string, { title: string; name: string; actingCapacity: 'individual' | 'representingCityAdministration' }];
 type CityVotes = Record<string, Vote[]>;  // cityId -> votes
