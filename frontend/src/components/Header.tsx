@@ -94,6 +94,23 @@ function Header({ cityInfo, onLogout, onCreatePoll }: HeaderProps) {
           >
             Polls
           </Typography>
+          <Typography 
+            variant="body2" 
+            component="div"
+            onClick={() => navigate('/register')}
+            sx={{ 
+              color: 'text.secondary',
+              textDecoration: 'none',
+              cursor: 'pointer',
+              marginRight: '12px',
+              '&:hover': { 
+                color: 'primary.main',
+                textDecoration: 'underline'
+              }
+            }}
+          >
+            Register City
+          </Typography>
         </Box>
       </Box>
 

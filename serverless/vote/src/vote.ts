@@ -362,18 +362,6 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
             };
         }
 
-        // For getVotes and getCities actions, inform the client about the new public API
-        if (action === 'getVotes' || action === 'getCities') {
-            console.log(`Note: ${action} action is now available without authentication via the public API`);
-            return {
-                statusCode: 400,
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    message: `Invalid action: ${action}. This operation is now available via the public API.`
-                }, null, 2)
-            };
-        }
-
         // Validate token and get resolvedCity
         let resolvedCity: City;
         try {

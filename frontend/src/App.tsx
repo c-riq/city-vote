@@ -11,6 +11,7 @@ import Header from './components/Header';
 import WorldMap from './components/WorldMap';
 import CityInfoBox from './components/CityInfoBox';
 import VoteList from './components/VoteList';
+import CityRegistration from './components/CityRegistration';
 import {
   City,
   ValidateTokenResponse,
@@ -301,6 +302,7 @@ function App() {
         <Container sx={{ pt: '80px' }}>
           <AuthenticatedContent />
           <Routes>
+            <Route path="/register" element={<CityRegistration />} />
             <Route path="/polls" element={<Polls theme={theme} />} />
             <Route path="/poll/:pollId" element={
               cityInfo ? (
