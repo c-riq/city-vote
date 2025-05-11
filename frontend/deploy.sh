@@ -35,9 +35,9 @@ fi
 echo "Copying about.html to dist directory..."
 cp about.html dist/
 
-# Sync all files including HTML with long cache duration
+# Sync all files with minimal cache duration
 echo Synching Build Folder: $s3_bucket...
-aws s3 sync dist/ s3://$s3_bucket --delete --exclude "**/.DS_Store" --cache-control max-age=31530000,public
+aws s3 sync dist/ s3://$s3_bucket --delete --exclude "**/.DS_Store" --cache-control "max-age=60,no-cache,must-revalidate,public"
 
 # Invalidate CloudFront cache if distribution ID is provided
 if [ ! -z "$cf_id" ]; then
