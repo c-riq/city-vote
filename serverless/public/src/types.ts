@@ -39,3 +39,17 @@ export interface GetVotesResponse {
 export interface GetCitiesResponse {
     cities: Record<string, City>;
 }
+
+// Registration API Request/Response types
+export interface RegisterRequest {
+    action: 'register';
+    registrationCode: string;
+    cityData: City;
+}
+
+export interface RegisterResponse {
+    message: string;
+    token?: string;
+    city?: City;
+    error?: string;
+}

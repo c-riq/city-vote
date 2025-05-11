@@ -5,8 +5,10 @@ import {
     City,
     VoteData,
     GetPublicVotesRequest,
-    GetPublicCitiesRequest
+    GetPublicCitiesRequest,
+    RegisterRequest
 } from './types';
+import { handleRegister } from './registration';
 
 const s3Client = new S3Client({ region: 'us-east-1' });
 const BUCKET_NAME = 'city-vote-data';
@@ -112,11 +114,13 @@ const handleGetPublicCities = async (): Promise<APIGatewayProxyResult> => {
 type PublicActionHandlers = {
     getVotes: (cityId?: string) => Promise<APIGatewayProxyResult>;
     getCities: () => Promise<APIGatewayProxyResult>;
+    register: (registrationCode: string, cityData: City) => Promise<APIGatewayProxyResult>;
 };
 
 const publicActionHandlers: PublicActionHandlers = {
     getVotes: handleGetPublicVotes,
     getCities: handleGetPublicCities,
+    register: handleRegister,
 };
 
 export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
@@ -129,7 +133,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
             };
         }
 
-        const { action, cityId } = JSON.parse(event.body);
+        const { action, cityId, registrationCode, cityData } = JSON.parse(event.body);
         
         if (!action) {
             return {
@@ -141,8 +145,14 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
             };
         }
 
-        const handler = publicActionHandlers[action as keyof PublicActionHandlers];
-        if (!handler) {
+        // Call the appropriate handler based on the action
+        if (action === 'getVotes') {
+            return await publicActionHandlers.getVotes(cityId);
+        } else if (action === 'register') {
+            return await publicActionHandlers.register(registrationCode, cityData);
+        } else if (action === 'getCities') {
+            return await publicActionHandlers.getCities();
+        } else {
             return {
                 statusCode: 400,
                 headers: { 'Content-Type': 'application/json' },
@@ -150,13 +160,6 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
                     message: `Invalid action: ${action}. Supported actions are: ${Object.keys(publicActionHandlers).join(', ')}`
                 }, null, 2)
             };
-        }
-
-        // Call the appropriate handler based on the action
-        if (action === 'getVotes') {
-            return await handler(cityId);
-        } else {
-            return await handler();
         }
     } catch (error) {
         console.error('Error:', error);
