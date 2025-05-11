@@ -182,7 +182,7 @@ function Polls({ token, cityInfo, votesData: propVotesData, cities: propCities, 
               fontWeight: 600,
             }}
           >
-            Public Polls
+            Polls
           </Typography>
           
           <Typography
@@ -194,7 +194,7 @@ function Polls({ token, cityInfo, votesData: propVotesData, cities: propCities, 
               maxWidth: 600,
             }}
           >
-            View all polls and votes from cities around the world. No authentication required.
+            View all polls and votes from cities around the world.
           </Typography>
         </>
       )}
