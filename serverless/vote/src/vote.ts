@@ -158,7 +158,7 @@ const handleValidateToken = async ({ resolvedCity }: ValidateTokenParams): Promi
         body: JSON.stringify({
             city: resolvedCity,
             cityId: resolvedCity.id
-        })
+        }, null, 2)
     };
 };
 
@@ -175,7 +175,7 @@ const handleVote = async ({ cityId, resolvedCity, pollId, option, title, name, a
                     !name && 'name',
                     !actingCapacity && 'actingCapacity'
                 ].filter(Boolean).join(', ')}`
-            })
+            }, null, 2)
         };
     }
 
@@ -185,7 +185,7 @@ const handleVote = async ({ cityId, resolvedCity, pollId, option, title, name, a
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 message: 'Token does not match the specified city'
-            })
+            }, null, 2)
         };
     }
 
@@ -199,7 +199,7 @@ const handleVote = async ({ cityId, resolvedCity, pollId, option, title, name, a
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 message: 'Failed to acquire lock, please try again'
-            })
+            }, null, 2)
         };
     }
 
@@ -241,7 +241,7 @@ const handleVote = async ({ cityId, resolvedCity, pollId, option, title, name, a
         return {
             statusCode: 200,
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: 'Vote recorded successfully' })
+            body: JSON.stringify({ message: 'Vote recorded successfully' }, null, 2)
         };
     } catch (error) {
         if (lockAcquired) {
@@ -256,7 +256,7 @@ const handleCreatePoll = async ({ pollId }: CreatePollParams): Promise<APIGatewa
         return {
             statusCode: 400,
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: 'Missing required parameter: pollId' })
+            body: JSON.stringify({ message: 'Missing required parameter: pollId' }, null, 2)
         };
     }
 
@@ -268,7 +268,7 @@ const handleCreatePoll = async ({ pollId }: CreatePollParams): Promise<APIGatewa
         return {
             statusCode: 429,
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: 'Failed to acquire lock, please try again' })
+            body: JSON.stringify({ message: 'Failed to acquire lock, please try again' }, null, 2)
         };
     }
 
@@ -296,7 +296,7 @@ const handleCreatePoll = async ({ pollId }: CreatePollParams): Promise<APIGatewa
             return {
                 statusCode: 409,
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: 'Poll already exists' })
+                body: JSON.stringify({ message: 'Poll already exists' }, null, 2)
             };
         }
 
@@ -314,7 +314,7 @@ const handleCreatePoll = async ({ pollId }: CreatePollParams): Promise<APIGatewa
         return {
             statusCode: 200,
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: 'Poll created successfully' })
+            body: JSON.stringify({ message: 'Poll created successfully' }, null, 2)
         };
     } catch (error) {
         if (lockAcquired) {
@@ -343,7 +343,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
             return {
                 statusCode: 400,
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: 'Missing request body' })
+                body: JSON.stringify({ message: 'Missing request body' }, null, 2)
             };
         }
 
@@ -358,7 +358,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
                         !action && 'action',
                         !token && 'token'
                     ].filter(Boolean).join(', ')}`
-                })
+                }, null, 2)
             };
         }
 
@@ -370,7 +370,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     message: `Invalid action: ${action}. This operation is now available via the public API.`
-                })
+                }, null, 2)
             };
         }
 
@@ -386,7 +386,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
                 return {
                     statusCode: 500,
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: 'Authentication system unavailable' })
+                    body: JSON.stringify({ message: 'Authentication system unavailable' }, null, 2)
                 };
             }
 
@@ -398,7 +398,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
                 return {
                     statusCode: 403,
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: 'Invalid token' })
+                    body: JSON.stringify({ message: 'Invalid token' }, null, 2)
                 };
             }
 
@@ -412,7 +412,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
                 body: JSON.stringify({
                     message: 'Authentication system error',
                     details: error instanceof Error ? error.message : 'Unknown error'
-                })
+                }, null, 2)
             };
         }
 
@@ -423,7 +423,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     message: `Invalid action: ${action}. Supported actions are: ${Object.keys(actionHandlers).join(', ')}`
-                })
+                }, null, 2)
             };
         }
 
@@ -437,7 +437,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
             body: JSON.stringify({
                 message: 'Internal server error',
                 details: error instanceof Error ? error.message : 'Unknown error'
-            })
+            }, null, 2)
         };
     }
 };

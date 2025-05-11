@@ -33,7 +33,7 @@ const handleGetPublicVotes = async (cityId?: string): Promise<APIGatewayProxyRes
             return {
                 statusCode: 404,
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: 'No votes data found' })
+                body: JSON.stringify({ message: 'No votes data found' }, null, 2)
             };
         }
 
@@ -51,7 +51,7 @@ const handleGetPublicVotes = async (cityId?: string): Promise<APIGatewayProxyRes
             return {
                 statusCode: 200,
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ votes: cityVotes })
+                body: JSON.stringify({ votes: cityVotes }, null, 2)
             };
         }
 
@@ -59,14 +59,14 @@ const handleGetPublicVotes = async (cityId?: string): Promise<APIGatewayProxyRes
         return {
                 statusCode: 200,
                 headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ votes })
+            body: JSON.stringify({ votes }, null, 2)
         };
     } catch (error: any) {
         if (error.name === 'NoSuchKey') {
             return {
                 statusCode: 404,
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: 'No votes data found' })
+                body: JSON.stringify({ message: 'No votes data found' }, null, 2)
             };
         }
         throw error;
@@ -84,7 +84,7 @@ const handleGetPublicCities = async (): Promise<APIGatewayProxyResult> => {
             return {
                 statusCode: 404,
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: 'Cities data not found' })
+                body: JSON.stringify({ message: 'Cities data not found' }, null, 2)
             };
         }
 
@@ -94,14 +94,14 @@ const handleGetPublicCities = async (): Promise<APIGatewayProxyResult> => {
         return {
             statusCode: 200,
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ cities })
+            body: JSON.stringify({ cities }, null, 2)
         };
     } catch (error: any) {
         if (error.name === 'NoSuchKey') {
             return {
                 statusCode: 404,
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: 'Cities data not found' })
+                body: JSON.stringify({ message: 'Cities data not found' }, null, 2)
             };
         }
         throw error;
@@ -125,7 +125,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
             return {
                 statusCode: 400,
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: 'Missing request body' })
+                body: JSON.stringify({ message: 'Missing request body' }, null, 2)
             };
         }
 
@@ -137,7 +137,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     message: 'Missing required parameter: action'
-                })
+                }, null, 2)
             };
         }
 
@@ -148,7 +148,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     message: `Invalid action: ${action}. Supported actions are: ${Object.keys(publicActionHandlers).join(', ')}`
-                })
+                }, null, 2)
             };
         }
 
@@ -166,7 +166,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
             body: JSON.stringify({
                 message: 'Internal server error',
                 details: error instanceof Error ? error.message : 'Unknown error'
-            })
+            }, null, 2)
         };
     }
 };
