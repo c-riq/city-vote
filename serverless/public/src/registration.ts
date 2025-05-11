@@ -5,8 +5,7 @@ import { City, RegisterRequest, RegisterResponse } from './types';
 
 const s3Client = new S3Client({ region: 'us-east-1' });
 const BUCKET_NAME = 'city-vote-data';
-const AUTH_KEY = 'auth/auth.json';
-const CITIES_KEY = 'cities/cities.json';
+const REGISTRATION_KEY = 'registration/registration.json';
 
 async function streamToString(stream: Readable): Promise<string> {
     return new Promise((resolve, reject) => {
@@ -29,58 +28,33 @@ export const handleRegister = async (cityData: City): Promise<APIGatewayProxyRes
     }
 
     try {
-        // Get existing auth data
-        const authData = await s3Client.send(new GetObjectCommand({
-            Bucket: BUCKET_NAME,
-            Key: AUTH_KEY
-        }));
-
-        let auth: Record<string, City> = {};
-        if (authData.Body) {
-            const authString = await streamToString(authData.Body as Readable);
-            auth = JSON.parse(authString);
-        }
-
-        // Check if city with same name already exists in auth.json
-        const cityExistsInAuth = Object.values(auth).some(city => 
-            city.name.toLowerCase() === cityData.name.toLowerCase());
-        
-        if (cityExistsInAuth) {
-            return {
-                statusCode: 409,
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    message: `City with name "${cityData.name}" already exists in authentication data`
-                }, null, 2)
-            };
-        }
-
-        // Get existing cities data to check if city already exists
-        let cityExistsInCities = false;
+        // Get existing registration data
+        let registrations: Record<string, City> = {};
         try {
-            const citiesData = await s3Client.send(new GetObjectCommand({
+            const registrationData = await s3Client.send(new GetObjectCommand({
                 Bucket: BUCKET_NAME,
-                Key: CITIES_KEY
+                Key: REGISTRATION_KEY
             }));
 
-            if (citiesData.Body) {
-                const citiesString = await streamToString(citiesData.Body as Readable);
-                const cities: Record<string, City> = JSON.parse(citiesString);
-                
-                cityExistsInCities = Object.values(cities).some(city => 
-                    city.name.toLowerCase() === cityData.name.toLowerCase());
+            if (registrationData.Body) {
+                const registrationString = await streamToString(registrationData.Body as Readable);
+                registrations = JSON.parse(registrationString);
             }
         } catch (error) {
-            console.error('Error checking cities data:', error);
-            // Continue with registration even if we can't check cities.json
+            console.error('Error getting registration data:', error);
+            // If the file doesn't exist yet, we'll create it
         }
 
-        if (cityExistsInCities) {
+        // Check if city with same name already exists in registration.json
+        const cityExistsInRegistration = Object.values(registrations).some(city => 
+            city.name.toLowerCase() === cityData.name.toLowerCase());
+        
+        if (cityExistsInRegistration) {
             return {
                 statusCode: 409,
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    message: `City with name "${cityData.name}" already exists in cities data`
+                    message: `City with name "${cityData.name}" already exists in registration data`
                 }, null, 2)
             };
         }
@@ -88,59 +62,25 @@ export const handleRegister = async (cityData: City): Promise<APIGatewayProxyRes
         // Use the ID provided in the registration data
         const cityId = cityData.id;
         
-        // Generate a unique token for the city
-        const token = `token_${Date.now()}_${Math.random().toString(36).substring(2, 15)}`;
-
         // Use the city object from the registration data
         const city: City = cityData;
 
-        // Add the city to the auth data
-        auth[token] = city;
+        // Add the city to the registration data
+        registrations[cityId] = city;
 
-        // Update the auth data
+        // Update the registration data
         await s3Client.send(new PutObjectCommand({
             Bucket: BUCKET_NAME,
-            Key: AUTH_KEY,
-            Body: JSON.stringify(auth, null, 2),
+            Key: REGISTRATION_KEY,
+            Body: JSON.stringify(registrations, null, 2),
             ContentType: 'application/json'
         }));
-
-        // Update cities.json file
-        try {
-            // Get existing cities data
-            const citiesData = await s3Client.send(new GetObjectCommand({
-                Bucket: BUCKET_NAME,
-                Key: CITIES_KEY
-            }));
-
-            let cities: Record<string, City> = {};
-            if (citiesData.Body) {
-                const citiesString = await streamToString(citiesData.Body as Readable);
-                cities = JSON.parse(citiesString);
-            }
-
-            // Add the new city to the cities data
-            cities[cityId] = city;
-
-            // Update the cities data
-            await s3Client.send(new PutObjectCommand({
-                Bucket: BUCKET_NAME,
-                Key: CITIES_KEY,
-                Body: JSON.stringify(cities, null, 2),
-                ContentType: 'application/json'
-            }));
-        } catch (error) {
-            console.error('Error updating cities data:', error);
-            // Don't throw error to prevent disrupting the main flow
-            // The city is still registered in auth.json
-        }
 
         return {
             statusCode: 200,
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 message: 'Registration successful',
-                token,
                 city
             }, null, 2)
         };

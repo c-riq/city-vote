@@ -109,7 +109,7 @@ function Header({ cityInfo, onLogout, onCreatePoll }: HeaderProps) {
               }
             }}
           >
-            Register City
+            Register
           </Typography>
         </Box>
       </Box>

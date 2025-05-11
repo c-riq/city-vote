@@ -43,7 +43,6 @@ const CityRegistration: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  const [token, setToken] = useState('');
 
   // Autocomplete state
   const [autocompleteResults, setAutocompleteResults] = useState<CityAutocompleteResult[]>([]);
@@ -198,7 +197,6 @@ const CityRegistration: React.FC = () => {
       }
 
       setSuccess('City registered successfully!');
-      setToken(data.token || '');
       
       // Reset form
       setCityName('');
@@ -230,24 +228,13 @@ const CityRegistration: React.FC = () => {
         {success && (
           <Alert severity="success" sx={{ mb: 3 }}>
             {success}
-            {token && (
-              <Box sx={{ mt: 2 }}>
-                <Typography variant="subtitle2">Your city access token:</Typography>
-                <TextField
-                  fullWidth
-                  value={token}
-                  variant="outlined"
-                  size="small"
-                  InputProps={{
-                    readOnly: true,
-                  }}
-                  sx={{ mt: 1, backgroundColor: 'rgba(0, 0, 0, 0.04)' }}
-                />
-                <Typography variant="caption" color="text.secondary" sx={{ mt: 1, display: 'block' }}>
-                  Please save this token securely. You will need it to access your city's dashboard.
-                </Typography>
-              </Box>
-            )}
+            <Box sx={{ mt: 2 }}>
+              <Typography variant="subtitle2">Next Steps:</Typography>
+              <Typography variant="body2" sx={{ mt: 1 }}>
+                Please write a brief email to <strong>info@rixdata.net</strong> to start the verification process.
+                Include your city name and any additional information that might help verify your city's identity.
+              </Typography>
+            </Box>
           </Alert>
         )}
 
@@ -327,7 +314,7 @@ const CityRegistration: React.FC = () => {
             <Grid item xs={12}>
               <Divider sx={{ my: 1 }}>Authentication Channels</Divider>
               <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 2 }}>
-                Add contact information for city officials who can verify the city's identity
+                Add contact information for city officials who can verify the city's identity and receive passwords for voting
               </Typography>
             </Grid>
 
