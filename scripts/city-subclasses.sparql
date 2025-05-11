@@ -1,0 +1,49 @@
+# SPARQL query to get all subclasses of city (Q515) and municipality (Q15284)
+# This can be executed at https://query.wikidata.org/
+
+SELECT DISTINCT 
+  (STRAFTER(STR(?citySubclass), "http://www.wikidata.org/entity/") AS ?citySubclassId)
+  ?citySubclassLabel 
+  (STRAFTER(STR(?ancestorClass), "http://www.wikidata.org/entity/") AS ?ancestorClassId)
+  ?ancestorClassLabel
+WHERE {
+  # Get all subclasses of city (Q515) or municipality (Q15284) with a limited depth
+  {
+    # Direct subclasses of city
+    ?citySubclass wdt:P279 wd:Q515.
+    BIND(wd:Q515 AS ?ancestorClass)
+  } UNION {
+    # Subclasses one level down from city
+    ?intermediate wdt:P279 wd:Q515.
+    ?citySubclass wdt:P279 ?intermediate.
+    BIND(wd:Q515 AS ?ancestorClass)
+  } UNION {
+    # Subclasses two levels down from city
+    ?intermediate1 wdt:P279 wd:Q515.
+    ?intermediate2 wdt:P279 ?intermediate1.
+    ?citySubclass wdt:P279 ?intermediate2.
+    BIND(wd:Q515 AS ?ancestorClass)
+  } UNION {
+    # Direct subclasses of municipality
+    ?citySubclass wdt:P279 wd:Q15284.
+    BIND(wd:Q15284 AS ?ancestorClass)
+  } UNION {
+    # Subclasses one level down from municipality
+    ?intermediate wdt:P279 wd:Q15284.
+    ?citySubclass wdt:P279 ?intermediate.
+    BIND(wd:Q15284 AS ?ancestorClass)
+  } UNION {
+    # Subclasses two levels down from municipality
+    ?intermediate1 wdt:P279 wd:Q15284.
+    ?intermediate2 wdt:P279 ?intermediate1.
+    ?citySubclass wdt:P279 ?intermediate2.
+    BIND(wd:Q15284 AS ?ancestorClass)
+  }
+  
+  # Get labels in English
+  SERVICE wikibase:label { 
+    bd:serviceParam wikibase:language "en". 
+  }
+}
+ORDER BY ?ancestorClassLabel ?citySubclassLabel
+LIMIT 2000  # Increased limit to accommodate both city and municipality subclasses
