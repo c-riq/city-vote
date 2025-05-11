@@ -9,10 +9,6 @@ export type VoteData = Record<string, Record<string, [number, string, {
 export interface City {
     id: string;
     name: string;
-    population: number;
-    country: string;
-    lat: number;
-    lon: number;
     authenticationKeyDistributionChannels: {
         account: string;
         type: 'linkedin' | 'email';
@@ -77,4 +73,4 @@ export interface GetCitiesResponse {
 
 export interface CreatePollResponse {
     message: string;
-} 
+}

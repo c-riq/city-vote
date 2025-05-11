@@ -9,10 +9,6 @@ export type VoteData = Record<string, Record<string, [number, string, {
 export interface City {
     id: string;
     name: string;
-    population: number;
-    country: string;
-    lat: number;
-    lon: number;
     authenticationKeyDistributionChannels: {
         account: string;
         type: 'linkedin' | 'email';
@@ -43,7 +39,6 @@ export interface GetCitiesResponse {
 // Registration API Request/Response types
 export interface RegisterRequest {
     action: 'register';
-    registrationCode: string;
     cityData: City;
 }
 

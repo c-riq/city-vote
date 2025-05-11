@@ -35,14 +35,10 @@ interface CityAutocompleteResult {
 
 const CityRegistration: React.FC = () => {
   const [cityName, setCityName] = useState('');
-  const [country, setCountry] = useState('');
-  const [population, setPopulation] = useState<number | ''>('');
-  const [lat, setLat] = useState<number | ''>('');
-  const [lon, setLon] = useState<number | ''>('');
+  const [cityId, setCityId] = useState('');
   const [authChannels, setAuthChannels] = useState<AuthChannel[]>([
     { account: '', type: 'email', confidence: 0 }
   ]);
-  const [cityId, setCityId] = useState('');
   
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
@@ -121,15 +117,6 @@ const CityRegistration: React.FC = () => {
     if (city) {
       setCityName(city.name);
       setCityId(city.wikidataId);
-      
-      // Set the country name from the autocomplete result
-      setCountry(city.countryName);
-      
-      // You would typically fetch more city details here
-      // For now, we'll just set some placeholder values
-      setLat('');
-      setLon('');
-      setPopulation('');
     }
   };
 
@@ -159,24 +146,8 @@ const CityRegistration: React.FC = () => {
       setError('City name is required');
       return false;
     }
-    if (!country.trim()) {
-      setError('Country is required');
-      return false;
-    }
     if (!cityId.trim()) {
       setError('City ID is required');
-      return false;
-    }
-    if (population === '' || isNaN(Number(population)) || Number(population) < 0) {
-      setError('Valid population is required');
-      return false;
-    }
-    if (lat === '' || isNaN(Number(lat)) || Number(lat) < -90 || Number(lat) > 90) {
-      setError('Valid latitude is required (between -90 and 90)');
-      return false;
-    }
-    if (lon === '' || isNaN(Number(lon)) || Number(lon) < -180 || Number(lon) > 180) {
-      setError('Valid longitude is required (between -180 and 180)');
       return false;
     }
 
@@ -206,10 +177,6 @@ const CityRegistration: React.FC = () => {
       const cityData: City = {
         id: cityId,
         name: cityName,
-        population: Number(population),
-        country,
-        lat: Number(lat),
-        lon: Number(lon),
         authenticationKeyDistributionChannels: authChannels
       };
 
@@ -235,10 +202,6 @@ const CityRegistration: React.FC = () => {
       
       // Reset form
       setCityName('');
-      setCountry('');
-      setPopulation('');
-      setLat('');
-      setLon('');
       setCityId('');
       setAuthChannels([{ account: '', type: 'email', confidence: 0 }]);
     } catch (err) {
@@ -294,8 +257,7 @@ const CityRegistration: React.FC = () => {
               <Divider sx={{ my: 1 }}>City Information</Divider>
             </Grid>
 
-            <Grid item xs={12} sm={6}>
-
+            <Grid item xs={12}>
               <Autocomplete
                 fullWidth
                 options={autocompleteResults}
@@ -341,18 +303,6 @@ const CityRegistration: React.FC = () => {
               />
             </Grid>
 
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="Country"
-                fullWidth
-                required
-                value={country}
-                onChange={(e) => setCountry(e.target.value)}
-                disabled={isSubmitting}
-                autoComplete="new-password"
-              />
-            </Grid>
-
             <Grid item xs={12}>
               {cityId ? (
                 <Box sx={{ mb: 2 }}>
@@ -374,48 +324,6 @@ const CityRegistration: React.FC = () => {
               )}
             </Grid>
 
-            <Grid item xs={12} sm={4}>
-              <TextField
-                label="Population"
-                fullWidth
-                required
-                type="number"
-                value={population}
-                onChange={(e) => setPopulation(e.target.value === '' ? '' : Number(e.target.value))}
-                disabled={isSubmitting}
-                InputProps={{ inputProps: { min: 0 } }}
-                autoComplete="new-password"
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={4}>
-              <TextField
-                label="Latitude"
-                fullWidth
-                required
-                type="number"
-                value={lat}
-                onChange={(e) => setLat(e.target.value === '' ? '' : Number(e.target.value))}
-                disabled={isSubmitting}
-                InputProps={{ inputProps: { min: -90, max: 90, step: 'any' } }}
-                autoComplete="new-password"
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={4}>
-              <TextField
-                label="Longitude"
-                fullWidth
-                required
-                type="number"
-                value={lon}
-                onChange={(e) => setLon(e.target.value === '' ? '' : Number(e.target.value))}
-                disabled={isSubmitting}
-                InputProps={{ inputProps: { min: -180, max: 180, step: 'any' } }}
-                autoComplete="new-password"
-              />
-            </Grid>
-
             <Grid item xs={12}>
               <Divider sx={{ my: 1 }}>Authentication Channels</Divider>
               <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 2 }}>
@@ -425,7 +333,7 @@ const CityRegistration: React.FC = () => {
 
             {authChannels.map((channel, index) => (
               <Grid item xs={12} key={index} container spacing={2}>
-                <Grid item xs={12} sm={5}>
+                <Grid item xs={12} sm={8}>
                   <TextField
                     label="Account"
                     fullWidth

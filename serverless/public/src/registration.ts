@@ -6,17 +6,7 @@ import { City, RegisterRequest, RegisterResponse } from './types';
 const s3Client = new S3Client({ region: 'us-east-1' });
 const BUCKET_NAME = 'city-vote-data';
 const AUTH_KEY = 'auth/auth.json';
-const REGISTRATION_CODES_KEY = 'auth/registration_codes.json';
 const CITIES_KEY = 'cities/cities.json';
-
-
-// Interface for registration codes storage
-interface RegistrationCode {
-    code: string;
-    used: boolean;
-    usedAt?: string;
-    usedBy?: string;
-}
 
 async function streamToString(stream: Readable): Promise<string> {
     return new Promise((resolve, reject) => {
@@ -27,60 +17,18 @@ async function streamToString(stream: Readable): Promise<string> {
     });
 }
 
-export const handleRegister = async (registrationCode: string, cityData: City): Promise<APIGatewayProxyResult> => {
-    if (!registrationCode || !cityData || !cityData.name) {
+export const handleRegister = async (cityData: City): Promise<APIGatewayProxyResult> => {
+    if (!cityData || !cityData.name) {
         return {
             statusCode: 400,
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                message: 'Missing required parameters: registrationCode and cityData'
+                message: 'Missing required parameter: cityData'
             }, null, 2)
         };
     }
 
     try {
-        // Check if registration code exists and has not been used
-        const registrationCodesData = await s3Client.send(new GetObjectCommand({
-            Bucket: BUCKET_NAME,
-            Key: REGISTRATION_CODES_KEY
-        }));
-
-        if (!registrationCodesData.Body) {
-            return {
-                statusCode: 500,
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    message: 'Registration system unavailable'
-                }, null, 2)
-            };
-        }
-
-        const registrationCodesString = await streamToString(registrationCodesData.Body as Readable);
-        const registrationCodes: Record<string, RegistrationCode> = JSON.parse(registrationCodesString);
-
-        // Check if registration code exists
-        if (!registrationCodes[registrationCode]) {
-            return {
-                statusCode: 403,
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    message: 'Invalid registration code'
-                }, null, 2)
-            };
-        }
-
-        // Check if registration code has already been used
-        if (registrationCodes[registrationCode].used) {
-            return {
-                statusCode: 403,
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    message: 'Registration code has already been used',
-                    usedAt: registrationCodes[registrationCode].usedAt
-                }, null, 2)
-            };
-        }
-
         // Get existing auth data
         const authData = await s3Client.send(new GetObjectCommand({
             Bucket: BUCKET_NAME,
@@ -186,19 +134,6 @@ export const handleRegister = async (registrationCode: string, cityData: City): 
             // Don't throw error to prevent disrupting the main flow
             // The city is still registered in auth.json
         }
-
-        // Mark the registration code as used
-        registrationCodes[registrationCode].used = true;
-        registrationCodes[registrationCode].usedAt = new Date().toISOString();
-        registrationCodes[registrationCode].usedBy = cityId;
-
-        // Update the registration codes
-        await s3Client.send(new PutObjectCommand({
-            Bucket: BUCKET_NAME,
-            Key: REGISTRATION_CODES_KEY,
-            Body: JSON.stringify(registrationCodes, null, 2),
-            ContentType: 'application/json'
-        }));
 
         return {
             statusCode: 200,

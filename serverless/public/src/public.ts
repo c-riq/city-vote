@@ -114,7 +114,7 @@ const handleGetPublicCities = async (): Promise<APIGatewayProxyResult> => {
 type PublicActionHandlers = {
     getVotes: (cityId?: string) => Promise<APIGatewayProxyResult>;
     getCities: () => Promise<APIGatewayProxyResult>;
-    register: (registrationCode: string, cityData: City) => Promise<APIGatewayProxyResult>;
+    register: (cityData: City) => Promise<APIGatewayProxyResult>;
 };
 
 const publicActionHandlers: PublicActionHandlers = {
@@ -133,7 +133,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
             };
         }
 
-        const { action, cityId, registrationCode, cityData } = JSON.parse(event.body);
+        const { action, cityId, cityData } = JSON.parse(event.body);
         
         if (!action) {
             return {
@@ -149,7 +149,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
         if (action === 'getVotes') {
             return await publicActionHandlers.getVotes(cityId);
         } else if (action === 'register') {
-            return await publicActionHandlers.register(registrationCode, cityData);
+            return await publicActionHandlers.register(cityData);
         } else if (action === 'getCities') {
             return await publicActionHandlers.getCities();
         } else {
