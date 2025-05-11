@@ -2,7 +2,7 @@ import { Button, Container, Typography, TextField, Box, Dialog,
   DialogTitle, DialogContent, DialogActions, createTheme, 
   ThemeProvider  } from '@mui/material';
 import { useState } from 'react';
-import { VOTE_HOST } from './constants';
+import { VOTE_HOST, PUBLIC_API_HOST } from './constants';
 import { BrowserRouter, Routes, Route, Navigate, useParams, useNavigate, Link } from 'react-router-dom';
 import Poll from './components/Poll';
 import Polls from './components/Polls';
@@ -139,10 +139,10 @@ function App() {
       setCityId(data.cityId);
       
       // Then fetch cities data
-      const citiesResponse = await fetch(`${VOTE_HOST}`, {
+      const citiesResponse = await fetch(`${PUBLIC_API_HOST}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'getCities', token })
+        body: JSON.stringify({ action: 'getCities' })
       });
 
       const citiesData: GetCitiesResponse = await citiesResponse.json();
@@ -155,10 +155,10 @@ function App() {
       setCities(citiesData.cities);
 
       // Finally fetch votes data
-      const votesResponse = await fetch(`${VOTE_HOST}`, {
+      const votesResponse = await fetch(`${PUBLIC_API_HOST}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'getVotes', token })
+        body: JSON.stringify({ action: 'getVotes' })
       });
 
       const votesData: GetVotesResponse = await votesResponse.json();
@@ -182,10 +182,10 @@ function App() {
   const fetchVotesOnly = async () => {
     setIsRefreshingVotes(true);
     try {
-      const votesResponse = await fetch(`${VOTE_HOST}`, {
+      const votesResponse = await fetch(`${PUBLIC_API_HOST}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'getVotes', token })
+        body: JSON.stringify({ action: 'getVotes' })
       });
 
       const votesData: GetVotesResponse = await votesResponse.json();

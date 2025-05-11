@@ -144,17 +144,6 @@ interface VoteParams {
     actingCapacity: 'individual' | 'representingCityAdministration';
 }
 
-interface GetVotesParams {
-    cityId?: string;
-    resolvedCity: City;
-    token: string;
-}
-
-interface GetCitiesParams {
-    resolvedCity: City;
-    token: string;
-}
-
 interface CreatePollParams {
     resolvedCity: City;
     token: string;
@@ -262,92 +251,6 @@ const handleVote = async ({ cityId, resolvedCity, pollId, option, title, name, a
     }
 };
 
-const handleGetVotes = async ({ resolvedCity, cityId }: GetVotesParams): Promise<APIGatewayProxyResult> => {
-    try {
-        const votesData = await s3Client.send(new GetObjectCommand({
-            Bucket: BUCKET_NAME,
-            Key: VOTES_KEY
-        }));
-        
-        if (!votesData.Body) {
-            return {
-                statusCode: 404,
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: 'No votes data found' })
-            };
-        }
-
-        const votesString = await streamToString(votesData.Body as Readable);
-        const votes = JSON.parse(votesString);
-
-        // If cityId is specified, filter votes for that city only
-        if (cityId) {
-            const cityVotes: Record<string, [number, string, { title: string; name: string; } | undefined][]> = {};
-            Object.entries(votes).forEach(([pollId, pollData]: [string, any]) => {
-                if (pollData[cityId]) {
-                    cityVotes[pollId] = pollData[cityId];
-                }
-            });
-            return {
-                statusCode: 200,
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ votes: cityVotes })
-            };
-        }
-
-        // Otherwise return all votes data
-        return {
-            statusCode: 200,
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ votes })
-        };
-    } catch (error: any) {
-        if (error.name === 'NoSuchKey') {
-            return {
-                statusCode: 404,
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: 'No votes data found' })
-            };
-        }
-        throw error;
-    }
-};
-
-const handleGetCities = async ({ resolvedCity }: GetCitiesParams): Promise<APIGatewayProxyResult> => {
-    try {
-        const cityData = await s3Client.send(new GetObjectCommand({
-            Bucket: BUCKET_NAME,
-            Key: 'cities/cities.json'
-        }));
-
-        if (!cityData.Body) {
-            return {
-                statusCode: 404,
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: 'Cities data not found' })
-            };
-        }
-
-        const citiesString = await streamToString(cityData.Body as Readable);
-        const cities = JSON.parse(citiesString);
-
-        return {
-            statusCode: 200,
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ cities })
-        };
-    } catch (error: any) {
-        if (error.name === 'NoSuchKey') {
-            return {
-                statusCode: 404,
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: 'Cities data not found' })
-            };
-        }
-        throw error;
-    }
-};
-
 const handleCreatePoll = async ({ pollId }: CreatePollParams): Promise<APIGatewayProxyResult> => {
     if (!pollId) {
         return {
@@ -426,19 +329,12 @@ type ActionHandlers = {
     validateToken: (params: ValidateTokenParams) => Promise<APIGatewayProxyResult>;
     vote: (params: VoteParams) => Promise<APIGatewayProxyResult>;
     createPoll: (params: CreatePollParams) => Promise<APIGatewayProxyResult>;
-    // These operations are now handled by the public function (no authentication required)
-    getVotes: (params: GetVotesParams) => Promise<APIGatewayProxyResult>;
-    getCities: (params: GetCitiesParams) => Promise<APIGatewayProxyResult>;
 };
 
 const actionHandlers: ActionHandlers = {
     validateToken: handleValidateToken,
     vote: handleVote,
     createPoll: handleCreatePoll,
-    // These operations are now handled by the public function (no authentication required)
-    // but kept here for backward compatibility
-    getVotes: handleGetVotes,
-    getCities: handleGetCities,
 };
 
 export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
@@ -469,6 +365,13 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
         // For getVotes and getCities actions, inform the client about the new public API
         if (action === 'getVotes' || action === 'getCities') {
             console.log(`Note: ${action} action is now available without authentication via the public API`);
+            return {
+                statusCode: 400,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    message: `Invalid action: ${action}. This operation is now available via the public API.`
+                })
+            };
         }
 
         // Validate token and get resolvedCity
