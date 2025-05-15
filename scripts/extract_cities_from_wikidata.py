@@ -8,7 +8,7 @@ import pydash
 import os
 
 # Path to the Wikidata dump file
-wikidata_dump_path = '/Volumes/backup_primary/projects/2023/data_20221022/wikidata/wikidata-20220103-all.json.gz'
+wikidata_dump_path = '/Volumes/tertiary/projects/2024/data_20221022/wikidata/wikidata-20220103-all.json.gz'
 # Path to the city subclasses JSON file
 city_subclasses_path = './city-subclasses.json'
 # Output directory and file
@@ -57,7 +57,11 @@ def extract_cities(city_subclasses):
     cities = []
     
     # Process each record in the Wikidata dump
+    lines_read = 0
     for record in parse_line(wikidata_dump_path):
+        lines_read += 1
+        if lines_read % 100_000 == 0:
+            print('lines_read', lines_read, lines_read/432_243_466.0)
         # Check if the record has instance of (P31) and has an English label
         if pydash.has(record, 'claims.P31') and pydash.get(record, 'labels.en.value'):
             for p31 in pydash.get(record, 'claims.P31'):
@@ -85,8 +89,7 @@ def extract_cities(city_subclasses):
                     
                     # Print progress
                     i += 1
-                    if i % 100 == 0:
-                        break
+                    if i % 1000 == 0:
                         print(f"Processed {i} cities/municipalities...")
                     
                     # Save intermediate results every 5000 cities
