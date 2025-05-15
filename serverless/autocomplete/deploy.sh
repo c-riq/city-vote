@@ -47,6 +47,20 @@ aws lambda update-function-code \
     --region $REGION \
     --no-cli-pager
 
+# Wait for the function update to complete
+echo "Waiting for function update to complete..."
+aws lambda wait function-updated \
+    --function-name $FUNCTION_NAME \
+    --region $REGION
+
+# Set memory to 256 MB
+echo "Setting memory to 256 MB..."
+aws lambda update-function-configuration \
+    --function-name $FUNCTION_NAME \
+    --memory-size 256 \
+    --region $REGION \
+    --no-cli-pager
+
 # Clean up
 rm -f $ZIP_FILE
 rm -rf "$TEMP_DIR"
