@@ -13,6 +13,7 @@ interface CityAutocompleteResult {
   countryWikidataId: string;
   countryName: string;
   countryCode: string;
+  registered?: boolean;
 }
 
 interface HeaderProps {
@@ -93,8 +94,10 @@ function Header({ cityInfo, onLogout, onCreatePoll }: HeaderProps) {
 
   const handleCitySelect = (city: CityAutocompleteResult | null) => {
     if (city) {
-      // Include the city name and country information in the URL as query parameters
-      navigate(`/city/${city.wikidataId}?name=${encodeURIComponent(city.name)}&country=${encodeURIComponent(city.countryName)}`);
+      // Include the city name, country information, and registered status in the URL as query parameters
+      // Assume all cities are not registered unless explicitly marked as registered
+      const isRegistered = city.registered === true;
+      navigate(`/city/${city.wikidataId}?name=${encodeURIComponent(city.name)}&country=${encodeURIComponent(city.countryName)}&registered=${isRegistered}`);
     }
   };
   
