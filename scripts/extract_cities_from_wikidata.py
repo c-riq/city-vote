@@ -11,7 +11,7 @@ import multiprocessing
 import sys
 
 # Path to the Wikidata dump file
-wikidata_dump_path = '/Volumes/tertiary/projects/2024/data_20221022/wikidata/wikidata-20220103-all.json.gz'
+wikidata_dump_path = '/Users/c/Desktop/project/data_20221022/wikidata/wikidata-20220103-all.json.gz'
 # Path to the city subclasses JSON file
 city_subclasses_path = './city-subclasses.json'
 # Output directory
@@ -43,14 +43,22 @@ def load_city_subclasses():
 def save_results(cities, filename):
     """Save the extracted cities to a JSON file."""
     result = {
-        "header": ["cityWikidataId", "cityLabelEnglish", "countryWikidataId", "ancestorType"],
-        "cities": [[city["cityWikidataId"], city["cityLabelEnglish"], city["countryWikidataId"], city["ancestorType"]] for city in cities]
+        "header": ["cityWikidataId", "cityLabelEnglish", "countryWikidataId", "ancestorType", "population", "coordinates", "officialWebsite"],
+        "cities": [[
+            city["cityWikidataId"], 
+            city["cityLabelEnglish"], 
+            city["countryWikidataId"], 
+            city["ancestorType"],
+            city["population"],
+            city["coordinates"],
+            city["officialWebsite"]
+        ] for city in cities]
     }
     
     with open(filename, 'w', encoding='utf-8') as f:
         json.dump(result, f, ensure_ascii=False, indent=2)
 
-def process_lines(process_id, city_subclasses, skip_lines, num_processes=4):
+def process_lines(process_id, city_subclasses, skip_lines, num_processes=4, max_lines=None):
     """Process lines from the file based on modulo of line number.
     
     Args:
@@ -58,6 +66,7 @@ def process_lines(process_id, city_subclasses, skip_lines, num_processes=4):
         city_subclasses: Dictionary of city subclasses
         skip_lines: Number of lines to skip at the beginning
         num_processes: Total number of processes
+        max_lines: Maximum number of lines to process (None for no limit)
     """
     print(f"Process {process_id} (PID {os.getpid()}): Starting processing lines where line_number % {num_processes} == {process_id}")
     
@@ -89,6 +98,11 @@ def process_lines(process_id, city_subclasses, skip_lines, num_processes=4):
                 
                 lines_read += 1
                 
+                # Check if we've reached the maximum number of lines
+                if max_lines is not None and lines_read >= max_lines:
+                    print(f"Process {process_id}: Reached maximum of {max_lines:,} lines")
+                    break
+                
                 # Only process lines where line_number % num_processes == process_id
                 if lines_read % num_processes != process_id:
                     continue
@@ -117,12 +131,49 @@ def process_lines(process_id, city_subclasses, skip_lines, num_processes=4):
                                 if pydash.has(record, 'claims.P17'):
                                     country_wikidata_id = pydash.get(record, 'claims.P17[0].mainsnak.datavalue.value.id')
                                 
+                                # Extract population if available (P1082 property)
+                                population = None
+                                if pydash.has(record, 'claims.P1082'):
+                                    population_claim = pydash.get(record, 'claims.P1082[0]')
+                                    if pydash.has(population_claim, 'mainsnak.datavalue.value.amount'):
+                                        # Population values in Wikidata are prefixed with '+' and may include precision
+                                        population_str = pydash.get(population_claim, 'mainsnak.datavalue.value.amount')
+                                        try:
+                                            # Remove '+' prefix and convert to integer
+                                            population = int(population_str.lstrip('+'))
+                                        except ValueError:
+                                            population = None
+                                
+                                # Extract coordinates if available (P625 property)
+                                coordinates = None
+                                if pydash.has(record, 'claims.P625'):
+                                    coord_claim = pydash.get(record, 'claims.P625[0]')
+                                    if pydash.has(coord_claim, 'mainsnak.datavalue.value'):
+                                        coord_value = pydash.get(coord_claim, 'mainsnak.datavalue.value')
+                                        latitude = pydash.get(coord_value, 'latitude')
+                                        longitude = pydash.get(coord_value, 'longitude')
+                                        if latitude is not None and longitude is not None:
+                                            coordinates = {
+                                                "latitude": latitude,
+                                                "longitude": longitude
+                                            }
+                                
+                                # Extract official website if available (P856 property)
+                                official_website = None
+                                if pydash.has(record, 'claims.P856'):
+                                    website_claim = pydash.get(record, 'claims.P856[0]')
+                                    if pydash.has(website_claim, 'mainsnak.datavalue.value'):
+                                        official_website = pydash.get(website_claim, 'mainsnak.datavalue.value')
+                                
                                 # Add to cities list
                                 city_data = {
                                     "cityWikidataId": city_wikidata_id,
                                     "cityLabelEnglish": city_label_english,
                                     "countryWikidataId": country_wikidata_id,
-                                    "ancestorType": ancestor_type
+                                    "ancestorType": ancestor_type,
+                                    "population": population,
+                                    "coordinates": coordinates,
+                                    "officialWebsite": official_website
                                 }
                                 cities.append(city_data)
                                 
@@ -159,6 +210,9 @@ def main():
     # Number of lines to skip at the beginning
     skip_lines = 0
     
+    # Maximum number of lines to process (for testing)
+    max_lines = 100000  # Process only 100k lines for testing
+    
     # Load city and municipality subclasses (shared by all processes)
     city_subclasses = load_city_subclasses()
     
@@ -172,7 +226,7 @@ def main():
     for i in range(num_processes):
         p = multiprocessing.Process(
             target=process_lines,
-            args=(i, city_subclasses, skip_lines, num_processes)
+            args=(i, city_subclasses, skip_lines, num_processes, max_lines)
         )
         processes.append(p)
         p.start()

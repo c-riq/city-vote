@@ -35,12 +35,43 @@ const handleAutocomplete = async (query: string, limit: number = 10): Promise<AP
             .map((city: string[]) => {
                 const countryName = countryNameMap.get(city[2]) || '';
                 const countryCode = countryCodeMap.get(city[2]) || '';
+                
+                // Parse population as number if it exists
+                let population: number | undefined = undefined;
+                if (city[3] !== null && city[3] !== undefined) {
+                    const parsedPopulation = Number(city[3]);
+                    if (!isNaN(parsedPopulation)) {
+                        population = parsedPopulation;
+                    }
+                }
+                
+                // Parse coordinates if they exist
+                let coordinates: { latitude: number; longitude: number } | undefined = undefined;
+                if (city[4] && typeof city[4] === 'object') {
+                    try {
+                        // Parse the coordinates object which might be a string in JSON format
+                        const coordObj = typeof city[4] === 'string' ? JSON.parse(city[4]) : city[4] as any;
+                        if (coordObj && typeof coordObj === 'object' && 
+                            'latitude' in coordObj && 'longitude' in coordObj) {
+                            coordinates = {
+                                latitude: Number(coordObj.latitude),
+                                longitude: Number(coordObj.longitude)
+                            };
+                        }
+                    } catch (e) {
+                        console.error('Error parsing coordinates:', e);
+                    }
+                }
+                
                 return {
                     wikidataId: city[0],
                     name: city[1],
                     countryWikidataId: city[2],
                     countryName: countryName,
-                    countryCode: countryCode
+                    countryCode: countryCode,
+                    population: population,
+                    coordinates: coordinates,
+                    officialWebsite: city[5] || undefined
                 };
             });
 

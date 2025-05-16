@@ -18,6 +18,12 @@ export interface AutocompleteResponse {
         countryWikidataId: string;
         countryName: string;
         countryCode: string;
+        population?: number;
+        coordinates?: {
+            latitude: number;
+            longitude: number;
+        };
+        officialWebsite?: string;
     }[];
     message?: string;
 }
