@@ -45,12 +45,15 @@ const handleAutocomplete = async (query: string, limit: number = 10): Promise<AP
                     }
                 }
                 
+                // Get population date if it exists
+                const populationDate = city[4] || undefined;
+                
                 // Parse coordinates if they exist
                 let coordinates: { latitude: number; longitude: number } | undefined = undefined;
-                if (city[4] && typeof city[4] === 'object') {
+                if (city[5] && typeof city[5] === 'object') {
                     try {
                         // Parse the coordinates object which might be a string in JSON format
-                        const coordObj = typeof city[4] === 'string' ? JSON.parse(city[4]) : city[4] as any;
+                        const coordObj = typeof city[5] === 'string' ? JSON.parse(city[5]) : city[5] as any;
                         if (coordObj && typeof coordObj === 'object' && 
                             'latitude' in coordObj && 'longitude' in coordObj) {
                             coordinates = {
@@ -70,8 +73,9 @@ const handleAutocomplete = async (query: string, limit: number = 10): Promise<AP
                     countryName: countryName,
                     countryCode: countryCode,
                     population: population,
+                    populationDate: populationDate,
                     coordinates: coordinates,
-                    officialWebsite: city[5] || undefined
+                    officialWebsite: city[6] || undefined
                 };
             });
 

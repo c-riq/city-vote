@@ -43,13 +43,14 @@ def load_city_subclasses():
 def save_results(cities, filename):
     """Save the extracted cities to a JSON file."""
     result = {
-        "header": ["cityWikidataId", "cityLabelEnglish", "countryWikidataId", "ancestorType", "population", "coordinates", "officialWebsite"],
+        "header": ["cityWikidataId", "cityLabelEnglish", "countryWikidataId", "ancestorType", "population", "populationDate", "coordinates", "officialWebsite"],
         "cities": [[
             city["cityWikidataId"], 
             city["cityLabelEnglish"], 
             city["countryWikidataId"], 
             city["ancestorType"],
             city["population"],
+            city["populationDate"],
             city["coordinates"],
             city["officialWebsite"]
         ] for city in cities]
@@ -133,6 +134,7 @@ def process_lines(process_id, city_subclasses, skip_lines, num_processes=4, max_
                                 
                                 # Extract population if available (P1082 property)
                                 population = None
+                                population_date = None
                                 if pydash.has(record, 'claims.P1082'):
                                     population_claim = pydash.get(record, 'claims.P1082[0]')
                                     if pydash.has(population_claim, 'mainsnak.datavalue.value.amount'):
@@ -141,6 +143,24 @@ def process_lines(process_id, city_subclasses, skip_lines, num_processes=4, max_
                                         try:
                                             # Remove '+' prefix and convert to integer
                                             population = int(population_str.lstrip('+'))
+                                            
+                                            # Try to extract the point in time qualifier (P585) for population date
+                                            if pydash.has(population_claim, 'qualifiers.P585'):
+                                                date_qualifier = pydash.get(population_claim, 'qualifiers.P585[0]')
+                                                if pydash.has(date_qualifier, 'datavalue.value.time'):
+                                                    # Wikidata time format is like "+2019-00-00T00:00:00Z"
+                                                    time_str = pydash.get(date_qualifier, 'datavalue.value.time')
+                                                    # Extract just the year or full date as needed
+                                                    if time_str.startswith('+'):
+                                                        time_str = time_str[1:]  # Remove leading '+'
+                                                    # Extract date part (before T)
+                                                    if 'T' in time_str:
+                                                        date_part = time_str.split('T')[0]
+                                                        # Handle cases with month/day as 00
+                                                        if date_part.endswith('-00-00'):
+                                                            population_date = date_part.split('-')[0]  # Just the year
+                                                        else:
+                                                            population_date = date_part  # Full date
                                         except ValueError:
                                             population = None
                                 
@@ -172,6 +192,7 @@ def process_lines(process_id, city_subclasses, skip_lines, num_processes=4, max_
                                     "countryWikidataId": country_wikidata_id,
                                     "ancestorType": ancestor_type,
                                     "population": population,
+                                    "populationDate": population_date,
                                     "coordinates": coordinates,
                                     "officialWebsite": official_website
                                 }

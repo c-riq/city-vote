@@ -35,7 +35,7 @@ function findResultFiles() {
 // Function to combine city data from multiple files
 function combineData(files) {
   let allCities = [];
-  let header = ["cityWikidataId", "cityLabelEnglish", "countryWikidataId", "population", "coordinates", "officialWebsite"];
+  let header = ["cityWikidataId", "cityLabelEnglish", "countryWikidataId", "population", "populationDate", "coordinates", "officialWebsite"];
   
   for (const file of files) {
     const data = readJsonFile(file);
@@ -43,10 +43,10 @@ function combineData(files) {
       console.log(`Processing ${file}: Found ${data.cities.length} cities`);
       
       // Transform the data to match the target format
-      // Each city should be [cityWikidataId, cityLabelEnglish, countryWikidataId, population, coordinates, officialWebsite]
+      // Each city should be [cityWikidataId, cityLabelEnglish, countryWikidataId, population, populationDate, coordinates, officialWebsite]
       const transformedCities = data.cities.map(city => {
-        // Assuming the order in the source is [cityWikidataId, cityLabelEnglish, countryWikidataId, ancestorType, population, coordinates, officialWebsite]
-        return [city[0], city[1], city[2], city[4], city[5], city[6]]; // Skip ancestorType (index 3)
+        // Assuming the order in the source is [cityWikidataId, cityLabelEnglish, countryWikidataId, ancestorType, population, populationDate, coordinates, officialWebsite]
+        return [city[0], city[1], city[2], city[4], city[5], city[6], city[7]]; // Skip ancestorType (index 3)
       });
       
       allCities = allCities.concat(transformedCities);

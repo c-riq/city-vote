@@ -19,6 +19,7 @@ export interface AutocompleteResponse {
         countryName: string;
         countryCode: string;
         population?: number;
+        populationDate?: string;
         coordinates?: {
             latitude: number;
             longitude: number;
