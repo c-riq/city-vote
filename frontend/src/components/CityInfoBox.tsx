@@ -33,6 +33,20 @@ function CityInfoBox({ cityId, cityInfo, cities, token }: CityInfoBoxProps) {
 
   const expirationTime = getExpirationInfo();
 
+  // Handle case when city data is incomplete
+  const handleIncompleteData = () => {
+    if (!city) return false;
+    
+    // Check if we have a placeholder city with minimal data
+    if (!city.country || city.country === 'Unknown') {
+      return true;
+    }
+    
+    return false;
+  };
+  
+  const isIncompleteData = handleIncompleteData();
+
   return (
     <Box sx={{ 
       width: '100%', 
@@ -70,6 +84,17 @@ function CityInfoBox({ cityId, cityInfo, cities, token }: CityInfoBoxProps) {
         flexDirection: 'column',
         gap: 1,
       }}>
+        {isIncompleteData && (
+          <Typography variant="body2" sx={{ 
+            color: 'warning.main', 
+            mb: 2, 
+            p: 1, 
+            bgcolor: 'warning.light', 
+            borderRadius: 1 
+          }}>
+            Limited information available for this city. This city may not be fully registered in the system.
+          </Typography>
+        )}
         <Typography variant="h5" sx={{ 
           color: 'primary.main',
           fontWeight: 600,
@@ -218,4 +243,4 @@ function CityInfoBox({ cityId, cityInfo, cities, token }: CityInfoBoxProps) {
   );
 }
 
-export default CityInfoBox; 
+export default CityInfoBox;

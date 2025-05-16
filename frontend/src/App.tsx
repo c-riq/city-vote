@@ -12,6 +12,7 @@ import WorldMap from './components/WorldMap';
 import CityInfoBox from './components/CityInfoBox';
 import VoteList from './components/VoteList';
 import CityRegistration from './components/CityRegistration';
+import CityProfile from './components/CityProfile';
 import {
   City,
   ValidateTokenResponse,
@@ -30,29 +31,31 @@ function CityRoute({ cityInfo, cities, theme }: {
 }) {
   const { cityId } = useParams();
   
-  if (!cityInfo) {
-    return <Navigate to="/" replace />;
+  // If user is logged in, show the city info box
+  if (cityInfo) {
+    return (
+      <Box
+        sx={{
+          padding: { xs: 2, sm: 4 },
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: 3,
+          backgroundColor: 'background.default',
+        }}
+      >
+        <CityInfoBox 
+          cityId={cityId || null} 
+          cityInfo={cityInfo} 
+          cities={cities} 
+          theme={theme} 
+        />
+      </Box>
+    );
   }
   
-  return (
-    <Box
-      sx={{
-        padding: { xs: 2, sm: 4 },
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        gap: 3,
-        backgroundColor: 'background.default',
-      }}
-    >
-      <CityInfoBox 
-        cityId={cityId || null} 
-        cityInfo={cityInfo} 
-        cities={cities} 
-        theme={theme} 
-      />
-    </Box>
-  );
+  // If user is not logged in, show the city profile
+  return <CityProfile cities={cities} />;
 }
 
 function App() {

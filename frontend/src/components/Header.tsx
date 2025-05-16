@@ -1,8 +1,19 @@
 import { useNavigate } from 'react-router-dom';
-import { Typography, Box, Button, IconButton } from '@mui/material';
+import { Typography, Box, Button, IconButton, TextField, Autocomplete, CircularProgress } from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
 import LoginIcon from '@mui/icons-material/Login';
 import LocationCityIcon from '@mui/icons-material/LocationCity';
+import SearchIcon from '@mui/icons-material/Search';
+import { useState, useEffect, useRef } from 'react';
+import { AUTOCOMPLETE_API_HOST } from '../constants';
+
+interface CityAutocompleteResult {
+  wikidataId: string;
+  name: string;
+  countryWikidataId: string;
+  countryName: string;
+  countryCode: string;
+}
 
 interface HeaderProps {
   cityInfo: {
@@ -15,6 +26,77 @@ interface HeaderProps {
 
 function Header({ cityInfo, onLogout, onCreatePoll }: HeaderProps) {
   const navigate = useNavigate();
+  const [searchValue, setSearchValue] = useState<CityAutocompleteResult | null>(null);
+  const [inputValue, setInputValue] = useState('');
+  const [options, setOptions] = useState<CityAutocompleteResult[]>([]);
+  const [loading, setLoading] = useState(false);
+  const autocompleteTimeoutRef = useRef<number | null>(null);
+  
+  const fetchAutocompleteResults = async (query: string) => {
+    if (!query || query.length < 2) {
+      setOptions([]);
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const response = await fetch(AUTOCOMPLETE_API_HOST, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          action: 'autocomplete',
+          query,
+          limit: 10
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        console.error('Autocomplete error:', data.message || 'Failed to fetch autocomplete results');
+        setOptions([]);
+        return;
+      }
+
+      setOptions(data.results || []);
+    } catch (err) {
+      console.error('Autocomplete error:', err);
+      setOptions([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Debounce the autocomplete API calls
+  useEffect(() => {
+    if (autocompleteTimeoutRef.current) {
+      clearTimeout(autocompleteTimeoutRef.current);
+    }
+
+    if (inputValue.length >= 2) {
+      autocompleteTimeoutRef.current = setTimeout(() => {
+        fetchAutocompleteResults(inputValue);
+      }, 300);
+    } else {
+      setOptions([]);
+    }
+
+    return () => {
+      if (autocompleteTimeoutRef.current) {
+        clearTimeout(autocompleteTimeoutRef.current);
+      }
+    };
+  }, [inputValue]);
+
+  const handleCitySelect = (city: CityAutocompleteResult | null) => {
+    if (city) {
+      // Include the city name and country information in the URL as query parameters
+      navigate(`/city/${city.wikidataId}?name=${encodeURIComponent(city.name)}&country=${encodeURIComponent(city.countryName)}`);
+    }
+  };
   
   return (
     <Box
@@ -35,7 +117,7 @@ function Header({ cityInfo, onLogout, onCreatePoll }: HeaderProps) {
         zIndex: 1100,
       }}
     >
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flexGrow: 1 }}>
         <img 
           src="/img/logo.png" 
           alt="City Vote Logo" 
@@ -114,7 +196,47 @@ function Header({ cityInfo, onLogout, onCreatePoll }: HeaderProps) {
         </Box>
       </Box>
 
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flexGrow: 1 }}>
+        <Autocomplete
+          sx={{ 
+            width: '300px', 
+            mx: 2,
+            display: { xs: 'none', md: 'block' }
+          }}
+          options={options}
+          loading={loading}
+          value={searchValue}
+          onChange={(_, newValue) => {
+            setSearchValue(newValue);
+            handleCitySelect(newValue);
+          }}
+          onInputChange={(_, newInputValue) => {
+            setInputValue(newInputValue);
+          }}
+          getOptionLabel={(option) => `${option.name}, ${option.countryCode}`}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              placeholder="Search cities..."
+              size="small"
+              InputProps={{
+                ...params.InputProps,
+                startAdornment: (
+                  <>
+                    <SearchIcon color="action" sx={{ mr: 1 }} />
+                    {params.InputProps.startAdornment}
+                  </>
+                ),
+                endAdornment: (
+                  <>
+                    {loading ? <CircularProgress color="inherit" size={20} /> : null}
+                    {params.InputProps.endAdornment}
+                  </>
+                ),
+              }}
+            />
+          )}
+        />
         {cityInfo ? (
           <>
             <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'right', mr: 2 }}>
