@@ -44,12 +44,14 @@ interface HeaderProps {
   } | null;
   onLogout: () => void;
   onCreatePoll: () => void;
+  showMobileSlogan?: boolean;
 }
 
-function Header({ cityInfo, onLogout, onCreatePoll }: HeaderProps) {
+function Header({ cityInfo, onLogout, onCreatePoll, showMobileSlogan = true }: HeaderProps) {
   const navigate = useNavigate();
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('lg'));
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
   const [searchValue, setSearchValue] = useState<CityAutocompleteResult | null>(null);
   const [inputValue, setInputValue] = useState('');
   const [options, setOptions] = useState<CityAutocompleteResult[]>([]);
@@ -306,20 +308,24 @@ function Header({ cityInfo, onLogout, onCreatePoll }: HeaderProps) {
             }} 
             onClick={() => navigate('/')}
           />
-          <Box sx={{ display: { xs: 'none', sm: 'flex' }, alignItems: 'center', gap: 1 }}>
-            <Typography 
-              variant="h6" 
-              component="div"
-              sx={{ 
-                cursor: 'pointer',
-                fontWeight: 'bold',
-                fontSize: { xs: '1rem', sm: '1.25rem' },
-                '&:hover': { color: 'primary.main' }
-              }}
-              onClick={() => navigate('/')}
-            >
-              city-vote.com
-            </Typography>
+          <Box sx={{ display: 'flex', gap: 1, flexDirection: { xs: 'column', sm: 'row' }, alignItems: { xs: 'flex-start', sm: 'center' } }}>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <Typography 
+                variant="h6" 
+                component="div"
+                sx={{ 
+                  cursor: 'pointer',
+                  fontWeight: 'bold',
+                  fontSize: { xs: '1rem', sm: '1.25rem' },
+                  '&:hover': { color: 'primary.main' }
+                }}
+                onClick={() => navigate('/')}
+              >
+                city-vote.com
+              </Typography>
+              
+              {/* Mobile slogan moved to main content area */}
+            </Box>
             <Typography 
               variant="body2" 
               component="a"

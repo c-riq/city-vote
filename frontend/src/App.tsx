@@ -301,6 +301,7 @@ function App() {
           cityInfo={cityInfo}
           onLogout={handleLogout}
           onCreatePoll={() => setIsModalOpen(true)}
+          showMobileSlogan={true}
         />
         <Container sx={{ pt: '80px' }}>
           <AuthenticatedContent />
@@ -336,6 +337,24 @@ function App() {
                     backgroundColor: 'background.default',
                   }}
                 >
+                      {/* Small slogan for mobile screens */}
+                      <Typography 
+                        variant="caption" 
+                        sx={{ 
+                          display: { xs: 'block', md: 'none' },
+                          color: '#1a237e',
+                          fontWeight: 300,
+                          letterSpacing: '0.05em',
+                          fontSize: '0.75rem',
+                          fontFamily: '"Helvetica Neue", Arial, sans-serif',
+                          mt: -3,
+                          mb: -1,
+                          opacity: 0.7,
+                          textAlign: 'center'
+                        }}
+                      >
+                        Local Government Coordination
+                      </Typography>
                   <Box sx={{ 
                     width: '100%',
                     maxWidth: '1000px',
@@ -355,6 +374,7 @@ function App() {
                       alignItems: 'center',
                       position: 'relative'
                     }}>
+                      {/* Slogan for non-mobile screens (no box) */}
                       <Typography 
                         variant="h6" 
                         sx={{ 
@@ -365,15 +385,9 @@ function App() {
                           fontWeight: 300,
                           textAlign: 'center',
                           letterSpacing: '0.12em',
-                          backgroundColor: 'rgba(255, 255, 255, 0.7)',
-                          backdropFilter: 'blur(4px)',
-                          px: 4,
-                          py: 1.5,
-                          borderRadius: 1,
-                          boxShadow: '0 4px 20px rgba(0,0,0,0.06)',
-                          border: '1px solid rgba(255, 255, 255, 0.9)',
                           textTransform: 'none',
-                          fontFamily: '"Helvetica Neue", Arial, sans-serif'
+                          fontFamily: '"Helvetica Neue", Arial, sans-serif',
+                          display: { xs: 'none', md: 'block' }
                         }}
                       >
                         Local Government Coordination
