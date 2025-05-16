@@ -336,7 +336,24 @@ async function searchCities(query: string, limit: number = 10): Promise<CityData
     }
   }
   
-  return matchingCities;
+  // Sort results by population in descending order
+  // Cities with no population will be at the end
+  return matchingCities.sort((a, b) => {
+    // If both have population, sort by population (descending)
+    if (a.population && b.population) {
+      return b.population - a.population;
+    }
+    // If only a has population, a comes first
+    if (a.population) {
+      return -1;
+    }
+    // If only b has population, b comes first
+    if (b.population) {
+      return 1;
+    }
+    // If neither has population, maintain original order
+    return 0;
+  });
 }
 
 const handleAutocomplete = async (query: string, limit: number = 10): Promise<APIGatewayProxyResult> => {

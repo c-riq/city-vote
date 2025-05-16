@@ -59,7 +59,7 @@ echo "Setting memory to 256 MB and timeout to 5 seconds..."
 aws lambda update-function-configuration \
     --function-name $FUNCTION_NAME \
     --memory-size 256 \
-    --timeout 5 \
+    --timeout 10 \
     --region $REGION \
     --no-cli-pager
 

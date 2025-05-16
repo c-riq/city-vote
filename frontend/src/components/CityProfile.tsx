@@ -15,6 +15,7 @@ interface ExtendedCity extends City {
   registered?: boolean;
   populationDate?: string;
   officialWebsite?: string;
+  wikidataId?: string;
   socialMedia?: {
     twitter?: string;
     facebook?: string;
@@ -55,7 +56,7 @@ const CityProfile: React.FC = () => {
         // Use the country from URL or fallback to Unknown
         const country = countryFromUrl || 'Unknown';
         
-        // Create a city object with the data from URL
+        // Create a basic city object with the data from URL
         setCity({
           id: cityId,
           name: cityName,
@@ -64,13 +65,14 @@ const CityProfile: React.FC = () => {
           lat: 0,
           lon: 0,
           authenticationKeyDistributionChannels: [],
-          registered: registeredFromUrl
+          registered: registeredFromUrl,
+          wikidataId: cityId.startsWith('Q') ? cityId : undefined
         });
 
         // First try to fetch detailed city data from the autocomplete API
         try {
-          // Only attempt this for Wikidata QIDs
-          if (cityId.startsWith('Q')) {
+          // For Wikidata QIDs, use direct QID lookup
+          if (cityId.startsWith('Q') && /^Q\d+$/.test(cityId)) {
             console.log('Fetching detailed city data for QID:', cityId);
             const autocompleteResponse = await fetch(AUTOCOMPLETE_API_HOST, {
               method: 'POST',
@@ -99,6 +101,55 @@ const CityProfile: React.FC = () => {
                   lon: cityDetails.coordinates?.longitude || prevCity!.lon,
                   officialWebsite: cityDetails.officialWebsite,
                   socialMedia: cityDetails.socialMedia
+                }));
+                
+                // Skip the regular API call if we got detailed data
+                return;
+              }
+            }
+          } 
+          // For non-Wikidata IDs, search by city name
+          else {
+            console.log('Searching for city by name:', cityName);
+            const autocompleteResponse = await fetch(AUTOCOMPLETE_API_HOST, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ 
+                action: 'autocomplete', 
+                query: cityName,
+                limit: 10
+              })
+            });
+
+            if (autocompleteResponse.ok) {
+              const autocompleteData = await autocompleteResponse.json();
+              console.log('Received search results:', autocompleteData);
+              
+              if (autocompleteData.results && autocompleteData.results.length > 0) {
+                // Find the city with the maximum population
+                let cityDetails = autocompleteData.results[0];
+                let maxPopulation = cityDetails.population || 0;
+                
+                for (const city of autocompleteData.results) {
+                  if (city.population && city.population > maxPopulation) {
+                    cityDetails = city;
+                    maxPopulation = city.population;
+                  }
+                }
+                
+                // Update city with detailed information from the first search result
+                setCity(prevCity => ({
+                  ...prevCity!,
+                  name: cityDetails.name || prevCity!.name,
+                  country: cityDetails.countryName || prevCity!.country,
+                  population: cityDetails.population || prevCity!.population,
+                  populationDate: cityDetails.populationDate,
+                  lat: cityDetails.coordinates?.latitude || prevCity!.lat,
+                  lon: cityDetails.coordinates?.longitude || prevCity!.lon,
+                  officialWebsite: cityDetails.officialWebsite,
+                  socialMedia: cityDetails.socialMedia,
+                  // Store the Wikidata ID for reference
+                  wikidataId: cityDetails.wikidataId
                 }));
                 
                 // Skip the regular API call if we got detailed data
@@ -459,15 +510,17 @@ const CityProfile: React.FC = () => {
           
           {/* Wikidata reference */}
           <Box sx={{ mt: 3, display: 'flex', justifyContent: 'flex-end' }}>
-            <Link 
-              href={`https://www.wikidata.org/wiki/${cityId}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              color="text.secondary"
-              sx={{ fontSize: '0.8rem', textDecoration: 'none' }}
-            >
-              Wikidata: {cityId}
-            </Link>
+            {cityId && (cityId.startsWith('Q') || city.wikidataId) && (
+              <Link 
+                href={`https://www.wikidata.org/wiki/${city.wikidataId || cityId}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                color="text.secondary"
+                sx={{ fontSize: '0.8rem', textDecoration: 'none' }}
+              >
+                Wikidata: {city.wikidataId || cityId}
+              </Link>
+            )}
           </Box>
         </Box>
       </Paper>
