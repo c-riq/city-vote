@@ -344,9 +344,24 @@ const CityProfile: React.FC = () => {
             {city.population > 0 && (
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <PeopleIcon sx={{ mr: 1, fontSize: 18 }} />
-                <Typography variant="body2">
+                <Typography variant="body2" component="span">
                   {city.population.toLocaleString()} residents
                   {city.populationDate && ` (as of ${city.populationDate})`}
+                  {city.wikidataId && (
+                    <>
+                      {' '}
+                      <Link 
+                        href={`https://www.wikidata.org/wiki/${city.wikidataId}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        sx={{ fontSize: '0.8rem', position: 'relative', zIndex: 10, pointerEvents: 'auto' }}
+                        component="a"
+                        onClick={(e) => { e.stopPropagation(); }}
+                      >
+                        [source: Wikidata]
+                      </Link>
+                    </>
+                  )}
                 </Typography>
               </Box>
             )}
@@ -359,8 +374,11 @@ const CityProfile: React.FC = () => {
                   target="_blank" 
                   rel="noopener noreferrer"
                   variant="body2"
+                  component="a"
+                  onClick={(e) => { e.stopPropagation(); }}
+                  sx={{ position: 'relative', zIndex: 10, pointerEvents: 'auto' }}
                 >
-                  Official Website
+                  {city.officialWebsite}
                 </Link>
               </Box>
             )}
