@@ -25,6 +25,13 @@ export interface AutocompleteResponse {
             longitude: number;
         };
         officialWebsite?: string;
+        socialMedia?: {
+            twitter?: string;
+            facebook?: string;
+            instagram?: string;
+            youtube?: string;
+            linkedin?: string;
+        };
     }[];
     message?: string;
 }
