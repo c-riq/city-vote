@@ -18,6 +18,12 @@ function readJsonFile(filePath) {
   }
 }
 
+// Function to round a number to a specific number of decimal places
+function roundToDecimalPlaces(num, decimalPlaces) {
+  const factor = Math.pow(10, decimalPlaces);
+  return Math.round(num * factor) / factor;
+}
+
 // Function to find all result files from the Python script
 function findResultFiles() {
   try {
@@ -35,7 +41,7 @@ function findResultFiles() {
 // Function to combine city data from multiple files
 function combineData(files) {
   let allCities = [];
-  let header = ["cityWikidataId", "cityLabelEnglish", "countryWikidataId", "population", "populationDate", "coordinates", "officialWebsite"];
+  let header = ["cityWikidataId", "cityLabelEnglish", "countryWikidataId", "population", "populationDate", "coordinates", "officialWebsite", "socialMedia"];
   
   for (const file of files) {
     const data = readJsonFile(file);
@@ -43,10 +49,19 @@ function combineData(files) {
       console.log(`Processing ${file}: Found ${data.cities.length} cities`);
       
       // Transform the data to match the target format
-      // Each city should be [cityWikidataId, cityLabelEnglish, countryWikidataId, population, populationDate, coordinates, officialWebsite]
+      // Each city should be [cityWikidataId, cityLabelEnglish, countryWikidataId, population, populationDate, coordinates, officialWebsite, socialMedia]
       const transformedCities = data.cities.map(city => {
-        // Assuming the order in the source is [cityWikidataId, cityLabelEnglish, countryWikidataId, ancestorType, population, populationDate, coordinates, officialWebsite]
-        return [city[0], city[1], city[2], city[4], city[5], city[6], city[7]]; // Skip ancestorType (index 3)
+        // Round coordinates to 2 decimal places if they exist
+        let coordinates = city[6];
+        if (coordinates && typeof coordinates === 'object' && 'latitude' in coordinates && 'longitude' in coordinates) {
+          coordinates = {
+            latitude: roundToDecimalPlaces(coordinates.latitude, 2),
+            longitude: roundToDecimalPlaces(coordinates.longitude, 2)
+          };
+        }
+        
+        // Assuming the order in the source is [cityWikidataId, cityLabelEnglish, countryWikidataId, ancestorType, population, populationDate, coordinates, officialWebsite, socialMedia]
+        return [city[0], city[1], city[2], city[4], city[5], coordinates, city[7], city[8]]; // Skip ancestorType (index 3)
       });
       
       allCities = allCities.concat(transformedCities);

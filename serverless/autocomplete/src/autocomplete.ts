@@ -66,6 +66,52 @@ const handleAutocomplete = async (query: string, limit: number = 10): Promise<AP
                     }
                 }
                 
+                // Parse social media accounts if they exist
+                let socialMedia: { 
+                    twitter?: string; 
+                    facebook?: string; 
+                    instagram?: string; 
+                    youtube?: string; 
+                    linkedin?: string; 
+                } | undefined = undefined;
+                
+                if (city[7] && typeof city[7] === 'object') {
+                    try {
+                        // Parse the social media object which might be a string in JSON format
+                        const socialObj = typeof city[7] === 'string' ? JSON.parse(city[7]) : city[7] as any;
+                        if (socialObj && typeof socialObj === 'object') {
+                            socialMedia = {};
+                            
+                            if ('twitter' in socialObj) {
+                                socialMedia.twitter = socialObj.twitter;
+                            }
+                            
+                            if ('facebook' in socialObj) {
+                                socialMedia.facebook = socialObj.facebook;
+                            }
+                            
+                            if ('instagram' in socialObj) {
+                                socialMedia.instagram = socialObj.instagram;
+                            }
+                            
+                            if ('youtube' in socialObj) {
+                                socialMedia.youtube = socialObj.youtube;
+                            }
+                            
+                            if ('linkedin' in socialObj) {
+                                socialMedia.linkedin = socialObj.linkedin;
+                            }
+                            
+                            // If no social media accounts were found, set to undefined
+                            if (Object.keys(socialMedia).length === 0) {
+                                socialMedia = undefined;
+                            }
+                        }
+                    } catch (e) {
+                        console.error('Error parsing social media accounts:', e);
+                    }
+                }
+                
                 return {
                     wikidataId: city[0],
                     name: city[1],
@@ -75,7 +121,8 @@ const handleAutocomplete = async (query: string, limit: number = 10): Promise<AP
                     population: population,
                     populationDate: populationDate,
                     coordinates: coordinates,
-                    officialWebsite: city[6] || undefined
+                    officialWebsite: city[6] || undefined,
+                    socialMedia: socialMedia
                 };
             });
 

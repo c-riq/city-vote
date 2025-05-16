@@ -43,7 +43,7 @@ def load_city_subclasses():
 def save_results(cities, filename):
     """Save the extracted cities to a JSON file."""
     result = {
-        "header": ["cityWikidataId", "cityLabelEnglish", "countryWikidataId", "ancestorType", "population", "populationDate", "coordinates", "officialWebsite"],
+        "header": ["cityWikidataId", "cityLabelEnglish", "countryWikidataId", "ancestorType", "population", "populationDate", "coordinates", "officialWebsite", "socialMedia"],
         "cities": [[
             city["cityWikidataId"], 
             city["cityLabelEnglish"], 
@@ -52,7 +52,8 @@ def save_results(cities, filename):
             city["population"],
             city["populationDate"],
             city["coordinates"],
-            city["officialWebsite"]
+            city["officialWebsite"],
+            city["socialMedia"]
         ] for city in cities]
     }
     
@@ -185,6 +186,44 @@ def process_lines(process_id, city_subclasses, skip_lines, num_processes=4, max_
                                     if pydash.has(website_claim, 'mainsnak.datavalue.value'):
                                         official_website = pydash.get(website_claim, 'mainsnak.datavalue.value')
                                 
+                                # Extract social media accounts
+                                social_media = {}
+                                
+                                # Twitter username (P2002)
+                                if pydash.has(record, 'claims.P2002'):
+                                    twitter_claim = pydash.get(record, 'claims.P2002[0]')
+                                    if pydash.has(twitter_claim, 'mainsnak.datavalue.value'):
+                                        twitter_username = pydash.get(twitter_claim, 'mainsnak.datavalue.value')
+                                        social_media['twitter'] = twitter_username
+                                
+                                # Facebook ID (P2013)
+                                if pydash.has(record, 'claims.P2013'):
+                                    facebook_claim = pydash.get(record, 'claims.P2013[0]')
+                                    if pydash.has(facebook_claim, 'mainsnak.datavalue.value'):
+                                        facebook_id = pydash.get(facebook_claim, 'mainsnak.datavalue.value')
+                                        social_media['facebook'] = facebook_id
+                                
+                                # Instagram username (P2003)
+                                if pydash.has(record, 'claims.P2003'):
+                                    instagram_claim = pydash.get(record, 'claims.P2003[0]')
+                                    if pydash.has(instagram_claim, 'mainsnak.datavalue.value'):
+                                        instagram_username = pydash.get(instagram_claim, 'mainsnak.datavalue.value')
+                                        social_media['instagram'] = instagram_username
+                                
+                                # YouTube channel ID (P2397)
+                                if pydash.has(record, 'claims.P2397'):
+                                    youtube_claim = pydash.get(record, 'claims.P2397[0]')
+                                    if pydash.has(youtube_claim, 'mainsnak.datavalue.value'):
+                                        youtube_id = pydash.get(youtube_claim, 'mainsnak.datavalue.value')
+                                        social_media['youtube'] = youtube_id
+                                
+                                # LinkedIn company ID (P4264)
+                                if pydash.has(record, 'claims.P4264'):
+                                    linkedin_claim = pydash.get(record, 'claims.P4264[0]')
+                                    if pydash.has(linkedin_claim, 'mainsnak.datavalue.value'):
+                                        linkedin_id = pydash.get(linkedin_claim, 'mainsnak.datavalue.value')
+                                        social_media['linkedin'] = linkedin_id
+                                
                                 # Add to cities list
                                 city_data = {
                                     "cityWikidataId": city_wikidata_id,
@@ -194,7 +233,8 @@ def process_lines(process_id, city_subclasses, skip_lines, num_processes=4, max_
                                     "population": population,
                                     "populationDate": population_date,
                                     "coordinates": coordinates,
-                                    "officialWebsite": official_website
+                                    "officialWebsite": official_website,
+                                    "socialMedia": social_media if social_media else None
                                 }
                                 cities.append(city_data)
                                 
@@ -226,13 +266,13 @@ def process_lines(process_id, city_subclasses, skip_lines, num_processes=4, max_
 def main():
     """Main function to extract cities and municipalities from Wikidata dump."""
     # Number of processes to use
-    num_processes = 4
+    num_processes = 8
     
     # Number of lines to skip at the beginning
     skip_lines = 0
     
-    # Maximum number of lines to process (for testing)
-    max_lines = 100000  # Process only 100k lines for testing
+    # Maximum number of lines to process (None for no limit)
+    max_lines = None  # Process the entire dump
     
     # Load city and municipality subclasses (shared by all processes)
     city_subclasses = load_city_subclasses()
