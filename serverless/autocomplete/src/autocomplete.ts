@@ -27,13 +27,6 @@ interface CityData {
   };
 }
 
-// Cache for CSV data and country maps
-let csvLinesCache: string[] | null = null;
-let headersCache: string[] | null = null;
-let cityNameIndexCache: number | null = null;
-let countryNameMapCache: Map<string, string> | null = null;
-let countryCodeMapCache: Map<string, string> | null = null;
-
 // Function to parse a CSV line, handling quoted fields with embedded commas
 function parseCSVLine(line: string): string[] {
   const result: string[] = [];
@@ -76,54 +69,40 @@ function safeParseJSON(jsonString: string): any {
   }
 }
 
-// Initialize the cache for CSV data and country maps
-async function initializeCache(): Promise<void> {
-  if (csvLinesCache !== null) {
-    return; // Cache already initialized
-  }
-  
+// Efficient search function for CSV data
+async function searchCities(query: string, limit: number = 10): Promise<CityData[]> {
   // Read and parse the CSV file
   const csvPath = path.join(__dirname, 'city-data.csv');
   const fileContent = fs.readFileSync(csvPath, 'utf8');
-  csvLinesCache = fileContent.split('\n');
   
-  // Parse the header line
-  const headerLine = csvLinesCache[0];
-  headersCache = parseCSVLine(headerLine);
+  // Split the content into lines
+  const lines = fileContent.split('\n');
+  
+  // Get the header line (first line)
+  const headerLine = lines[0];
+  const headers = parseCSVLine(headerLine);
   
   // Find the index of the city name column
-  cityNameIndexCache = headersCache.indexOf('cityLabelEnglish');
-  if (cityNameIndexCache === -1) {
+  const cityNameIndex = headers.indexOf('cityLabelEnglish');
+  if (cityNameIndex === -1) {
     throw new Error('City name column not found in CSV');
   }
-  
-  // Create maps for country wikidata IDs to country names and ISO codes
-  countryNameMapCache = new Map<string, string>();
-  countryCodeMapCache = new Map<string, string>();
-  countries.countries.forEach(country => {
-    if (country[4]) { // Check if wikidata id exists
-      countryNameMapCache.set(country[4], country[0]);
-      countryCodeMapCache.set(country[4], country[1]); // Alpha-2 code
-    }
-  });
-}
-
-// Optimized search function for CSV data
-async function searchCities(query: string, limit: number = 10): Promise<CityData[]> {
-  // Initialize cache if not already done
-  await initializeCache();
   
   // Normalize the query for case-insensitive search
   const normalizedQuery = query.toLowerCase();
   
+  // Create maps for country wikidata IDs to country names and ISO codes
+  const countryNameMap = new Map<string, string>();
+  const countryCodeMap = new Map<string, string>();
+  countries.countries.forEach(country => {
+    if (country[4]) { // Check if wikidata id exists
+      countryNameMap.set(country[4], country[0]);
+      countryCodeMap.set(country[4], country[1]); // Alpha-2 code
+    }
+  });
+  
   // Filter cities based on the query
   const matchingCities: CityData[] = [];
-  
-  // Use cached values
-  const lines = csvLinesCache!;
-  const cityNameIndex = cityNameIndexCache!;
-  const countryNameMap = countryNameMapCache!;
-  const countryCodeMap = countryCodeMapCache!;
   
   // Start from line 1 (skip header)
   for (let i = 1; i < lines.length && matchingCities.length < limit; i++) {

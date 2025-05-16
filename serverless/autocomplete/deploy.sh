@@ -24,9 +24,10 @@ fi
 TEMP_DIR=$(mktemp -d)
 echo "Created temporary directory: $TEMP_DIR"
 
-# Copy function file and dependencies
+# Copy function file, dependencies, and CSV data file
 cp -r dist/* "$TEMP_DIR/"
 cp package.json "$TEMP_DIR/"
+cp src/city-data.csv "$TEMP_DIR/"
 
 # Install dependencies
 cd "$TEMP_DIR"
@@ -53,11 +54,12 @@ aws lambda wait function-updated \
     --function-name $FUNCTION_NAME \
     --region $REGION
 
-# Set memory to 256 MB
-echo "Setting memory to 256 MB..."
+# Set memory to 256 MB and timeout to 5 seconds
+echo "Setting memory to 256 MB and timeout to 5 seconds..."
 aws lambda update-function-configuration \
     --function-name $FUNCTION_NAME \
     --memory-size 256 \
+    --timeout 5 \
     --region $REGION \
     --no-cli-pager
 
