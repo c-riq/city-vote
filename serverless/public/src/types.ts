@@ -1,5 +1,5 @@
 // Vote storage format in S3
-export type VoteData = Record<string, Record<string, [number, string, {
+export type VoteData_ = Record<string, Record<string, [number, string, {
     title: string;
     name: string;
     actingCapacity: 'individual' | 'representingCityAdministration';
@@ -9,10 +9,6 @@ export type VoteData = Record<string, Record<string, [number, string, {
 export interface City {
     id: string;
     name: string;
-    population: number;
-    country: string;
-    lat: number;
-    lon: number;
     authenticationKeyDistributionChannels: {
         account: string;
         type: 'linkedin' | 'email';
@@ -32,10 +28,22 @@ export interface GetPublicCitiesRequest {
 
 // API Response types
 export interface GetVotesResponse {
-    votes: VoteData;
+    votes: VoteData_;
     message?: string;
 }
 
 export interface GetCitiesResponse {
     cities: Record<string, City>;
+}
+
+// Registration API Request/Response types
+export interface RegisterRequest {
+    action: 'register';
+    cityData: City;
+}
+
+export interface RegisterResponse {
+    message: string;
+    city?: City;
+    error?: string;
 }

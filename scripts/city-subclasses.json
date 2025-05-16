@@ -1,0 +1,4934 @@
+[
+  {
+    "citySubclassId": "Q10329259",
+    "citySubclassLabel": "Q10329259",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q10499171",
+    "citySubclassLabel": "Q10499171",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q10717529",
+    "citySubclassLabel": "Q10717529",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q107566885",
+    "citySubclassLabel": "Q107566885",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q109357164",
+    "citySubclassLabel": "Q109357164",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q11372285",
+    "citySubclassLabel": "Q11372285",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q113834062",
+    "citySubclassLabel": "Q113834062",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q11422603",
+    "citySubclassLabel": "Q11422603",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q11503672",
+    "citySubclassLabel": "Q11503672",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q116273899",
+    "citySubclassLabel": "Q116273899",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q120041664",
+    "citySubclassLabel": "Q120041664",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q120134568",
+    "citySubclassLabel": "Q120134568",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q1216443",
+    "citySubclassLabel": "Q1216443",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q125747656",
+    "citySubclassLabel": "Q125747656",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q131744438",
+    "citySubclassLabel": "Q131744438",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q132705785",
+    "citySubclassLabel": "Q132705785",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q133313713",
+    "citySubclassLabel": "Q133313713",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q15849630",
+    "citySubclassLabel": "Q15849630",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q16133394",
+    "citySubclassLabel": "Q16133394",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q17640484",
+    "citySubclassLabel": "Q17640484",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q1835354",
+    "citySubclassLabel": "Q1835354",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q18485046",
+    "citySubclassLabel": "Q18485046",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q19974058",
+    "citySubclassLabel": "Q19974058",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q20451116",
+    "citySubclassLabel": "Q20451116",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q2059613",
+    "citySubclassLabel": "Q2059613",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q2073573",
+    "citySubclassLabel": "Q2073573",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q21012165",
+    "citySubclassLabel": "Q21012165",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q2445080",
+    "citySubclassLabel": "Q2445080",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q2693668",
+    "citySubclassLabel": "Q2693668",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q3238183",
+    "citySubclassLabel": "Q3238183",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q3559100",
+    "citySubclassLabel": "Q3559100",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q3657267",
+    "citySubclassLabel": "Q3657267",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q60997513",
+    "citySubclassLabel": "Q60997513",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q71145903",
+    "citySubclassLabel": "Q71145903",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q85866563",
+    "citySubclassLabel": "Q85866563",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q9696256",
+    "citySubclassLabel": "Q9696256",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q9730870",
+    "citySubclassLabel": "Q9730870",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q104414508",
+    "citySubclassLabel": "100 percent corner",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q24068255",
+    "citySubclassLabel": "13 Kohanic cities",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q2324785",
+    "citySubclassLabel": "Amsterdam as a gay capital",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q122144173",
+    "citySubclassLabel": "Ancient Somali City-States",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q111235034",
+    "citySubclassLabel": "Antarctic gateway cities",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q15954565",
+    "citySubclassLabel": "Austrian walled towns",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q3333869",
+    "citySubclassLabel": "Balanced Metropolis",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q15273785",
+    "citySubclassLabel": "Belgian municipality with the title of city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q10840672",
+    "citySubclassLabel": "Business core city (Japan)",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q81830252",
+    "citySubclassLabel": "Byzantine city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q9345964",
+    "citySubclassLabel": "Capital in Africa",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q5035713",
+    "citySubclassLabel": "Capital of Brazil",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q10876480",
+    "citySubclassLabel": "Capital of Republic of China (Taiwan)",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q65089000",
+    "citySubclassLabel": "Capital of Sri Lanka",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q12029144",
+    "citySubclassLabel": "Celtic oppida in the Czech lands",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q752596",
+    "citySubclassLabel": "Cities of Refuge",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q56487051",
+    "citySubclassLabel": "Citizen Science City",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q2327515",
+    "citySubclassLabel": "City district in Baden-Württemberg",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q3559227",
+    "citySubclassLabel": "City in Ireland",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q2561694",
+    "citySubclassLabel": "City-kingdom of Cyprus",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q26201757",
+    "citySubclassLabel": "Civitas foederata",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q7819319",
+    "citySubclassLabel": "Czech municipality with expanded powers",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q15093669",
+    "citySubclassLabel": "Dalmatian city-states",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q1256805",
+    "citySubclassLabel": "Drei-Flüsse-Stadt",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q109383352",
+    "citySubclassLabel": "Emirate Palace",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q1375749",
+    "citySubclassLabel": "European City",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q11895038",
+    "citySubclassLabel": "Finnish cities",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q5500203",
+    "citySubclassLabel": "Free city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q3559137",
+    "citySubclassLabel": "Gallo-Roman city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q448801",
+    "citySubclassLabel": "Greater district town",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q116621859",
+    "citySubclassLabel": "Greater district town in Baden-Württemberg",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q69391739",
+    "citySubclassLabel": "Greek colony",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q10925819",
+    "citySubclassLabel": "Hakka walled village",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q707813",
+    "citySubclassLabel": "Hanseatic city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q111737592",
+    "citySubclassLabel": "Heroic City",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q115458966",
+    "citySubclassLabel": "Ighrem",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q4115680",
+    "citySubclassLabel": "Italian city-state",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q11506008",
+    "citySubclassLabel": "Japanese port settlement",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q6373489",
+    "citySubclassLabel": "Kartah",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q131338872",
+    "citySubclassLabel": "LGBT sanctuary city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q1799127",
+    "citySubclassLabel": "La Scarzuola",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q23640644",
+    "citySubclassLabel": "Levitical city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q1547289",
+    "citySubclassLabel": "Lutherstadt",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q6706509",
+    "citySubclassLabel": "Luz",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q111291800",
+    "citySubclassLabel": "Mahanagara",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q6796750",
+    "citySubclassLabel": "Maya city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q117000106",
+    "citySubclassLabel": "Mesopotamian city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q83726564",
+    "citySubclassLabel": "Monotowns of Russia",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q17194218",
+    "citySubclassLabel": "Mountain indigenous township",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q4144830",
+    "citySubclassLabel": "NPP satellite city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q2052467",
+    "citySubclassLabel": "Parity Imperial City",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q133805184",
+    "citySubclassLabel": "Public city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q2202509",
+    "citySubclassLabel": "Roman city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q55780222",
+    "citySubclassLabel": "Roman colonies in Berber Africa",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q756780",
+    "citySubclassLabel": "Roman colony",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q129098277",
+    "citySubclassLabel": "Roman small town",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q13416557",
+    "citySubclassLabel": "Royal city in Polish-Lithuanian Commonwealth",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q18702",
+    "citySubclassLabel": "Royal free city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q742313",
+    "citySubclassLabel": "Sardinian Judicati",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q37800986",
+    "citySubclassLabel": "Serbian city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q12159392",
+    "citySubclassLabel": "Seven Cities of Delhi",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q134265157",
+    "citySubclassLabel": "Smart Infrastructure",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q482810",
+    "citySubclassLabel": "Special City of Korea",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q7574799",
+    "citySubclassLabel": "Special City of Korea",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q21857891",
+    "citySubclassLabel": "Swedish city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q3559177",
+    "citySubclassLabel": "Vilafranca",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q687312",
+    "citySubclassLabel": "Vorort",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q108913517",
+    "citySubclassLabel": "Yoruba country",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q131668",
+    "citySubclassLabel": "acropolis",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q129267212",
+    "citySubclassLabel": "administrative capital",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q13455645",
+    "citySubclassLabel": "administrative city in the Republic of Ireland",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q613611",
+    "citySubclassLabel": "alcázar",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q2479824",
+    "citySubclassLabel": "altepetl",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q15661340",
+    "citySubclassLabel": "ancient city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q618846",
+    "citySubclassLabel": "apoikia",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q4826725",
+    "citySubclassLabel": "automotive city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q1094397",
+    "citySubclassLabel": "autonomous city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q16532593",
+    "citySubclassLabel": "autonomous city of Spain",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q896881",
+    "citySubclassLabel": "average city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q4858354",
+    "citySubclassLabel": "barangay",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q810652",
+    "citySubclassLabel": "bastide",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q1549591",
+    "citySubclassLabel": "big city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q108454666",
+    "citySubclassLabel": "big city of South Korea",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q4943467",
+    "citySubclassLabel": "boomburb",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q474164",
+    "citySubclassLabel": "boomtown",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q11498809",
+    "citySubclassLabel": "branch-office economy city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q142085",
+    "citySubclassLabel": "burgus",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q88034",
+    "citySubclassLabel": "burh",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q5119",
+    "citySubclassLabel": "capital city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q11643523",
+    "citySubclassLabel": "capital city wall",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q25466816",
+    "citySubclassLabel": "capital of Indonesia",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q1025961",
+    "citySubclassLabel": "capital of Japan",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q3297600",
+    "citySubclassLabel": "capital of Korea",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q4442912",
+    "citySubclassLabel": "capital of Russia",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q34843301",
+    "citySubclassLabel": "capital of county in Romania",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q3147563",
+    "citySubclassLabel": "capital of regency",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q12031379",
+    "citySubclassLabel": "capital of region",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q16825568",
+    "citySubclassLabel": "caravan city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q16537979",
+    "citySubclassLabel": "castelliere",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q5050823",
+    "citySubclassLabel": "castro",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q116798230",
+    "citySubclassLabel": "celtiberian town",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q2235075",
+    "citySubclassLabel": "centre city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q13218391",
+    "citySubclassLabel": "charter city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q13218382",
+    "citySubclassLabel": "charter city and county",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q604886",
+    "citySubclassLabel": "charter city of the United States",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q2844893",
+    "citySubclassLabel": "cidade",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q108525740",
+    "citySubclassLabel": "circular city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q11881845",
+    "citySubclassLabel": "city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q1749269",
+    "citySubclassLabel": "city designated by government ordinance",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q55440238",
+    "citySubclassLabel": "city in Alberta",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q60458065",
+    "citySubclassLabel": "city in British Columbia",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q130626256",
+    "citySubclassLabel": "city in Canada",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q25412763",
+    "citySubclassLabel": "city in Chile",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q63209072",
+    "citySubclassLabel": "city in Colombia",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q29556224",
+    "citySubclassLabel": "city in Cyprus",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q63208468",
+    "citySubclassLabel": "city in Ecuador",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q11870638",
+    "citySubclassLabel": "city in Finland",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q63208555",
+    "citySubclassLabel": "city in Gabon",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q130627817",
+    "citySubclassLabel": "city in Manitoba",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q123440126",
+    "citySubclassLabel": "city in Mexico",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q130628050",
+    "citySubclassLabel": "city in New Brunswick",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q2974552",
+    "citySubclassLabel": "city in New Jersey",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q44551483",
+    "citySubclassLabel": "city in Newfoundland and Labrador",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q132680629",
+    "citySubclassLabel": "city in North Carolina",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q130629307",
+    "citySubclassLabel": "city in Nova Scotia",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q130629319",
+    "citySubclassLabel": "city in Ontario",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q130629327",
+    "citySubclassLabel": "city in Prince Edward Island",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q130629332",
+    "citySubclassLabel": "city in Quebec",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q130627673",
+    "citySubclassLabel": "city in Saskatchewan",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q110571169",
+    "citySubclassLabel": "city in Saudi Arabia",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q1093829",
+    "citySubclassLabel": "city in the United States",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q15063611",
+    "citySubclassLabel": "city in the state of New York",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q5770918",
+    "citySubclassLabel": "city of Argentina",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q13218357",
+    "citySubclassLabel": "city of California",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q110071194",
+    "citySubclassLabel": "city of Illinois",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q494721",
+    "citySubclassLabel": "city of Japan",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q34986717",
+    "citySubclassLabel": "city of Malaysia",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q28659128",
+    "citySubclassLabel": "city of North Korea",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q108569710",
+    "citySubclassLabel": "city of Ohio",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q63440326",
+    "citySubclassLabel": "city of Oregon",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q21010817",
+    "citySubclassLabel": "city of Pennsylvania",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q110076100",
+    "citySubclassLabel": "city of Peru",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q15647906",
+    "citySubclassLabel": "city of Portugal",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q29045252",
+    "citySubclassLabel": "city of South Korea",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q54935504",
+    "citySubclassLabel": "city of Switzerland",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q110390579",
+    "citySubclassLabel": "city of United Kingdom",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q111874502",
+    "citySubclassLabel": "city of West Virginia",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q15221256",
+    "citySubclassLabel": "city of Wisconsin",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q104157",
+    "citySubclassLabel": "city of the Philippines",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q5124027",
+    "citySubclassLabel": "city proper",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q12102963",
+    "citySubclassLabel": "city specifically designated in the state plan",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q15584664",
+    "citySubclassLabel": "city under municipality jurisdiction in Latvia",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q15127838",
+    "citySubclassLabel": "city under state jurisdiction in Latvia",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q681277",
+    "citySubclassLabel": "city with county rights",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q925381",
+    "citySubclassLabel": "city with powiat rights",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q9391358",
+    "citySubclassLabel": "city with public health center",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q3678424",
+    "citySubclassLabel": "city with special status",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q15715391",
+    "citySubclassLabel": "city without municipal status",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q133442",
+    "citySubclassLabel": "city-state",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q5770438",
+    "citySubclassLabel": "citânia",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q26198154",
+    "citySubclassLabel": "civitas stipendaria",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q63390901",
+    "citySubclassLabel": "closed city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q130358646",
+    "citySubclassLabel": "coastal cities",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q1187811",
+    "citySubclassLabel": "college town",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q117025897",
+    "citySubclassLabel": "colonia augusta",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q11418818",
+    "citySubclassLabel": "commercial capital city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q106078286",
+    "citySubclassLabel": "component city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q3301053",
+    "citySubclassLabel": "consolidated city-county",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q87311542",
+    "citySubclassLabel": "core city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q1137833",
+    "citySubclassLabel": "core city of Japan",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q713146",
+    "citySubclassLabel": "county-administered city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q5183566",
+    "citySubclassLabel": "creative city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q1392581",
+    "citySubclassLabel": "cycling city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q5228121",
+    "citySubclassLabel": "dava",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q129319205",
+    "citySubclassLabel": "de facto national capital",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q129319315",
+    "citySubclassLabel": "de jure national capital",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q129672688",
+    "citySubclassLabel": "district capital",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q61793478",
+    "citySubclassLabel": "district independent city of Brandenburg",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q8452914",
+    "citySubclassLabel": "district town",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q125684839",
+    "citySubclassLabel": "economic capital city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q1266029",
+    "citySubclassLabel": "edge city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q11499984",
+    "citySubclassLabel": "educational town",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q655593",
+    "citySubclassLabel": "emporia",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q112631697",
+    "citySubclassLabel": "eupseong",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q105742483",
+    "citySubclassLabel": "executive capital",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q2240381",
+    "citySubclassLabel": "fashion capital",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q257391",
+    "citySubclassLabel": "federal capital",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q537250",
+    "citySubclassLabel": "federal city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q1066984",
+    "citySubclassLabel": "financial center",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q15221304",
+    "citySubclassLabel": "first-class city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q129670726",
+    "citySubclassLabel": "former state capital",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q677678",
+    "citySubclassLabel": "fortified town",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q10500900",
+    "citySubclassLabel": "fortress city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q15221373",
+    "citySubclassLabel": "fourth-class city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q13218276",
+    "citySubclassLabel": "free city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q116215378",
+    "citySubclassLabel": "free city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q57318",
+    "citySubclassLabel": "free imperial city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q5871700",
+    "citySubclassLabel": "fundus",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q25377665",
+    "citySubclassLabel": "gambling city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q21550633",
+    "citySubclassLabel": "garden city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q55612423",
+    "citySubclassLabel": "general law municipality",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q208511",
+    "citySubclassLabel": "global city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q108454687",
+    "citySubclassLabel": "half million city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q29946056",
+    "citySubclassLabel": "highly urbanized city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q15063600",
+    "citySubclassLabel": "home rule city of Michigan",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q15260353",
+    "citySubclassLabel": "host city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q100268926",
+    "citySubclassLabel": "iberian settlement",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q1656724",
+    "citySubclassLabel": "ideal city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q116215373",
+    "citySubclassLabel": "imperial city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q15092400",
+    "citySubclassLabel": "independent city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q114401982",
+    "citySubclassLabel": "independent city in Berlin",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q1266818",
+    "citySubclassLabel": "independent city in the United States",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q22865",
+    "citySubclassLabel": "independent city of Germany",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q61708053",
+    "citySubclassLabel": "independent city of Saxony-Anhalt",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q106079704",
+    "citySubclassLabel": "independent component city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q1662118",
+    "citySubclassLabel": "industrial city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q134260478",
+    "citySubclassLabel": "infrastructure intelligence",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q129383523",
+    "citySubclassLabel": "judicative capital",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q105742499",
+    "citySubclassLabel": "judicial capital",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q89691",
+    "citySubclassLabel": "ksar",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q113380361",
+    "citySubclassLabel": "large city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q129676344",
+    "citySubclassLabel": "large city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q1548518",
+    "citySubclassLabel": "large district town",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q1548525",
+    "citySubclassLabel": "large independent city of Lower Saxony",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q51929311",
+    "citySubclassLabel": "largest city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q18193550",
+    "citySubclassLabel": "lateran",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q116988218",
+    "citySubclassLabel": "latin colonia",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q105742469",
+    "citySubclassLabel": "legislative capital",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q428986",
+    "citySubclassLabel": "linear city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q43185013",
+    "citySubclassLabel": "maritime republic",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q5770868",
+    "citySubclassLabel": "medieval city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q5107861",
+    "citySubclassLabel": "medieval commune",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q129255737",
+    "citySubclassLabel": "medium-sized city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q54935786",
+    "citySubclassLabel": "medium-sized district town",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q174844",
+    "citySubclassLabel": "megacity",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q1175519",
+    "citySubclassLabel": "megyei város",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q200250",
+    "citySubclassLabel": "metropolis",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q482821",
+    "citySubclassLabel": "metropolitan city of South Korea",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q6024226",
+    "citySubclassLabel": "metropolitan municipality",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q124313007",
+    "citySubclassLabel": "metropolitan prefecture",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q71144301",
+    "citySubclassLabel": "metropolitan region",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q620509",
+    "citySubclassLabel": "military town",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q1637706",
+    "citySubclassLabel": "million city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q1131233",
+    "citySubclassLabel": "monotown",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q85875185",
+    "citySubclassLabel": "morería (city)",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q1319414",
+    "citySubclassLabel": "mueang",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q97166215",
+    "citySubclassLabel": "municipal city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q1381899",
+    "citySubclassLabel": "municipality of Vietnam",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q213468",
+    "citySubclassLabel": "municipium",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q108178728",
+    "citySubclassLabel": "national capital",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q1066538",
+    "citySubclassLabel": "national central city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q117214267",
+    "citySubclassLabel": "official city of the Democratic Republic of the Congo",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q11558727",
+    "citySubclassLabel": "offshore city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q205181",
+    "citySubclassLabel": "offshore financial centre",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q192601",
+    "citySubclassLabel": "oppidum",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q15840617",
+    "citySubclassLabel": "planned national capital",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q148837",
+    "citySubclassLabel": "polis",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q114496982",
+    "citySubclassLabel": "political city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q2264924",
+    "citySubclassLabel": "port city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q123924129",
+    "citySubclassLabel": "precinct",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q65589340",
+    "citySubclassLabel": "prefectural capital of Japan",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q748149",
+    "citySubclassLabel": "prefecture-level city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q1422929",
+    "citySubclassLabel": "primate city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q16933701",
+    "citySubclassLabel": "principal city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q111737893",
+    "citySubclassLabel": "private city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q16878951",
+    "citySubclassLabel": "private town",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q97379400",
+    "citySubclassLabel": "provincial capital",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q83020",
+    "citySubclassLabel": "provincial city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q3249005",
+    "citySubclassLabel": "provincial city of Vietnam",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q21507383",
+    "citySubclassLabel": "provincial or territorial capital city in Canada",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q129331592",
+    "citySubclassLabel": "rebel capital city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q109382914",
+    "citySubclassLabel": "regional capital in Saudi Arabia",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q97192525",
+    "citySubclassLabel": "regional town",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q2138558",
+    "citySubclassLabel": "regiopolis",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q7375052",
+    "citySubclassLabel": "royal city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q7311182",
+    "citySubclassLabel": "royal town",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q3559093",
+    "citySubclassLabel": "sanctuary city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q691960",
+    "citySubclassLabel": "satellite city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q15221310",
+    "citySubclassLabel": "second-class city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q914425",
+    "citySubclassLabel": "signoria",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q18466176",
+    "citySubclassLabel": "small city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q1231558",
+    "citySubclassLabel": "smart city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q11562970",
+    "citySubclassLabel": "spa city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q16181672",
+    "citySubclassLabel": "special autonomous city in South Korea",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q1145012",
+    "citySubclassLabel": "special city of Japan",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q7574798",
+    "citySubclassLabel": "special city of North Korea",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q4249901",
+    "citySubclassLabel": "special-status city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q63441182",
+    "citySubclassLabel": "sponge city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q11271835",
+    "citySubclassLabel": "state capital",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q14784328",
+    "citySubclassLabel": "state capital in Germany",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q109329953",
+    "citySubclassLabel": "state city of Latvia",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q21518270",
+    "citySubclassLabel": "state or insular area capital of the United States",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q257978",
+    "citySubclassLabel": "statutory city in Czechia",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q262882",
+    "citySubclassLabel": "statutory city of Austria",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q250811",
+    "citySubclassLabel": "sub-province-level division",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q1050126",
+    "citySubclassLabel": "sub-provincial district of the People's Republic of China",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q20616831",
+    "citySubclassLabel": "submerged city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q2912045",
+    "citySubclassLabel": "summer capital",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q4189057",
+    "citySubclassLabel": "supernumerary town",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q652360",
+    "citySubclassLabel": "sustainable city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q377283",
+    "citySubclassLabel": "temporary capital",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q15141632",
+    "citySubclassLabel": "thesaban nakhon",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q15221370",
+    "citySubclassLabel": "third-class city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q11630531",
+    "citySubclassLabel": "tourist city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q13218690",
+    "citySubclassLabel": "town in Hungary",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q16858213",
+    "citySubclassLabel": "town in Romania",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q2367508",
+    "citySubclassLabel": "township of Taiwan",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q61708099",
+    "citySubclassLabel": "urban district in Saxony",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q61856863",
+    "citySubclassLabel": "urban district in Schleswig-Holstein",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q85631896",
+    "citySubclassLabel": "urban district of Bavaria",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q85635638",
+    "citySubclassLabel": "urban district of Bremen",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q85636199",
+    "citySubclassLabel": "urban district of Hamburg",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q61980648",
+    "citySubclassLabel": "urban district of Hesse",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q779426",
+    "citySubclassLabel": "urban district of Hungary",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q85635929",
+    "citySubclassLabel": "urban district of Lower Saxony",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q85635301",
+    "citySubclassLabel": "urban district of Mecklenburg-Vorpommern",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q85635630",
+    "citySubclassLabel": "urban district of North Rhine-Westphalia",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q85632032",
+    "citySubclassLabel": "urban district of Rhineland-Palatinate",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q61747322",
+    "citySubclassLabel": "urban district of Thuringia",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q2616791",
+    "citySubclassLabel": "urban municipality",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q42744322",
+    "citySubclassLabel": "urban municipality in Germany",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q12015578",
+    "citySubclassLabel": "urban municipality in Sweden",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q12039044",
+    "citySubclassLabel": "urban township of Taiwan",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q763590",
+    "citySubclassLabel": "vicus",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q104600084",
+    "citySubclassLabel": "winter capital",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q8069436",
+    "citySubclassLabel": "zero-carbon city",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q10423826",
+    "citySubclassLabel": "Q10423826",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q10484437",
+    "citySubclassLabel": "Q10484437",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q10484438",
+    "citySubclassLabel": "Q10484438",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q10503736",
+    "citySubclassLabel": "Q10503736",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q10585410",
+    "citySubclassLabel": "Q10585410",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q10706887",
+    "citySubclassLabel": "Q10706887",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q110655882",
+    "citySubclassLabel": "Q110655882",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q112893163",
+    "citySubclassLabel": "Q112893163",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q11891850",
+    "citySubclassLabel": "Q11891850",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q1214945",
+    "citySubclassLabel": "Q1214945",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q1214947",
+    "citySubclassLabel": "Q1214947",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q12368866",
+    "citySubclassLabel": "Q12368866",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q125576927",
+    "citySubclassLabel": "Q125576927",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q125577012",
+    "citySubclassLabel": "Q125577012",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q125577043",
+    "citySubclassLabel": "Q125577043",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q125577059",
+    "citySubclassLabel": "Q125577059",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q125577083",
+    "citySubclassLabel": "Q125577083",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q125577114",
+    "citySubclassLabel": "Q125577114",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q125577150",
+    "citySubclassLabel": "Q125577150",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q129261725",
+    "citySubclassLabel": "Q129261725",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q129349635",
+    "citySubclassLabel": "Q129349635",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q130233653",
+    "citySubclassLabel": "Q130233653",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q130234104",
+    "citySubclassLabel": "Q130234104",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q133997300",
+    "citySubclassLabel": "Q133997300",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q133997481",
+    "citySubclassLabel": "Q133997481",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q13430105",
+    "citySubclassLabel": "Q13430105",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q1440591",
+    "citySubclassLabel": "Q1440591",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q1500394",
+    "citySubclassLabel": "Q1500394",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q1501116",
+    "citySubclassLabel": "Q1501116",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q15786355",
+    "citySubclassLabel": "Q15786355",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q15918034",
+    "citySubclassLabel": "Q15918034",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q15966517",
+    "citySubclassLabel": "Q15966517",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q16915447",
+    "citySubclassLabel": "Q16915447",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q1936115",
+    "citySubclassLabel": "Q1936115",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q20103881",
+    "citySubclassLabel": "Q20103881",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q206824",
+    "citySubclassLabel": "Q206824",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q2251202",
+    "citySubclassLabel": "Q2251202",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q23787781",
+    "citySubclassLabel": "Q23787781",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q2595432",
+    "citySubclassLabel": "Q2595432",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q3677886",
+    "citySubclassLabel": "Q3677886",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q3913680",
+    "citySubclassLabel": "Q3913680",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q60997513",
+    "citySubclassLabel": "Q60997513",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q72264395",
+    "citySubclassLabel": "Q72264395",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q74303884",
+    "citySubclassLabel": "Q74303884",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q94734763",
+    "citySubclassLabel": "Q94734763",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q18285253",
+    "citySubclassLabel": "Alberta special area",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q15273785",
+    "citySubclassLabel": "Belgian municipality with the title of city",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q23787679",
+    "citySubclassLabel": "Bicycle friendly municipality",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q107694889",
+    "citySubclassLabel": "Bicycle friendly municipality in Bavaria",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q13081391",
+    "citySubclassLabel": "Bjelimići",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q10840672",
+    "citySubclassLabel": "Business core city (Japan)",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q1019292",
+    "citySubclassLabel": "Bäuert",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q114178",
+    "citySubclassLabel": "Bürgerkommune",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q125576962",
+    "citySubclassLabel": "Category:Municipalities in the Canary Islands",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q56293109",
+    "citySubclassLabel": "Civic community",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q60351842",
+    "citySubclassLabel": "Complex of Communities of Cyprus Republic",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q17290932",
+    "citySubclassLabel": "Cree reserved land",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q3558965",
+    "citySubclassLabel": "Cree village",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q7819319",
+    "citySubclassLabel": "Czech municipality with expanded powers",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q15974307",
+    "citySubclassLabel": "Einheitsgemeinde of Germany",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q2215397",
+    "citySubclassLabel": "English-language word \"city\"",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q448801",
+    "citySubclassLabel": "Greater district town",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q1232414",
+    "citySubclassLabel": "Großgemeinde",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q11983070",
+    "citySubclassLabel": "Herredskommune",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q15234658",
+    "citySubclassLabel": "Improvement Districts of Alberta",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q27824520",
+    "citySubclassLabel": "Inuit reserved land",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q71111443",
+    "citySubclassLabel": "Jewish political community",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q55118936",
+    "citySubclassLabel": "Kirchgemeinde",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q1751950",
+    "citySubclassLabel": "Korporationsgemeinde",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q122733837",
+    "citySubclassLabel": "Ladin municipalities of South Tyrol",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q20522070",
+    "citySubclassLabel": "Local community (Slovenia)",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q6925531",
+    "citySubclassLabel": "Local industrial councils in Israel",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q1544184",
+    "citySubclassLabel": "Municipality in Prussia",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q64515521",
+    "citySubclassLabel": "Municipality of South Vietnam",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q31835971",
+    "citySubclassLabel": "Munizipalität",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q2154459",
+    "citySubclassLabel": "New England town",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q115791821",
+    "citySubclassLabel": "Nisga'a village",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q692680",
+    "citySubclassLabel": "Ortsgemeinde",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q41778911",
+    "citySubclassLabel": "Ortsgemeinde of Rhineland-Palatinate",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q2371398",
+    "citySubclassLabel": "Regional Service Commission",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q2148181",
+    "citySubclassLabel": "Rhode",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q20826981",
+    "citySubclassLabel": "Rural community (local government)",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q115885364",
+    "citySubclassLabel": "Tribal town",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q98651954",
+    "citySubclassLabel": "Viertelsgemeinde",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q3685476",
+    "citySubclassLabel": "abolished municipality in Italy",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q10401396",
+    "citySubclassLabel": "administrative village",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q4291381",
+    "citySubclassLabel": "amalgamated hromada",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q666943",
+    "citySubclassLabel": "associated commune",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q515483",
+    "citySubclassLabel": "baladiyah",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q10501047",
+    "citySubclassLabel": "birth domicile",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q4946305",
+    "citySubclassLabel": "borough in the United States",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q13410522",
+    "citySubclassLabel": "borough of Alaska",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q4946304",
+    "citySubclassLabel": "borough of Connecticut",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q2911266",
+    "citySubclassLabel": "borough of New Jersey",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q408804",
+    "citySubclassLabel": "borough of New York City",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q777120",
+    "citySubclassLabel": "borough of Pennsylvania",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q3284867",
+    "citySubclassLabel": "cendea",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q2689658",
+    "citySubclassLabel": "central municipality",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q604886",
+    "citySubclassLabel": "charter city of the United States",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q15253706",
+    "citySubclassLabel": "city",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q27676414",
+    "citySubclassLabel": "city",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q3505887",
+    "citySubclassLabel": "city council",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q1749269",
+    "citySubclassLabel": "city designated by government ordinance",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q11422368",
+    "citySubclassLabel": "city for international conferences and tourism",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q55440238",
+    "citySubclassLabel": "city in Alberta",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q60458065",
+    "citySubclassLabel": "city in British Columbia",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q130626256",
+    "citySubclassLabel": "city in Canada",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q130627817",
+    "citySubclassLabel": "city in Manitoba",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q130628050",
+    "citySubclassLabel": "city in New Brunswick",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q2974552",
+    "citySubclassLabel": "city in New Jersey",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q44551483",
+    "citySubclassLabel": "city in Newfoundland and Labrador",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q132680629",
+    "citySubclassLabel": "city in North Carolina",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q130629307",
+    "citySubclassLabel": "city in Nova Scotia",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q130629319",
+    "citySubclassLabel": "city in Ontario",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q130629327",
+    "citySubclassLabel": "city in Prince Edward Island",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q130629332",
+    "citySubclassLabel": "city in Quebec",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q130627673",
+    "citySubclassLabel": "city in Saskatchewan",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q110571169",
+    "citySubclassLabel": "city in Saudi Arabia",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q12131624",
+    "citySubclassLabel": "city in Ukraine",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q1093829",
+    "citySubclassLabel": "city in the United States",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q15063611",
+    "citySubclassLabel": "city in the state of New York",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q6960199",
+    "citySubclassLabel": "city municipality of Slovenia",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q13218357",
+    "citySubclassLabel": "city of California",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q110071194",
+    "citySubclassLabel": "city of Illinois",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q494721",
+    "citySubclassLabel": "city of Japan",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q108569710",
+    "citySubclassLabel": "city of Ohio",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q63440326",
+    "citySubclassLabel": "city of Oregon",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q21010817",
+    "citySubclassLabel": "city of Pennsylvania",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q70036182",
+    "citySubclassLabel": "city of Taiwan under Japanese rule",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q111874502",
+    "citySubclassLabel": "city of West Virginia",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q15221256",
+    "citySubclassLabel": "city of Wisconsin",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q12131640",
+    "citySubclassLabel": "city of district significance",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q5123999",
+    "citySubclassLabel": "city of regional significance of Ukraine",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q27676416",
+    "citySubclassLabel": "city or town",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q12102963",
+    "citySubclassLabel": "city specifically designated in the state plan",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q10929914",
+    "citySubclassLabel": "city status",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q681277",
+    "citySubclassLabel": "city with county rights",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q587089",
+    "citySubclassLabel": "city with municipal rights",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q925381",
+    "citySubclassLabel": "city with powiat rights",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q9391358",
+    "citySubclassLabel": "city with public health center",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q5124045",
+    "citySubclassLabel": "city with special status",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q3678424",
+    "citySubclassLabel": "city with special status",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q117351913",
+    "citySubclassLabel": "city, town or village of Japan",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q1021096",
+    "citySubclassLabel": "civic community",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q10433151",
+    "citySubclassLabel": "civic municipality",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q3266850",
+    "citySubclassLabel": "commune",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q112226256",
+    "citySubclassLabel": "commune et commune nouvelle",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q22927548",
+    "citySubclassLabel": "commune in merger-association",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q2989454",
+    "citySubclassLabel": "commune nouvelle",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q2989398",
+    "citySubclassLabel": "commune of Algeria",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q132730984",
+    "citySubclassLabel": "commune of Burundi",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q3076994",
+    "citySubclassLabel": "commune of Cameroon",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q1840161",
+    "citySubclassLabel": "commune of Chile",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q484170",
+    "citySubclassLabel": "commune of France",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q22927616",
+    "citySubclassLabel": "commune of France with specific status",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q3685462",
+    "citySubclassLabel": "commune of Haiti",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q747074",
+    "citySubclassLabel": "commune of Italy",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q3192808",
+    "citySubclassLabel": "commune of Madagascar",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q1758856",
+    "citySubclassLabel": "commune of Mali",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q2989470",
+    "citySubclassLabel": "commune of Mauritania",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q4229812",
+    "citySubclassLabel": "commune of Moldova",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q99308423",
+    "citySubclassLabel": "commune of Monaco",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q84669937",
+    "citySubclassLabel": "commune of New Caledonia",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q659103",
+    "citySubclassLabel": "commune of Romania",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q17176508",
+    "citySubclassLabel": "commune of the Central African Republic",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q29414133",
+    "citySubclassLabel": "community of Cyprus Republic",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q1633408",
+    "citySubclassLabel": "concelho",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q12712989",
+    "citySubclassLabel": "concelho of Cape Verde",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q3301053",
+    "citySubclassLabel": "consolidated city-county",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q1137833",
+    "citySubclassLabel": "core city of Japan",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q1441562",
+    "citySubclassLabel": "coterminous municipality",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q106072745",
+    "citySubclassLabel": "coterminous town-village of New York",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q5055981",
+    "citySubclassLabel": "council of Asturies",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q603715",
+    "citySubclassLabel": "county of New Brunswick",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q11774771",
+    "citySubclassLabel": "county of Nova Scotia",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q21869758",
+    "citySubclassLabel": "delegated commune",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q2566190",
+    "citySubclassLabel": "department of Burkina Faso",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q1208802",
+    "citySubclassLabel": "direct-administered municipality",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q499073",
+    "citySubclassLabel": "direct-controlled municipality",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q18663566",
+    "citySubclassLabel": "dissolved municipality of Japan",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q134626",
+    "citySubclassLabel": "district capital",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q3327871",
+    "citySubclassLabel": "district municipality",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q1589568",
+    "citySubclassLabel": "district municipality",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q17301072",
+    "citySubclassLabel": "district municipality of Lithuania",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q12806962",
+    "citySubclassLabel": "district of Ljubljana",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q4389092",
+    "citySubclassLabel": "district of Moscow",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q18646840",
+    "citySubclassLabel": "divorce municipality",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q1434401",
+    "citySubclassLabel": "dzielnica",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q27554593",
+    "citySubclassLabel": "dzielnica of Lublin",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q1815926",
+    "citySubclassLabel": "effective rural municipality",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q15221304",
+    "citySubclassLabel": "first-class city",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q18821702",
+    "citySubclassLabel": "former commune of France",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q7268568",
+    "citySubclassLabel": "former grietenij",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q19730508",
+    "citySubclassLabel": "former municipality",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q19347965",
+    "citySubclassLabel": "former municipality of Austria",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q23036513",
+    "citySubclassLabel": "former municipality of Denmark",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q26742250",
+    "citySubclassLabel": "former municipality of Estonia",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q17468533",
+    "citySubclassLabel": "former municipality of Finland",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q117871604",
+    "citySubclassLabel": "former municipality of Greece",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q57416832",
+    "citySubclassLabel": "former municipality of Greenland",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q107141943",
+    "citySubclassLabel": "former municipality of Iceland",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q110211119",
+    "citySubclassLabel": "former municipality of Latvia",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q131749582",
+    "citySubclassLabel": "former municipality of Lithuania",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q133444419",
+    "citySubclassLabel": "former municipality of North Macedonia",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q18663579",
+    "citySubclassLabel": "former municipality of Norway",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q55863584",
+    "citySubclassLabel": "former municipality of Spain",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q6621272",
+    "citySubclassLabel": "former municipality of Sweden",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q685309",
+    "citySubclassLabel": "former municipality of Switzerland",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q96948740",
+    "citySubclassLabel": "former municipality of the Faroe Islands",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q7265977",
+    "citySubclassLabel": "former municipality of the Netherlands",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q131463097",
+    "citySubclassLabel": "former municipality of the United States",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q15221373",
+    "citySubclassLabel": "fourth-class city",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q2280389",
+    "citySubclassLabel": "fusion municipality",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q55612423",
+    "citySubclassLabel": "general law municipality",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q15334",
+    "citySubclassLabel": "gmina",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q3752524",
+    "citySubclassLabel": "gmina's auxiliary unit",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q111031767",
+    "citySubclassLabel": "hamlet of Ohio",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q104841013",
+    "citySubclassLabel": "hromada",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q132133526",
+    "citySubclassLabel": "illegal municipality",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q9283961",
+    "citySubclassLabel": "incorporated town",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q110071230",
+    "citySubclassLabel": "incorporated town of Illinois",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q1266818",
+    "citySubclassLabel": "independent city in the United States",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q22865",
+    "citySubclassLabel": "independent city of Germany",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q130335918",
+    "citySubclassLabel": "indigenous commune",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q1307779",
+    "citySubclassLabel": "integrated municipality",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q2115448",
+    "citySubclassLabel": "intra-city territory of a federal city",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q99691499",
+    "citySubclassLabel": "kommune",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q6838968",
+    "citySubclassLabel": "kozhuun",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q4314343",
+    "citySubclassLabel": "language border municipality",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q1548518",
+    "citySubclassLabel": "large district town",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q1548525",
+    "citySubclassLabel": "large independent city of Lower Saxony",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q1214953",
+    "citySubclassLabel": "large village of Hungary",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q3111821",
+    "citySubclassLabel": "list of communities in New Brunswick",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q2218838",
+    "citySubclassLabel": "list of municipalities in Nova Scotia",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q6643749",
+    "citySubclassLabel": "list of towns in Nova Scotia",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q1288520",
+    "citySubclassLabel": "local council in Israel",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q719592",
+    "citySubclassLabel": "local council of Malta",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q28916128",
+    "citySubclassLabel": "local government district",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q2762194",
+    "citySubclassLabel": "local government in Israel",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q1500352",
+    "citySubclassLabel": "local municipality",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q3327873",
+    "citySubclassLabel": "local municipality of Quebec",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q3032041",
+    "citySubclassLabel": "local service district of New Brunswick",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q15210668",
+    "citySubclassLabel": "lower-tier municipality",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q562061",
+    "citySubclassLabel": "market municipality",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q100341898",
+    "citySubclassLabel": "market municipality of Germany",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q54935786",
+    "citySubclassLabel": "medium-sized district town",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q1175519",
+    "citySubclassLabel": "megyei város",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q6024226",
+    "citySubclassLabel": "metropolitan municipality",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q1530824",
+    "citySubclassLabel": "metropolitan municipality in South Africa",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q2716259",
+    "citySubclassLabel": "metropolitan municipality in Turkey",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q2229627",
+    "citySubclassLabel": "millionaire municipality",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q113637359",
+    "citySubclassLabel": "monohromada",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q128599115",
+    "citySubclassLabel": "municipal building authority",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q348884",
+    "citySubclassLabel": "municipal community",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q13420058",
+    "citySubclassLabel": "municipal community in Sweden",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q60849925",
+    "citySubclassLabel": "municipal district in Russia",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q14762205",
+    "citySubclassLabel": "municipal district of Alberta",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q29473607",
+    "citySubclassLabel": "municipal district of Drymos",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q15731904",
+    "citySubclassLabel": "municipal district of Nova Scotia",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q1849719",
+    "citySubclassLabel": "municipal formation in Russia",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q3788231",
+    "citySubclassLabel": "municipal government in Canada",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q3350075",
+    "citySubclassLabel": "municipal okrug",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q42619282",
+    "citySubclassLabel": "municipal okrug of Saint Petersburg",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q25505751",
+    "citySubclassLabel": "municipal school",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q16739079",
+    "citySubclassLabel": "municipalities of Cyprus Republic",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q737681",
+    "citySubclassLabel": "municipalities with language facilities",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q27676428",
+    "citySubclassLabel": "municipality",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q123433484",
+    "citySubclassLabel": "municipality in Alberta",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q3243765",
+    "citySubclassLabel": "municipality in Argentina",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q262166",
+    "citySubclassLabel": "municipality in Germany",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q17110751",
+    "citySubclassLabel": "municipality in Saskatchewan",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q3327870",
+    "citySubclassLabel": "municipality in the United States",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q768307",
+    "citySubclassLabel": "municipality of Albania",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q125576665",
+    "citySubclassLabel": "municipality of Andalucía",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q378508",
+    "citySubclassLabel": "municipality of Angola",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q61763947",
+    "citySubclassLabel": "municipality of Aragon",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q667509",
+    "citySubclassLabel": "municipality of Austria",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q15129871",
+    "citySubclassLabel": "municipality of Azerbaijan",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q493522",
+    "citySubclassLabel": "municipality of Belgium",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q17134625",
+    "citySubclassLabel": "municipality of Bermuda",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q1062710",
+    "citySubclassLabel": "municipality of Bolivia",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q3184121",
+    "citySubclassLabel": "municipality of Brazil",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q1906268",
+    "citySubclassLabel": "municipality of Bulgaria",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q123095923",
+    "citySubclassLabel": "municipality of Cantabria",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q33146843",
+    "citySubclassLabel": "municipality of Catalonia",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q2555896",
+    "citySubclassLabel": "municipality of Colombia",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q57058",
+    "citySubclassLabel": "municipality of Croatia",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q558330",
+    "citySubclassLabel": "municipality of Cuba",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q2177636",
+    "citySubclassLabel": "municipality of Denmark",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q3556889",
+    "citySubclassLabel": "municipality of El Salvador",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q856076",
+    "citySubclassLabel": "municipality of Finland",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q2276925",
+    "citySubclassLabel": "municipality of Galicia",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q1349648",
+    "citySubclassLabel": "municipality of Greece",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q16423979",
+    "citySubclassLabel": "municipality of Greenland",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q1872284",
+    "citySubclassLabel": "municipality of Guatemala",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q2602693",
+    "citySubclassLabel": "municipality of Honduras",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q2590631",
+    "citySubclassLabel": "municipality of Hungary",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q955655",
+    "citySubclassLabel": "municipality of Iceland",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q110071154",
+    "citySubclassLabel": "municipality of Illinois",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q20110574",
+    "citySubclassLabel": "municipality of Iran",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q1054813",
+    "citySubclassLabel": "municipality of Japan",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q109279933",
+    "citySubclassLabel": "municipality of Jordan",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q123680441",
+    "citySubclassLabel": "municipality of La Rioja",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q6936383",
+    "citySubclassLabel": "municipality of Lebanon",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q15650103",
+    "citySubclassLabel": "municipality of Libya",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q16124843",
+    "citySubclassLabel": "municipality of Libya",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q203300",
+    "citySubclassLabel": "municipality of Liechtenstein",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q2919801",
+    "citySubclassLabel": "municipality of Luxembourg",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q1952852",
+    "citySubclassLabel": "municipality of Mexico",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q1963041",
+    "citySubclassLabel": "municipality of Moldova",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q56036687",
+    "citySubclassLabel": "municipality of Mozambique",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q3492039",
+    "citySubclassLabel": "municipality of Nepal",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q54115138",
+    "citySubclassLabel": "municipality of New Jersey",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q318727",
+    "citySubclassLabel": "municipality of Nicaragua",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q605291",
+    "citySubclassLabel": "municipality of Niger",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q755707",
+    "citySubclassLabel": "municipality of Norway",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q108569731",
+    "citySubclassLabel": "municipality of Ohio",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q3327899",
+    "citySubclassLabel": "municipality of Ontario",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q110076354",
+    "citySubclassLabel": "municipality of Peru",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q13217644",
+    "citySubclassLabel": "municipality of Portugal",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q263639",
+    "citySubclassLabel": "municipality of Puerto Rico",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q685320",
+    "citySubclassLabel": "municipality of Qatar",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q640364",
+    "citySubclassLabel": "municipality of Romania",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q108800505",
+    "citySubclassLabel": "municipality of Saudi Arabia",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q133269612",
+    "citySubclassLabel": "municipality of Segovia",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q6784672",
+    "citySubclassLabel": "municipality of Slovakia",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q328584",
+    "citySubclassLabel": "municipality of Slovenia",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q66126784",
+    "citySubclassLabel": "municipality of Sonora",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q2666845",
+    "citySubclassLabel": "municipality of South Africa",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q2074737",
+    "citySubclassLabel": "municipality of Spain",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q127448",
+    "citySubclassLabel": "municipality of Sweden",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q2997091",
+    "citySubclassLabel": "municipality of Tamaulipas",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q41067667",
+    "citySubclassLabel": "municipality of Tunisia",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q2460358",
+    "citySubclassLabel": "municipality of Turkey",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q123165444",
+    "citySubclassLabel": "municipality of Turkey",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q110977456",
+    "citySubclassLabel": "municipality of Uganda",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q3685434",
+    "citySubclassLabel": "municipality of Uruguay",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q3327920",
+    "citySubclassLabel": "municipality of Venezuela",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q1381899",
+    "citySubclassLabel": "municipality of Vietnam",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q18918041",
+    "citySubclassLabel": "municipality of West Bengal",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q5153359",
+    "citySubclassLabel": "municipality of the Czech Republic",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q6005581",
+    "citySubclassLabel": "municipality of the Dominican Republic",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q856079",
+    "citySubclassLabel": "municipality of the Faroe Islands",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q65133814",
+    "citySubclassLabel": "municipality of the Independent State of Croatia",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q2039348",
+    "citySubclassLabel": "municipality of the Netherlands",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q24764",
+    "citySubclassLabel": "municipality of the Philippines",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q6936404",
+    "citySubclassLabel": "municipality of the State of Palestine",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q123754112",
+    "citySubclassLabel": "municipality of the Valencian Community",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q2101494",
+    "citySubclassLabel": "municipality types in Switzerland",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q7841907",
+    "citySubclassLabel": "municipality with authorized municipal office",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q15978299",
+    "citySubclassLabel": "municipality with town privileges in the Czech Republic",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q1763214",
+    "citySubclassLabel": "municipio",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q16155707",
+    "citySubclassLabel": "městys",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q27676431",
+    "citySubclassLabel": "naskapi village municipality",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q28656402",
+    "citySubclassLabel": "new town in Alberta",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q116457956",
+    "citySubclassLabel": "non-urban municipality in Germany",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q116196862",
+    "citySubclassLabel": "northern hamlet of Saskatchewan",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q3559003",
+    "citySubclassLabel": "northern village",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q115861271",
+    "citySubclassLabel": "northern village",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q2183520",
+    "citySubclassLabel": "obec",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q2248015",
+    "citySubclassLabel": "overflow municipality",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q27676524",
+    "citySubclassLabel": "parish municipality",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q20757176",
+    "citySubclassLabel": "parish municipality of Denmark",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q24279",
+    "citySubclassLabel": "parish of Andorra",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q13997861",
+    "citySubclassLabel": "partido of Buenos Aires Province",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q1153975",
+    "citySubclassLabel": "people's commune",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q748149",
+    "citySubclassLabel": "prefecture-level city",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q89031988",
+    "citySubclassLabel": "provincial municipality of Turkey",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q5154047",
+    "citySubclassLabel": "quarter/commune of Cambodia",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q109382914",
+    "citySubclassLabel": "regional capital in Saudi Arabia",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q20899166",
+    "citySubclassLabel": "regional capital of France",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q1022469",
+    "citySubclassLabel": "regional council of Israel",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q85796467",
+    "citySubclassLabel": "regional district in British Columbia",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q119627394",
+    "citySubclassLabel": "regional government",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q1388464",
+    "citySubclassLabel": "regional municipality in Canada",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q14762890",
+    "citySubclassLabel": "regional municipality of Ontario",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q60740115",
+    "citySubclassLabel": "resort municipality",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q6636519",
+    "citySubclassLabel": "resort village in Saskatchewan",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q2989369",
+    "citySubclassLabel": "rural community of New Brunswick",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q3504085",
+    "citySubclassLabel": "rural municipality",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q1650922",
+    "citySubclassLabel": "rural municipality",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q12336315",
+    "citySubclassLabel": "rural municipality",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q6637174",
+    "citySubclassLabel": "rural municipality in Saskatchewan",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q1802801",
+    "citySubclassLabel": "rural municipality of Austria",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q3327874",
+    "citySubclassLabel": "rural municipality of Canada",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q30060572",
+    "citySubclassLabel": "rural municipality of Canada",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q29467088",
+    "citySubclassLabel": "rural municipality of Nepal",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q11722303",
+    "citySubclassLabel": "rural municipality of Sweden and Finland",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q634099",
+    "citySubclassLabel": "rural settlement in Russia",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q64636958",
+    "citySubclassLabel": "school district of Oregon",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q15221310",
+    "citySubclassLabel": "second-class city",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q14502790",
+    "citySubclassLabel": "settlement of Hungary",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q14762300",
+    "citySubclassLabel": "single-tier municipality",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q954172",
+    "citySubclassLabel": "sparse municipality",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q1145012",
+    "citySubclassLabel": "special city of Japan",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q5327704",
+    "citySubclassLabel": "special ward of Japan",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q123432159",
+    "citySubclassLabel": "specialized municipality in Alberta",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q21518270",
+    "citySubclassLabel": "state or insular area capital of the United States",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q257978",
+    "citySubclassLabel": "statutory city in Czechia",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q262882",
+    "citySubclassLabel": "statutory city of Austria",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q28544871",
+    "citySubclassLabel": "sub-metropolitan municipality of Nepal",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q15141625",
+    "citySubclassLabel": "subdistrict municipality",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q6641762",
+    "citySubclassLabel": "summer village in Alberta",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q3298871",
+    "citySubclassLabel": "sundown town",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q116175792",
+    "citySubclassLabel": "territorial hamlet of Canada",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q991683",
+    "citySubclassLabel": "theoretical municipality",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q1155688",
+    "citySubclassLabel": "thesaban",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q13025342",
+    "citySubclassLabel": "thesaban mueang",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q15141632",
+    "citySubclassLabel": "thesaban nakhon",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q15221370",
+    "citySubclassLabel": "third-class city",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q2195811",
+    "citySubclassLabel": "titular city",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q55430416",
+    "citySubclassLabel": "town in Alberta",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q15105893",
+    "citySubclassLabel": "town in Croatia",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q13218690",
+    "citySubclassLabel": "town in Hungary",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q131905118",
+    "citySubclassLabel": "town in Manitoba",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q52132873",
+    "citySubclassLabel": "town in New Brunswick",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q59341087",
+    "citySubclassLabel": "town in Nova Scotia",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q15068900",
+    "citySubclassLabel": "town in Prince Edward Island",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q6643756",
+    "citySubclassLabel": "town in Saskatchewan",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q15127012",
+    "citySubclassLabel": "town in the United States",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q1059478",
+    "citySubclassLabel": "town of Japan",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q7829892",
+    "citySubclassLabel": "town of New Jersey",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q106071004",
+    "citySubclassLabel": "town of New York",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q44529188",
+    "citySubclassLabel": "town of Newfoundland and Labrador",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q110256876",
+    "citySubclassLabel": "town of Pennsylvania",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q98938901",
+    "citySubclassLabel": "town of Vermont",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q15411644",
+    "citySubclassLabel": "town of Virginia",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q100503226",
+    "citySubclassLabel": "town of the United Kingdom",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q27676422",
+    "citySubclassLabel": "township municipality",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q55774719",
+    "citySubclassLabel": "township municipality in Ontario",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q7830262",
+    "citySubclassLabel": "township of Myanmar",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q7830213",
+    "citySubclassLabel": "township of New Jersey",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q107011587",
+    "citySubclassLabel": "transitional council",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q107105851",
+    "citySubclassLabel": "transitional metropolitan council",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q107105862",
+    "citySubclassLabel": "transitional metropolitan substructure",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q25340975",
+    "citySubclassLabel": "transitional representative council",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q18632459",
+    "citySubclassLabel": "ulus",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q115857060",
+    "citySubclassLabel": "undivided municipality in Czechia",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q27676424",
+    "citySubclassLabel": "united townships municipality",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q16295254",
+    "citySubclassLabel": "upper-tier municipality",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q779426",
+    "citySubclassLabel": "urban district of Hungary",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q2616791",
+    "citySubclassLabel": "urban municipality",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q42744322",
+    "citySubclassLabel": "urban municipality in Germany",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q13626398",
+    "citySubclassLabel": "urban okrug in Russia",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q2661988",
+    "citySubclassLabel": "urban settlement in Russia",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q7900181",
+    "citySubclassLabel": "urban township of Michigan",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q15063142",
+    "citySubclassLabel": "urban township of Minnesota",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q7900183",
+    "citySubclassLabel": "urban township of Ohio",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q7900180",
+    "citySubclassLabel": "urban township of the United States",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q3491915",
+    "citySubclassLabel": "urban-rural municipality",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q6644696",
+    "citySubclassLabel": "village in Alberta",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q6644778",
+    "citySubclassLabel": "village in Saskatchewan",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q27676420",
+    "citySubclassLabel": "village municipality of Quebec",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q96857311",
+    "citySubclassLabel": "village of Guam",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q110071217",
+    "citySubclassLabel": "village of Illinois",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q4174776",
+    "citySubclassLabel": "village of Japan",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q6644759",
+    "citySubclassLabel": "village of New Brunswick",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q7930612",
+    "citySubclassLabel": "village of New Jersey",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q108569739",
+    "citySubclassLabel": "village of Ohio",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  }
+]

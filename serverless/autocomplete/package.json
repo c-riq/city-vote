@@ -1,0 +1,18 @@
+{
+  "name": "city-vote-autocomplete",
+  "version": "1.0.0",
+  "description": "Autocomplete service for City Vote registration",
+  "main": "dist/autocomplete.js",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "clean": "rm -rf dist",
+    "deploy": "npm run clean && npm run build && ./deploy.sh"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.119",
+    "@types/node": "^20.5.7",
+    "typescript": "^5.2.2"
+  }
+}

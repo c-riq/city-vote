@@ -5,6 +5,10 @@ export AWS_PROFILE="rix-admin-chris"
 # Change to the directory containing the function
 cd "$(dirname "$0")"
 
+# Build the project
+echo "Building the project..."
+npm run build
+
 REGION="us-east-1"      # N. Virginia
 FUNCTION_NAME="city-vote-unauthenticated"
 ZIP_FILE="function.zip"

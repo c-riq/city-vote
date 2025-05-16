@@ -2,8 +2,8 @@ import { Button, Container, Typography, TextField, Box, Dialog,
   DialogTitle, DialogContent, DialogActions, createTheme, 
   ThemeProvider  } from '@mui/material';
 import { useState } from 'react';
-import { VOTE_HOST } from './constants';
-import { BrowserRouter, Routes, Route, Navigate, useParams, useNavigate, Link } from 'react-router-dom';
+import { VOTE_HOST, PUBLIC_API_HOST } from './constants';
+import { BrowserRouter, Routes, Route, useParams, useNavigate, Link } from 'react-router-dom';
 import Poll from './components/Poll';
 import Polls from './components/Polls';
 import Header from './components/Header';
@@ -11,12 +11,14 @@ import Header from './components/Header';
 import WorldMap from './components/WorldMap';
 import CityInfoBox from './components/CityInfoBox';
 import VoteList from './components/VoteList';
+import CityRegistration from './components/CityRegistration';
+import CityProfile from './components/CityProfile';
 import {
   City,
   ValidateTokenResponse,
   GetCitiesResponse,
   GetVotesResponse
-} from './voteBackendTypes';
+} from './backendTypes';
 
 type Vote = [number, string, { title: string; name: string; actingCapacity: 'individual' | 'representingCityAdministration' }];
 type CityVotes = Record<string, Vote[]>;  // cityId -> votes
@@ -29,29 +31,31 @@ function CityRoute({ cityInfo, cities, theme }: {
 }) {
   const { cityId } = useParams();
   
-  if (!cityInfo) {
-    return <Navigate to="/" replace />;
+  // If user is logged in, show the city info box
+  if (cityInfo) {
+    return (
+      <Box
+        sx={{
+          padding: { xs: 2, sm: 4 },
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: 3,
+          backgroundColor: 'background.default',
+        }}
+      >
+        <CityInfoBox 
+          cityId={cityId || null} 
+          cityInfo={cityInfo} 
+          cities={cities} 
+          theme={theme} 
+        />
+      </Box>
+    );
   }
   
-  return (
-    <Box
-      sx={{
-        padding: { xs: 2, sm: 4 },
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        gap: 3,
-        backgroundColor: 'background.default',
-      }}
-    >
-      <CityInfoBox 
-        cityId={cityId || null} 
-        cityInfo={cityInfo} 
-        cities={cities} 
-        theme={theme} 
-      />
-    </Box>
-  );
+  // If user is not logged in, show the city profile
+  return <CityProfile />;
 }
 
 function App() {
@@ -139,10 +143,10 @@ function App() {
       setCityId(data.cityId);
       
       // Then fetch cities data
-      const citiesResponse = await fetch(`${VOTE_HOST}`, {
+      const citiesResponse = await fetch(`${PUBLIC_API_HOST}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'getCities', token })
+        body: JSON.stringify({ action: 'getCities' })
       });
 
       const citiesData: GetCitiesResponse = await citiesResponse.json();
@@ -155,10 +159,10 @@ function App() {
       setCities(citiesData.cities);
 
       // Finally fetch votes data
-      const votesResponse = await fetch(`${VOTE_HOST}`, {
+      const votesResponse = await fetch(`${PUBLIC_API_HOST}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'getVotes', token })
+        body: JSON.stringify({ action: 'getVotes' })
       });
 
       const votesData: GetVotesResponse = await votesResponse.json();
@@ -182,10 +186,10 @@ function App() {
   const fetchVotesOnly = async () => {
     setIsRefreshingVotes(true);
     try {
-      const votesResponse = await fetch(`${VOTE_HOST}`, {
+      const votesResponse = await fetch(`${PUBLIC_API_HOST}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'getVotes', token })
+        body: JSON.stringify({ action: 'getVotes' })
       });
 
       const votesData: GetVotesResponse = await votesResponse.json();
@@ -301,6 +305,7 @@ function App() {
         <Container sx={{ pt: '80px' }}>
           <AuthenticatedContent />
           <Routes>
+            <Route path="/register" element={<CityRegistration />} />
             <Route path="/polls" element={<Polls theme={theme} />} />
             <Route path="/poll/:pollId" element={
               cityInfo ? (
@@ -331,6 +336,24 @@ function App() {
                     backgroundColor: 'background.default',
                   }}
                 >
+                      {/* Small slogan for mobile screens */}
+                      <Typography 
+                        variant="caption" 
+                        sx={{ 
+                          display: { xs: 'block', md: 'none' },
+                          color: '#1a237e',
+                          fontWeight: 300,
+                          letterSpacing: '0.05em',
+                          fontSize: '0.75rem',
+                          fontFamily: '"Helvetica Neue", Arial, sans-serif',
+                          mt: -3,
+                          mb: -1,
+                          opacity: 0.7,
+                          textAlign: 'center'
+                        }}
+                      >
+                        Local Government Coordination
+                      </Typography>
                   <Box sx={{ 
                     width: '100%',
                     maxWidth: '1000px',
@@ -345,9 +368,29 @@ function App() {
                       borderRadius: 4,
                       overflow: 'hidden',
                       display: 'flex',
+                      flexDirection: 'column',
                       justifyContent: 'center',
                       alignItems: 'center',
+                      position: 'relative'
                     }}>
+                      {/* Slogan for non-mobile screens (no box) */}
+                      <Typography 
+                        variant="h6" 
+                        sx={{ 
+                          position: 'absolute',
+                          top: { xs: 0, sm: 0 },
+                          zIndex: 10,
+                          color: '#1a237e',
+                          fontWeight: 300,
+                          textAlign: 'center',
+                          letterSpacing: '0.12em',
+                          textTransform: 'none',
+                          fontFamily: '"Helvetica Neue", Arial, sans-serif',
+                          display: { xs: 'none', md: 'block' }
+                        }}
+                      >
+                        Local Government Coordination
+                      </Typography>
                       <WorldMap />
                     </Box>
                     <Typography 

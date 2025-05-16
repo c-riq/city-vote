@@ -24,7 +24,7 @@ import {
   VoteRequest,
   GetVotesResponse,
   GetCitiesResponse
-} from '../voteBackendTypes';
+} from '../backendTypes';
 
 interface PollProps {
   token?: string;

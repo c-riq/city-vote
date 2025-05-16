@@ -3,10 +3,8 @@ import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3';
 import { Readable } from 'stream';
 import {
     City,
-    VoteData,
-    GetPublicVotesRequest,
-    GetPublicCitiesRequest
 } from './types';
+import { handleRegister } from './registration';
 
 const s3Client = new S3Client({ region: 'us-east-1' });
 const BUCKET_NAME = 'city-vote-data';
@@ -33,7 +31,7 @@ const handleGetPublicVotes = async (cityId?: string): Promise<APIGatewayProxyRes
             return {
                 statusCode: 404,
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: 'No votes data found' })
+                body: JSON.stringify({ message: 'No votes data found' }, null, 2)
             };
         }
 
@@ -51,7 +49,7 @@ const handleGetPublicVotes = async (cityId?: string): Promise<APIGatewayProxyRes
             return {
                 statusCode: 200,
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ votes: cityVotes })
+                body: JSON.stringify({ votes: cityVotes }, null, 2)
             };
         }
 
@@ -59,14 +57,14 @@ const handleGetPublicVotes = async (cityId?: string): Promise<APIGatewayProxyRes
         return {
                 statusCode: 200,
                 headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ votes })
+            body: JSON.stringify({ votes }, null, 2)
         };
     } catch (error: any) {
         if (error.name === 'NoSuchKey') {
             return {
                 statusCode: 404,
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: 'No votes data found' })
+                body: JSON.stringify({ message: 'No votes data found' }, null, 2)
             };
         }
         throw error;
@@ -84,7 +82,7 @@ const handleGetPublicCities = async (): Promise<APIGatewayProxyResult> => {
             return {
                 statusCode: 404,
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: 'Cities data not found' })
+                body: JSON.stringify({ message: 'Cities data not found' }, null, 2)
             };
         }
 
@@ -94,14 +92,14 @@ const handleGetPublicCities = async (): Promise<APIGatewayProxyResult> => {
         return {
             statusCode: 200,
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ cities })
+            body: JSON.stringify({ cities }, null, 2)
         };
     } catch (error: any) {
         if (error.name === 'NoSuchKey') {
             return {
                 statusCode: 404,
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: 'Cities data not found' })
+                body: JSON.stringify({ message: 'Cities data not found' }, null, 2)
             };
         }
         throw error;
@@ -112,11 +110,13 @@ const handleGetPublicCities = async (): Promise<APIGatewayProxyResult> => {
 type PublicActionHandlers = {
     getVotes: (cityId?: string) => Promise<APIGatewayProxyResult>;
     getCities: () => Promise<APIGatewayProxyResult>;
+    register: (cityData: City) => Promise<APIGatewayProxyResult>;
 };
 
 const publicActionHandlers: PublicActionHandlers = {
     getVotes: handleGetPublicVotes,
     getCities: handleGetPublicCities,
+    register: handleRegister,
 };
 
 export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
@@ -125,11 +125,11 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
             return {
                 statusCode: 400,
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: 'Missing request body' })
+                body: JSON.stringify({ message: 'Missing request body' }, null, 2)
             };
         }
 
-        const { action, cityId } = JSON.parse(event.body);
+        const { action, cityId, cityData } = JSON.parse(event.body);
         
         if (!action) {
             return {
@@ -137,26 +137,25 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     message: 'Missing required parameter: action'
-                })
-            };
-        }
-
-        const handler = publicActionHandlers[action as keyof PublicActionHandlers];
-        if (!handler) {
-            return {
-                statusCode: 400,
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    message: `Invalid action: ${action}. Supported actions are: ${Object.keys(publicActionHandlers).join(', ')}`
-                })
+                }, null, 2)
             };
         }
 
         // Call the appropriate handler based on the action
         if (action === 'getVotes') {
-            return await handler(cityId);
+            return await publicActionHandlers.getVotes(cityId);
+        } else if (action === 'register') {
+            return await publicActionHandlers.register(cityData);
+        } else if (action === 'getCities') {
+            return await publicActionHandlers.getCities();
         } else {
-            return await handler();
+            return {
+                statusCode: 400,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    message: `Invalid action: ${action}. Supported actions are: ${Object.keys(publicActionHandlers).join(', ')}`
+                }, null, 2)
+            };
         }
     } catch (error) {
         console.error('Error:', error);
@@ -166,7 +165,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
             body: JSON.stringify({
                 message: 'Internal server error',
                 details: error instanceof Error ? error.message : 'Unknown error'
-            })
+            }, null, 2)
         };
     }
 };
