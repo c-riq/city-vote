@@ -26,7 +26,7 @@ export const countries = {
         ["Benin", "BJ", "BEN", "204", "Q962"],
         ["Bermuda", "BM", "BMU", "060", ""],
         ["Bhutan", "BT", "BTN", "064", "Q917"],
-        ["Bolivia (Plurinational State of)", "BO", "BOL", "068", "Q750"],
+        ["Bolivia", "BO", "BOL", "068", "Q750"],
         ["Bonaire, Sint Eustatius and Saba", "BQ", "BES", "535", ""],
         ["Bosnia and Herzegovina", "BA", "BIH", "070", "Q225"],
         ["Botswana", "BW", "BWA", "072", "Q963"],

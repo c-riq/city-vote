@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Box, Typography, Paper, Avatar, Divider, CircularProgress, Button, Link, Chip } from '@mui/material';
+import { Box, Typography, Paper, Avatar, Divider, CircularProgress, Button, Link, Chip, IconButton } from '@mui/material';
 import LocationCityIcon from '@mui/icons-material/LocationCity';
 import PublicIcon from '@mui/icons-material/Public';
 import PeopleIcon from '@mui/icons-material/People';
 import InfoIcon from '@mui/icons-material/Info';
 import VerifiedIcon from '@mui/icons-material/Verified';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { PUBLIC_API_HOST } from '../constants';
 import { City } from '../backendTypes';
 
@@ -129,16 +130,16 @@ const CityProfile: React.FC<CityProfileProps> = ({ cities: initialCities }) => {
   const joinDateFormatted = joinDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
 
   return (
-    <Box sx={{ maxWidth: 800, mx: 'auto', pt: 4, px: 2 }}>
+    <Box sx={{ maxWidth: 800, mx: 'auto', pt: { xs: 2, sm: 4 }, px: { xs: 0, sm: 2 } }}>
       {/* Twitter-like header with back button */}
-      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-        <Button 
+      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2, px: { xs: 2, sm: 0 } }}>
+        <IconButton 
           onClick={() => navigate('/')} 
-          startIcon={<span className="material-icons">arrow_back</span>}
-          sx={{ mr: 2 }}
+          sx={{ mr: 1 }}
+          aria-label="Back"
         >
-          Back
-        </Button>
+          <ArrowBackIcon />
+        </IconButton>
         <Typography variant="h6">City Profile</Typography>
       </Box>
       
@@ -146,61 +147,83 @@ const CityProfile: React.FC<CityProfileProps> = ({ cities: initialCities }) => {
       <Paper elevation={0} sx={{ borderRadius: 3, overflow: 'hidden', mb: 4, border: '1px solid #e0e0e0' }}>
         {/* Cover photo area - blue gradient */}
         <Box sx={{ 
-          height: 150, 
+          height: { xs: 120, sm: 150 }, 
           background: 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
-          position: 'relative'
-        }} />
+          position: 'relative',
+          overflow: 'hidden' // Add overflow hidden to prevent content from spilling out
+        }}>
+          {/* City name in the banner - with same left margin as before */}
+          <Box sx={{ 
+            position: 'absolute',
+            bottom: { xs: 0, sm: 9 },
+            left: { xs: 110, sm: 150 } // Align with the position it had below the avatar
+          }}>
+            <Typography 
+              variant="h4" 
+              component="h1" 
+              sx={{ 
+                fontWeight: 'bold',
+                fontSize: { xs: '1.5rem', sm: '2rem', md: '2.125rem' },
+                color: 'white',
+                textShadow: '1px 1px 3px rgba(0,0,0,0.3)'
+              }}
+            >
+              {city.name}
+            </Typography>
+          </Box>
+          
+          {/* Registration status chip - positioned in top right of banner */}
+          <Box sx={{ 
+            position: 'absolute',
+            top: { xs: 10, sm: 15 },
+            right: { xs: 10, sm: 15 }
+          }}>
+            {city.registered ? (
+              <Chip 
+                icon={<VerifiedIcon />} 
+                label="Verified City" 
+                color="primary" 
+                variant="outlined"
+                sx={{ bgcolor: 'rgba(255,255,255,0.8)' }}
+              />
+            ) : (
+              <Chip 
+                icon={<InfoIcon />} 
+                label="Unregistered City" 
+                color="default" 
+                variant="outlined"
+                sx={{ bgcolor: 'rgba(255,255,255,0.8)' }}
+              />
+            )}
+          </Box>
+        </Box>
         
         {/* Profile info section */}
-        <Box sx={{ p: 3, pt: 0, position: 'relative' }}>
+        <Box sx={{ p: { xs: 2, sm: 3 }, pt: 0, position: 'relative' }}>
           <Box sx={{ display: 'flex', position: 'relative' }}>
             {/* Profile avatar - positioned to overlap the cover photo */}
             <Avatar 
               sx={{ 
-                width: 120, 
-                height: 120, 
+                width: { xs: 90, sm: 120 }, 
+                height: { xs: 90, sm: 120 }, 
                 bgcolor: 'primary.main',
                 border: '4px solid white',
                 position: 'relative',
-                top: -60,
-                mr: 3
+                top: { xs: -45, sm: -60 },
+                mr: { xs: 2, sm: 3 }
               }}
             >
-              <LocationCityIcon sx={{ fontSize: 60 }} />
+              <LocationCityIcon sx={{ fontSize: { xs: 45, sm: 60 } }} />
             </Avatar>
-            
-            {/* Registration status chip */}
-            <Box sx={{ 
-              display: 'flex', 
-              justifyContent: 'flex-end', 
-              position: 'absolute',
-              right: 0,
-              top: -40
-            }}>
-              {city.registered ? (
-                <Chip 
-                  icon={<VerifiedIcon />} 
-                  label="Verified City" 
-                  color="primary" 
-                  variant="outlined"
-                />
-              ) : (
-                <Chip 
-                  icon={<InfoIcon />} 
-                  label="Unregistered City" 
-                  color="default" 
-                  variant="outlined"
-                />
-              )}
-            </Box>
           </Box>
           
-          {/* City name and basic info - with proper spacing from avatar */}
-          <Box sx={{ mt: -20, ml: 17, mb: 6 }}>
-            <Typography variant="h4" component="h1" gutterBottom sx={{ fontWeight: 'bold' }}>
-              {city.name}
-            </Typography>
-            
+          {/* City basic info - with proper spacing from avatar */}
+          <Box sx={{ 
+            mt: { xs: -12, sm: -16 }, 
+            ml: { xs: 12, sm: 17 }, 
+            mb: { xs: 4, sm: 6 },
+            pr: { xs: 1, sm: 0 }
+          }}>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, color: 'text.secondary', mb: 2 }}>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <PublicIcon sx={{ mr: 1, fontSize: 18 }} />
@@ -249,14 +272,15 @@ const CityProfile: React.FC<CityProfileProps> = ({ cities: initialCities }) => {
           {!city.registered && (
             <Box sx={{ 
               mt: 2, 
-              p: 2, 
+              p: { xs: 1.5, sm: 2 }, 
               bgcolor: 'info.light', 
               borderRadius: 2,
               display: 'flex',
-              alignItems: 'center',
+              flexDirection: { xs: 'column', sm: 'row' },
+              alignItems: { xs: 'flex-start', sm: 'center' },
               gap: 1
             }}>
-              <InfoIcon sx={{ color: '#e3f2fd' }} />
+              <InfoIcon sx={{ color: '#e3f2fd', mt: { xs: 0.5, sm: 0 } }} />
               <Typography variant="body2" color="info.dark">
                 Want to register this city? Visit the <Link href="/register" color="primary" sx={{ fontWeight: 'bold', color: '#e3f2fd' }}>Registration</Link> page to add it to the City Vote platform.
               </Typography>
@@ -269,17 +293,6 @@ const CityProfile: React.FC<CityProfileProps> = ({ cities: initialCities }) => {
               <Typography variant="subtitle1" gutterBottom fontWeight="bold">
                 Location
               </Typography>
-              <Box 
-                component="iframe"
-                src={`https://www.openstreetmap.org/export/embed.html?bbox=${city.lon-0.1}%2C${city.lat-0.1}%2C${city.lon+0.1}%2C${city.lat+0.1}&layer=mapnik&marker=${city.lat}%2C${city.lon}`}
-                sx={{ 
-                  width: '100%', 
-                  height: '300px', 
-                  border: '1px solid #eee',
-                  borderRadius: 2
-                }}
-                title={`Map of ${city.name}`}
-              />
             </Box>
           ) : null}
           
