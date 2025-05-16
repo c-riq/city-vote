@@ -6,8 +6,9 @@ export interface CityAutocompleteData {
 
 // API Request/Response types
 export interface AutocompleteRequest {
-    action: 'autocomplete';
+    action: 'autocomplete' | 'getByQid';
     query: string;
+    qid?: string;
     limit?: number;
 }
 

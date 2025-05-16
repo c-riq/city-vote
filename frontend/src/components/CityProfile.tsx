@@ -8,7 +8,7 @@ import InfoIcon from '@mui/icons-material/Info';
 import VerifiedIcon from '@mui/icons-material/Verified';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { PUBLIC_API_HOST } from '../constants';
+import { PUBLIC_API_HOST, AUTOCOMPLETE_API_HOST } from '../constants';
 import { City } from '../backendTypes';
 
 interface CityProfileProps {
@@ -17,6 +17,15 @@ interface CityProfileProps {
 
 interface ExtendedCity extends City {
   registered?: boolean;
+  populationDate?: string;
+  officialWebsite?: string;
+  socialMedia?: {
+    twitter?: string;
+    facebook?: string;
+    instagram?: string;
+    youtube?: string;
+    linkedin?: string;
+  };
 }
 
 const CityProfile: React.FC<CityProfileProps> = ({ cities: initialCities }) => {
@@ -62,7 +71,51 @@ const CityProfile: React.FC<CityProfileProps> = ({ cities: initialCities }) => {
           registered: registeredFromUrl
         });
 
-        // Fetch additional city data if available
+        // First try to fetch detailed city data from the autocomplete API
+        try {
+          // Only attempt this for Wikidata QIDs
+          if (cityId.startsWith('Q')) {
+            console.log('Fetching detailed city data for QID:', cityId);
+            const autocompleteResponse = await fetch(AUTOCOMPLETE_API_HOST, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ 
+                action: 'getByQid', 
+                qid: cityId 
+              })
+            });
+
+            if (autocompleteResponse.ok) {
+              const autocompleteData = await autocompleteResponse.json();
+              console.log('Received detailed city data:', autocompleteData);
+              
+              if (autocompleteData.results && autocompleteData.results.length > 0) {
+                const cityDetails = autocompleteData.results[0];
+                
+                // Update city with detailed information
+                setCity(prevCity => ({
+                  ...prevCity!,
+                  name: cityDetails.name || prevCity!.name,
+                  country: cityDetails.countryName || prevCity!.country,
+                  population: cityDetails.population || prevCity!.population,
+                  populationDate: cityDetails.populationDate,
+                  lat: cityDetails.coordinates?.latitude || prevCity!.lat,
+                  lon: cityDetails.coordinates?.longitude || prevCity!.lon,
+                  officialWebsite: cityDetails.officialWebsite,
+                  socialMedia: cityDetails.socialMedia
+                }));
+                
+                // Skip the regular API call if we got detailed data
+                return;
+              }
+            }
+          }
+        } catch (err) {
+          console.warn('Failed to fetch detailed city data, falling back to basic data:', err);
+          // Continue with the regular API call
+        }
+
+        // Fetch additional city data if available (fallback)
         console.log('Fetching city data for ID:', cityId);
         const response = await fetch(PUBLIC_API_HOST, {
           method: 'POST',
@@ -246,7 +299,88 @@ const CityProfile: React.FC<CityProfileProps> = ({ cities: initialCities }) => {
                 <PeopleIcon sx={{ mr: 1, fontSize: 18 }} />
                 <Typography variant="body2">
                   {city.population.toLocaleString()} residents
+                  {city.populationDate && ` (as of ${city.populationDate})`}
                 </Typography>
+              </Box>
+            )}
+            
+            {city.officialWebsite && (
+              <Box sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
+                <PublicIcon sx={{ mr: 1, fontSize: 18 }} />
+                <Link 
+                  href={city.officialWebsite} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  variant="body2"
+                >
+                  Official Website
+                </Link>
+              </Box>
+            )}
+            
+            {/* Social Media Links */}
+            {city.socialMedia && Object.keys(city.socialMedia).length > 0 && (
+              <Box sx={{ mt: 2 }}>
+                <Typography variant="body2" color="text.secondary" gutterBottom>
+                  Social Media:
+                </Typography>
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                  {city.socialMedia.twitter && (
+                    <Chip 
+                      label="Twitter" 
+                      size="small"
+                      component="a"
+                      href={`https://twitter.com/${city.socialMedia.twitter}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      clickable
+                    />
+                  )}
+                  {city.socialMedia.facebook && (
+                    <Chip 
+                      label="Facebook" 
+                      size="small"
+                      component="a"
+                      href={`https://facebook.com/${city.socialMedia.facebook}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      clickable
+                    />
+                  )}
+                  {city.socialMedia.instagram && (
+                    <Chip 
+                      label="Instagram" 
+                      size="small"
+                      component="a"
+                      href={`https://instagram.com/${city.socialMedia.instagram}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      clickable
+                    />
+                  )}
+                  {city.socialMedia.youtube && (
+                    <Chip 
+                      label="YouTube" 
+                      size="small"
+                      component="a"
+                      href={`https://youtube.com/channel/${city.socialMedia.youtube}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      clickable
+                    />
+                  )}
+                  {city.socialMedia.linkedin && (
+                    <Chip 
+                      label="LinkedIn" 
+                      size="small"
+                      component="a"
+                      href={`https://linkedin.com/company/${city.socialMedia.linkedin}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      clickable
+                    />
+                  )}
+                </Box>
               </Box>
             )}
           </Box>
@@ -293,6 +427,37 @@ const CityProfile: React.FC<CityProfileProps> = ({ cities: initialCities }) => {
               <Typography variant="subtitle1" gutterBottom fontWeight="bold">
                 Location
               </Typography>
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                <Typography variant="body2" color="text.secondary">
+                  Coordinates: {city.lat.toFixed(2)}°N, {city.lon.toFixed(2)}°E
+                </Typography>
+              </Box>
+              <Box sx={{ 
+                mt: 1, 
+                p: 1, 
+                border: '1px solid #e0e0e0', 
+                borderRadius: 1,
+                bgcolor: '#f5f5f5',
+                textAlign: 'center'
+              }}>
+                <Link 
+                  href={`https://www.openstreetmap.org/?mlat=${city.lat}&mlon=${city.lon}&zoom=12`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  variant="body2"
+                >
+                  View on OpenStreetMap
+                </Link>
+                {' | '}
+                <Link 
+                  href={`https://www.google.com/maps?q=${city.lat},${city.lon}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  variant="body2"
+                >
+                  View on Google Maps
+                </Link>
+              </Box>
             </Box>
           ) : null}
           
