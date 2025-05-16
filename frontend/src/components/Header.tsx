@@ -44,14 +44,12 @@ interface HeaderProps {
   } | null;
   onLogout: () => void;
   onCreatePoll: () => void;
-  showMobileSlogan?: boolean;
 }
 
-function Header({ cityInfo, onLogout, onCreatePoll, showMobileSlogan = true }: HeaderProps) {
+function Header({ cityInfo, onLogout, onCreatePoll }: HeaderProps) {
   const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
   const [searchValue, setSearchValue] = useState<CityAutocompleteResult | null>(null);
   const [inputValue, setInputValue] = useState('');
   const [options, setOptions] = useState<CityAutocompleteResult[]>([]);

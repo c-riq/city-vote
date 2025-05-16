@@ -301,7 +301,6 @@ function App() {
           cityInfo={cityInfo}
           onLogout={handleLogout}
           onCreatePoll={() => setIsModalOpen(true)}
-          showMobileSlogan={true}
         />
         <Container sx={{ pt: '80px' }}>
           <AuthenticatedContent />
