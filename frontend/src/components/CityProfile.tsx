@@ -209,12 +209,14 @@ const CityProfile: React.FC<CityProfileProps> = ({ cities: initialCities }) => {
                 </Typography>
               </Box>
               
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <CalendarMonthIcon sx={{ mr: 1, fontSize: 18 }} />
-                <Typography variant="body2">
-                  Joined {joinDateFormatted}
-                </Typography>
-              </Box>
+              {city.registered && (
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  <CalendarMonthIcon sx={{ mr: 1, fontSize: 18 }} />
+                  <Typography variant="body2">
+                    Joined {joinDateFormatted}
+                  </Typography>
+                </Box>
+              )}
             </Box>
             {city.population > 0 && (
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -254,9 +256,9 @@ const CityProfile: React.FC<CityProfileProps> = ({ cities: initialCities }) => {
               alignItems: 'center',
               gap: 1
             }}>
-              <InfoIcon color="info" />
+              <InfoIcon sx={{ color: '#e3f2fd' }} />
               <Typography variant="body2" color="info.dark">
-                Want to register this city? Visit the <Link href="/register" color="info.main">Registration</Link> page to add it to the City Vote platform.
+                Want to register this city? Visit the <Link href="/register" color="primary" sx={{ fontWeight: 'bold', color: '#e3f2fd' }}>Registration</Link> page to add it to the City Vote platform.
               </Typography>
             </Box>
           )}
@@ -267,6 +269,17 @@ const CityProfile: React.FC<CityProfileProps> = ({ cities: initialCities }) => {
               <Typography variant="subtitle1" gutterBottom fontWeight="bold">
                 Location
               </Typography>
+              <Box 
+                component="iframe"
+                src={`https://www.openstreetmap.org/export/embed.html?bbox=${city.lon-0.1}%2C${city.lat-0.1}%2C${city.lon+0.1}%2C${city.lat+0.1}&layer=mapnik&marker=${city.lat}%2C${city.lon}`}
+                sx={{ 
+                  width: '100%', 
+                  height: '300px', 
+                  border: '1px solid #eee',
+                  borderRadius: 2
+                }}
+                title={`Map of ${city.name}`}
+              />
             </Box>
           ) : null}
           
