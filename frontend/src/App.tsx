@@ -350,9 +350,34 @@ function App() {
                       borderRadius: 4,
                       overflow: 'hidden',
                       display: 'flex',
+                      flexDirection: 'column',
                       justifyContent: 'center',
                       alignItems: 'center',
+                      position: 'relative'
                     }}>
+                      <Typography 
+                        variant="h6" 
+                        sx={{ 
+                          position: 'absolute',
+                          top: { xs: 0, sm: 0 },
+                          zIndex: 10,
+                          color: '#1a237e',
+                          fontWeight: 300,
+                          textAlign: 'center',
+                          letterSpacing: '0.12em',
+                          backgroundColor: 'rgba(255, 255, 255, 0.7)',
+                          backdropFilter: 'blur(4px)',
+                          px: 4,
+                          py: 1.5,
+                          borderRadius: 1,
+                          boxShadow: '0 4px 20px rgba(0,0,0,0.06)',
+                          border: '1px solid rgba(255, 255, 255, 0.9)',
+                          textTransform: 'none',
+                          fontFamily: '"Helvetica Neue", Arial, sans-serif'
+                        }}
+                      >
+                        Local Government Coordination
+                      </Typography>
                       <WorldMap />
                     </Box>
                     <Typography 
