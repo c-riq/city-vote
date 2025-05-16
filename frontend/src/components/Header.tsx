@@ -133,6 +133,8 @@ function Header({ cityInfo, onLogout, onCreatePoll }: HeaderProps) {
       // Assume all cities are not registered unless explicitly marked as registered
       const isRegistered = city.registered === true;
       navigate(`/city/${city.wikidataId}?name=${encodeURIComponent(city.name)}&country=${encodeURIComponent(city.countryName)}&registered=${isRegistered}`);
+      // Close the drawer when a city is selected
+      setDrawerOpen(false);
     }
   };
   
@@ -146,8 +148,6 @@ function Header({ cityInfo, onLogout, onCreatePoll }: HeaderProps) {
         <Box
           sx={{ width: 250 }}
           role="presentation"
-          onClick={toggleDrawer(false)}
-          onKeyDown={toggleDrawer(false)}
         >
           <Box sx={{ p: 2, display: 'flex', alignItems: 'center', gap: 2 }}>
             <img 
@@ -161,25 +161,37 @@ function Header({ cityInfo, onLogout, onCreatePoll }: HeaderProps) {
           </Box>
           <Divider />
           <List>
-            <ListItem button onClick={() => navigate('/')}>
+            <ListItem button onClick={() => {
+              navigate('/');
+              setDrawerOpen(false);
+            }}>
               <ListItemIcon>
                 <HomeIcon />
               </ListItemIcon>
               <ListItemText primary="Home" />
             </ListItem>
-            <ListItem button onClick={() => window.location.href = '/about-city-vote.html'}>
+            <ListItem button onClick={() => {
+              window.location.href = '/about-city-vote.html';
+              setDrawerOpen(false);
+            }}>
               <ListItemIcon>
                 <InfoIcon />
               </ListItemIcon>
               <ListItemText primary="About" />
             </ListItem>
-            <ListItem button onClick={() => navigate('/polls')}>
+            <ListItem button onClick={() => {
+              navigate('/polls');
+              setDrawerOpen(false);
+            }}>
               <ListItemIcon>
                 <PollIcon />
               </ListItemIcon>
               <ListItemText primary="Polls" />
             </ListItem>
-            <ListItem button onClick={() => navigate('/register')}>
+            <ListItem button onClick={() => {
+              navigate('/register');
+              setDrawerOpen(false);
+            }}>
               <ListItemIcon>
                 <AppRegistrationIcon />
               </ListItemIcon>
@@ -239,7 +251,14 @@ function Header({ cityInfo, onLogout, onCreatePoll }: HeaderProps) {
               variant="outlined"
               color="primary"
               fullWidth
-              onClick={cityInfo ? onLogout : () => navigate('/')}
+              onClick={() => {
+                if (cityInfo) {
+                  onLogout();
+                } else {
+                  navigate('/');
+                }
+                setDrawerOpen(false);
+              }}
               startIcon={cityInfo ? <LogoutIcon /> : <LoginIcon />}
             >
               {cityInfo ? 'Logout' : 'Login'}
