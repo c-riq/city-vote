@@ -11,10 +11,6 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { PUBLIC_API_HOST, AUTOCOMPLETE_API_HOST } from '../constants';
 import { City } from '../backendTypes';
 
-interface CityProfileProps {
-  cities?: Record<string, City>;
-}
-
 interface ExtendedCity extends City {
   registered?: boolean;
   populationDate?: string;
@@ -28,7 +24,7 @@ interface ExtendedCity extends City {
   };
 }
 
-const CityProfile: React.FC<CityProfileProps> = ({ cities: initialCities }) => {
+const CityProfile: React.FC = () => {
   const navigate = useNavigate();
   const { cityId } = useParams<{ cityId: string }>();
   const [city, setCity] = useState<ExtendedCity | null>(null);

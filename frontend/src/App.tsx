@@ -3,7 +3,7 @@ import { Button, Container, Typography, TextField, Box, Dialog,
   ThemeProvider  } from '@mui/material';
 import { useState } from 'react';
 import { VOTE_HOST, PUBLIC_API_HOST } from './constants';
-import { BrowserRouter, Routes, Route, Navigate, useParams, useNavigate, Link } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useParams, useNavigate, Link } from 'react-router-dom';
 import Poll from './components/Poll';
 import Polls from './components/Polls';
 import Header from './components/Header';
@@ -55,7 +55,7 @@ function CityRoute({ cityInfo, cities, theme }: {
   }
   
   // If user is not logged in, show the city profile
-  return <CityProfile cities={cities} />;
+  return <CityProfile />;
 }
 
 function App() {
