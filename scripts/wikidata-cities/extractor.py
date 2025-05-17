@@ -99,13 +99,11 @@ def extract_city_data(record, best_type):
     """Extract city data from a Wikidata record."""
     city_wikidata_id = pydash.get(record, 'id')
     city_label_english = pydash.get(record, 'labels.en.value')
-    country_wikidata_id = ''
     ancestor_type = best_type['ancestor_label']
     class_label = best_type['subclass_label']
     
-    # Extract country ID
-    if pydash.has(record, 'claims.P17'):
-        country_wikidata_id = pydash.get(record, 'claims.P17[0].mainsnak.datavalue.value.id')
+    # Extract country ID and date
+    country_wikidata_id, country_date = extract_country(record)
     
     # Extract population and date
     population, population_date = extract_population(record)
@@ -127,6 +125,7 @@ def extract_city_data(record, best_type):
         "cityWikidataId": city_wikidata_id,
         "cityLabelEnglish": city_label_english,
         "countryWikidataId": country_wikidata_id,
+        "countryDate": country_date,
         "ancestorType": ancestor_type,
         "classLabel": class_label,
         "population": population,
@@ -184,6 +183,67 @@ def extract_population(record):
             population_date = sorted_data[0]['date']
     
     return population, population_date
+
+def extract_country(record):
+    """Extract country and date from a Wikidata record."""
+    country_wikidata_id = ''
+    country_date = None
+    
+    if pydash.has(record, 'claims.P17'):
+        country_claims = pydash.get(record, 'claims.P17', [])
+        valid_country_data = []
+        
+        for country_claim in country_claims:
+            if pydash.has(country_claim, 'mainsnak.datavalue.value.id'):
+                country_id = pydash.get(country_claim, 'mainsnak.datavalue.value.id')
+                
+                # Extract date
+                parsed_date = None
+                country_date_str = None
+                if pydash.has(country_claim, 'qualifiers.P585'):
+                    date_qualifier = pydash.get(country_claim, 'qualifiers.P585[0]')
+                    if pydash.has(date_qualifier, 'datavalue.value.time'):
+                        time_str = pydash.get(date_qualifier, 'datavalue.value.time')
+                        parsed_date, country_date_str = parse_wikidata_date(time_str)
+                
+                # Check for preferred rank
+                rank = pydash.get(country_claim, 'rank', 'normal')
+                is_preferred = (rank == 'preferred')
+                
+                valid_country_data.append({
+                    'id': country_id,
+                    'date': country_date_str,
+                    'parsed_date': parsed_date,
+                    'is_preferred': is_preferred
+                })
+        
+        if valid_country_data:
+            # First check for preferred rank
+            preferred_countries = [c for c in valid_country_data if c['is_preferred']]
+            if preferred_countries:
+                # If there are multiple preferred countries, sort by date
+                if len(preferred_countries) > 1:
+                    sorted_data = sorted(
+                        preferred_countries,
+                        key=lambda x: (x['parsed_date'] is None, x['parsed_date'] or datetime.datetime.min),
+                        reverse=True
+                    )
+                    country_wikidata_id = sorted_data[0]['id']
+                    country_date = sorted_data[0]['date']
+                else:
+                    country_wikidata_id = preferred_countries[0]['id']
+                    country_date = preferred_countries[0]['date']
+            else:
+                # Sort by date using parsed datetime objects
+                sorted_data = sorted(
+                    valid_country_data,
+                    key=lambda x: (x['parsed_date'] is None, x['parsed_date'] or datetime.datetime.min),
+                    reverse=True
+                )
+                country_wikidata_id = sorted_data[0]['id']
+                country_date = sorted_data[0]['date']
+    
+    return country_wikidata_id, country_date
 
 def extract_coordinates(record):
     """Extract coordinates from a Wikidata record."""

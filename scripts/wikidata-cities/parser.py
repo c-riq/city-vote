@@ -58,8 +58,8 @@ def save_results(cities, filename):
     """Save the extracted cities to a JSON file with each record on a single line."""
     import json
     
-    header = ["cityWikidataId", "cityLabelEnglish", "countryWikidataId", "ancestorType", 
-              "classLabel", "population", "populationDate", "latitude", "longitude", 
+    header = ["cityWikidataId", "cityLabelEnglish", "countryWikidataId", "countryDate", "ancestorType",
+              "classLabel", "population", "populationDate", "latitude", "longitude",
               "officialWebsite", "socialMedia"]
     
     with open(filename, 'w', encoding='utf-8') as f:
@@ -70,6 +70,7 @@ def save_results(cities, filename):
                 city["cityWikidataId"],
                 city["cityLabelEnglish"],
                 city["countryWikidataId"],
+                city["countryDate"],
                 city["ancestorType"],
                 city["classLabel"],
                 city["population"],

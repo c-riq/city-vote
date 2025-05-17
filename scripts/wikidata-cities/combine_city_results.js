@@ -74,18 +74,18 @@ function combineData(files) {
         }
         
         // Assuming the order in the source is:
-        // [cityWikidataId, cityLabelEnglish, countryWikidataId, ancestorType, classLabel, population, populationDate, latitude, longitude, officialWebsite, socialMedia]
+        // [cityWikidataId, cityLabelEnglish, countryWikidataId, countryDate, ancestorType, classLabel, population, populationDate, latitude, longitude, officialWebsite, socialMedia]
         return [
           city[0],                // cityWikidataId
           city[1],                // cityLabelEnglish
           city[2],                // countryWikidataId
-          city[5],                // population
-          city[6],                // populationDate
+          city[6],                // population
+          city[7],                // populationDate
           latitude,               // latitude
           longitude,              // longitude
-          city[9],                // officialWebsite
-          city[10]                // socialMedia
-        ]; // Skip ancestorType (index 3) and classLabel (index 4)
+          city[10],               // officialWebsite
+          city[11]                // socialMedia
+        ]; // Skip countryDate (index 3), ancestorType (index 4) and classLabel (index 5)
       });
       
       allCities = allCities.concat(transformedCities);
