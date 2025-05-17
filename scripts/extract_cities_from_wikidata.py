@@ -334,8 +334,7 @@ def process_lines(process_id, city_subclasses, skip_lines, num_processes=4, max_
                                 save_results(cities, output_file)
                                 print(f"Process {process_id}: Saved {len(cities)} cities to {output_file}")
                             
-                            # Only process each entity once
-                            break
+                            # Process all entities (removed break statement that was causing early exit)
                 except json.decoder.JSONDecodeError:
                     continue
     
@@ -363,7 +362,7 @@ def main():
     skip_lines = 0
     
     # Maximum number of lines to process (None for no limit)
-    max_lines = None # Process the entire dump
+    max_lines = 10_000 # Process the entire dump
     
     # Load city and municipality subclasses (shared by all processes)
     city_subclasses = load_city_subclasses()
