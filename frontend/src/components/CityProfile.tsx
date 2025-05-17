@@ -23,6 +23,8 @@ interface ExtendedCity extends City {
     youtube?: string;
     linkedin?: string;
   };
+  supersedes_duplicates?: string[];
+  superseded_by?: string;
 }
 
 const CityProfile: React.FC = () => {
@@ -85,10 +87,22 @@ const CityProfile: React.FC = () => {
 
             if (autocompleteResponse.ok) {
               const autocompleteData = await autocompleteResponse.json();
-              console.log('Received detailed city data:', autocompleteData);
+              // Received detailed city data
               
               if (autocompleteData.results && autocompleteData.results.length > 0) {
                 const cityDetails = autocompleteData.results[0];
+                
+                // Check if this city is superseded by another city
+                if (cityDetails.superseded_by && cityDetails.superseded_by !== cityId) {
+                }
+                // Check if the returned wikidataId is different from the requested cityId
+                else if (cityDetails.wikidataId && cityDetails.wikidataId !== cityId && cityDetails.supersedes_duplicates?.includes(cityId)) {
+                  
+                  // We already have the primary city details, so we can redirect directly
+                  const redirectUrl = `/city/${cityDetails.wikidataId}?name=${encodeURIComponent(cityDetails.name)}&country=${encodeURIComponent(cityDetails.countryName || '')}`;
+                  navigate(redirectUrl);
+                  return;
+                }
                 
                 // Update city with detailed information
                 setCity(prevCity => ({
@@ -100,7 +114,9 @@ const CityProfile: React.FC = () => {
                   lat: cityDetails.coordinates?.latitude || prevCity!.lat,
                   lon: cityDetails.coordinates?.longitude || prevCity!.lon,
                   officialWebsite: cityDetails.officialWebsite,
-                  socialMedia: cityDetails.socialMedia
+                  socialMedia: cityDetails.socialMedia,
+                  supersedes_duplicates: cityDetails.supersedes_duplicates,
+                  superseded_by: cityDetails.superseded_by
                 }));
                 
                 // Skip the regular API call if we got detailed data
@@ -110,7 +126,6 @@ const CityProfile: React.FC = () => {
           } 
           // For non-Wikidata IDs, search by city name
           else {
-            console.log('Searching for city by name:', cityName);
             const autocompleteResponse = await fetch(AUTOCOMPLETE_API_HOST, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
@@ -123,7 +138,6 @@ const CityProfile: React.FC = () => {
 
             if (autocompleteResponse.ok) {
               const autocompleteData = await autocompleteResponse.json();
-              console.log('Received search results:', autocompleteData);
               
               if (autocompleteData.results && autocompleteData.results.length > 0) {
                 // Find the city with the maximum population
@@ -135,6 +149,52 @@ const CityProfile: React.FC = () => {
                     cityDetails = city;
                     maxPopulation = city.population;
                   }
+                }
+                
+                
+                // Check if this city is superseded by another city
+                if (cityDetails.superseded_by) {
+                  
+                  // Fetch details of the superseding city
+                  try {
+                    const supersedingResponse = await fetch(AUTOCOMPLETE_API_HOST, {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({
+                        action: 'getByQid',
+                        qid: cityDetails.superseded_by
+                      })
+                    });
+                    
+                    if (supersedingResponse.ok) {
+                      const supersedingData = await supersedingResponse.json();
+                      
+                      if (supersedingData.results && supersedingData.results.length > 0) {
+                        const supersedingCity = supersedingData.results[0];
+                        
+                        // Redirect to the superseding city with its correct name and country
+                        const redirectUrl = `/city/${cityDetails.superseded_by}?name=${encodeURIComponent(supersedingCity.name)}&country=${encodeURIComponent(supersedingCity.countryName || '')}`;
+                        navigate(redirectUrl);
+                        return;
+                      } else {
+                        console.log('No results found for superseding city');
+                      }
+                    } else {
+                      console.log('Failed to fetch superseding city details, status:', supersedingResponse.status);
+                    }
+                  } catch (err) {
+                    console.error('Error fetching superseding city details:', err);
+                  }
+                  
+                  // Fallback if we couldn't get superseding city details
+                  navigate(`/city/${cityDetails.superseded_by}`);
+                  return;
+                }
+                
+                // If this city has a Wikidata ID and it's different from the current URL, update the URL
+                if (cityDetails.wikidataId && cityDetails.wikidataId !== cityId) {
+                  navigate(`/city/${cityDetails.wikidataId}?name=${encodeURIComponent(cityDetails.name)}&country=${encodeURIComponent(cityDetails.countryName || '')}`);
+                  return;
                 }
                 
                 // Update city with detailed information from the first search result
@@ -149,7 +209,9 @@ const CityProfile: React.FC = () => {
                   officialWebsite: cityDetails.officialWebsite,
                   socialMedia: cityDetails.socialMedia,
                   // Store the Wikidata ID for reference
-                  wikidataId: cityDetails.wikidataId
+                  wikidataId: cityDetails.wikidataId,
+                  supersedes_duplicates: cityDetails.supersedes_duplicates,
+                  superseded_by: cityDetails.superseded_by
                 }));
                 
                 // Skip the regular API call if we got detailed data
@@ -446,6 +508,137 @@ const CityProfile: React.FC = () => {
                     />
                   )}
                 </Box>
+              </Box>
+            )}
+
+            {/* Duplication Relationship Information */}
+            {(city.supersedes_duplicates?.length || city.superseded_by) && (
+              <Box sx={{ mt: 2 }}>
+                <Typography variant="body2" color="text.secondary" gutterBottom>
+                  Duplication Information:
+                </Typography>
+                
+                {city.superseded_by && (
+                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                    <Typography variant="body2" color="warning.main">
+                      This city is a duplicate of{' '}
+                      <Link
+                        component="button"
+                        color="warning.main"
+                        sx={{ fontWeight: 'bold', textDecoration: 'underline', border: 'none', background: 'none', padding: 0, cursor: 'pointer' }}
+                        onClick={async (e) => {
+                          e.preventDefault();
+                          try {
+                            console.log(`Fetching details for superseding city ${city.superseded_by}...`);
+                            const supersedingResponse = await fetch(AUTOCOMPLETE_API_HOST, {
+                              method: 'POST',
+                              headers: { 'Content-Type': 'application/json' },
+                              body: JSON.stringify({
+                                action: 'getByQid',
+                                qid: city.superseded_by
+                              })
+                            });
+                            
+                            if (supersedingResponse.ok) {
+                              const supersedingData = await supersedingResponse.json();
+                              console.log('Superseding city data from link:', JSON.stringify(supersedingData, null, 2));
+                              console.log('Superseding city data:', supersedingData);
+                              
+                              if (supersedingData.results && supersedingData.results.length > 0) {
+                                const supersedingCity = supersedingData.results[0];
+                                console.log('Redirecting to superseding city:', supersedingCity);
+                                
+                                // Navigate to the superseding city with its correct name and country
+                                const redirectUrl = `/city/${city.superseded_by}?name=${encodeURIComponent(supersedingCity.name)}&country=${encodeURIComponent(supersedingCity.countryName || '')}`;
+                                console.log('Redirect URL:', redirectUrl);
+                                navigate(redirectUrl);
+                                return;
+                              } else {
+                                console.log('No results found for superseding city');
+                              }
+                            } else {
+                              console.log('Failed to fetch superseding city details, status:', supersedingResponse.status);
+                            }
+                          } catch (err) {
+                            console.error('Error fetching superseding city details:', err);
+                          }
+                          
+                          // Fallback if we couldn't get superseding city details
+                          console.log('Using fallback navigation to superseding city');
+                          navigate(`/city/${city.superseded_by}`);
+                        }}
+                      >
+                        {city.superseded_by}
+                      </Link>
+                    </Typography>
+                  </Box>
+                )}
+                
+                {city.supersedes_duplicates && city.supersedes_duplicates.length > 0 && (
+                  <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
+                    <Typography variant="body2" color="success.main">
+                      This city supersedes the following duplicates:
+                    </Typography>
+                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, ml: 2 }}>
+                      {city.supersedes_duplicates
+                        .filter(id => id !== cityId && id !== city.wikidataId) // Filter out self-references
+                        .map((duplicateId, index) => (
+                        <Chip
+                          key={duplicateId}
+                          label={duplicateId}
+                          size="small"
+                          component="button"
+                          onClick={async (e) => {
+                            e.preventDefault();
+                            console.log(`Clicked on duplicate city chip: ${duplicateId}`);
+                            try {
+                              // Fetch details of the duplicate city
+                              console.log(`Fetching details for duplicate city ${duplicateId}...`);
+                              const duplicateResponse = await fetch(AUTOCOMPLETE_API_HOST, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                  action: 'getByQid',
+                                  qid: duplicateId
+                                })
+                              });
+                              
+                              if (duplicateResponse.ok) {
+                                const duplicateData = await duplicateResponse.json();
+                                console.log('Duplicate city data:', JSON.stringify(duplicateData, null, 2));
+                                
+                                if (duplicateData.results && duplicateData.results.length > 0) {
+                                  const duplicateCity = duplicateData.results[0];
+                                  console.log('Redirecting to duplicate city:', duplicateCity);
+                                  
+                                  // Navigate to the duplicate city with its correct name and country
+                                  const redirectUrl = `/city/${duplicateId}?name=${encodeURIComponent(duplicateCity.name)}&country=${encodeURIComponent(duplicateCity.countryName || '')}`;
+                                  console.log('Redirect URL:', redirectUrl);
+                                  navigate(redirectUrl);
+                                  return;
+                                } else {
+                                  console.log('No results found for duplicate city');
+                                }
+                              } else {
+                                console.log('Failed to fetch duplicate city details, status:', duplicateResponse.status);
+                              }
+                            } catch (err) {
+                              console.error('Error fetching duplicate city details:', err);
+                            }
+                            
+                            // Fallback if we couldn't get duplicate city details
+                            console.log('Using fallback navigation to duplicate city');
+                            navigate(`/city/${duplicateId}`);
+                          }}
+                          clickable
+                          color="primary"
+                          variant="outlined"
+                          sx={{ fontSize: '0.7rem' }}
+                        />
+                      ))}
+                    </Box>
+                  </Box>
+                )}
               </Box>
             )}
           </Box>
