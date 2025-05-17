@@ -9,6 +9,9 @@ import os
 import time
 import multiprocessing
 import sys
+import datetime
+import re
+from dateutil import parser as date_parser
 
 # Path to the Wikidata dump file
 wikidata_dump_path = '/Users/c/Desktop/project/data_20221022/wikidata/wikidata-20220103-all.json.gz'
@@ -38,9 +41,51 @@ def load_city_subclasses():
             'ancestorLabel': ancestor_label,
             'subclassLabel': subclass_label
         }
-    
     print(f"Loaded {len(subclass_map)} city subclasses")
     return subclass_map
+
+def parse_wikidata_date(time_str):
+    """
+    Parse a Wikidata time string into a normalized date format for proper comparison.
+    
+    Args:
+        time_str: Wikidata time string (e.g., "+2019-00-00T00:00:00Z")
+        
+    Returns:
+        tuple: (datetime object or None, original date string)
+    """
+    if not time_str:
+        return None, None
+    
+    # Remove leading + if present
+    if time_str.startswith('+'):
+        time_str = time_str[1:]
+    
+    # Extract date part (before T)
+    if 'T' in time_str:
+        date_part = time_str.split('T')[0]
+    else:
+        date_part = time_str
+    
+    # Handle partial dates
+    if '-00-00' in date_part:  # Year only
+        year = int(date_part.split('-')[0])
+        # Use middle of the year for sorting
+        parsed_date = datetime.datetime(year, 7, 1)
+        return parsed_date, str(year)
+    elif re.match(r'\d{4}-\d{2}-00', date_part):  # Year and month
+        year, month = map(int, date_part.split('-')[:2])
+        # Use middle of the month for sorting
+        parsed_date = datetime.datetime(year, month, 15)
+        return parsed_date, f"{year}-{month:02d}"
+    else:  # Full date or other format
+        try:
+            parsed_date = date_parser.parse(date_part)
+            return parsed_date, date_part
+        except (ValueError, TypeError):
+            # If parsing fails, return None but keep original string
+            return None, date_part
+
 
 def save_results(cities, filename):
     """Save the extracted cities to a JSON file."""
@@ -184,36 +229,29 @@ def process_lines(process_id, city_subclasses, skip_lines, num_processes=4, max_
                                             
                                             # Extract date
                                             pop_date = None
+                                            parsed_date = None
                                             if pydash.has(pop_claim, 'qualifiers.P585'):
                                                 date_qualifier = pydash.get(pop_claim, 'qualifiers.P585[0]')
                                                 if pydash.has(date_qualifier, 'datavalue.value.time'):
                                                     # Wikidata time format is like "+2019-00-00T00:00:00Z"
                                                     time_str = pydash.get(date_qualifier, 'datavalue.value.time')
-                                                    # Extract just the year or full date as needed
-                                                    if time_str.startswith('+'):
-                                                        time_str = time_str[1:]  # Remove leading '+'
-                                                    # Extract date part (before T)
-                                                    if 'T' in time_str:
-                                                        date_part = time_str.split('T')[0]
-                                                        # Handle cases with month/day as 00
-                                                        if date_part.endswith('-00-00'):
-                                                            pop_date = date_part.split('-')[0]  # Just the year
-                                                        else:
-                                                            pop_date = date_part  # Full date
+                                                    # Parse the date properly
+                                                    parsed_date, pop_date = parse_wikidata_date(time_str)
                                             
                                             valid_population_data.append({
                                                 'value': pop_value,
-                                                'date': pop_date
+                                                'date': pop_date,
+                                                'parsed_date': parsed_date
                                             })
                                         except ValueError:
                                             continue
                                 
                                 # Use the most recent population data if available
                                 if valid_population_data:
-                                    # Sort by date (None dates last)
+                                    # Sort by date using parsed datetime objects for proper comparison
                                     sorted_data = sorted(
                                         valid_population_data,
-                                        key=lambda x: (x['date'] is None, x['date'] or ''),
+                                        key=lambda x: (x['parsed_date'] is None, x['parsed_date'] or datetime.datetime.min),
                                         reverse=True
                                     )
                                     population = sorted_data[0]['value']
@@ -325,7 +363,7 @@ def main():
     skip_lines = 0
     
     # Maximum number of lines to process (None for no limit)
-    max_lines = 100_000  # Process the entire dump
+    max_lines = None # Process the entire dump
     
     # Load city and municipality subclasses (shared by all processes)
     city_subclasses = load_city_subclasses()
