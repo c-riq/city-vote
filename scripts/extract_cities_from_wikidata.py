@@ -119,35 +119,67 @@ def process_lines(process_id, city_subclasses, skip_lines, num_processes=4, max_
                     
                     # Check if the record has instance of (P31) and has an English label
                     if pydash.has(record, 'claims.P31') and pydash.get(record, 'labels.en.value'):
+                        # Find all matching city types
+                        matching_city_types = []
                         for p31 in pydash.get(record, 'claims.P31'):
-                            # Check if it's one of our target city or municipality types
                             city_type_id = pydash.get(p31, 'mainsnak.datavalue.value.id')
                             if city_type_id in city_subclasses:
-                                # Extract required information
-                                city_wikidata_id = pydash.get(record, 'id')
-                                city_label_english = pydash.get(record, 'labels.en.value')
-                                country_wikidata_id = ''
-                                ancestor_type = city_subclasses[city_type_id]['ancestorLabel']
+                                matching_city_types.append({
+                                    'id': city_type_id,
+                                    'ancestor_label': city_subclasses[city_type_id]['ancestorLabel']
+                                })
+                        
+                        # If we found matching city types, use the most specific one
+                        # Preference order: city > municipality > other types
+                        if matching_city_types:
+                            # Sort by specificity (city is most specific)
+                            def get_type_priority(type_info):
+                                label = type_info['ancestor_label'].lower()
+                                if 'city' in label:
+                                    return 0  # Highest priority
+                                elif 'municipality' in label:
+                                    return 1  # Second priority
+                                else:
+                                    return 2  # Lowest priority
+                            
+                            matching_city_types.sort(key=get_type_priority)
+                            best_type = matching_city_types[0]
+                            
+                            # Extract required information
+                            city_wikidata_id = pydash.get(record, 'id')
+                            city_label_english = pydash.get(record, 'labels.en.value')
+                            country_wikidata_id = ''
+                            ancestor_type = best_type['ancestor_label']
+                            
+                            # Extract country ID if available (P17 property)
+                            if pydash.has(record, 'claims.P17'):
+                                country_wikidata_id = pydash.get(record, 'claims.P17[0].mainsnak.datavalue.value.id')
+                            
+                            # Extract population if available (P1082 property)
+                            population = None
+                            population_date = None
+                            if pydash.has(record, 'claims.P1082'):
+                                # Get all population claims and sort by date (newest first)
+                                population_claims = pydash.get(record, 'claims.P1082', [])
+                                valid_population_data = []
                                 
-                                # Extract country ID if available (P17 property)
-                                if pydash.has(record, 'claims.P17'):
-                                    country_wikidata_id = pydash.get(record, 'claims.P17[0].mainsnak.datavalue.value.id')
-                                
-                                # Extract population if available (P1082 property)
-                                population = None
-                                population_date = None
-                                if pydash.has(record, 'claims.P1082'):
-                                    population_claim = pydash.get(record, 'claims.P1082[0]')
-                                    if pydash.has(population_claim, 'mainsnak.datavalue.value.amount'):
+                                for pop_claim in population_claims:
+                                    if pydash.has(pop_claim, 'mainsnak.datavalue.value.amount'):
                                         # Population values in Wikidata are prefixed with '+' and may include precision
-                                        population_str = pydash.get(population_claim, 'mainsnak.datavalue.value.amount')
+                                        population_str = pydash.get(pop_claim, 'mainsnak.datavalue.value.amount')
                                         try:
                                             # Remove '+' prefix and convert to integer
-                                            population = int(population_str.lstrip('+'))
+                                            pop_value = int(population_str.lstrip('+'))
                                             
-                                            # Try to extract the point in time qualifier (P585) for population date
-                                            if pydash.has(population_claim, 'qualifiers.P585'):
-                                                date_qualifier = pydash.get(population_claim, 'qualifiers.P585[0]')
+                                            # Validate population (reject unrealistic values)
+                                            # Max realistic city population ~40 million (greater than any known city)
+                                            if pop_value <= 0 or pop_value > 40000000:
+                                                continue
+                                            
+                                            # Extract date
+                                            pop_date = None
+                                            if pydash.has(pop_claim, 'qualifiers.P585'):
+                                                date_qualifier = pydash.get(pop_claim, 'qualifiers.P585[0]')
                                                 if pydash.has(date_qualifier, 'datavalue.value.time'):
                                                     # Wikidata time format is like "+2019-00-00T00:00:00Z"
                                                     time_str = pydash.get(date_qualifier, 'datavalue.value.time')
@@ -159,92 +191,109 @@ def process_lines(process_id, city_subclasses, skip_lines, num_processes=4, max_
                                                         date_part = time_str.split('T')[0]
                                                         # Handle cases with month/day as 00
                                                         if date_part.endswith('-00-00'):
-                                                            population_date = date_part.split('-')[0]  # Just the year
+                                                            pop_date = date_part.split('-')[0]  # Just the year
                                                         else:
-                                                            population_date = date_part  # Full date
+                                                            pop_date = date_part  # Full date
+                                            
+                                            valid_population_data.append({
+                                                'value': pop_value,
+                                                'date': pop_date
+                                            })
                                         except ValueError:
-                                            population = None
+                                            continue
                                 
-                                # Extract coordinates if available (P625 property)
-                                coordinates = None
-                                if pydash.has(record, 'claims.P625'):
-                                    coord_claim = pydash.get(record, 'claims.P625[0]')
-                                    if pydash.has(coord_claim, 'mainsnak.datavalue.value'):
-                                        coord_value = pydash.get(coord_claim, 'mainsnak.datavalue.value')
-                                        latitude = pydash.get(coord_value, 'latitude')
-                                        longitude = pydash.get(coord_value, 'longitude')
-                                        if latitude is not None and longitude is not None:
-                                            coordinates = {
-                                                "latitude": latitude,
-                                                "longitude": longitude
-                                            }
-                                
-                                # Extract official website if available (P856 property)
-                                official_website = None
-                                if pydash.has(record, 'claims.P856'):
-                                    website_claim = pydash.get(record, 'claims.P856[0]')
-                                    if pydash.has(website_claim, 'mainsnak.datavalue.value'):
-                                        official_website = pydash.get(website_claim, 'mainsnak.datavalue.value')
-                                
-                                # Extract social media accounts
-                                social_media = {}
-                                
-                                # Twitter username (P2002)
-                                if pydash.has(record, 'claims.P2002'):
-                                    twitter_claim = pydash.get(record, 'claims.P2002[0]')
-                                    if pydash.has(twitter_claim, 'mainsnak.datavalue.value'):
-                                        twitter_username = pydash.get(twitter_claim, 'mainsnak.datavalue.value')
-                                        social_media['twitter'] = twitter_username
-                                
-                                # Facebook ID (P2013)
-                                if pydash.has(record, 'claims.P2013'):
-                                    facebook_claim = pydash.get(record, 'claims.P2013[0]')
-                                    if pydash.has(facebook_claim, 'mainsnak.datavalue.value'):
-                                        facebook_id = pydash.get(facebook_claim, 'mainsnak.datavalue.value')
-                                        social_media['facebook'] = facebook_id
-                                
-                                # Instagram username (P2003)
-                                if pydash.has(record, 'claims.P2003'):
-                                    instagram_claim = pydash.get(record, 'claims.P2003[0]')
-                                    if pydash.has(instagram_claim, 'mainsnak.datavalue.value'):
-                                        instagram_username = pydash.get(instagram_claim, 'mainsnak.datavalue.value')
-                                        social_media['instagram'] = instagram_username
-                                
-                                # YouTube channel ID (P2397)
-                                if pydash.has(record, 'claims.P2397'):
-                                    youtube_claim = pydash.get(record, 'claims.P2397[0]')
-                                    if pydash.has(youtube_claim, 'mainsnak.datavalue.value'):
-                                        youtube_id = pydash.get(youtube_claim, 'mainsnak.datavalue.value')
-                                        social_media['youtube'] = youtube_id
-                                
-                                # LinkedIn company ID (P4264)
-                                if pydash.has(record, 'claims.P4264'):
-                                    linkedin_claim = pydash.get(record, 'claims.P4264[0]')
-                                    if pydash.has(linkedin_claim, 'mainsnak.datavalue.value'):
-                                        linkedin_id = pydash.get(linkedin_claim, 'mainsnak.datavalue.value')
-                                        social_media['linkedin'] = linkedin_id
-                                
-                                # Add to cities list
-                                city_data = {
-                                    "cityWikidataId": city_wikidata_id,
-                                    "cityLabelEnglish": city_label_english,
-                                    "countryWikidataId": country_wikidata_id,
-                                    "ancestorType": ancestor_type,
-                                    "population": population,
-                                    "populationDate": population_date,
-                                    "coordinates": coordinates,
-                                    "officialWebsite": official_website,
-                                    "socialMedia": social_media if social_media else None
-                                }
-                                cities.append(city_data)
-                                
-                                # Save intermediate results periodically
-                                if len(cities) % save_interval == 0:
-                                    output_file = f"{output_dir}/cities_process_{process_id}_{len(cities)}.json"
-                                    save_results(cities, output_file)
-                                    print(f"Process {process_id}: Saved {len(cities)} cities to {output_file}")
-                                
-                                break  # Only add once if it's a city/municipality
+                                # Use the most recent population data if available
+                                if valid_population_data:
+                                    # Sort by date (None dates last)
+                                    sorted_data = sorted(
+                                        valid_population_data,
+                                        key=lambda x: (x['date'] is None, x['date'] or ''),
+                                        reverse=True
+                                    )
+                                    population = sorted_data[0]['value']
+                                    population_date = sorted_data[0]['date']
+                            
+                            # Extract coordinates if available (P625 property)
+                            coordinates = None
+                            if pydash.has(record, 'claims.P625'):
+                                coord_claim = pydash.get(record, 'claims.P625[0]')
+                                if pydash.has(coord_claim, 'mainsnak.datavalue.value'):
+                                    coord_value = pydash.get(coord_claim, 'mainsnak.datavalue.value')
+                                    latitude = pydash.get(coord_value, 'latitude')
+                                    longitude = pydash.get(coord_value, 'longitude')
+                                    if latitude is not None and longitude is not None:
+                                        coordinates = {
+                                            "latitude": latitude,
+                                            "longitude": longitude
+                                        }
+                            
+                            # Extract official website if available (P856 property)
+                            official_website = None
+                            if pydash.has(record, 'claims.P856'):
+                                website_claim = pydash.get(record, 'claims.P856[0]')
+                                if pydash.has(website_claim, 'mainsnak.datavalue.value'):
+                                    official_website = pydash.get(website_claim, 'mainsnak.datavalue.value')
+                            
+                            # Extract social media accounts
+                            social_media = {}
+                            
+                            # Twitter username (P2002)
+                            if pydash.has(record, 'claims.P2002'):
+                                twitter_claim = pydash.get(record, 'claims.P2002[0]')
+                                if pydash.has(twitter_claim, 'mainsnak.datavalue.value'):
+                                    twitter_username = pydash.get(twitter_claim, 'mainsnak.datavalue.value')
+                                    social_media['twitter'] = twitter_username
+                            
+                            # Facebook ID (P2013)
+                            if pydash.has(record, 'claims.P2013'):
+                                facebook_claim = pydash.get(record, 'claims.P2013[0]')
+                                if pydash.has(facebook_claim, 'mainsnak.datavalue.value'):
+                                    facebook_id = pydash.get(facebook_claim, 'mainsnak.datavalue.value')
+                                    social_media['facebook'] = facebook_id
+                            
+                            # Instagram username (P2003)
+                            if pydash.has(record, 'claims.P2003'):
+                                instagram_claim = pydash.get(record, 'claims.P2003[0]')
+                                if pydash.has(instagram_claim, 'mainsnak.datavalue.value'):
+                                    instagram_username = pydash.get(instagram_claim, 'mainsnak.datavalue.value')
+                                    social_media['instagram'] = instagram_username
+                            
+                            # YouTube channel ID (P2397)
+                            if pydash.has(record, 'claims.P2397'):
+                                youtube_claim = pydash.get(record, 'claims.P2397[0]')
+                                if pydash.has(youtube_claim, 'mainsnak.datavalue.value'):
+                                    youtube_id = pydash.get(youtube_claim, 'mainsnak.datavalue.value')
+                                    social_media['youtube'] = youtube_id
+                            
+                            # LinkedIn company ID (P4264)
+                            if pydash.has(record, 'claims.P4264'):
+                                linkedin_claim = pydash.get(record, 'claims.P4264[0]')
+                                if pydash.has(linkedin_claim, 'mainsnak.datavalue.value'):
+                                    linkedin_id = pydash.get(linkedin_claim, 'mainsnak.datavalue.value')
+                                    social_media['linkedin'] = linkedin_id
+                            
+                            # Add to cities list
+                            city_data = {
+                                "cityWikidataId": city_wikidata_id,
+                                "cityLabelEnglish": city_label_english,
+                                "countryWikidataId": country_wikidata_id,
+                                "ancestorType": ancestor_type,
+                                "population": population,
+                                "populationDate": population_date,
+                                "coordinates": coordinates,
+                                "officialWebsite": official_website,
+                                "socialMedia": social_media if social_media else None
+                            }
+                            cities.append(city_data)
+                            
+                            # Save intermediate results periodically
+                            if len(cities) % save_interval == 0:
+                                output_file = f"{output_dir}/cities_process_{process_id}_{len(cities)}.json"
+                                save_results(cities, output_file)
+                                print(f"Process {process_id}: Saved {len(cities)} cities to {output_file}")
+                            
+                            # Only process each entity once
+                            break
                 except json.decoder.JSONDecodeError:
                     continue
     
