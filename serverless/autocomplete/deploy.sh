@@ -19,6 +19,10 @@ fi
 REGION="us-east-1"      # N. Virginia
 ZIP_FILE="function.zip"
 
+# Generate split CSV files
+echo "Generating split CSV files..."
+npm run split-csv
+
 # Build the TypeScript code
 echo "Building TypeScript..."
 npm run build
@@ -34,10 +38,21 @@ fi
 TEMP_DIR=$(mktemp -d)
 echo "Created temporary directory: $TEMP_DIR"
 
-# Copy function file, dependencies, and CSV data file
+# Copy function file, dependencies, and CSV data files
 cp -r dist/* "$TEMP_DIR/"
 cp package.json "$TEMP_DIR/"
+
+# Copy the original CSV file
 cp src/city-data.csv "$TEMP_DIR/"
+
+# Create directories for split CSV files
+mkdir -p "$TEMP_DIR/split_by_letter"
+mkdir -p "$TEMP_DIR/split_by_qid"
+
+# Copy split CSV files
+echo "Copying split CSV files..."
+cp -r src/split_by_letter/* "$TEMP_DIR/split_by_letter/"
+cp -r src/split_by_qid/* "$TEMP_DIR/split_by_qid/"
 
 # Install dependencies
 cd "$TEMP_DIR"
@@ -67,12 +82,12 @@ aws lambda wait function-updated \
     --function-name $FUNCTION_NAME \
     --region $REGION
 
-# Set memory to 256 MB and timeout to 5 seconds
-echo "Setting memory to 256 MB and timeout to 5 seconds..."
+# Set memory to 512 MB and timeout to 15 seconds
+echo "Setting memory to 512 MB and timeout to 15 seconds..."
 aws lambda update-function-configuration \
     --function-name $FUNCTION_NAME \
-    --memory-size 256 \
-    --timeout 10 \
+    --memory-size 512 \
+    --timeout 15 \
     --environment "$ENVIRONMENT_VARIABLES" \
     --region $REGION \
     --no-cli-pager

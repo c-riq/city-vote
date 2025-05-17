@@ -69,10 +69,33 @@ function safeParseJSON(jsonString: string): any {
   }
 }
 
+// Function to get the first 2 digits of a QID
+function getQidPrefix(qid: string): string {
+  // Remove the 'Q' prefix
+  const numericPart = qid.substring(1);
+  
+  // Pad with leading zeros if needed
+  const paddedNumeric = numericPart.padStart(2, '0');
+  
+  // Get the first 2 digits
+  return paddedNumeric.substring(0, 2);
+}
+
 // Function to find a city by its Wikidata QID
 async function findCityByQid(qid: string): Promise<CityData | null> {
+  // Determine which split file to use based on QID prefix
+  const qidPrefix = getQidPrefix(qid);
+  const splitCsvPath = path.join(__dirname, 'split_by_qid', `Q${qidPrefix}.csv`);
+  
+  // Check if the split file exists, otherwise return null (no fallback to original file)
+  if (!fs.existsSync(splitCsvPath)) {
+    console.log(`Split file for QID prefix ${qidPrefix} not found`);
+    return null;
+  }
+  
+  const csvPath = splitCsvPath;
+  
   // Read and parse the CSV file
-  const csvPath = path.join(__dirname, 'city-data.csv');
   const fileContent = fs.readFileSync(csvPath, 'utf8');
   
   // Split the content into lines
@@ -203,8 +226,28 @@ async function findCityByQid(qid: string): Promise<CityData | null> {
 
 // Efficient search function for CSV data
 async function searchCities(query: string, limit: number = 10): Promise<CityData[]> {
+  // Normalize the query for case-insensitive search
+  const normalizedQuery = query.toLowerCase();
+  
+  // Determine which split file to use based on first letter of query
+  const firstLetter = normalizedQuery.charAt(0).toUpperCase();
+  let csvPath;
+  
+  if (/[A-Z]/.test(firstLetter)) {
+    // Use the appropriate letter file
+    csvPath = path.join(__dirname, 'split_by_letter', `${firstLetter}.csv`);
+  } else {
+    // For non-alphabetic characters, use the # file
+    csvPath = path.join(__dirname, 'split_by_letter', '#.csv');
+  }
+  
+  // Check if the split file exists, otherwise return empty results (no fallback to original file)
+  if (!fs.existsSync(csvPath)) {
+    console.log(`Split file for letter ${firstLetter} not found`);
+    return [];
+  }
+  
   // Read and parse the CSV file
-  const csvPath = path.join(__dirname, 'city-data.csv');
   const fileContent = fs.readFileSync(csvPath, 'utf8');
   
   // Split the content into lines
@@ -220,8 +263,7 @@ async function searchCities(query: string, limit: number = 10): Promise<CityData
     throw new Error('City name column not found in CSV');
   }
   
-  // Normalize the query for case-insensitive search
-  const normalizedQuery = query.toLowerCase();
+  // We already normalized the query at the beginning of the function
   
   // Create maps for country wikidata IDs to country names and ISO codes
   const countryNameMap = new Map<string, string>();
@@ -245,8 +287,8 @@ async function searchCities(query: string, limit: number = 10): Promise<CityData
     
     const cityName = cityData[cityNameIndex];
     
-    // Check if the city name includes the query
-    if (cityName.toLowerCase().includes(normalizedQuery)) {
+    // Check if the city name starts with the query (prefix match only)
+    if (cityName.toLowerCase().startsWith(normalizedQuery)) {
       const wikidataId = cityData[0];
       const countryWikidataId = cityData[2];
       const countryName = countryNameMap.get(countryWikidataId) || '';
