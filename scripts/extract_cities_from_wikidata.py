@@ -26,15 +26,17 @@ def load_city_subclasses():
     with open(city_subclasses_path, 'r', encoding='utf-8') as f:
         subclasses = json.load(f)
     
-    # Create a dictionary mapping subclass IDs to their ancestor class
+    # Create a dictionary mapping subclass IDs to their ancestor class and subclass label
     subclass_map = {}
     for item in subclasses:
         subclass_id = item['citySubclassId']
         ancestor_id = item['ancestorClassId']
         ancestor_label = item['ancestorClassLabel']
+        subclass_label = item['citySubclassLabel']
         subclass_map[subclass_id] = {
             'ancestorId': ancestor_id,
-            'ancestorLabel': ancestor_label
+            'ancestorLabel': ancestor_label,
+            'subclassLabel': subclass_label
         }
     
     print(f"Loaded {len(subclass_map)} city subclasses")
@@ -43,12 +45,13 @@ def load_city_subclasses():
 def save_results(cities, filename):
     """Save the extracted cities to a JSON file."""
     result = {
-        "header": ["cityWikidataId", "cityLabelEnglish", "countryWikidataId", "ancestorType", "population", "populationDate", "coordinates", "officialWebsite", "socialMedia"],
+        "header": ["cityWikidataId", "cityLabelEnglish", "countryWikidataId", "ancestorType", "classLabel", "population", "populationDate", "coordinates", "officialWebsite", "socialMedia"],
         "cities": [[
-            city["cityWikidataId"], 
-            city["cityLabelEnglish"], 
-            city["countryWikidataId"], 
+            city["cityWikidataId"],
+            city["cityLabelEnglish"],
+            city["countryWikidataId"],
             city["ancestorType"],
+            city["classLabel"],
             city["population"],
             city["populationDate"],
             city["coordinates"],
@@ -126,7 +129,8 @@ def process_lines(process_id, city_subclasses, skip_lines, num_processes=4, max_
                             if city_type_id in city_subclasses:
                                 matching_city_types.append({
                                     'id': city_type_id,
-                                    'ancestor_label': city_subclasses[city_type_id]['ancestorLabel']
+                                    'ancestor_label': city_subclasses[city_type_id]['ancestorLabel'],
+                                    'subclass_label': city_subclasses[city_type_id]['subclassLabel']
                                 })
                         
                         # If we found matching city types, use the most specific one
@@ -150,6 +154,7 @@ def process_lines(process_id, city_subclasses, skip_lines, num_processes=4, max_
                             city_label_english = pydash.get(record, 'labels.en.value')
                             country_wikidata_id = ''
                             ancestor_type = best_type['ancestor_label']
+                            class_label = best_type['subclass_label']
                             
                             # Extract country ID if available (P17 property)
                             if pydash.has(record, 'claims.P17'):
@@ -278,6 +283,7 @@ def process_lines(process_id, city_subclasses, skip_lines, num_processes=4, max_
                                 "cityLabelEnglish": city_label_english,
                                 "countryWikidataId": country_wikidata_id,
                                 "ancestorType": ancestor_type,
+                                "classLabel": class_label,
                                 "population": population,
                                 "populationDate": population_date,
                                 "coordinates": coordinates,
@@ -321,7 +327,7 @@ def main():
     skip_lines = 0
     
     # Maximum number of lines to process (None for no limit)
-    max_lines = None  # Process the entire dump
+    max_lines = 100_000  # Process the entire dump
     
     # Load city and municipality subclasses (shared by all processes)
     city_subclasses = load_city_subclasses()
