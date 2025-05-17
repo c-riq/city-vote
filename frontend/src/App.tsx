@@ -754,13 +754,29 @@ function App() {
                         }}
                       >
                         <Link to={`/poll/${encodeURIComponent(pollId)}`} style={{ textDecoration: 'none' }}>
-                          <Typography variant="h6" sx={{ color: 'primary.main', fontWeight: 500, mb: 2 }}>
-                            {(() => {
-                              // Helper function to get display title (removes _attachment_<hash> if present)
-                              const attachmentIndex = pollId.indexOf('_attachment_');
-                              return attachmentIndex !== -1 ? pollId.substring(0, attachmentIndex) : pollId;
-                            })()}
-                          </Typography>
+                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                            <Typography variant="h6" sx={{ color: 'primary.main', fontWeight: 500, mb: 2 }}>
+                              {(() => {
+                                // Helper function to get display title (removes _attachment_<hash> if present)
+                                const attachmentIndex = pollId.indexOf('_attachment_');
+                                return attachmentIndex !== -1 ? pollId.substring(0, attachmentIndex) : pollId;
+                              })()}
+                            </Typography>
+                            {pollId.includes('_attachment_') && (
+                              <span 
+                                className="material-icons" 
+                                style={{ 
+                                  fontSize: '1.2rem', 
+                                  color: '#1a237e',
+                                  opacity: 0.7,
+                                  marginBottom: '16px' // Match the mb: 2 (16px) from Typography
+                                }}
+                                title="Has attachment"
+                              >
+                                attach_file
+                              </span>
+                            )}
+                          </Box>
                         </Link>
                         <VoteList 
                           votes={allVotes} 
