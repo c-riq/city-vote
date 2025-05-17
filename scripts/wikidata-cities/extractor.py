@@ -72,6 +72,14 @@ def process_lines(process_id, wikidata_dump_path, city_subclasses, output_dir, s
                             matching_city_types.sort(key=get_type_priority)
                             best_type = matching_city_types[0]
                             
+                            # Skip cities that have been replaced by something else (P1366)
+                            if pydash.has(record, 'claims.P1366'):
+                                city_id = pydash.get(record, 'id')
+                                city_name = pydash.get(record, 'labels.en.value')
+                                replaced_by = pydash.get(record, 'claims.P1366[0].mainsnak.datavalue.value.id', 'unknown')
+                                print(f"Process {process_id}: Skipping city {city_id} ({city_name}) - replaced by {replaced_by}")
+                                continue
+                            
                             city_data = extract_city_data(record, best_type)
                             cities.append(city_data)
                             
