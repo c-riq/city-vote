@@ -412,7 +412,7 @@ const CityProfile: React.FC = () => {
                   {city.wikidataId && (
                     <>
                       {' '}
-                      <Link 
+                      <Link
                         href={`https://www.wikidata.org/wiki/${city.wikidataId}`}
                         target="_blank"
                         rel="noopener noreferrer"
@@ -511,136 +511,7 @@ const CityProfile: React.FC = () => {
               </Box>
             )}
 
-            {/* Duplication Relationship Information */}
-            {(city.supersedes_duplicates?.length || city.superseded_by) && (
-              <Box sx={{ mt: 2 }}>
-                <Typography variant="body2" color="text.secondary" gutterBottom>
-                  Duplication Information:
-                </Typography>
-                
-                {city.superseded_by && (
-                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                    <Typography variant="body2" color="warning.main">
-                      This city is a duplicate of{' '}
-                      <Link
-                        component="button"
-                        color="warning.main"
-                        sx={{ fontWeight: 'bold', textDecoration: 'underline', border: 'none', background: 'none', padding: 0, cursor: 'pointer' }}
-                        onClick={async (e) => {
-                          e.preventDefault();
-                          try {
-                            console.log(`Fetching details for superseding city ${city.superseded_by}...`);
-                            const supersedingResponse = await fetch(AUTOCOMPLETE_API_HOST, {
-                              method: 'POST',
-                              headers: { 'Content-Type': 'application/json' },
-                              body: JSON.stringify({
-                                action: 'getByQid',
-                                qid: city.superseded_by
-                              })
-                            });
-                            
-                            if (supersedingResponse.ok) {
-                              const supersedingData = await supersedingResponse.json();
-                              console.log('Superseding city data from link:', JSON.stringify(supersedingData, null, 2));
-                              console.log('Superseding city data:', supersedingData);
-                              
-                              if (supersedingData.results && supersedingData.results.length > 0) {
-                                const supersedingCity = supersedingData.results[0];
-                                console.log('Redirecting to superseding city:', supersedingCity);
-                                
-                                // Navigate to the superseding city with its correct name and country
-                                const redirectUrl = `/city/${city.superseded_by}?name=${encodeURIComponent(supersedingCity.name)}&country=${encodeURIComponent(supersedingCity.countryName || '')}`;
-                                console.log('Redirect URL:', redirectUrl);
-                                navigate(redirectUrl);
-                                return;
-                              } else {
-                                console.log('No results found for superseding city');
-                              }
-                            } else {
-                              console.log('Failed to fetch superseding city details, status:', supersedingResponse.status);
-                            }
-                          } catch (err) {
-                            console.error('Error fetching superseding city details:', err);
-                          }
-                          
-                          // Fallback if we couldn't get superseding city details
-                          console.log('Using fallback navigation to superseding city');
-                          navigate(`/city/${city.superseded_by}`);
-                        }}
-                      >
-                        {city.superseded_by}
-                      </Link>
-                    </Typography>
-                  </Box>
-                )}
-                
-                {city.supersedes_duplicates && city.supersedes_duplicates.length > 0 && (
-                  <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
-                    <Typography variant="body2" color="success.main">
-                      This city supersedes the following duplicates:
-                    </Typography>
-                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, ml: 2 }}>
-                      {city.supersedes_duplicates
-                        .filter(id => id !== cityId && id !== city.wikidataId) // Filter out self-references
-                        .map((duplicateId, index) => (
-                        <Chip
-                          key={duplicateId}
-                          label={duplicateId}
-                          size="small"
-                          component="button"
-                          onClick={async (e) => {
-                            e.preventDefault();
-                            console.log(`Clicked on duplicate city chip: ${duplicateId}`);
-                            try {
-                              // Fetch details of the duplicate city
-                              console.log(`Fetching details for duplicate city ${duplicateId}...`);
-                              const duplicateResponse = await fetch(AUTOCOMPLETE_API_HOST, {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({
-                                  action: 'getByQid',
-                                  qid: duplicateId
-                                })
-                              });
-                              
-                              if (duplicateResponse.ok) {
-                                const duplicateData = await duplicateResponse.json();
-                                console.log('Duplicate city data:', JSON.stringify(duplicateData, null, 2));
-                                
-                                if (duplicateData.results && duplicateData.results.length > 0) {
-                                  const duplicateCity = duplicateData.results[0];
-                                  console.log('Redirecting to duplicate city:', duplicateCity);
-                                  
-                                  // Navigate to the duplicate city with its correct name and country
-                                  const redirectUrl = `/city/${duplicateId}?name=${encodeURIComponent(duplicateCity.name)}&country=${encodeURIComponent(duplicateCity.countryName || '')}`;
-                                  console.log('Redirect URL:', redirectUrl);
-                                  navigate(redirectUrl);
-                                  return;
-                                } else {
-                                  console.log('No results found for duplicate city');
-                                }
-                              } else {
-                                console.log('Failed to fetch duplicate city details, status:', duplicateResponse.status);
-                              }
-                            } catch (err) {
-                              console.error('Error fetching duplicate city details:', err);
-                            }
-                            
-                            // Fallback if we couldn't get duplicate city details
-                            console.log('Using fallback navigation to duplicate city');
-                            navigate(`/city/${duplicateId}`);
-                          }}
-                          clickable
-                          color="primary"
-                          variant="outlined"
-                          sx={{ fontSize: '0.7rem' }}
-                        />
-                      ))}
-                    </Box>
-                  </Box>
-                )}
-              </Box>
-            )}
+            {/* Removed duplication information section */}
           </Box>
           
           <Divider sx={{ my: 2 }} />
@@ -720,9 +591,9 @@ const CityProfile: React.FC = () => {
           ) : null}
           
           {/* Wikidata reference */}
-          <Box sx={{ mt: 3, display: 'flex', justifyContent: 'flex-end' }}>
+          <Box sx={{ mt: 3, display: 'flex', justifyContent: 'flex-end', flexDirection: 'column', alignItems: 'flex-end' }}>
             {cityId && (cityId.startsWith('Q') || city.wikidataId) && (
-              <Link 
+              <Link
                 href={`https://www.wikidata.org/wiki/${city.wikidataId || cityId}`}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -731,6 +602,44 @@ const CityProfile: React.FC = () => {
               >
                 Wikidata: {city.wikidataId || cityId}
               </Link>
+            )}
+            
+            {/* Similar entities section */}
+            {((city.supersedes_duplicates && city.supersedes_duplicates.filter(id => id !== cityId && id !== city.wikidataId).length > 0) || city.superseded_by) && (
+              <Typography color="text.secondary" sx={{ fontSize: '0.75rem', mt: 0.5 }}>
+                Similar entities:{' '}
+                {city.superseded_by && (
+                  <Link
+                    href={`https://www.wikidata.org/wiki/${city.superseded_by}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    color="text.secondary"
+                    sx={{ fontSize: '0.75rem' }}
+                  >
+                    {city.superseded_by}
+                  </Link>
+                )}
+                
+                {city.superseded_by && city.supersedes_duplicates && city.supersedes_duplicates.filter(id => id !== cityId && id !== city.wikidataId).length > 0 && ', '}
+                
+                {city.supersedes_duplicates && city.supersedes_duplicates
+                  .filter(id => id !== cityId && id !== city.wikidataId)
+                  .map((duplicateId, index, array) => (
+                    <React.Fragment key={duplicateId}>
+                      <Link
+                        href={`https://www.wikidata.org/wiki/${duplicateId}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        color="text.secondary"
+                        sx={{ fontSize: '0.75rem' }}
+                      >
+                        {duplicateId}
+                      </Link>
+                      {index < array.length - 1 && ', '}
+                    </React.Fragment>
+                  ))
+                }
+              </Typography>
             )}
           </Box>
         </Box>
