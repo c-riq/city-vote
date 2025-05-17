@@ -2,8 +2,14 @@
 set -x
 trap "exit" INT
 
+# Check for dev argument
 aws_profile=rix-admin-chris
 s3_bucket=city-vote-data
+
+# Append -dev to bucket name if first argument is "dev"
+if [ "$1" = "dev" ]; then
+  s3_bucket="${s3_bucket}-dev"
+fi
 
 echo Profile: $aws_profile
 echo S3_Bucket: $s3_bucket
@@ -50,4 +56,4 @@ if ! aws s3 cp auth/auth.json s3://$s3_bucket/auth/auth.json --cache-control max
     exit 1
 fi
 
-echo "Upload complete!" 
+echo "Upload complete!"

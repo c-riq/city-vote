@@ -9,15 +9,27 @@ cd "$(dirname "$0")"
 echo "Building the project..."
 npm run build
 
+# Check if "dev" argument is provided
+if [ "$1" == "dev" ]; then
+  ENV="dev"
+  FUNCTION_NAME="city-vote-unauthenticated-dev"
+  ROLE_ARN="arn:aws:iam::152769399840:role/service-role/city-vote-unauthenticated-dev-role-z33gawc2"
+  echo "Deploying to DEV environment..."
+else
+  ENV="prod"
+  FUNCTION_NAME="city-vote-unauthenticated"
+  ROLE_ARN="arn:aws:iam::152769399840:role/service-role/city-vote-unauthenticated-role-aay5rono"
+  echo "Deploying to PRODUCTION environment..."
+fi
+
 REGION="us-east-1"      # N. Virginia
-FUNCTION_NAME="city-vote-unauthenticated"
 ZIP_FILE="function.zip"
-ROLE_ARN="arn:aws:iam::152769399840:role/service-role/city-vote-unauthenticated-role-aay5rono"
+
 
 # Check if required files exist
 if [ ! -f "dist/public.js" ]; then
     echo "Error: dist/public.js not found in current directory ($(pwd))"
-    echo "Please run 'npm run build' first"
+    echo "Build failed"
     exit 1
 fi
 
@@ -47,6 +59,9 @@ if [ ! -f "$ZIP_FILE" ]; then
     exit 1
 fi
 
+# Set environment variables based on deployment environment
+ENVIRONMENT_VARIABLES="{\"Variables\":{\"CITY_VOTE_ENV\":\"$ENV\"}}"
+
 # Update existing function or create new one
 echo "Updating function $FUNCTION_NAME in $REGION..."
 if ! aws lambda get-function --function-name $FUNCTION_NAME --region $REGION --no-cli-pager >/dev/null 2>&1; then
@@ -60,6 +75,7 @@ if ! aws lambda get-function --function-name $FUNCTION_NAME --region $REGION --n
         --region $REGION \
         --timeout 10 \
         --memory-size 128 \
+        --environment "$ENVIRONMENT_VARIABLES" \
         --no-cli-pager
 else
     # Update function configuration and wait for completion
@@ -67,6 +83,7 @@ else
         --function-name $FUNCTION_NAME \
         --timeout 10 \
         --memory-size 128 \
+        --environment "$ENVIRONMENT_VARIABLES" \
         --region $REGION \
         --no-cli-pager
 

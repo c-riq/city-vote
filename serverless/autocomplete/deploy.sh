@@ -5,8 +5,18 @@ export AWS_PROFILE="rix-admin-chris"
 # Change to the directory containing the function
 cd "$(dirname "$0")"
 
+# Check if "dev" argument is provided
+if [ "$1" == "dev" ]; then
+  ENV="dev"
+  FUNCTION_NAME="city-vote-autocomplete-city-dev"
+  echo "Deploying to DEV environment..."
+else
+  ENV="prod"
+  FUNCTION_NAME="city-vote-autocomplete-city"
+  echo "Deploying to PRODUCTION environment..."
+fi
+
 REGION="us-east-1"      # N. Virginia
-FUNCTION_NAME="city-vote-autocomplete-city"
 ZIP_FILE="function.zip"
 
 # Build the TypeScript code
@@ -40,6 +50,9 @@ cd "$TEMP_DIR"
 zip -r "$OLDPWD/$ZIP_FILE" .
 cd -
 
+# Set environment variables based on deployment environment
+ENVIRONMENT_VARIABLES="{\"Variables\":{\"CITY_VOTE_ENV\":\"$ENV\"}}"
+
 # Update function code
 echo "Updating function $FUNCTION_NAME in $REGION..."
 aws lambda update-function-code \
@@ -60,6 +73,7 @@ aws lambda update-function-configuration \
     --function-name $FUNCTION_NAME \
     --memory-size 256 \
     --timeout 10 \
+    --environment "$ENVIRONMENT_VARIABLES" \
     --region $REGION \
     --no-cli-pager
 

@@ -244,17 +244,18 @@ const CityRegistration: React.FC = () => {
             </Grid>
 
             <Grid item xs={12}>
-              <Autocomplete
-                fullWidth
-                options={autocompleteResults}
-                getOptionLabel={(option) => `${option.name}, ${option.countryCode}`}
-                loading={isLoadingAutocomplete}
-                onInputChange={(_, newInputValue) => {
-                  setAutocompleteInputValue(newInputValue);
-                }}
-                onChange={(_, newValue) => {
-                  handleCitySelect(newValue);
-                }}
+<Autocomplete
+  fullWidth
+  options={autocompleteResults}
+  getOptionLabel={(option) => `${option.name}, ${option.countryCode}`}
+  loading={isLoadingAutocomplete}
+  onInputChange={(_, newInputValue) => {
+    setAutocompleteInputValue(newInputValue);
+  }}
+  onChange={(_, newValue) => {
+    handleCitySelect(newValue);
+  }}
+  isOptionEqualToValue={(option, value) => option.wikidataId === value.wikidataId}
                 renderInput={(params) => (
                   <TextField
                     {...params}

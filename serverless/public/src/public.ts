@@ -7,7 +7,10 @@ import {
 import { handleRegister } from './registration';
 
 const s3Client = new S3Client({ region: 'us-east-1' });
-const BUCKET_NAME = 'city-vote-data';
+// Check if running in dev environment based on environment variable
+const isDev = process.env.CITY_VOTE_ENV === 'dev';
+const BUCKET_NAME = isDev ? 'city-vote-data-dev' : 'city-vote-data';
+
 const VOTES_KEY = 'votes/votes.json';
 
 async function streamToString(stream: Readable): Promise<string> {

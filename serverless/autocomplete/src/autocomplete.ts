@@ -1,5 +1,5 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
-import { AutocompleteRequest, AutocompleteResponse } from './types';
+import { AutocompleteRequest } from './types';
 import { countries } from './countries';
 import * as fs from 'fs';
 import * as path from 'path';
