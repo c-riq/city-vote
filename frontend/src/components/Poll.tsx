@@ -76,6 +76,16 @@ function Poll({ token, pollData, onVoteComplete, votesData: propVotesData, citie
     }
   }, [pollId, isAuthenticated]);
 
+  // Update local state when props change (after a vote is submitted and parent fetches new data)
+  useEffect(() => {
+    if (propVotesData) {
+      setVotesData(propVotesData);
+    }
+    if (propCities) {
+      setCities(propCities);
+    }
+  }, [propVotesData, propCities]);
+
   // Check for attachment when poll ID is available
   useEffect(() => {
     const checkAttachment = async () => {
@@ -198,6 +208,8 @@ function Poll({ token, pollData, onVoteComplete, votesData: propVotesData, citie
         throw new Error(data.message || 'Failed to submit vote');
       }
 
+      // Call the parent's callback which will fetch updated data
+      // The useEffect hook will update local state when props change
       onVoteComplete?.();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to submit vote');
