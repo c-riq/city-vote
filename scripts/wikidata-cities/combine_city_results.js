@@ -5,13 +5,21 @@ const path = require('path');
 
 // Directories and files
 const inputDir = path.join(__dirname, './data/cities');
-const outputFile = path.join(__dirname, '../serverless/autocomplete/src/city-data.csv');
+const outputFile = path.join(__dirname, '../../serverless/autocomplete/src/city-data.csv');
 
-// Function to read and parse a JSON file
-function readJsonFile(filePath) {
+// Function to read and parse a JSON Lines file
+function readJsonLinesFile(filePath) {
   try {
     const data = fs.readFileSync(filePath, 'utf8');
-    return JSON.parse(data);
+    const lines = data.trim().split('\n');
+    
+    // First line is the header
+    const header = JSON.parse(lines[0]);
+    
+    // Rest of the lines are city data
+    const cities = lines.slice(1).map(line => JSON.parse(line));
+    
+    return { header, cities };
   } catch (error) {
     console.error(`Error reading file ${filePath}:`, error);
     return null;
@@ -27,6 +35,13 @@ function roundToDecimalPlaces(num, decimalPlaces) {
 // Function to find all result files from the Python script
 function findResultFiles() {
   try {
+    // Create the directory if it doesn't exist
+    if (!fs.existsSync(inputDir)) {
+      console.log(`Creating directory: ${inputDir}`);
+      fs.mkdirSync(inputDir, { recursive: true });
+      return [];
+    }
+    
     const files = fs.readdirSync(inputDir);
     // Filter for files that match the pattern cities_process_*_final.json
     return files
@@ -41,27 +56,36 @@ function findResultFiles() {
 // Function to combine city data from multiple files
 function combineData(files) {
   let allCities = [];
-  let header = ["cityWikidataId", "cityLabelEnglish", "countryWikidataId", "population", "populationDate", "coordinates", "officialWebsite", "socialMedia"];
+  let header = ["cityWikidataId", "cityLabelEnglish", "countryWikidataId", "population", "populationDate", "latitude", "longitude", "officialWebsite", "socialMedia"];
   
   for (const file of files) {
-    const data = readJsonFile(file);
+    const data = readJsonLinesFile(file);
     if (data && data.cities && Array.isArray(data.cities)) {
       console.log(`Processing ${file}: Found ${data.cities.length} cities`);
       
       // Transform the data to match the target format
-      // Each city should be [cityWikidataId, cityLabelEnglish, countryWikidataId, population, populationDate, coordinates, officialWebsite, socialMedia]
       const transformedCities = data.cities.map(city => {
         // Round coordinates to 2 decimal places if they exist
-        let coordinates = city[6];
-        if (coordinates && typeof coordinates === 'object' && 'latitude' in coordinates && 'longitude' in coordinates) {
-          coordinates = {
-            latitude: roundToDecimalPlaces(coordinates.latitude, 2),
-            longitude: roundToDecimalPlaces(coordinates.longitude, 2)
-          };
+        let latitude = city[7];
+        let longitude = city[8];
+        if (latitude !== null && longitude !== null) {
+          latitude = roundToDecimalPlaces(latitude, 2);
+          longitude = roundToDecimalPlaces(longitude, 2);
         }
         
-        // Assuming the order in the source is [cityWikidataId, cityLabelEnglish, countryWikidataId, ancestorType, population, populationDate, coordinates, officialWebsite, socialMedia]
-        return [city[0], city[1], city[2], city[4], city[5], coordinates, city[7], city[8]]; // Skip ancestorType (index 3)
+        // Assuming the order in the source is:
+        // [cityWikidataId, cityLabelEnglish, countryWikidataId, ancestorType, classLabel, population, populationDate, latitude, longitude, officialWebsite, socialMedia]
+        return [
+          city[0],                // cityWikidataId
+          city[1],                // cityLabelEnglish
+          city[2],                // countryWikidataId
+          city[5],                // population
+          city[6],                // populationDate
+          latitude,               // latitude
+          longitude,              // longitude
+          city[9],                // officialWebsite
+          city[10]                // socialMedia
+        ]; // Skip ancestorType (index 3) and classLabel (index 4)
       });
       
       allCities = allCities.concat(transformedCities);
