@@ -45,7 +45,7 @@ def load_city_subclasses():
 def save_results(cities, filename):
     """Save the extracted cities to a JSON file."""
     result = {
-        "header": ["cityWikidataId", "cityLabelEnglish", "countryWikidataId", "ancestorType", "classLabel", "population", "populationDate", "coordinates", "officialWebsite", "socialMedia"],
+        "header": ["cityWikidataId", "cityLabelEnglish", "countryWikidataId", "ancestorType", "classLabel", "population", "populationDate", "latitude", "longitude", "officialWebsite", "socialMedia"],
         "cities": [[
             city["cityWikidataId"],
             city["cityLabelEnglish"],
@@ -54,7 +54,8 @@ def save_results(cities, filename):
             city["classLabel"],
             city["population"],
             city["populationDate"],
-            city["coordinates"],
+            city["latitude"],
+            city["longitude"],
             city["officialWebsite"],
             city["socialMedia"]
         ] for city in cities]
@@ -219,18 +220,14 @@ def process_lines(process_id, city_subclasses, skip_lines, num_processes=4, max_
                                     population_date = sorted_data[0]['date']
                             
                             # Extract coordinates if available (P625 property)
-                            coordinates = None
+                            latitude = None
+                            longitude = None
                             if pydash.has(record, 'claims.P625'):
                                 coord_claim = pydash.get(record, 'claims.P625[0]')
                                 if pydash.has(coord_claim, 'mainsnak.datavalue.value'):
                                     coord_value = pydash.get(coord_claim, 'mainsnak.datavalue.value')
                                     latitude = pydash.get(coord_value, 'latitude')
                                     longitude = pydash.get(coord_value, 'longitude')
-                                    if latitude is not None and longitude is not None:
-                                        coordinates = {
-                                            "latitude": latitude,
-                                            "longitude": longitude
-                                        }
                             
                             # Extract official website if available (P856 property)
                             official_website = None
@@ -286,7 +283,8 @@ def process_lines(process_id, city_subclasses, skip_lines, num_processes=4, max_
                                 "classLabel": class_label,
                                 "population": population,
                                 "populationDate": population_date,
-                                "coordinates": coordinates,
+                                "latitude": latitude,
+                                "longitude": longitude,
                                 "officialWebsite": official_website,
                                 "socialMedia": social_media if social_media else None
                             }
