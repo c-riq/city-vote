@@ -7,6 +7,17 @@ import { PUBLIC_API_HOST } from '../constants';
 
 // Helper function to get display title (removes _attachment_<hash> if present)
 const getDisplayTitle = (title: string): string => {
+  // First check if it's a joint statement
+  if (title.startsWith('joint_statement_')) {
+    // If it's just "joint_statement_" with no title, display "Joint Statement"
+    if (title === 'joint_statement_' || title.startsWith('joint_statement__attachment_')) {
+      return 'Joint Statement';
+    }
+    // Otherwise remove the prefix
+    title = title.substring('joint_statement_'.length);
+  }
+  
+  // Then remove attachment hash if present
   const attachmentIndex = title.indexOf('_attachment_');
   return attachmentIndex !== -1 ? title.substring(0, attachmentIndex) : title;
 };
@@ -282,6 +293,7 @@ function Polls({ token, cityInfo, votesData: propVotesData, cities: propCities, 
                 votes={allVotes} 
                 cities={cities} 
                 variant="cell" 
+                isJointStatement={pollId.startsWith('joint_statement_')}
               />
             </Box>
           );

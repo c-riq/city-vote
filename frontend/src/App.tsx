@@ -249,6 +249,7 @@ function App() {
     const [isCreatingPoll, setIsCreatingPoll] = useState(false);
     const [attachment, setAttachment] = useState<File | null>(null);
     const [attachmentError, setAttachmentError] = useState('');
+    const [pollType, setPollType] = useState<'regular' | 'jointStatement'>('regular');
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0] || null;
@@ -289,13 +290,31 @@ function App() {
     };
 
     const handleCreatePoll = async () => {
-        if (!question.trim()) return;
+        // For regular polls, question is required
+        // For joint statements, attachment is required
+        if ((pollType === 'regular' && !question.trim()) || 
+            (pollType === 'jointStatement' && !attachment)) {
+            return;
+        }
         
         setIsCreatingPoll(true);
         try {
+            // Prepare the poll ID
+            let basePollId = question.trim();
+            if (pollType === 'jointStatement') {
+                // For joint statements, handle the ID differently
+                if (!basePollId || basePollId === 'Joint Statement') {
+                    // If no title or default title, just use the prefix with trailing underscore
+                    basePollId = 'joint_statement_';
+                } else {
+                    // Otherwise, add the prefix to the custom title
+                    basePollId = `joint_statement_${basePollId}`;
+                }
+            }
+            
             // If there's an attachment, get a presigned URL and upload it first
             if (attachment) {
-                const attachmentId = await createAttachmentId(question.trim());
+                const attachmentId = await createAttachmentId(basePollId);
                 
                 // First, get the presigned URL
                 const getUrlResponse = await fetch(VOTE_HOST, {
@@ -304,7 +323,7 @@ function App() {
                     body: JSON.stringify({
                         action: 'uploadAttachment',
                         token,
-                        pollId: question.trim(),
+                        pollId: basePollId,
                         attachmentId
                     })
                 });
@@ -342,7 +361,8 @@ function App() {
                         body: JSON.stringify({
                             action: 'createPoll',
                             token,
-                            pollId: urlData.pollId
+                            pollId: urlData.pollId,
+                            pollType // Pass the poll type to the backend
                         })
                     });
 
@@ -356,6 +376,7 @@ function App() {
                     navigate(`/poll/${encodedQuestion}`);
                     setQuestion('');
                     setAttachment(null);
+                    setPollType('regular'); // Reset to default
                     return;
                 }
             }
@@ -367,7 +388,8 @@ function App() {
                 body: JSON.stringify({
                     action: 'createPoll',
                     token,
-                    pollId: question.trim()
+                    pollId: basePollId,
+                    pollType // Pass the poll type to the backend
                 })
             });
 
@@ -377,10 +399,11 @@ function App() {
             }
 
             setIsModalOpen(false);
-            const encodedQuestion = encodeURIComponent(question.trim());
+            const encodedQuestion = encodeURIComponent(basePollId);
             navigate(`/poll/${encodedQuestion}`);
             setQuestion('');
             setAttachment(null);
+            setPollType('regular'); // Reset to default
         } catch (err) {
             alert(err instanceof Error ? err.message : 'Failed to create poll');
         } finally {
@@ -404,19 +427,52 @@ function App() {
                 fullWidth
             >
                 <DialogTitle component="div" sx={{ pb: 2, pt: 3, px: 3 }}>
-                    New Poll Question
+                    Create New Poll
                 </DialogTitle>
                 <DialogContent sx={{ px: 3, pb: 3 }}>
+                    {/* Poll Type Selection */}
+                    <Box sx={{ mb: 3, mt: 1 }}>
+                        <Typography variant="subtitle2" sx={{ mb: 1 }}>
+                            Poll Type
+                        </Typography>
+                        <Box sx={{ display: 'flex', gap: 2 }}>
+                            <Button
+                                variant={pollType === 'regular' ? 'contained' : 'outlined'}
+                                onClick={() => setPollType('regular')}
+                                sx={{ flex: 1 }}
+                            >
+                                Regular Poll
+                            </Button>
+                            <Button
+                                variant={pollType === 'jointStatement' ? 'contained' : 'outlined'}
+                                onClick={() => setPollType('jointStatement')}
+                                sx={{ flex: 1 }}
+                            >
+                                Joint Statement
+                            </Button>
+                        </Box>
+                        <Typography variant="body2" sx={{ mt: 1, color: 'text.secondary' }}>
+                            {pollType === 'regular' 
+                                ? 'Create a standard poll with Yes/No voting options.' 
+                                : 'Create a joint statement that cities can sign. Requires a PDF document.'}
+                        </Typography>
+                    </Box>
+
+                    {/* Question Field */}
                     <TextField
                         fullWidth
-                        label="Question"
+                        label={pollType === 'regular' ? "Question" : "Statement Title"}
                         value={question}
                         onChange={(e) => setQuestion(e.target.value)}
                         margin="normal"
+                        required={pollType === 'regular'}
+                        helperText={pollType === 'jointStatement' ? "Optional for joint statements" : ""}
                     />
+
+                    {/* Attachment Field */}
                     <Box sx={{ mt: 2 }}>
                         <Typography variant="subtitle2" sx={{ mb: 1 }}>
-                            Attachment (Optional)
+                            {pollType === 'regular' ? 'Attachment (Optional)' : 'Document (Required)'}
                         </Typography>
                         <input
                             accept="application/pdf"
@@ -444,13 +500,22 @@ function App() {
                                 {attachmentError}
                             </Typography>
                         )}
+                        {pollType === 'jointStatement' && !attachment && (
+                            <Typography variant="body2" sx={{ mt: 1, color: 'warning.main' }}>
+                                A PDF document is required for joint statements
+                            </Typography>
+                        )}
                     </Box>
                 </DialogContent>
                 <DialogActions sx={{ px: 3, pb: 3 }}>
                     <Button onClick={handleCancel}>Cancel</Button>
                     <Button 
                         onClick={handleCreatePoll}
-                        disabled={!question.trim() || isCreatingPoll}
+                        disabled={
+                            isCreatingPoll || 
+                            (pollType === 'regular' && !question.trim()) || 
+                            (pollType === 'jointStatement' && !attachment)
+                        }
                     >
                         {isCreatingPoll ? 'Creating...' : 'Create Poll'}
                     </Button>
@@ -782,6 +847,7 @@ function App() {
                           votes={allVotes} 
                           cities={cities} 
                           variant="cell" 
+                          isJointStatement={pollId.startsWith('joint_statement_')}
                         />
                       </Box>
                     );

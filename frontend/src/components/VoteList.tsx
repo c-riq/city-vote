@@ -17,9 +17,10 @@ interface VoteListProps {
   cities: Record<string, any>;
   variant?: 'list' | 'cell';
   containerStyle?: React.CSSProperties;  // Optional container styles
+  isJointStatement?: boolean;  // Flag to indicate if this is a joint statement poll
 }
 
-const VoteList = ({ votes, cities, variant = 'list', containerStyle }: VoteListProps) => {
+const VoteList = ({ votes, cities, variant = 'list', containerStyle, isJointStatement = false }: VoteListProps) => {
   const VoteContent = variant === 'cell' ? (
     <Box>
       {votes.map((vote, _) => (
@@ -49,17 +50,17 @@ const VoteList = ({ votes, cities, variant = 'list', containerStyle }: VoteListP
                 {cities?.[vote.cityId]?.name}, {cities?.[vote.cityId]?.country}
               </Typography>
             </Link>
-            <Typography 
-              component="span" 
-              sx={{ 
-                mx: 1,
-                color: 'text.primary',
-                fontWeight: 600,
-                fontSize: '1rem'
-              }}
-            >
-              voted <strong>{vote.option}</strong>
-            </Typography>
+              <Typography 
+                component="span" 
+                sx={{ 
+                  mx: 1,
+                  color: 'text.primary',
+                  fontWeight: 600,
+                  fontSize: '1rem'
+                }}
+              >
+                {isJointStatement ? 'signed' : 'voted'} <strong>{isJointStatement && vote.option === 'Sign' ? 'document' : vote.option}</strong>
+              </Typography>
           </Box>
           <Typography 
             variant="body2" 
@@ -126,7 +127,7 @@ const VoteList = ({ votes, cities, variant = 'list', containerStyle }: VoteListP
                       fontSize: '1rem'
                     }}
                   >
-                    voted <strong>{vote.option}</strong>
+                    {isJointStatement ? 'signed' : 'voted'} <strong>{isJointStatement && vote.option === 'Sign' ? 'document' : vote.option}</strong>
                   </Typography>
                 </Box>
               }
@@ -165,4 +166,4 @@ const VoteList = ({ votes, cities, variant = 'list', containerStyle }: VoteListP
   );
 };
 
-export default VoteList; 
+export default VoteList;

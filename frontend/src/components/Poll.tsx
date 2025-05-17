@@ -128,9 +128,21 @@ function Poll({ token, pollData, onVoteComplete, votesData: propVotesData, citie
 
   // Helper function to get display title (removes _attachment_<hash> if present)
   const getDisplayTitle = (title: string): string => {
+    // First check if it's a joint statement
+    if (title === 'joint_statement_' || title.startsWith('joint_statement__attachment_')) {
+      return 'Joint Statement';
+    } else if (title.startsWith('joint_statement_')) {
+      // If it has a custom title, remove the prefix
+      title = title.substring('joint_statement_'.length);
+    }
+    
+    // Then remove attachment hash if present
     const attachmentIndex = title.indexOf('_attachment_');
     return attachmentIndex !== -1 ? title.substring(0, attachmentIndex) : title;
   };
+  
+  // Check if this is a joint statement poll
+  const isJointStatement = (pollId || '').startsWith('joint_statement_');
 
   const fetchData = async () => {
     setError('');
@@ -487,24 +499,45 @@ function Poll({ token, pollData, onVoteComplete, votesData: propVotesData, citie
                 maxWidth: 400,
                 mx: 'auto'
               }}>
-                {(pollData?.options || ['Yes', 'No']).map((option: string, index: number) => (
+                {isJointStatement ? (
+                  // For joint statements, only show "Sign Document" option
                   <Button
-                    key={index}
                     variant="contained"
-                    onClick={() => handleVoteClick(option)}
+                    onClick={() => handleVoteClick("Sign")}
                     disabled={voting || !personalInfo.title || !personalInfo.name}
                     sx={{
                       py: 1.5,
                       fontSize: '1.1rem',
-                      backgroundColor: index === 0 ? 'primary.main' : 'primary.light',
+                      backgroundColor: 'primary.main',
                       '&:hover': {
-                        backgroundColor: index === 0 ? 'primary.dark' : 'primary.main',
+                        backgroundColor: 'primary.dark',
                       }
                     }}
+                    startIcon={<span className="material-icons">how_to_reg</span>}
                   >
-                    {option}
+                    Sign Document
                   </Button>
-                ))}
+                ) : (
+                  // For regular polls, show Yes/No options
+                  (pollData?.options || ['Yes', 'No']).map((option: string, index: number) => (
+                    <Button
+                      key={index}
+                      variant="contained"
+                      onClick={() => handleVoteClick(option)}
+                      disabled={voting || !personalInfo.title || !personalInfo.name}
+                      sx={{
+                        py: 1.5,
+                        fontSize: '1.1rem',
+                        backgroundColor: index === 0 ? 'primary.main' : 'primary.light',
+                        '&:hover': {
+                          backgroundColor: index === 0 ? 'primary.dark' : 'primary.main',
+                        }
+                      }}
+                    >
+                      {option}
+                    </Button>
+                  ))
+                )}
               </Box>
             </>
           )}
@@ -517,7 +550,9 @@ function Poll({ token, pollData, onVoteComplete, votesData: propVotesData, citie
             alignItems: 'center',
             gap: 2
           }}>
-            <Typography variant="h6" sx={{ mb: 2 }}>Results</Typography>
+            <Typography variant="h6" sx={{ mb: 2 }}>
+              {isJointStatement ? 'Signatures' : 'Results'}
+            </Typography>
             
             {Object.entries(votesByOption).length > 0 ? (
               Object.entries(votesByOption).map(([option, count]) => (
@@ -535,16 +570,16 @@ function Poll({ token, pollData, onVoteComplete, votesData: propVotesData, citie
                   }}
                 >
                   <Typography variant="body1" sx={{ fontWeight: 500 }}>
-                    {option}
+                    {isJointStatement && option === 'Sign' ? 'Signed' : option}
                   </Typography>
                   <Typography variant="body1" sx={{ fontWeight: 700 }}>
-                    {count} vote{count !== 1 ? 's' : ''}
+                    {count} {isJointStatement ? 'signature' : 'vote'}{count !== 1 ? 's' : ''}
                   </Typography>
                 </Box>
               ))
             ) : (
               <Typography variant="body1" sx={{ color: 'text.secondary' }}>
-                No votes yet
+                {isJointStatement ? 'No signatures yet' : 'No votes yet'}
               </Typography>
             )}
           </Box>
@@ -559,7 +594,7 @@ function Poll({ token, pollData, onVoteComplete, votesData: propVotesData, citie
               fontWeight: 500
             }}
           >
-            Voting History
+            {isJointStatement ? 'Signature History' : 'Voting History'}
           </Typography>
           
           <VoteList 
@@ -576,27 +611,42 @@ function Poll({ token, pollData, onVoteComplete, votesData: propVotesData, citie
             }
             cities={cities || {}}
             variant="list"
+            isJointStatement={isJointStatement}
           />
 
           <Dialog
             open={confirmDialog.open}
             onClose={() => setConfirmDialog({ open: false, option: null })}
           >
-            <DialogTitle>Confirm Vote</DialogTitle>
+            <DialogTitle>{isJointStatement ? 'Confirm Signature' : 'Confirm Vote'}</DialogTitle>
             <DialogContent>
               <Typography>
-                Are you sure you want to vote "<strong>{confirmDialog.option}</strong>"{' '}
-                {isPersonal ? (
-                  <>as a <strong>personal</strong> vote from {personalInfo.title} <strong>{personalInfo.name}</strong></>
+                {isJointStatement ? (
+                  <>
+                    Are you sure you want to sign this document{' '}
+                    {isPersonal ? (
+                      <>as a <strong>personal</strong> signature from {personalInfo.title} <strong>{personalInfo.name}</strong></>
+                    ) : (
+                      <>on <strong>behalf of the City Administration </strong> as {personalInfo.title} <strong>{personalInfo.name}</strong></>
+                    )}?
+                  </>
                 ) : (
-                  <>on <strong>behalf of the City Administration </strong> as {personalInfo.title} <strong>{personalInfo.name}</strong></>
-                )}?
+                  <>
+                    Are you sure you want to vote "<strong>{confirmDialog.option}</strong>"{' '}
+                    {isPersonal ? (
+                      <>as a <strong>personal</strong> vote from {personalInfo.title} <strong>{personalInfo.name}</strong></>
+                    ) : (
+                      <>on <strong>behalf of the City Administration </strong> as {personalInfo.title} <strong>{personalInfo.name}</strong></>
+                    )}?
+                  </>
+                )}
               </Typography>
               {hasVoted && !isPersonal && (
                 <Typography
                   sx={{ mt: 2, color: 'warning.main' }}
                 >
-                  Note: {cityInfo?.name} has already voted on this poll. This will add another vote to the history.
+                  Note: {cityInfo?.name} has already {isJointStatement ? 'signed this document' : 'voted on this poll'}. 
+                  This will add another {isJointStatement ? 'signature' : 'vote'} to the history.
                 </Typography>
               )}
             </DialogContent>
@@ -614,7 +664,7 @@ function Poll({ token, pollData, onVoteComplete, votesData: propVotesData, citie
                 autoFocus
                 disabled={!personalInfo.title || !personalInfo.name}
               >
-                Confirm Vote
+                {isJointStatement ? 'Confirm Signature' : 'Confirm Vote'}
               </Button>
             </DialogActions>
           </Dialog>
