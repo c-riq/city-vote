@@ -49,8 +49,8 @@ function getQidPrefix(qid: string): string {
 // Function to split CSV by first 2 digits of QID
 async function splitCSVByQidPrefix() {
   try {
-    // Read the original CSV file
-    const csvPath = path.join(__dirname, 'city-data.csv');
+    // Read the deduplicated CSV file
+    const csvPath = path.join(__dirname, 'city-data-deduplicated.csv');
     const fileContent = fs.readFileSync(csvPath, 'utf8');
     
     // Split the content into lines

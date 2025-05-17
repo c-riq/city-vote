@@ -33,6 +33,8 @@ export interface AutocompleteResponse {
             youtube?: string;
             linkedin?: string;
         };
+        supersedes_duplicates?: string[];
+        superseded_by?: string;
     }[];
     message?: string;
 }

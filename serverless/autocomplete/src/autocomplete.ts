@@ -25,6 +25,8 @@ interface CityData {
     youtube?: string;
     linkedin?: string;
   };
+  supersedes_duplicates?: string[];
+  superseded_by?: string;
 }
 
 // Function to parse a CSV line, handling quoted fields with embedded commas
@@ -111,6 +113,10 @@ async function findCityByQid(qid: string): Promise<CityData | null> {
     throw new Error('City wikidata ID column not found in CSV');
   }
   
+  // Find the index of the superseded_by column
+  const supersededByIndex = headers.indexOf('superseded_by');
+  const supersededDuplicatesIndex = headers.indexOf('supersedes_duplicates');
+  
   // Create maps for country wikidata IDs to country names and ISO codes
   const countryNameMap = new Map<string, string>();
   const countryCodeMap = new Map<string, string>();
@@ -132,6 +138,13 @@ async function findCityByQid(qid: string): Promise<CityData | null> {
     
     // Check if the city wikidata ID matches the query
     if (cityWikidataId === qid) {
+      // Check if this city is superseded by another city
+      if (supersededByIndex !== -1 && cityData[supersededByIndex] && cityData[supersededByIndex] !== '') {
+        // If this city is superseded, recursively find the superseding city
+        console.log(`City ${qid} is superseded by ${cityData[supersededByIndex]}, redirecting...`);
+        return findCityByQid(cityData[supersededByIndex]);
+      }
+      
       const cityName = cityData[1];
       const countryWikidataId = cityData[2];
       const countryName = countryNameMap.get(countryWikidataId) || '';
@@ -153,7 +166,7 @@ async function findCityByQid(qid: string): Promise<CityData | null> {
       let coordinates: { latitude: number; longitude: number } | undefined = undefined;
       if (cityData[5] && cityData[5] !== '') {
         const coordObj = safeParseJSON(cityData[5]);
-        if (coordObj && typeof coordObj === 'object' && 
+        if (coordObj && typeof coordObj === 'object' &&
             'latitude' in coordObj && 'longitude' in coordObj) {
           coordinates = {
             latitude: Number(coordObj.latitude),
@@ -166,12 +179,12 @@ async function findCityByQid(qid: string): Promise<CityData | null> {
       const officialWebsite = cityData[6] || undefined;
       
       // Parse social media accounts if they exist
-      let socialMedia: { 
-        twitter?: string; 
-        facebook?: string; 
-        instagram?: string; 
-        youtube?: string; 
-        linkedin?: string; 
+      let socialMedia: {
+        twitter?: string;
+        facebook?: string;
+        instagram?: string;
+        youtube?: string;
+        linkedin?: string;
       } | undefined = undefined;
       
       if (cityData[7] && cityData[7] !== '') {
@@ -206,6 +219,12 @@ async function findCityByQid(qid: string): Promise<CityData | null> {
         }
       }
       
+      // Parse supersedes_duplicates if it exists
+      let supersedes_duplicates: string[] | undefined = undefined;
+      if (supersededDuplicatesIndex !== -1 && cityData[supersededDuplicatesIndex] && cityData[supersededDuplicatesIndex] !== '') {
+        supersedes_duplicates = cityData[supersededDuplicatesIndex].split('|');
+      }
+      
       return {
         wikidataId: cityWikidataId,
         name: cityName,
@@ -216,7 +235,8 @@ async function findCityByQid(qid: string): Promise<CityData | null> {
         populationDate,
         coordinates,
         officialWebsite,
-        socialMedia
+        socialMedia,
+        supersedes_duplicates
       };
     }
   }
@@ -263,6 +283,10 @@ async function searchCities(query: string, limit: number = 10): Promise<CityData
     throw new Error('City name column not found in CSV');
   }
   
+  // Find the index of the superseded_by column
+  const supersededByIndex = headers.indexOf('superseded_by');
+  const supersededDuplicatesIndex = headers.indexOf('supersedes_duplicates');
+  
   // We already normalized the query at the beginning of the function
   
   // Create maps for country wikidata IDs to country names and ISO codes
@@ -284,6 +308,11 @@ async function searchCities(query: string, limit: number = 10): Promise<CityData
     
     const cityData = parseCSVLine(lines[i]);
     if (cityData.length <= cityNameIndex) continue; // Skip malformed lines
+    
+    // Skip cities that are superseded by others
+    if (supersededByIndex !== -1 && cityData[supersededByIndex] && cityData[supersededByIndex] !== '') {
+      continue;
+    }
     
     const cityName = cityData[cityNameIndex];
     
@@ -310,7 +339,7 @@ async function searchCities(query: string, limit: number = 10): Promise<CityData
       let coordinates: { latitude: number; longitude: number } | undefined = undefined;
       if (cityData[5] && cityData[5] !== '') {
         const coordObj = safeParseJSON(cityData[5]);
-        if (coordObj && typeof coordObj === 'object' && 
+        if (coordObj && typeof coordObj === 'object' &&
             'latitude' in coordObj && 'longitude' in coordObj) {
           coordinates = {
             latitude: Number(coordObj.latitude),
@@ -323,12 +352,12 @@ async function searchCities(query: string, limit: number = 10): Promise<CityData
       const officialWebsite = cityData[6] || undefined;
       
       // Parse social media accounts if they exist
-      let socialMedia: { 
-        twitter?: string; 
-        facebook?: string; 
-        instagram?: string; 
-        youtube?: string; 
-        linkedin?: string; 
+      let socialMedia: {
+        twitter?: string;
+        facebook?: string;
+        instagram?: string;
+        youtube?: string;
+        linkedin?: string;
       } | undefined = undefined;
       
       if (cityData[7] && cityData[7] !== '') {
@@ -363,6 +392,12 @@ async function searchCities(query: string, limit: number = 10): Promise<CityData
         }
       }
       
+      // Parse supersedes_duplicates if it exists
+      let supersedes_duplicates: string[] | undefined = undefined;
+      if (supersededDuplicatesIndex !== -1 && cityData[supersededDuplicatesIndex] && cityData[supersededDuplicatesIndex] !== '') {
+        supersedes_duplicates = cityData[supersededDuplicatesIndex].split('|');
+      }
+      
       matchingCities.push({
         wikidataId,
         name: cityName,
@@ -373,7 +408,8 @@ async function searchCities(query: string, limit: number = 10): Promise<CityData
         populationDate,
         coordinates,
         officialWebsite,
-        socialMedia
+        socialMedia,
+        supersedes_duplicates
       });
     }
   }
