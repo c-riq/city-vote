@@ -1,7 +1,7 @@
 import { Button, Container, Typography, TextField, Box, Dialog, 
   DialogTitle, DialogContent, DialogActions, createTheme, 
   ThemeProvider  } from '@mui/material';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { VOTE_HOST, PUBLIC_API_HOST } from './constants';
 import { BrowserRouter, Routes, Route, useParams, useNavigate, Link } from 'react-router-dom';
 import Poll from './components/Poll';
@@ -105,9 +105,18 @@ function App() {
     },
   });
 
-  const [token, setToken] = useState('');
-  const [cityInfo, setCityInfo] = useState<City | null>(null);
-  const [cityId, setCityId] = useState<string | null>(null);
+  const [token, setToken] = useState(() => {
+    const saved = localStorage.getItem('token');
+    return saved ? saved : '';
+  });
+  const [cityInfo, setCityInfo] = useState<City | null>(() => {
+    const saved = localStorage.getItem('cityInfo');
+    return saved ? JSON.parse(saved) : null;
+  });
+  const [cityId, setCityId] = useState<string | null>(() => {
+    const saved = localStorage.getItem('cityId');
+    return saved ? saved : null;
+  });
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [votesData, setVotesData] = useState<PollVotes>({});
@@ -115,6 +124,13 @@ function App() {
   const [polls, _] = useState<Record<string, any>>({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isRefreshingVotes, setIsRefreshingVotes] = useState(false);
+
+  // Auto-fetch data if token exists in localStorage
+  useEffect(() => {
+    if (token) {
+      fetchData();
+    }
+  }, []);
 
   const fetchData = async () => {
     setError('');
@@ -138,9 +154,12 @@ function App() {
         throw new Error(data.message || data.details || 'Authentication failed');
       }
 
-      // First set the city info
+      // First set the city info and persist to localStorage
       setCityInfo(data.city);
       setCityId(data.cityId);
+      localStorage.setItem('token', token);
+      localStorage.setItem('cityInfo', JSON.stringify(data.city));
+      localStorage.setItem('cityId', data.cityId);
       
       // Then fetch cities data
       const citiesResponse = await fetch(`${PUBLIC_API_HOST}`, {
@@ -217,6 +236,11 @@ function App() {
     setToken('');
     setVotesData({});
     setCities({});
+    
+    // Clear localStorage
+    localStorage.removeItem('token');
+    localStorage.removeItem('cityInfo');
+    localStorage.removeItem('cityId');
   };
 
   function AuthenticatedContent() {
