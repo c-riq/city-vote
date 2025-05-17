@@ -48,6 +48,7 @@ export type VoteData_ = Record<string, Record<string, [number, string, {
     title: string;
     name: string;
     actingCapacity: 'individual' | 'representingCityAdministration';
+    externallyVerifiedBy?: string; // Platform that verified this vote (for imported joint statements)
 }][]>>;
 
 // City data format
@@ -98,6 +99,7 @@ export type VoteData = Record<string, Record<string, [number, string, {
     title: string;
     name: string;
     actingCapacity: 'individual' | 'representingCityAdministration';
+    externallyVerifiedBy?: string; // Platform that verified this vote (for imported joint statements)
 }][]>>;
 
 // City data format
@@ -130,6 +132,7 @@ export interface VoteRequest {
     title: string;
     name: string;
     actingCapacity: 'individual' | 'representingCityAdministration';
+    externallyVerifiedBy?: string; // Platform that verified this vote (for imported joint statements)
 }
 
 export interface GetVotesRequest {
@@ -195,5 +198,3 @@ export interface GetCitiesResponse {
 export interface CreatePollResponse {
     message: string;
 }
-
-

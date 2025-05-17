@@ -9,6 +9,7 @@ interface Vote {
     title: string;
     name: string;
     actingCapacity: 'individual' | 'representingCityAdministration';
+    externallyVerifiedBy?: string; // Platform that verified this vote
   };
 }
 
@@ -79,6 +80,21 @@ const VoteList = ({ votes, cities, variant = 'list', containerStyle, isJointStat
                 'personal' : 
                 'city admin'}
             </em>
+            {vote.voteInfo.externallyVerifiedBy && (
+              <>
+                {' · '}
+                <span style={{ 
+                  backgroundColor: '#e3f2fd', 
+                  padding: '2px 6px', 
+                  borderRadius: '4px',
+                  fontSize: '0.75rem',
+                  fontWeight: 500,
+                  color: '#0d47a1'
+                }}>
+                  Verified by {vote.voteInfo.externallyVerifiedBy}
+                </span>
+              </>
+            )}
           </Typography>
         </Typography>
       ))}
@@ -149,6 +165,21 @@ const VoteList = ({ votes, cities, variant = 'list', containerStyle, isJointStat
                       'personal' : 
                       'city admin'}
                   </em>
+                  {vote.voteInfo.externallyVerifiedBy && (
+                    <>
+                      {' · '}
+                      <span style={{ 
+                        backgroundColor: '#e3f2fd', 
+                        padding: '2px 6px', 
+                        borderRadius: '4px',
+                        fontSize: '0.75rem',
+                        fontWeight: 500,
+                        color: '#0d47a1'
+                      }}>
+                        Verified by {vote.voteInfo.externallyVerifiedBy}
+                      </span>
+                    </>
+                  )}
                 </Typography>
               }
             />

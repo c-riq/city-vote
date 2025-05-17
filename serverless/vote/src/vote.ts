@@ -148,6 +148,7 @@ interface VoteParams {
     title: string;
     name: string;
     actingCapacity: 'individual' | 'representingCityAdministration';
+    externallyVerifiedBy?: string; // Platform that verified this vote
 }
 
 interface CreatePollParams {
@@ -182,7 +183,7 @@ const handleValidateToken = async ({ resolvedCity }: ValidateTokenParams): Promi
     };
 };
 
-const handleVote = async ({ cityId, resolvedCity, pollId, option, title, name, actingCapacity }: VoteParams): Promise<APIGatewayProxyResult> => {
+const handleVote = async ({ cityId, resolvedCity, pollId, option, title, name, actingCapacity, externallyVerifiedBy }: VoteParams): Promise<APIGatewayProxyResult> => {
     if (!pollId || option === undefined || !title || !name || !actingCapacity) {
         return {
             statusCode: 400,
@@ -257,7 +258,12 @@ const handleVote = async ({ cityId, resolvedCity, pollId, option, title, name, a
         votes[pollId][resolvedCity.id].push([
             Date.now(), 
             option, 
-            { title: displayTitle, name, actingCapacity }
+            { 
+                title: displayTitle, 
+                name, 
+                actingCapacity,
+                ...(externallyVerifiedBy ? { externallyVerifiedBy } : {})
+            }
         ]);
 
         await s3Client.send(new PutObjectCommand({
@@ -537,7 +543,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
             };
         }
 
-        const { action, cityId, token, pollId, option, title, name, actingCapacity } = JSON.parse(event.body);
+        const { action, cityId, token, pollId, option, title, name, actingCapacity, externallyVerifiedBy } = JSON.parse(event.body);
         
         if (!action) {
             return {
@@ -619,7 +625,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
         }
 
         // Type assertion to ensure correct params are passed to each handler
-        return await handler({ cityId, resolvedCity, token, pollId, option, title, name, actingCapacity } as any);
+        return await handler({ cityId, resolvedCity, token, pollId, option, title, name, actingCapacity, externallyVerifiedBy } as any);
     } catch (error) {
         console.error('Error:', error);
         return {
