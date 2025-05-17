@@ -1,4 +1,4 @@
-// Vote storage format in S3
+// Vote storage format in S3 (underscore added to prevent name collision in synced file)
 export type VoteData_ = Record<string, Record<string, [number, string, {
     title: string;
     name: string;
@@ -16,7 +16,6 @@ export interface City {
     }[];
 }
 
-// Public API Request/Response types (no authentication required)
 export interface GetPublicVotesRequest {
     action: 'getVotes';
     cityId?: string;
@@ -26,7 +25,6 @@ export interface GetPublicCitiesRequest {
     action: 'getCities';
 }
 
-// API Response types
 export interface GetVotesResponse {
     votes: VoteData_;
     message?: string;

@@ -5,6 +5,12 @@ import VoteList from './VoteList';
 import { VoteData, GetVotesResponse, City } from '../backendTypes';
 import { PUBLIC_API_HOST } from '../constants';
 
+// Helper function to get display title (removes _attachment_<hash> if present)
+const getDisplayTitle = (title: string): string => {
+  const attachmentIndex = title.indexOf('_attachment_');
+  return attachmentIndex !== -1 ? title.substring(0, attachmentIndex) : title;
+};
+
 interface PollsProps {
   theme?: any;
   token?: string;
@@ -253,7 +259,7 @@ function Polls({ token, cityInfo, votesData: propVotesData, cities: propCities, 
             >
               <Link to={`/poll/${encodeURIComponent(pollId)}`} style={{ textDecoration: 'none' }}>
                 <Typography variant="h6" sx={{ color: 'primary.main', fontWeight: 500, mb: 2 }}>
-                  {pollId}
+                  {getDisplayTitle(pollId)}
                 </Typography>
               </Link>
               <VoteList 

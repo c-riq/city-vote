@@ -14,7 +14,8 @@ import {
   RadioGroup,
   TextField,
   Typography,
-  CircularProgress
+  CircularProgress,
+  Link as MuiLink
 } from '@mui/material';
 import { VOTE_HOST, PUBLIC_API_HOST } from '../constants';
 import VoteList from './VoteList';
@@ -36,6 +37,21 @@ interface PollProps {
   theme?: any;
 }
 
+// Helper function to create a URL-safe base64 SHA-256 hash
+const createAttachmentId = async (pollQuestion: string): Promise<string> => {
+  // Use the SubtleCrypto API to create a SHA-256 hash
+  const encoder = new TextEncoder();
+  const data = encoder.encode(pollQuestion);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  
+  // Convert the hash to a base64 string
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const hashBase64 = btoa(String.fromCharCode(...hashArray));
+  
+  // Make it URL-safe by replacing characters
+  return hashBase64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+};
+
 function Poll({ token, pollData, onVoteComplete, votesData: propVotesData, cities: propCities, cityInfo }: PollProps) {
   const navigate = useNavigate();
   const { pollId } = useParams();
@@ -51,6 +67,7 @@ function Poll({ token, pollData, onVoteComplete, votesData: propVotesData, citie
   const [votesData, setVotesData] = useState<VoteData>(propVotesData || {});
   const [cities, setCities] = useState<Record<string, City>>(propCities || {});
   const [isAuthenticated] = useState(!!token && !!cityInfo);
+  const [attachmentUrl, setAttachmentUrl] = useState<string | null>(null);
 
   // Fetch data if not provided as props (unauthenticated mode)
   useEffect(() => {
@@ -58,6 +75,52 @@ function Poll({ token, pollData, onVoteComplete, votesData: propVotesData, citie
       fetchData();
     }
   }, [pollId, isAuthenticated]);
+
+  // Check for attachment when poll ID is available
+  useEffect(() => {
+    const checkAttachment = async () => {
+      if (pollId || pollData?.id) {
+        const question = pollData?.id || decodeURIComponent(pollId || '');
+        const attachmentId = await createAttachmentId(question);
+        
+        // Request a direct URL for the attachment
+        try {
+          const response = await fetch(`${VOTE_HOST}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              action: 'getAttachmentUrl',
+              pollId: question,
+              attachmentId: attachmentId,
+              token: token || '' // Token may be optional for public polls
+            })
+          });
+          
+          if (response.ok) {
+            const data = await response.json();
+            if (data.attachmentUrl) {
+              setAttachmentUrl(data.attachmentUrl);
+            } else {
+              setAttachmentUrl(null);
+            }
+          } else {
+            setAttachmentUrl(null);
+          }
+        } catch (error) {
+          console.error('Error checking attachment:', error);
+          setAttachmentUrl(null);
+        }
+      }
+    };
+    
+    checkAttachment();
+  }, [pollId, pollData, token]);
+
+  // Helper function to get display title (removes _attachment_<hash> if present)
+  const getDisplayTitle = (title: string): string => {
+    const attachmentIndex = title.indexOf('_attachment_');
+    return attachmentIndex !== -1 ? title.substring(0, attachmentIndex) : title;
+  };
 
   const fetchData = async () => {
     setError('');
@@ -304,14 +367,39 @@ function Poll({ token, pollData, onVoteComplete, votesData: propVotesData, citie
           <Typography 
             variant="h4" 
             sx={{ 
-              mb: 4,
+              mb: 2,
               color: 'primary.main',
               textAlign: 'center',
               fontWeight: 600
             }}
           >
-            {pollData?.title || decodeURIComponent(pollId || '')}
+            {getDisplayTitle(pollData?.title || decodeURIComponent(pollId || ''))}
           </Typography>
+          
+          {attachmentUrl && (
+            <Box sx={{ 
+              display: 'flex', 
+              justifyContent: 'center', 
+              mb: 4,
+              mt: 2
+            }}>
+              <Button
+                variant="outlined"
+                startIcon={<span className="material-icons">description</span>}
+                component={MuiLink}
+                href={attachmentUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                sx={{ 
+                  textTransform: 'none',
+                  borderRadius: 2,
+                  px: 3
+                }}
+              >
+                View Attachment
+              </Button>
+            </Box>
+          )}
 
           {isAuthenticated && (
             <>

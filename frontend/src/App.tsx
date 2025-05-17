@@ -2,7 +2,7 @@ import { Button, Container, Typography, TextField, Box, Dialog,
   DialogTitle, DialogContent, DialogActions, createTheme, 
   ThemeProvider  } from '@mui/material';
 import { useState } from 'react';
-import { VOTE_HOST, PUBLIC_API_HOST, VOTE_HOST_DEV, PUBLIC_API_HOST_DEV } from './constants';
+import { VOTE_HOST, PUBLIC_API_HOST } from './constants';
 import { BrowserRouter, Routes, Route, useParams, useNavigate, Link } from 'react-router-dom';
 import Poll from './components/Poll';
 import Polls from './components/Polls';
@@ -223,12 +223,120 @@ function App() {
     const navigate = useNavigate();
     const [question, setQuestion] = useState('');
     const [isCreatingPoll, setIsCreatingPoll] = useState(false);
+    const [attachment, setAttachment] = useState<File | null>(null);
+    const [attachmentError, setAttachmentError] = useState('');
+
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0] || null;
+        
+        if (file) {
+            if (file.type !== 'application/pdf') {
+                setAttachmentError('Only PDF files are allowed');
+                setAttachment(null);
+                return;
+            }
+            
+            if (file.size > 10 * 1024 * 1024) { // 10MB limit
+                setAttachmentError('File size must be less than 10MB');
+                setAttachment(null);
+                return;
+            }
+            
+            setAttachmentError('');
+            setAttachment(file);
+        } else {
+            setAttachment(null);
+        }
+    };
+
+    // Helper function to create a URL-safe base64 SHA-256 hash
+    const createAttachmentId = async (pollQuestion: string): Promise<string> => {
+        // Use the SubtleCrypto API to create a SHA-256 hash
+        const encoder = new TextEncoder();
+        const data = encoder.encode(pollQuestion);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+        
+        // Convert the hash to a base64 string
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        const hashBase64 = btoa(String.fromCharCode(...hashArray));
+        
+        // Make it URL-safe by replacing characters
+        return hashBase64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    };
 
     const handleCreatePoll = async () => {
         if (!question.trim()) return;
         
         setIsCreatingPoll(true);
         try {
+            // If there's an attachment, get a presigned URL and upload it first
+            if (attachment) {
+                const attachmentId = await createAttachmentId(question.trim());
+                
+                // First, get the presigned URL
+                const getUrlResponse = await fetch(VOTE_HOST, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'uploadAttachment',
+                        token,
+                        pollId: question.trim(),
+                        attachmentId
+                    })
+                });
+
+                if (!getUrlResponse.ok) {
+                    const data = await getUrlResponse.json();
+                    throw new Error(data.message || 'Failed to get upload URL');
+                }
+
+                const urlData = await getUrlResponse.json();
+                
+                if (!urlData.uploadUrl) {
+                    throw new Error('No upload URL provided');
+                }
+                
+                // Then, upload the file directly to S3 using the presigned URL
+                const uploadResponse = await fetch(urlData.uploadUrl, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/pdf'
+                    },
+                    body: attachment
+                });
+
+                if (!uploadResponse.ok) {
+                    throw new Error('Failed to upload attachment to S3');
+                }
+                
+                // Use the formatted pollId returned from the backend (which includes _attachment_<hash>)
+                if (urlData.pollId) {
+                    // Create the poll with the formatted pollId
+                    const response = await fetch(VOTE_HOST, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            action: 'createPoll',
+                            token,
+                            pollId: urlData.pollId
+                        })
+                    });
+
+                    if (!response.ok) {
+                        const data = await response.json();
+                        throw new Error(data.message || 'Failed to create poll');
+                    }
+
+                    setIsModalOpen(false);
+                    const encodedQuestion = encodeURIComponent(urlData.pollId);
+                    navigate(`/poll/${encodedQuestion}`);
+                    setQuestion('');
+                    setAttachment(null);
+                    return;
+                }
+            }
+
+            // If no attachment or no pollId returned, create the poll with the original question
             const response = await fetch(VOTE_HOST, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -248,6 +356,7 @@ function App() {
             const encodedQuestion = encodeURIComponent(question.trim());
             navigate(`/poll/${encodedQuestion}`);
             setQuestion('');
+            setAttachment(null);
         } catch (err) {
             alert(err instanceof Error ? err.message : 'Failed to create poll');
         } finally {
@@ -257,6 +366,8 @@ function App() {
 
     const handleCancel = () => {
         setQuestion('');
+        setAttachment(null);
+        setAttachmentError('');
         setIsModalOpen(false);
     };
 
@@ -279,6 +390,37 @@ function App() {
                         onChange={(e) => setQuestion(e.target.value)}
                         margin="normal"
                     />
+                    <Box sx={{ mt: 2 }}>
+                        <Typography variant="subtitle2" sx={{ mb: 1 }}>
+                            Attachment (Optional)
+                        </Typography>
+                        <input
+                            accept="application/pdf"
+                            style={{ display: 'none' }}
+                            id="attachment-file"
+                            type="file"
+                            onChange={handleFileChange}
+                        />
+                        <label htmlFor="attachment-file">
+                            <Button
+                                variant="outlined"
+                                component="span"
+                                startIcon={<span className="material-icons">attach_file</span>}
+                            >
+                                {attachment ? 'Change PDF' : 'Upload PDF'}
+                            </Button>
+                        </label>
+                        {attachment && (
+                            <Typography variant="body2" sx={{ mt: 1, color: 'text.secondary' }}>
+                                Selected: {attachment.name} ({Math.round(attachment.size / 1024)} KB)
+                            </Typography>
+                        )}
+                        {attachmentError && (
+                            <Typography variant="body2" sx={{ mt: 1, color: 'error.main' }}>
+                                {attachmentError}
+                            </Typography>
+                        )}
+                    </Box>
                 </DialogContent>
                 <DialogActions sx={{ px: 3, pb: 3 }}>
                     <Button onClick={handleCancel}>Cancel</Button>
@@ -589,7 +731,11 @@ function App() {
                       >
                         <Link to={`/poll/${encodeURIComponent(pollId)}`} style={{ textDecoration: 'none' }}>
                           <Typography variant="h6" sx={{ color: 'primary.main', fontWeight: 500, mb: 2 }}>
-                            {pollId}
+                            {(() => {
+                              // Helper function to get display title (removes _attachment_<hash> if present)
+                              const attachmentIndex = pollId.indexOf('_attachment_');
+                              return attachmentIndex !== -1 ? pollId.substring(0, attachmentIndex) : pollId;
+                            })()}
                           </Typography>
                         </Link>
                         <VoteList 

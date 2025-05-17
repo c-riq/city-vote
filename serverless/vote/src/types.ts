@@ -54,11 +54,33 @@ export interface CreatePollRequest {
     pollId: string;
 }
 
+export interface UploadAttachmentRequest {
+    action: 'uploadAttachment';
+    token: string;
+    pollId: string;
+    attachmentId?: string;
+}
+
 // API Response types
 export interface ValidateTokenResponse {
     city: City;
     cityId: string;
     message?: string;
+    details?: string;
+}
+
+export interface UploadAttachmentResponse {
+    message: string;
+    attachmentUrl?: string;
+    uploadUrl?: string;
+    getUrl?: string;
+    pollId?: string; // Added to return the formatted pollId for attachments
+    details?: string;
+}
+
+export interface GetAttachmentUrlResponse {
+    message: string;
+    attachmentUrl?: string; // Direct URL to the attachment (no longer a presigned URL)
     details?: string;
 }
 
@@ -77,4 +99,4 @@ export interface GetCitiesResponse {
 
 export interface CreatePollResponse {
     message: string;
-} 
+}

@@ -1,7 +1,9 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { S3Client, GetObjectCommand, PutObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { Readable } from 'stream';
 import crypto from 'crypto';
+import { createHash } from 'crypto';
 import {
     City,
     VoteData,
@@ -11,6 +13,7 @@ const s3Client = new S3Client({ region: 'us-east-1' });
 // Check if running in dev environment based on environment variable
 const isDev = process.env.CITY_VOTE_ENV === 'dev';
 const BUCKET_NAME = isDev ? 'city-vote-data-dev' : 'city-vote-data';
+const PUBLIC_BUCKET_NAME = isDev ? 'city-vote-data-public-dev' : 'city-vote-data-public';
 
 const VOTES_KEY = 'votes/votes.json';
 const LOCK_KEY = 'votes/lock.csv';
@@ -153,6 +156,20 @@ interface CreatePollParams {
     pollId: string;
 }
 
+interface UploadAttachmentParams {
+    resolvedCity: City;
+    token: string;
+    pollId: string;
+    contentType?: string;
+    attachmentId?: string;
+}
+
+// Helper function to create a URL-safe base64 SHA-256 hash
+const createUrlSafeB64Hash = (input: string): string => {
+    const hash = createHash('sha256').update(input).digest('base64');
+    return hash.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+};
+
 // Update action handlers with specific types
 const handleValidateToken = async ({ resolvedCity }: ValidateTokenParams): Promise<APIGatewayProxyResult> => {
     return {
@@ -227,16 +244,26 @@ const handleVote = async ({ cityId, resolvedCity, pollId, option, title, name, a
         if (!votes[pollId]) votes[pollId] = {};
         if (!votes[pollId][resolvedCity.id]) votes[pollId][resolvedCity.id] = [];
 
+        // For polls with attachments, the title displayed in the UI should have the _attachment_<hash> part removed
+        let displayTitle = title;
+        if (pollId.includes('_attachment_')) {
+            // If the title still contains the _attachment_<hash> part, remove it for display
+            const attachmentIndex = title.indexOf('_attachment_');
+            if (attachmentIndex !== -1) {
+                displayTitle = title.substring(0, attachmentIndex);
+            }
+        }
+        
         votes[pollId][resolvedCity.id].push([
             Date.now(), 
             option, 
-            { title, name, actingCapacity }
+            { title: displayTitle, name, actingCapacity }
         ]);
 
         await s3Client.send(new PutObjectCommand({
             Bucket: BUCKET_NAME,
             Key: VOTES_KEY,
-            Body: JSON.stringify(votes),
+            Body: JSON.stringify(votes, null, 2), // Format JSON with 2-space indentation
             ContentType: 'application/json'
         }));
         await releaseLock();
@@ -262,6 +289,9 @@ const handleCreatePoll = async ({ pollId }: CreatePollParams): Promise<APIGatewa
             body: JSON.stringify({ message: 'Missing required parameter: pollId' }, null, 2)
         };
     }
+    
+    // Note: For polls with attachments, the pollId must be in the format <poll_question>_attachment_<hash>
+    // This is enforced in the handleUploadAttachment function
 
     const sessionId = Buffer.from(crypto.getRandomValues(new Uint8Array(16))).toString('base64');
     let lockAcquired = false;
@@ -309,7 +339,7 @@ const handleCreatePoll = async ({ pollId }: CreatePollParams): Promise<APIGatewa
         await s3Client.send(new PutObjectCommand({
             Bucket: BUCKET_NAME,
             Key: VOTES_KEY,
-            Body: JSON.stringify(votes),
+            Body: JSON.stringify(votes, null, 2), // Format JSON with 2-space indentation
             ContentType: 'application/json'
         }));
         await releaseLock();
@@ -327,21 +357,178 @@ const handleCreatePoll = async ({ pollId }: CreatePollParams): Promise<APIGatewa
     }
 };
 
+// No multipart form data parsing needed - using only JSON
+
+// Interface for getAttachmentUrl params
+interface GetAttachmentUrlParams {
+    resolvedCity?: City;
+    token?: string;
+    pollId: string;
+    attachmentId?: string;
+}
+
 // Update action handlers type
 type ActionHandlers = {
     validateToken: (params: ValidateTokenParams) => Promise<APIGatewayProxyResult>;
     vote: (params: VoteParams) => Promise<APIGatewayProxyResult>;
     createPoll: (params: CreatePollParams) => Promise<APIGatewayProxyResult>;
+    uploadAttachment: (params: UploadAttachmentParams) => Promise<APIGatewayProxyResult>;
+    getAttachmentUrl: (params: GetAttachmentUrlParams) => Promise<APIGatewayProxyResult>;
+};
+
+// Get the direct URL for an attachment (bucket is public)
+const getAttachmentDirectUrl = (hash: string): string => {
+    // Create the attachment key using the hash
+    const attachmentKey = `attachments/${hash}.pdf`;
+    
+    // Return direct URL to the public bucket
+    return `https://${PUBLIC_BUCKET_NAME}.s3.amazonaws.com/${attachmentKey}`;
+};
+
+// Generate a presigned URL for uploading an attachment
+const generatePutPresignedUrl = async (pollId: string, contentType: string, attachmentId?: string): Promise<string> => {
+    // Use the provided attachmentId or generate one if not provided
+    const hash = attachmentId || createUrlSafeB64Hash(pollId);
+    
+    // Create the attachment key using just the hash
+    const attachmentKey = `attachments/${hash}.pdf`;
+    
+    // Create the command for putting the object
+    const command = new PutObjectCommand({
+        Bucket: PUBLIC_BUCKET_NAME,
+        Key: attachmentKey,
+        ContentType: contentType
+    });
+    
+    // Generate a presigned URL that expires in 15 minutes (900 seconds)
+    return await getSignedUrl(s3Client, command, { expiresIn: 900 });
+};
+
+const handleUploadAttachment = async ({ resolvedCity, pollId, attachmentId }: UploadAttachmentParams): Promise<APIGatewayProxyResult> => {
+    if (!pollId) {
+        return {
+            statusCode: 400,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: 'Missing required parameter: pollId' }, null, 2)
+        };
+    }
+
+    try {
+        // Use the provided attachmentId or generate one if not provided
+        const hash = attachmentId || createUrlSafeB64Hash(pollId);
+        
+        // Ensure pollId follows the required format for attachments: <poll_question>_attachment_<hash>
+        // Check if pollId already has the correct format
+        if (!pollId.includes('_attachment_')) {
+            pollId = `${pollId}_attachment_${hash}`;
+        }
+        
+        // Generate presigned URL for upload and direct URL for retrieval
+        const contentType = 'application/pdf';
+        const uploadUrl = await generatePutPresignedUrl(pollId, contentType, attachmentId);
+        const getUrl = getAttachmentDirectUrl(hash);
+        
+        // Return the presigned URL for upload, direct URL for retrieval, and the formatted pollId
+        return {
+            statusCode: 200,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                message: 'Presigned URLs generated successfully',
+                uploadUrl,
+                getUrl,
+                pollId
+            }, null, 2)
+        };
+    } catch (error) {
+        console.error('Error handling attachment:', error);
+        return {
+            statusCode: 500,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                message: 'Failed to process attachment request',
+                details: error instanceof Error ? error.message : 'Unknown error'
+            }, null, 2)
+        };
+    }
+};
+
+// Handler for getting a direct URL for an attachment
+const handleGetAttachmentUrl = async ({ pollId, attachmentId }: GetAttachmentUrlParams): Promise<APIGatewayProxyResult> => {
+    if (!pollId) {
+        return {
+            statusCode: 400,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: 'Missing required parameter: pollId' }, null, 2)
+        };
+    }
+
+    try {
+        // Use the provided attachmentId or generate one if not provided
+        const hash = attachmentId || createUrlSafeB64Hash(pollId);
+        
+        // Ensure pollId follows the required format for attachments: <poll_question>_attachment_<hash>
+        // Check if pollId already has the correct format
+        if (!pollId.includes('_attachment_')) {
+            pollId = `${pollId}_attachment_${hash}`;
+        }
+        
+        // Create the attachment key using just the hash
+        const attachmentKey = `attachments/${hash}.pdf`;
+        
+        // Check if the attachment exists
+        try {
+            await s3Client.send(new GetObjectCommand({
+                Bucket: PUBLIC_BUCKET_NAME,
+                Key: attachmentKey
+            }));
+            
+            // If we get here, the attachment exists, so return the direct URL
+            const directUrl = getAttachmentDirectUrl(hash);
+            
+            return {
+                statusCode: 200,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    message: 'Attachment URL generated successfully',
+                    attachmentUrl: directUrl
+                }, null, 2)
+            };
+        } catch (error: any) {
+            if (error.name === 'NoSuchKey') {
+                // Attachment doesn't exist
+                return {
+                    statusCode: 404,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: 'Attachment not found' }, null, 2)
+                };
+            }
+            throw error;
+        }
+    } catch (error) {
+        console.error('Error generating attachment URL:', error);
+        return {
+            statusCode: 500,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                message: 'Failed to generate attachment URL',
+                details: error instanceof Error ? error.message : 'Unknown error'
+            }, null, 2)
+        };
+    }
 };
 
 const actionHandlers: ActionHandlers = {
     validateToken: handleValidateToken,
     vote: handleVote,
     createPoll: handleCreatePoll,
+    uploadAttachment: handleUploadAttachment,
+    getAttachmentUrl: handleGetAttachmentUrl
 };
 
 export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     try {
+
+        // Handle regular JSON requests
         if (!event.body) {
             return {
                 statusCode: 400,
@@ -352,15 +539,28 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
 
         const { action, cityId, token, pollId, option, title, name, actingCapacity } = JSON.parse(event.body);
         
-        if (!action || !token) {
+        if (!action) {
             return {
                 statusCode: 400,
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    message: `Missing required parameters: ${[
-                        !action && 'action',
-                        !token && 'token'
-                    ].filter(Boolean).join(', ')}`
+                    message: 'Missing required parameter: action'
+                }, null, 2)
+            };
+        }
+        
+        // Special case for getAttachmentUrl which doesn't require token validation
+        if (action === 'getAttachmentUrl') {
+            const { pollId, attachmentId } = JSON.parse(event.body);
+            return await handleGetAttachmentUrl({ pollId, attachmentId });
+        }
+        
+        if (!token) {
+            return {
+                statusCode: 400,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    message: 'Missing required parameter: token'
                 }, null, 2)
             };
         }

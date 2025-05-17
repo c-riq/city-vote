@@ -10,8 +10,9 @@ export interface CityAutocompleteData {
 
 // API Request/Response types
 export interface AutocompleteRequest {
-    action: 'autocomplete';
+    action: 'autocomplete' | 'getByQid';
     query: string;
+    qid?: string;
     limit?: number;
 }
 
@@ -22,14 +23,28 @@ export interface AutocompleteResponse {
         countryWikidataId: string;
         countryName: string;
         countryCode: string;
+        population?: number;
+        populationDate?: string;
+        coordinates?: {
+            latitude: number;
+            longitude: number;
+        };
+        officialWebsite?: string;
+        socialMedia?: {
+            twitter?: string;
+            facebook?: string;
+            instagram?: string;
+            youtube?: string;
+            linkedin?: string;
+        };
     }[];
     message?: string;
 }
 
 
 // From serverless/public/src/types.ts
-// Vote storage format in S3
-export type VoteData = Record<string, Record<string, [number, string, {
+// Vote storage format in S3 (underscore added to prevent name collision in synced file)
+export type VoteData_ = Record<string, Record<string, [number, string, {
     title: string;
     name: string;
     actingCapacity: 'individual' | 'representingCityAdministration';
@@ -46,7 +61,6 @@ export interface City {
     }[];
 }
 
-// Public API Request/Response types (no authentication required)
 export interface GetPublicVotesRequest {
     action: 'getVotes';
     cityId?: string;
@@ -56,9 +70,8 @@ export interface GetPublicCitiesRequest {
     action: 'getCities';
 }
 
-// API Response types
 export interface GetVotesResponse {
-    votes: VoteData;
+    votes: VoteData_;
     message?: string;
 }
 
@@ -80,6 +93,13 @@ export interface RegisterResponse {
 
 
 // From serverless/vote/src/types.ts
+// Vote storage format in S3
+export type VoteData = Record<string, Record<string, [number, string, {
+    title: string;
+    name: string;
+    actingCapacity: 'individual' | 'representingCityAdministration';
+}][]>>;
+
 // City data format
 export interface City {
     id: string;
@@ -129,11 +149,33 @@ export interface CreatePollRequest {
     pollId: string;
 }
 
+export interface UploadAttachmentRequest {
+    action: 'uploadAttachment';
+    token: string;
+    pollId: string;
+    attachmentId?: string;
+}
+
 // API Response types
 export interface ValidateTokenResponse {
     city: City;
     cityId: string;
     message?: string;
+    details?: string;
+}
+
+export interface UploadAttachmentResponse {
+    message: string;
+    attachmentUrl?: string;
+    uploadUrl?: string;
+    getUrl?: string;
+    pollId?: string; // Added to return the formatted pollId for attachments
+    details?: string;
+}
+
+export interface GetAttachmentUrlResponse {
+    message: string;
+    attachmentUrl?: string; // Direct URL to the attachment (no longer a presigned URL)
     details?: string;
 }
 
@@ -152,5 +194,6 @@ export interface GetCitiesResponse {
 
 export interface CreatePollResponse {
     message: string;
-} 
+}
+
 
