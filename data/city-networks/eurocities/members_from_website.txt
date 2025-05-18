@@ -1,0 +1,455 @@
+# copy pasted from website
+Aarhus
+denmark
+Aix-Marseille-Provence Metropole
+france
+Alcobendas
+spain
+Almere
+netherlands
+Amaroussion
+greece
+Ambelokipi-Menemeni
+greece
+Amiens Metropole
+france
+Ampelokipoi-Menemeni
+greece
+Amsterdam
+netherlands
+Angers Loire Metropole
+france
+Antwerp
+belgium
+Arezzo
+italy
+Athens
+greece
+Barcelona
+spain
+Barcelos
+portugal
+Bari
+italy
+Belfast
+united kingdom
+Bergen
+norway
+Berlin
+germany
+Beyoglu
+turkey
+Bialystok
+poland
+Bilbao
+spain
+Birmingham
+united kingdom
+Bochum
+germany
+Bologna
+italy
+Bonn
+germany
+Bordeaux
+france
+Bordeaux Metropole
+france
+Borlange
+sweden
+Brabantstad
+netherlands
+Braga
+portugal
+Bratislava
+slovakia
+Bremen
+germany
+Brescia
+italy
+Brest Metropole
+france
+Brighton & Hove
+united kingdom
+Bristol
+united kingdom
+Brno
+czech republic
+Bruges
+belgium
+Brussels
+belgium
+Brussels Capital Region
+belgium
+Budapest
+hungary
+Burgas
+bulgaria
+Bydgoszcz
+poland
+Cagliari
+italy
+Cardiff
+united kingdom
+Cesena
+italy
+Chemnitz
+germany
+Chernihiv
+ukraine
+Chisinau
+moldova
+Cluj-Napoca
+romania
+Cologne
+germany
+Constanta
+romania
+Copenhagen
+denmark
+Coventry
+united kingdom
+Debrecen
+hungary
+Derry-Strabane
+united kingdom
+Dijon
+france
+Donostia – San Sebastian
+spain
+Dordrecht
+netherlands
+Dortmund
+germany
+Dresden
+germany
+Dublin
+ireland
+Dusseldorf
+germany
+Edinburgh
+united kingdom
+Eindhoven
+netherlands
+Espoo
+finland
+Essen
+germany
+Florence
+italy
+Frankfurt
+germany
+Fuenlabrada
+spain
+Gaziantep
+turkey
+Gdansk
+poland
+Genoa
+italy
+Ghent
+belgium
+Gijon
+spain
+Glasgow
+united kingdom
+Gothenburg
+sweden
+Grand Paris Sud
+france
+Greater Paris Metropole
+france
+Grenoble Alpes Metropole
+france
+Groningen
+netherlands
+Guimaraes
+portugal
+Haarlem
+netherlands
+Hagen
+germany
+Hamburg
+germany
+Hannover
+germany
+Hatay
+turkey
+Helsinki
+finland
+Irpin
+ukraine
+Istanbul
+turkey
+Izmir
+turkey
+Kadikoy
+turkey
+Karlsruhe
+germany
+Karlstad
+sweden
+Katowice
+poland
+Kharkiv
+ukraine
+Kherson
+ukraine
+Khmelnytskyi
+ukraine
+Kiel
+germany
+Klaipeda
+lithuania
+Kortrijk
+belgium
+Kungsbacka
+sweden
+Kyiv
+ukraine
+Lahti
+finland
+Leeds
+united kingdom
+Leeuwarden
+netherlands
+Leipzig
+germany
+Leuven
+belgium
+Liege
+belgium
+Lille Metropole
+france
+Linkoping
+sweden
+Lisbon
+portugal
+Ljubljana
+slovenia
+Lodz
+poland
+Logrono
+spain
+London
+united kingdom
+Lublin
+poland
+Luxembourg
+luxembourg
+Lviv
+ukraine
+Lyon
+france
+Lyon Metropole
+france
+Madrid
+spain
+Maia
+portugal
+Malaga
+spain
+Malmo
+sweden
+Manchester
+united kingdom
+Mannheim
+germany
+Mariupol (city government in exile)
+ukraine
+Marseille
+france
+Matosinhos
+portugal
+Mezitli
+turkey
+Milan
+italy
+Montpellier Metropole
+france
+Muenster
+germany
+Munich
+germany
+Murcia
+spain
+Nancy
+france
+Nantes Metropole
+france
+Naples
+italy
+Netwerkstad Twente
+netherlands
+Newcastle
+united kingdom
+Nice Côte d’Azur
+france
+Nicosia
+cyprus
+Novi Sad
+serbia
+Nuremberg
+germany
+Odesa
+ukraine
+Odunpazari
+turkey
+Oeiras
+portugal
+Orihuela
+spain
+Oslo
+norway
+Osmangazi
+turkey
+Ostend
+belgium
+Oulu
+finland
+Palermo
+italy
+Paris
+france
+Parma
+italy
+Pau
+france
+Pesaro
+italy
+Pilsen
+czech republic
+Pisa
+italy
+Podgorica
+montenegro
+Pokrovsk
+ukraine
+Poltava
+ukraine
+Porto
+portugal
+Poznan
+poland
+Prague
+czech republic
+Reggio Calabria Metropolitan City
+italy
+Rennes Metropole
+france
+Reykjavik
+iceland
+Riga
+latvia
+Rijeka
+croatia
+Rome
+italy
+Rome Metropolitan Area
+italy
+Rotterdam
+netherlands
+Rubi
+spain
+Rzeszow
+poland
+Saint-Denis
+france
+Sant Boi de Llobregat
+spain
+Sarajevo
+bosnia-herzegovina
+Seville
+spain
+Sheffield
+united kingdom
+Sipoo
+finland
+Sofia
+bulgaria
+Solna
+sweden
+St Nazaire
+france
+Stavanger
+norway
+Stockholm
+sweden
+Strasbourg
+france
+Strovolos
+cyprus
+Stuttgart
+germany
+Sunderland
+united kingdom
+Tallinn
+estonia
+Tampere
+finland
+Taranto
+italy
+Tbilisi
+georgia
+Terrassa Metropolitan Area
+spain
+The Hague
+netherlands
+Thessaloniki
+greece
+Timisoara
+romania
+Tirana
+albania
+Toulouse
+france
+Treviso
+italy
+Trondheim
+norway
+Turin
+italy
+Turku
+finland
+Umea
+sweden
+Ungheni
+moldova
+Uppsala
+sweden
+Utrecht
+netherlands
+Valencia
+spain
+Valladolid
+spain
+Valongo
+portugal
+Vantaa
+finland
+Varna
+bulgaria
+Venice
+italy
+Vienna
+austria
+Vilnius
+lithuania
+Vinnytsia
+ukraine
+Warsaw
+poland
+Wiesbaden
+germany
+Wroclaw
+poland
+Yerevan
+armenia
+Zagreb
+croatia
+Zaragoza
+spain
+Zhytomyr
+ukraine
+Zurich
+switzerland
