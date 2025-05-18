@@ -25,10 +25,8 @@ export interface AutocompleteResponse {
         countryCode: string;
         population?: number;
         populationDate?: string;
-        coordinates?: {
-            latitude: number;
-            longitude: number;
-        };
+        latitude?: number;
+        longitude?: number;
         officialWebsite?: string;
         socialMedia?: {
             twitter?: string;
