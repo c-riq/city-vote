@@ -300,13 +300,13 @@ const CityNetworkProfile: React.FC = () => {
 const NetworkMap: React.FC<{ members: EurocitiesMember[] }> = ({ members }) => {
   const navigate = useNavigate();
   
-  // Convert members to map points with small, consistent sizing
+  // Convert members to map points with population-based sizing like in WorldMap
   const mapPoints: CityMapPoint[] = members.map(member => ({
     coordinates: [member.longitude, member.latitude] as [number, number],
     name: member.wikidata_name,
     wikidataId: member.wikidata_id,
-    // Small, consistent dot size
-    size: 2.5,
+    // Similar sizing logic to WorldMap
+    size: member.population ? Math.max(3, member.population / 500000) : 3,
     country: member.country_name,
     population: member.population
   }));
@@ -324,8 +324,8 @@ const NetworkMap: React.FC<{ members: EurocitiesMember[] }> = ({ members }) => {
     }}>
       <ComposableMap
         projectionConfig={{ 
-          scale: 450,
-          center: [15, 55] // Centered on Europe
+          scale: 750, // More zoomed in
+          center: [15, 50] // Centered on Europe
         }}
         width={800}
         height={400}
@@ -379,19 +379,15 @@ const NetworkMap: React.FC<{ members: EurocitiesMember[] }> = ({ members }) => {
                   r={8}
                   fill="transparent"
                 />
-                {/* Visible city dot - small, no border */}
+                {/* Visible city dot - styled like WorldMap */}
                 <circle
-                  r={city.size}
-                  fill="#ffffff"
-                  opacity={0.85}
+                  r={city.size / 2}
+                  fill="#1a237e"
+                  opacity={0.75}
+                  stroke="none"
                   style={{ 
-                    transition: 'opacity 0.2s',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.opacity = '1';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.opacity = '0.85';
+                    pointerEvents: 'none',
+                    transition: 'fill 0.2s, opacity 0.2s, r 0.3s',
                   }}
                 />
               </g>
