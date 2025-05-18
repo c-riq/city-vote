@@ -5,6 +5,7 @@ import LocationCityIcon from '@mui/icons-material/LocationCity';
 import PublicIcon from '@mui/icons-material/Public';
 import PeopleIcon from '@mui/icons-material/People';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import LinkIcon from '@mui/icons-material/Link';
 import { PUBLIC_DATA_BUCKET_URL } from '../constants';
 import { ComposableMap, Geographies, Geography, Marker, ZoomableGroup } from 'react-simple-maps';
 import countryBorders from './countryBorders.json';
@@ -40,6 +41,7 @@ const CityNetworkProfile: React.FC = () => {
   const [networkData, setNetworkData] = useState<EurocitiesData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [totalPopulation, setTotalPopulation] = useState<number | null>(null);
 
   useEffect(() => {
     const fetchNetworkData = async () => {
@@ -69,6 +71,12 @@ const CityNetworkProfile: React.FC = () => {
 
         const data: EurocitiesData = await response.json();
         setNetworkData(data);
+        
+        // Calculate total population
+        const total = data.members
+          .filter(member => member.population !== null)
+          .reduce((sum, member) => sum + (member.population || 0), 0);
+        setTotalPopulation(total);
       } catch (err) {
         console.error('Error fetching network data:', err);
         setError('Failed to load network data');
@@ -191,6 +199,38 @@ const CityNetworkProfile: React.FC = () => {
                   {networkData.members.length} member cities
                 </Typography>
               </Box>
+              
+              {totalPopulation && (
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  <PeopleIcon sx={{ mr: 1, fontSize: 18 }} />
+                  <Typography variant="body2">
+                    Total population: {totalPopulation.toLocaleString()} residents
+                  </Typography>
+                </Box>
+              )}
+              
+              <Box sx={{ display: 'flex', alignItems: 'center', position: 'relative', zIndex: 1000 }}>
+                <LinkIcon sx={{ mr: 1, fontSize: 18, color: 'primary.main' }} />
+                <Link 
+                  href="https://eurocities.eu/" 
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  sx={{ 
+                    color: 'primary.main',
+                    fontWeight: 'medium',
+                    textDecoration: 'none',
+                    '&:hover': { 
+                      textDecoration: 'underline',
+                      color: 'primary.dark'
+                    },
+                    cursor: 'pointer'
+                  }}
+                >
+                  <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
+                    eurocities.eu
+                  </Typography>
+                </Link>
+              </Box>
             </Box>
           </Box>
           
@@ -262,7 +302,7 @@ const CityNetworkProfile: React.FC = () => {
           {networkData.not_found && networkData.not_found.length > 0 && (
             <Box sx={{ mt: 4 }}>
               <Typography variant="h6" sx={{ mb: 2 }}>
-                Cities Without Wikidata Information
+                Other members
               </Typography>
               <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
                 {networkData.not_found.map((cityName) => (
@@ -356,17 +396,7 @@ const NetworkMap: React.FC<{ members: EurocitiesMember[] }> = ({ members }) => {
         {mapPoints.map((city, i) => (
           <Marker key={i} coordinates={city.coordinates}>
             <Tooltip 
-              title={
-                <Box>
-                  <Typography variant="subtitle2">{city.name}</Typography>
-                  <Typography variant="caption" display="block">{city.country}</Typography>
-                  {city.population && (
-                    <Typography variant="caption" display="block">
-                      Population: {city.population.toLocaleString()}
-                    </Typography>
-                  )}
-                </Box>
-              } 
+              title={city.name}
               arrow 
               placement="top"
             >
