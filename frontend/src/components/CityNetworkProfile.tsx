@@ -7,7 +7,7 @@ import PeopleIcon from '@mui/icons-material/People';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import LinkIcon from '@mui/icons-material/Link';
 import { PUBLIC_DATA_BUCKET_URL } from '../constants';
-import { ComposableMap, Geographies, Geography, Marker, ZoomableGroup } from 'react-simple-maps';
+import { ComposableMap, Geographies, Geography, Marker } from 'react-simple-maps';
 import countryBorders from './countryBorders.json';
 
 interface EurocitiesMember {
