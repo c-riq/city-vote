@@ -12,7 +12,7 @@ from extractor import process_lines
 
 # Configuration
 SCRIPT_DIR = pathlib.Path(__file__).parent
-WIKIDATA_DUMP_PATH = '/Users/c/Desktop/project/data_20221022/wikidata/wikidata-20220103-all.json.gz'
+WIKIDATA_DUMP_PATH = '/Users/c/Desktop/project/data_20221022/wikidata/latest-all.json.gz'
 CITY_SUBCLASSES_PATH = str(SCRIPT_DIR / 'city-subclasses.json')
 OUTPUT_DIR = str(SCRIPT_DIR / 'data/cities')
 
@@ -28,7 +28,7 @@ def main():
     skip_lines = 0
     
     # Maximum number of lines to process (None for no limit)
-    max_lines = 1000000
+    max_lines = None
     
     # Load city and municipality subclasses
     city_subclasses = load_city_subclasses(CITY_SUBCLASSES_PATH)

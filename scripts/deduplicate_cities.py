@@ -17,14 +17,13 @@ import os
 from geopy.distance import geodesic
 import argparse
 
-def parse_coordinates(coord_str):
-    """Parse coordinates from JSON string."""
-    if pd.isna(coord_str):
+def parse_coordinates(lat, lon):
+    """Parse coordinates from latitude and longitude values."""
+    if pd.isna(lat) or pd.isna(lon):
         return None
     try:
-        coords = json.loads(coord_str)
-        return (coords.get('latitude'), coords.get('longitude'))
-    except (json.JSONDecodeError, AttributeError):
+        return (float(lat), float(lon))
+    except (ValueError, TypeError):
         return None
 
 def parse_social_media(social_media_str):
@@ -83,8 +82,21 @@ def main():
     df['supersedes_duplicates'] = ''
     df['superseded_by'] = ''
     
-    # Parse coordinates
-    df['coords_tuple'] = df['coordinates'].apply(parse_coordinates)
+    # Convert latitude and longitude to numeric values
+    df['latitude_num'] = pd.to_numeric(df['latitude'], errors='coerce')
+    df['longitude_num'] = pd.to_numeric(df['longitude'], errors='coerce')
+    
+    # Round latitude and longitude to 2 decimal places
+    df['latitude'] = df['latitude_num'].apply(lambda x: round(x, 2) if not pd.isna(x) else None)
+    df['longitude'] = df['longitude_num'].apply(lambda x: round(x, 2) if not pd.isna(x) else None)
+    
+    # Create coordinates tuple for distance calculations
+    df['coords_tuple'] = df.apply(
+        lambda row: (row['latitude_num'], row['longitude_num'])
+        if not pd.isna(row['latitude_num']) and not pd.isna(row['longitude_num'])
+        else None,
+        axis=1
+    )
     
     # Calculate scores for precedence
     df['score'] = df.apply(calculate_city_score, axis=1)
@@ -154,7 +166,7 @@ def main():
                 processed_qids.add(qid1)
     
     # Drop temporary columns
-    df = df.drop(columns=['coords_tuple', 'score'])
+    df = df.drop(columns=['coords_tuple', 'score', 'latitude_num', 'longitude_num'])
     
     # Save to new CSV file
     print(f"Saving deduplicated data to {args.output}...")

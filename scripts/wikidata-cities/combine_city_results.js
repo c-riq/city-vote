@@ -56,36 +56,52 @@ function findResultFiles() {
 // Function to combine city data from multiple files
 function combineData(files) {
   let allCities = [];
-  let header = ["cityWikidataId", "cityLabelEnglish", "countryWikidataId", "population", "populationDate", "latitude", "longitude", "officialWebsite", "socialMedia"];
+  let outputHeader = ["cityWikidataId", "cityLabelEnglish", "countryWikidataId", "population", "populationDate", "latitude", "longitude", "officialWebsite", "socialMedia"];
   
   for (const file of files) {
     const data = readJsonLinesFile(file);
-    if (data && data.cities && Array.isArray(data.cities)) {
+    if (data && data.cities && Array.isArray(data.cities) && data.header && Array.isArray(data.header)) {
       console.log(`Processing ${file}: Found ${data.cities.length} cities`);
+      
+      // Get indices from the header
+      const cityWikidataIdIndex = data.header.indexOf("cityWikidataId");
+      const cityLabelEnglishIndex = data.header.indexOf("cityLabelEnglish");
+      const countryWikidataIdIndex = data.header.indexOf("countryWikidataId");
+      const populationIndex = data.header.indexOf("population");
+      const populationDateIndex = data.header.indexOf("populationDate");
+      const latitudeIndex = data.header.indexOf("latitude");
+      const longitudeIndex = data.header.indexOf("longitude");
+      const officialWebsiteIndex = data.header.indexOf("officialWebsite");
+      const socialMediaIndex = data.header.indexOf("socialMedia");
+      
+      // Check if all required fields are present
+      if (cityWikidataIdIndex === -1 || cityLabelEnglishIndex === -1 || countryWikidataIdIndex === -1) {
+        console.warn(`Warning: Required fields missing in ${file}, skipping`);
+        continue;
+      }
       
       // Transform the data to match the target format
       const transformedCities = data.cities.map(city => {
         // Round coordinates to 2 decimal places if they exist
-        let latitude = city[7];
-        let longitude = city[8];
+        let latitude = latitudeIndex !== -1 ? city[latitudeIndex] : null;
+        let longitude = longitudeIndex !== -1 ? city[longitudeIndex] : null;
+        
         if (latitude !== null && longitude !== null) {
           latitude = roundToDecimalPlaces(latitude, 2);
           longitude = roundToDecimalPlaces(longitude, 2);
         }
         
-        // Assuming the order in the source is:
-        // [cityWikidataId, cityLabelEnglish, countryWikidataId, countryDate, ancestorType, classLabel, population, populationDate, latitude, longitude, officialWebsite, socialMedia]
         return [
-          city[0],                // cityWikidataId
-          city[1],                // cityLabelEnglish
-          city[2],                // countryWikidataId
-          city[6],                // population
-          city[7],                // populationDate
-          latitude,               // latitude
-          longitude,              // longitude
-          city[10],               // officialWebsite
-          city[11]                // socialMedia
-        ]; // Skip countryDate (index 3), ancestorType (index 4) and classLabel (index 5)
+          cityWikidataIdIndex !== -1 ? city[cityWikidataIdIndex] : null,
+          cityLabelEnglishIndex !== -1 ? city[cityLabelEnglishIndex] : null,
+          countryWikidataIdIndex !== -1 ? city[countryWikidataIdIndex] : null,
+          populationIndex !== -1 ? city[populationIndex] : null,
+          populationDateIndex !== -1 ? city[populationDateIndex] : null,
+          latitude,
+          longitude,
+          officialWebsiteIndex !== -1 ? city[officialWebsiteIndex] : null,
+          socialMediaIndex !== -1 ? city[socialMediaIndex] : null
+        ];
       });
       
       allCities = allCities.concat(transformedCities);
@@ -94,7 +110,7 @@ function combineData(files) {
     }
   }
   
-  return { header, cities: allCities };
+  return { header: outputHeader, cities: allCities };
 }
 
 // Function to escape CSV values properly

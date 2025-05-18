@@ -13,10 +13,8 @@ interface CityData {
   countryCode: string;
   population?: number;
   populationDate?: string;
-  coordinates?: {
-    latitude: number;
-    longitude: number;
-  };
+  latitude?: number;
+  longitude?: number;
   officialWebsite?: string;
   socialMedia?: {
     twitter?: string;
@@ -162,21 +160,28 @@ async function findCityByQid(qid: string): Promise<CityData | null> {
       // Get population date if it exists
       const populationDate = cityData[4] || undefined;
       
-      // Parse coordinates if they exist
-      let coordinates: { latitude: number; longitude: number } | undefined = undefined;
+      // Parse latitude and longitude if they exist
+      let latitude: number | undefined = undefined;
+      let longitude: number | undefined = undefined;
+      
+      // Parse latitude (index 5)
       if (cityData[5] && cityData[5] !== '') {
-        const coordObj = safeParseJSON(cityData[5]);
-        if (coordObj && typeof coordObj === 'object' &&
-            'latitude' in coordObj && 'longitude' in coordObj) {
-          coordinates = {
-            latitude: Number(coordObj.latitude),
-            longitude: Number(coordObj.longitude)
-          };
+        const parsedLat = Number(cityData[5]);
+        if (!isNaN(parsedLat)) {
+          latitude = parsedLat;
+        }
+      }
+      
+      // Parse longitude (index 6)
+      if (cityData[6] && cityData[6] !== '') {
+        const parsedLong = Number(cityData[6]);
+        if (!isNaN(parsedLong)) {
+          longitude = parsedLong;
         }
       }
       
       // Get official website if it exists
-      const officialWebsite = cityData[6] || undefined;
+      const officialWebsite = cityData[7] || undefined;
       
       // Parse social media accounts if they exist
       let socialMedia: {
@@ -187,8 +192,8 @@ async function findCityByQid(qid: string): Promise<CityData | null> {
         linkedin?: string;
       } | undefined = undefined;
       
-      if (cityData[7] && cityData[7] !== '') {
-        const socialObj = safeParseJSON(cityData[7]);
+      if (cityData[8] && cityData[8] !== '') {
+        const socialObj = safeParseJSON(cityData[8]);
         if (socialObj && typeof socialObj === 'object') {
           socialMedia = {};
           
@@ -233,7 +238,8 @@ async function findCityByQid(qid: string): Promise<CityData | null> {
         countryCode,
         population,
         populationDate,
-        coordinates,
+        latitude,
+        longitude,
         officialWebsite,
         socialMedia,
         supersedes_duplicates
@@ -335,21 +341,28 @@ async function searchCities(query: string, limit: number = 10): Promise<CityData
       // Get population date if it exists
       const populationDate = cityData[4] || undefined;
       
-      // Parse coordinates if they exist
-      let coordinates: { latitude: number; longitude: number } | undefined = undefined;
+      // Parse latitude and longitude if they exist
+      let latitude: number | undefined = undefined;
+      let longitude: number | undefined = undefined;
+      
+      // Parse latitude (index 5)
       if (cityData[5] && cityData[5] !== '') {
-        const coordObj = safeParseJSON(cityData[5]);
-        if (coordObj && typeof coordObj === 'object' &&
-            'latitude' in coordObj && 'longitude' in coordObj) {
-          coordinates = {
-            latitude: Number(coordObj.latitude),
-            longitude: Number(coordObj.longitude)
-          };
+        const parsedLat = Number(cityData[5]);
+        if (!isNaN(parsedLat)) {
+          latitude = parsedLat;
+        }
+      }
+      
+      // Parse longitude (index 6)
+      if (cityData[6] && cityData[6] !== '') {
+        const parsedLong = Number(cityData[6]);
+        if (!isNaN(parsedLong)) {
+          longitude = parsedLong;
         }
       }
       
       // Get official website if it exists
-      const officialWebsite = cityData[6] || undefined;
+      const officialWebsite = cityData[7] || undefined;
       
       // Parse social media accounts if they exist
       let socialMedia: {
@@ -360,8 +373,8 @@ async function searchCities(query: string, limit: number = 10): Promise<CityData
         linkedin?: string;
       } | undefined = undefined;
       
-      if (cityData[7] && cityData[7] !== '') {
-        const socialObj = safeParseJSON(cityData[7]);
+      if (cityData[8] && cityData[8] !== '') {
+        const socialObj = safeParseJSON(cityData[8]);
         if (socialObj && typeof socialObj === 'object') {
           socialMedia = {};
           
@@ -406,7 +419,8 @@ async function searchCities(query: string, limit: number = 10): Promise<CityData
         countryCode,
         population,
         populationDate,
-        coordinates,
+        latitude,
+        longitude,
         officialWebsite,
         socialMedia,
         supersedes_duplicates
