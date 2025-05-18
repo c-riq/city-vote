@@ -10,10 +10,10 @@ import os
 
 def main():
     # Define file paths
-    members_file = 'data/city-networks/eurocities/members-wikidata.json'
+    members_file = 'public-data/city-networks/eurocities/members-wikidata.json'
     city_data_file = 'serverless/autocomplete/src/city-data-deduplicated.csv'
     countries_file = 'scripts/data/countries.csv'
-    output_file = 'data/city-networks/eurocities/members-wikidata-enriched.json'
+    output_file = 'public-data/city-networks/eurocities/members-wikidata-enriched.json'
     
     # Load members data
     with open(members_file, 'r') as f:
