@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Box, Typography, Paper, Avatar, Divider, CircularProgress, Button, Link, Chip, IconButton, Grid } from '@mui/material';
+import { Box, Typography, Paper, Avatar, Divider, CircularProgress, Button, Link, Chip, IconButton, Grid, Tooltip } from '@mui/material';
 import LocationCityIcon from '@mui/icons-material/LocationCity';
 import PublicIcon from '@mui/icons-material/Public';
 import PeopleIcon from '@mui/icons-material/People';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { PUBLIC_DATA_BUCKET_URL } from '../constants';
+import { ComposableMap, Geographies, Geography, Marker, ZoomableGroup } from 'react-simple-maps';
+import countryBorders from './countryBorders.json';
 
 interface EurocitiesMember {
   name_on_website: string;
@@ -16,6 +18,15 @@ interface EurocitiesMember {
   population: number | null;
   country: string;
   country_name: string;
+}
+
+interface CityMapPoint {
+  coordinates: [number, number];
+  name: string;
+  wikidataId: string;
+  size: number;
+  country?: string;
+  population?: number | null;
 }
 
 interface EurocitiesData {
@@ -111,13 +122,15 @@ const CityNetworkProfile: React.FC = () => {
       
       {/* Network info section */}
       <Paper elevation={0} sx={{ borderRadius: 3, overflow: 'hidden', mb: 4, border: '1px solid #e0e0e0' }}>
-        {/* Cover photo area - blue gradient */}
+        {/* Cover photo area with map */}
         <Box sx={{ 
-          height: { xs: 120, sm: 150 }, 
+          height: { xs: 300, sm: 350 }, 
           background: 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
           position: 'relative',
           overflow: 'hidden'
         }}>
+          {/* Network Map */}
+          {networkData && <NetworkMap members={networkData.members} />}
           <Box sx={{ 
             position: 'absolute',
             bottom: { xs: 0, sm: 9 },
@@ -279,6 +292,113 @@ const CityNetworkProfile: React.FC = () => {
           </Box>
         </Box>
       </Paper>
+    </Box>
+  );
+};
+
+// NetworkMap component for displaying city network members on a map
+const NetworkMap: React.FC<{ members: EurocitiesMember[] }> = ({ members }) => {
+  const navigate = useNavigate();
+  
+  // Convert members to map points with small, consistent sizing
+  const mapPoints: CityMapPoint[] = members.map(member => ({
+    coordinates: [member.longitude, member.latitude] as [number, number],
+    name: member.wikidata_name,
+    wikidataId: member.wikidata_id,
+    // Small, consistent dot size
+    size: 2.5,
+    country: member.country_name,
+    population: member.population
+  }));
+
+  const handleCityClick = (city: CityMapPoint) => {
+    navigate(`/city/${city.wikidataId}`);
+  };
+
+  return (
+    <Box sx={{ 
+      width: '100%',
+      height: '100%',
+      overflow: 'hidden',
+      position: 'relative'
+    }}>
+      <ComposableMap
+        projectionConfig={{ 
+          scale: 450,
+          center: [15, 55] // Centered on Europe
+        }}
+        width={800}
+        height={400}
+        style={{
+          width: '100%',
+          height: '100%'
+        }}
+      >
+        <Geographies geography={countryBorders}>
+          {({ geographies }) =>
+            geographies.map((geo) => (
+              <Geography
+                key={geo.rsmKey}
+                geography={geo}
+                fill="#F5F4F6"
+                stroke="#D6D6DA"
+                style={{
+                  default: { outline: 'none', fill: '#E4E5E9' },
+                  hover: { outline: 'none', fill: '#D6D6DA' },
+                  pressed: { outline: 'none' }
+                }}
+              />
+            ))
+          }
+        </Geographies>
+        
+        {/* City markers - small dots with tooltips */}
+        {mapPoints.map((city, i) => (
+          <Marker key={i} coordinates={city.coordinates}>
+            <Tooltip 
+              title={
+                <Box>
+                  <Typography variant="subtitle2">{city.name}</Typography>
+                  <Typography variant="caption" display="block">{city.country}</Typography>
+                  {city.population && (
+                    <Typography variant="caption" display="block">
+                      Population: {city.population.toLocaleString()}
+                    </Typography>
+                  )}
+                </Box>
+              } 
+              arrow 
+              placement="top"
+            >
+              <g
+                onClick={() => handleCityClick(city)}
+                style={{ cursor: 'pointer' }}
+              >
+                {/* Larger invisible hit area */}
+                <circle
+                  r={8}
+                  fill="transparent"
+                />
+                {/* Visible city dot - small, no border */}
+                <circle
+                  r={city.size}
+                  fill="#ffffff"
+                  opacity={0.85}
+                  style={{ 
+                    transition: 'opacity 0.2s',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.opacity = '1';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.opacity = '0.85';
+                  }}
+                />
+              </g>
+            </Tooltip>
+          </Marker>
+        ))}
+      </ComposableMap>
     </Box>
   );
 };
