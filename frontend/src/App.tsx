@@ -13,6 +13,7 @@ import CityInfoBox from './components/CityInfoBox';
 import VoteList from './components/VoteList';
 import CityRegistration from './components/CityRegistration';
 import CityProfile from './components/CityProfile';
+import CityNetworkProfile from './components/CityNetworkProfile';
 import {
   City,
   ValidateTokenResponse,
@@ -864,6 +865,10 @@ function App() {
                   theme={theme} 
                 />
               }
+            />
+            <Route 
+              path="/network/:networkId" 
+              element={<CityNetworkProfile />}
             />
           </Routes>
           {/* {cityInfo && (
