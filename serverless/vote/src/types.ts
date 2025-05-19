@@ -52,6 +52,8 @@ export interface CreatePollRequest {
     action: 'createPoll';
     token: string;
     pollId: string;
+    documentUrl?: string;
+    organisedBy?: string;
 }
 
 export interface UploadAttachmentRequest {

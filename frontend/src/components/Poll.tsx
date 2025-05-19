@@ -68,6 +68,11 @@ function Poll({ token, pollData, onVoteComplete, votesData: propVotesData, citie
   const [cities, setCities] = useState<Record<string, City>>(propCities || {});
   const [isAuthenticated] = useState(!!token && !!cityInfo);
   const [attachmentUrl, setAttachmentUrl] = useState<string | null>(null);
+  const [pollMetadata, setPollMetadata] = useState<{
+    documentUrl?: string;
+    organisedBy?: string;
+    createdAt?: number;
+  } | null>(null);
 
   // Fetch data if not provided as props (unauthenticated mode)
   useEffect(() => {
@@ -86,9 +91,9 @@ function Poll({ token, pollData, onVoteComplete, votesData: propVotesData, citie
     }
   }, [propVotesData, propCities]);
 
-  // Check for attachment when poll ID is available
+  // Fetch poll metadata and check for attachment when poll ID is available
   useEffect(() => {
-    const checkAttachment = async () => {
+    const fetchPollData = async () => {
       if (pollId || pollData?.id) {
         const question = pollData?.id || decodeURIComponent(pollId || '');
         const attachmentId = await createAttachmentId(question);
@@ -120,13 +125,40 @@ function Poll({ token, pollData, onVoteComplete, votesData: propVotesData, citie
           console.error('Error checking attachment:', error);
           setAttachmentUrl(null);
         }
+        
+        // Fetch poll metadata
+        try {
+          const metadataResponse = await fetch(`${VOTE_HOST}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              action: 'getPollMetadata',
+              pollId: question,
+              token: token || '' // Token may be optional for public polls
+            })
+          });
+          
+          if (metadataResponse.ok) {
+            const metadataData = await metadataResponse.json();
+            if (metadataData.metadata) {
+              setPollMetadata(metadataData.metadata);
+            } else {
+              setPollMetadata(null);
+            }
+          } else {
+            setPollMetadata(null);
+          }
+        } catch (error) {
+          console.error('Error fetching poll metadata:', error);
+          setPollMetadata(null);
+        }
       }
     };
     
-    checkAttachment();
+    fetchPollData();
   }, [pollId, pollData, token]);
 
-  // Helper function to get display title (removes _attachment_<hash> if present)
+  // Helper function to get display title and metadata
   const getDisplayTitle = (title: string): string => {
     // First check if it's a joint statement
     if (title === 'joint_statement_' || title.startsWith('joint_statement__attachment_')) {
@@ -136,9 +168,66 @@ function Poll({ token, pollData, onVoteComplete, votesData: propVotesData, citie
       title = title.substring('joint_statement_'.length);
     }
     
-    // Then remove attachment hash if present
+    // Remove attachment hash if present
     const attachmentIndex = title.indexOf('_attachment_');
-    return attachmentIndex !== -1 ? title.substring(0, attachmentIndex) : title;
+    if (attachmentIndex !== -1) {
+      title = title.substring(0, attachmentIndex);
+    }
+    
+    // Remove URL if present
+    const urlIndex = title.indexOf('_url_');
+    if (urlIndex !== -1) {
+      title = title.substring(0, urlIndex);
+    }
+    
+    // Remove organised by if present
+    const organisedByIndex = title.indexOf('_organised_by_');
+    if (organisedByIndex !== -1) {
+      title = title.substring(0, organisedByIndex);
+    }
+    
+    return title;
+  };
+  
+  // Helper function to extract organised by information
+  const getOrganisedBy = (title: string): string | null => {
+    const organisedByIndex = title.indexOf('_organised_by_');
+    if (organisedByIndex !== -1) {
+      // Extract everything after _organised_by_
+      let organisedBy = title.substring(organisedByIndex + '_organised_by_'.length);
+      
+      // If there's a URL or attachment after the organised by, remove it
+      const urlIndex = organisedBy.indexOf('_url_');
+      if (urlIndex !== -1) {
+        organisedBy = organisedBy.substring(0, urlIndex);
+      }
+      
+      const attachmentIndex = organisedBy.indexOf('_attachment_');
+      if (attachmentIndex !== -1) {
+        organisedBy = organisedBy.substring(0, attachmentIndex);
+      }
+      
+      return organisedBy;
+    }
+    return null;
+  };
+  
+  // Helper function to extract document URL
+  const getDocumentUrl = (title: string): string | null => {
+    const urlIndex = title.indexOf('_url_');
+    if (urlIndex !== -1) {
+      // Extract everything after _url_
+      let url = title.substring(urlIndex + '_url_'.length);
+      
+      // If there's an attachment after the URL, remove it
+      const attachmentIndex = url.indexOf('_attachment_');
+      if (attachmentIndex !== -1) {
+        url = url.substring(0, attachmentIndex);
+      }
+      
+      return decodeURIComponent(url);
+    }
+    return null;
   };
   
   // Check if this is a joint statement poll
@@ -399,6 +488,54 @@ function Poll({ token, pollData, onVoteComplete, votesData: propVotesData, citie
           >
             {getDisplayTitle(pollData?.title || decodeURIComponent(pollId || ''))}
           </Typography>
+          
+          {/* Display organised by information if available */}
+          {isJointStatement && (
+            (pollMetadata?.organisedBy || getOrganisedBy(pollData?.title || decodeURIComponent(pollId || ''))) && (
+              <Typography 
+                variant="subtitle1" 
+                sx={{ 
+                  mb: 3,
+                  textAlign: 'center',
+                  color: 'text.secondary'
+                }}
+              >
+                Organised by: {pollMetadata?.organisedBy || getOrganisedBy(pollData?.title || decodeURIComponent(pollId || ''))}
+              </Typography>
+            )
+          )}
+          
+          {/* Display document URL if available */}
+          {isJointStatement && (
+            (pollMetadata?.documentUrl || getDocumentUrl(pollData?.title || decodeURIComponent(pollId || ''))) && (
+              <Box sx={{ 
+                display: 'flex', 
+                justifyContent: 'center', 
+                mb: 4,
+                flexDirection: 'column',
+                alignItems: 'center'
+              }}>
+                <Typography variant="subtitle2" sx={{ mb: 1 }}>
+                  Document URL:
+                </Typography>
+                <Button
+                  variant="outlined"
+                  startIcon={<span className="material-icons">open_in_new</span>}
+                  component={MuiLink}
+                  href={pollMetadata?.documentUrl || getDocumentUrl(pollData?.title || decodeURIComponent(pollId || '')) || '#'}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  sx={{ 
+                    textTransform: 'none',
+                    borderRadius: 2,
+                    px: 3
+                  }}
+                >
+                  Open Document
+                </Button>
+              </Box>
+            )
+          )}
           
           {attachmentUrl && (
             <>

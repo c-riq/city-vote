@@ -16,6 +16,7 @@ const BUCKET_NAME = isDev ? 'city-vote-data-dev' : 'city-vote-data';
 const PUBLIC_BUCKET_NAME = isDev ? 'city-vote-data-public-dev' : 'city-vote-data-public';
 
 const VOTES_KEY = 'votes/votes.json';
+const POLLS_METADATA_KEY = 'votes/polls_metadata.json';
 const LOCK_KEY = 'votes/lock.csv';
 const AUTH_KEY = 'auth/auth.json';
 const ACCESS_LOG_KEY = 'logs/access.json';
@@ -155,6 +156,8 @@ interface CreatePollParams {
     resolvedCity: City;
     token: string;
     pollId: string;
+    documentUrl?: string;
+    organisedBy?: string;
 }
 
 interface UploadAttachmentParams {
@@ -287,7 +290,16 @@ const handleVote = async ({ cityId, resolvedCity, pollId, option, title, name, a
     }
 };
 
-const handleCreatePoll = async ({ pollId }: CreatePollParams): Promise<APIGatewayProxyResult> => {
+// Interface for poll metadata
+interface PollMetadata {
+    [pollId: string]: {
+        documentUrl?: string;
+        organisedBy?: string;
+        createdAt: number;
+    };
+}
+
+const handleCreatePoll = async ({ pollId, documentUrl, organisedBy }: CreatePollParams): Promise<APIGatewayProxyResult> => {
     if (!pollId) {
         return {
             statusCode: 400,
@@ -312,6 +324,7 @@ const handleCreatePoll = async ({ pollId }: CreatePollParams): Promise<APIGatewa
     }
 
     try {
+        // 1. First, handle votes data
         let votes: VoteData = {};
         try {
             const existingData = await s3Client.send(new GetObjectCommand({
@@ -348,12 +361,49 @@ const handleCreatePoll = async ({ pollId }: CreatePollParams): Promise<APIGatewa
             Body: JSON.stringify(votes, null, 2), // Format JSON with 2-space indentation
             ContentType: 'application/json'
         }));
+
+        // 2. Then, handle poll metadata
+        let pollsMetadata: PollMetadata = {};
+        try {
+            const existingMetadata = await s3Client.send(new GetObjectCommand({
+                Bucket: BUCKET_NAME,
+                Key: POLLS_METADATA_KEY
+            }));
+            
+            if (existingMetadata.Body) {
+                const metadataString = await streamToString(existingMetadata.Body as Readable);
+                pollsMetadata = JSON.parse(metadataString);
+            }
+        } catch (error: any) {
+            if (error.name !== 'NoSuchKey') {
+                throw error;
+            }
+        }
+
+        // Add metadata for the new poll
+        pollsMetadata[pollId] = {
+            createdAt: Date.now(),
+            ...(documentUrl ? { documentUrl } : {}),
+            ...(organisedBy ? { organisedBy } : {})
+        };
+
+        await s3Client.send(new PutObjectCommand({
+            Bucket: BUCKET_NAME,
+            Key: POLLS_METADATA_KEY,
+            Body: JSON.stringify(pollsMetadata, null, 2),
+            ContentType: 'application/json'
+        }));
+
         await releaseLock();
 
         return {
             statusCode: 200,
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: 'Poll created successfully' }, null, 2)
+            body: JSON.stringify({ 
+                message: 'Poll created successfully',
+                pollId,
+                metadata: pollsMetadata[pollId]
+            }, null, 2)
         };
     } catch (error) {
         if (lockAcquired) {
@@ -373,6 +423,72 @@ interface GetAttachmentUrlParams {
     attachmentId?: string;
 }
 
+// Interface for getPollMetadata params
+interface GetPollMetadataParams {
+    resolvedCity?: City;
+    token?: string;
+    pollId: string;
+}
+
+// Handler for getting poll metadata
+const handleGetPollMetadata = async ({ pollId }: GetPollMetadataParams): Promise<APIGatewayProxyResult> => {
+    if (!pollId) {
+        return {
+            statusCode: 400,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: 'Missing required parameter: pollId' }, null, 2)
+        };
+    }
+
+    try {
+        // Get poll metadata
+        let pollsMetadata: PollMetadata = {};
+        try {
+            const existingMetadata = await s3Client.send(new GetObjectCommand({
+                Bucket: BUCKET_NAME,
+                Key: POLLS_METADATA_KEY
+            }));
+            
+            if (existingMetadata.Body) {
+                const metadataString = await streamToString(existingMetadata.Body as Readable);
+                pollsMetadata = JSON.parse(metadataString);
+            }
+        } catch (error: any) {
+            if (error.name !== 'NoSuchKey') {
+                throw error;
+            }
+        }
+
+        // Check if poll metadata exists
+        if (!pollsMetadata[pollId]) {
+            return {
+                statusCode: 404,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: 'Poll metadata not found' }, null, 2)
+            };
+        }
+
+        return {
+            statusCode: 200,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                message: 'Poll metadata retrieved successfully',
+                metadata: pollsMetadata[pollId]
+            }, null, 2)
+        };
+    } catch (error) {
+        console.error('Error retrieving poll metadata:', error);
+        return {
+            statusCode: 500,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                message: 'Failed to retrieve poll metadata',
+                details: error instanceof Error ? error.message : 'Unknown error'
+            }, null, 2)
+        };
+    }
+};
+
 // Update action handlers type
 type ActionHandlers = {
     validateToken: (params: ValidateTokenParams) => Promise<APIGatewayProxyResult>;
@@ -380,6 +496,7 @@ type ActionHandlers = {
     createPoll: (params: CreatePollParams) => Promise<APIGatewayProxyResult>;
     uploadAttachment: (params: UploadAttachmentParams) => Promise<APIGatewayProxyResult>;
     getAttachmentUrl: (params: GetAttachmentUrlParams) => Promise<APIGatewayProxyResult>;
+    getPollMetadata: (params: GetPollMetadataParams) => Promise<APIGatewayProxyResult>;
 };
 
 // Get the direct URL for an attachment (bucket is public)
@@ -528,7 +645,8 @@ const actionHandlers: ActionHandlers = {
     vote: handleVote,
     createPoll: handleCreatePoll,
     uploadAttachment: handleUploadAttachment,
-    getAttachmentUrl: handleGetAttachmentUrl
+    getAttachmentUrl: handleGetAttachmentUrl,
+    getPollMetadata: handleGetPollMetadata
 };
 
 export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
@@ -543,7 +661,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
             };
         }
 
-        const { action, cityId, token, pollId, option, title, name, actingCapacity, externallyVerifiedBy } = JSON.parse(event.body);
+        const { action, cityId, token, pollId, option, title, name, actingCapacity, externallyVerifiedBy, documentUrl, organisedBy } = JSON.parse(event.body);
         
         if (!action) {
             return {
@@ -555,10 +673,15 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
             };
         }
         
-        // Special case for getAttachmentUrl which doesn't require token validation
+        // Special cases that don't require token validation
         if (action === 'getAttachmentUrl') {
             const { pollId, attachmentId } = JSON.parse(event.body);
             return await handleGetAttachmentUrl({ pollId, attachmentId });
+        }
+        
+        if (action === 'getPollMetadata') {
+            const { pollId } = JSON.parse(event.body);
+            return await handleGetPollMetadata({ pollId });
         }
         
         if (!token) {
@@ -625,7 +748,11 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
         }
 
         // Type assertion to ensure correct params are passed to each handler
-        return await handler({ cityId, resolvedCity, token, pollId, option, title, name, actingCapacity, externallyVerifiedBy } as any);
+        if (action === 'createPoll') {
+            return await handler({ resolvedCity, token, pollId, documentUrl, organisedBy } as any);
+        } else {
+            return await handler({ cityId, resolvedCity, token, pollId, option, title, name, actingCapacity, externallyVerifiedBy } as any);
+        }
     } catch (error) {
         console.error('Error:', error);
         return {

@@ -251,6 +251,10 @@ function App() {
     const [attachment, setAttachment] = useState<File | null>(null);
     const [attachmentError, setAttachmentError] = useState('');
     const [pollType, setPollType] = useState<'regular' | 'jointStatement'>('regular');
+    const [useUrl, setUseUrl] = useState(false);
+    const [documentUrl, setDocumentUrl] = useState('');
+    const [urlError, setUrlError] = useState('');
+    const [organisedBy, setOrganisedBy] = useState('');
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0] || null;
@@ -291,11 +295,31 @@ function App() {
     };
 
     const handleCreatePoll = async () => {
-        // For regular polls, question is required
-        // For joint statements, attachment is required
-        if ((pollType === 'regular' && !question.trim()) || 
-            (pollType === 'jointStatement' && !attachment)) {
-            return;
+        // Validate inputs based on poll type
+        if (pollType === 'regular' && !question.trim()) {
+            return; // Regular polls require a question
+        }
+        
+        if (pollType === 'jointStatement') {
+            if (useUrl) {
+                // URL validation for joint statements
+                if (!documentUrl.trim()) {
+                    setUrlError('Document URL is required');
+                    return;
+                }
+                
+                // Basic URL validation
+                try {
+                    new URL(documentUrl);
+                    setUrlError('');
+                } catch (e) {
+                    setUrlError('Please enter a valid URL');
+                    return;
+                }
+            } else if (!attachment) {
+                // PDF is required when not using URL
+                return;
+            }
         }
         
         setIsCreatingPoll(true);
@@ -311,10 +335,112 @@ function App() {
                     // Otherwise, add the prefix to the custom title
                     basePollId = `joint_statement_${basePollId}`;
                 }
+                
+                // No longer need to add organised by to the poll ID
+                // It will be stored in the poll metadata
             }
             
-            // If there's an attachment, get a presigned URL and upload it first
-            if (attachment) {
+            // Handle document based on type
+            if (pollType === 'jointStatement') {
+                if (useUrl) {
+                    // Create the poll with the URL as a separate field
+                    const response = await fetch(VOTE_HOST, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            action: 'createPoll',
+                            token,
+                            pollId: basePollId,
+                            pollType,
+                            documentUrl,
+                            organisedBy: organisedBy.trim() || undefined
+                        })
+                    });
+
+                    if (!response.ok) {
+                        const data = await response.json();
+                        throw new Error(data.message || 'Failed to create poll');
+                    }
+
+                    setIsModalOpen(false);
+                    const encodedQuestion = encodeURIComponent(basePollId);
+                    navigate(`/poll/${encodedQuestion}`);
+                    setQuestion('');
+                    setDocumentUrl('');
+                    setPollType('regular'); // Reset to default
+                    return;
+                } else if (attachment) {
+                    // For PDF-based joint statements
+                    const attachmentId = await createAttachmentId(basePollId);
+                    
+                    // First, get the presigned URL
+                    const getUrlResponse = await fetch(VOTE_HOST, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            action: 'uploadAttachment',
+                            token,
+                            pollId: basePollId,
+                            attachmentId
+                        })
+                    });
+
+                    if (!getUrlResponse.ok) {
+                        const data = await getUrlResponse.json();
+                        throw new Error(data.message || 'Failed to get upload URL');
+                    }
+
+                    const urlData = await getUrlResponse.json();
+                    
+                    if (!urlData.uploadUrl) {
+                        throw new Error('No upload URL provided');
+                    }
+                    
+                    // Then, upload the file directly to S3 using the presigned URL
+                    const uploadResponse = await fetch(urlData.uploadUrl, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/pdf'
+                        },
+                        body: attachment
+                    });
+
+                    if (!uploadResponse.ok) {
+                        throw new Error('Failed to upload attachment to S3');
+                    }
+                    
+                    // Use the formatted pollId returned from the backend (which includes _attachment_<hash>)
+                    if (urlData.pollId) {
+                        // Create the poll with the formatted pollId
+                        const response = await fetch(VOTE_HOST, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                action: 'createPoll',
+                                token,
+                                pollId: urlData.pollId,
+                                pollType,
+                                organisedBy: organisedBy.trim() || undefined
+                            })
+                        });
+
+                        if (!response.ok) {
+                            const data = await response.json();
+                            throw new Error(data.message || 'Failed to create poll');
+                        }
+
+                        setIsModalOpen(false);
+                        const encodedQuestion = encodeURIComponent(urlData.pollId);
+                        navigate(`/poll/${encodedQuestion}`);
+                        setQuestion('');
+                        setAttachment(null);
+                        setOrganisedBy('');
+                        setPollType('regular'); // Reset to default
+                        return;
+                    }
+                }
+            } else if (attachment) {
+                // Handle regular poll with attachment
                 const attachmentId = await createAttachmentId(basePollId);
                 
                 // First, get the presigned URL
@@ -363,7 +489,7 @@ function App() {
                             action: 'createPoll',
                             token,
                             pollId: urlData.pollId,
-                            pollType // Pass the poll type to the backend
+                            pollType
                         })
                     });
 
@@ -475,38 +601,97 @@ function App() {
                         <Typography variant="subtitle2" sx={{ mb: 1 }}>
                             {pollType === 'regular' ? 'Attachment (Optional)' : 'Document (Required)'}
                         </Typography>
-                        <input
-                            accept="application/pdf"
-                            style={{ display: 'none' }}
-                            id="attachment-file"
-                            type="file"
-                            onChange={handleFileChange}
-                        />
-                        <label htmlFor="attachment-file">
-                            <Button
-                                variant="outlined"
-                                component="span"
-                                startIcon={<span className="material-icons">attach_file</span>}
-                            >
-                                {attachment ? 'Change PDF' : 'Upload PDF'}
-                            </Button>
-                        </label>
-                        {attachment && (
-                            <Typography variant="body2" sx={{ mt: 1, color: 'text.secondary' }}>
-                                Selected: {attachment.name} ({Math.round(attachment.size / 1024)} KB)
-                            </Typography>
+                        
+                        {/* URL or PDF selection for joint statements */}
+                        {pollType === 'jointStatement' && (
+                            <Box sx={{ mb: 2 }}>
+                                <Typography variant="body2" sx={{ mb: 1, color: 'text.secondary' }}>
+                                    Choose document type:
+                                </Typography>
+                                <Box sx={{ display: 'flex', gap: 2 }}>
+                                    <Button
+                                        variant={!useUrl ? 'contained' : 'outlined'}
+                                        size="small"
+                                        onClick={() => setUseUrl(false)}
+                                    >
+                                        PDF Upload
+                                    </Button>
+                                    <Button
+                                        variant={useUrl ? 'contained' : 'outlined'}
+                                        size="small"
+                                        onClick={() => setUseUrl(true)}
+                                    >
+                                        URL Link
+                                    </Button>
+                                </Box>
+                            </Box>
                         )}
-                        {attachmentError && (
-                            <Typography variant="body2" sx={{ mt: 1, color: 'error.main' }}>
-                                {attachmentError}
-                            </Typography>
+                        
+                        {/* URL input field */}
+                        {pollType === 'jointStatement' && useUrl && (
+                            <TextField
+                                fullWidth
+                                label="Document URL"
+                                value={documentUrl}
+                                onChange={(e) => setDocumentUrl(e.target.value)}
+                                margin="normal"
+                                placeholder="https://example.com/document.pdf"
+                                required
+                                error={!!urlError}
+                                helperText={urlError || "Enter the URL to the document"}
+                            />
                         )}
-                        {pollType === 'jointStatement' && !attachment && (
-                            <Typography variant="body2" sx={{ mt: 1, color: 'warning.main' }}>
-                                A PDF document is required for joint statements
-                            </Typography>
+                        
+                        {/* PDF upload field */}
+                        {(!useUrl || pollType === 'regular') && (
+                            <>
+                                <input
+                                    accept="application/pdf"
+                                    style={{ display: 'none' }}
+                                    id="attachment-file"
+                                    type="file"
+                                    onChange={handleFileChange}
+                                />
+                                <label htmlFor="attachment-file">
+                                    <Button
+                                        variant="outlined"
+                                        component="span"
+                                        startIcon={<span className="material-icons">attach_file</span>}
+                                    >
+                                        {attachment ? 'Change PDF' : 'Upload PDF'}
+                                    </Button>
+                                </label>
+                                {attachment && (
+                                    <Typography variant="body2" sx={{ mt: 1, color: 'text.secondary' }}>
+                                        Selected: {attachment.name} ({Math.round(attachment.size / 1024)} KB)
+                                    </Typography>
+                                )}
+                                {attachmentError && (
+                                    <Typography variant="body2" sx={{ mt: 1, color: 'error.main' }}>
+                                        {attachmentError}
+                                    </Typography>
+                                )}
+                                {pollType === 'jointStatement' && !attachment && !useUrl && (
+                                    <Typography variant="body2" sx={{ mt: 1, color: 'warning.main' }}>
+                                        A PDF document is required for joint statements
+                                    </Typography>
+                                )}
+                            </>
                         )}
                     </Box>
+                    
+                    {/* Organised By Field (only for joint statements) */}
+                    {pollType === 'jointStatement' && (
+                        <TextField
+                            fullWidth
+                            label="Organised By"
+                            value={organisedBy}
+                            onChange={(e) => setOrganisedBy(e.target.value)}
+                            margin="normal"
+                            placeholder="Optional: Organisation or entity that organised this joint statement"
+                            helperText="Optional field to indicate who organised this joint statement"
+                        />
+                    )}
                 </DialogContent>
                 <DialogActions sx={{ px: 3, pb: 3 }}>
                     <Button onClick={handleCancel}>Cancel</Button>
@@ -515,7 +700,8 @@ function App() {
                         disabled={
                             isCreatingPoll || 
                             (pollType === 'regular' && !question.trim()) || 
-                            (pollType === 'jointStatement' && !attachment)
+                            (pollType === 'jointStatement' && !useUrl && !attachment) ||
+                            (pollType === 'jointStatement' && useUrl && !documentUrl.trim())
                         }
                     >
                         {isCreatingPoll ? 'Creating...' : 'Create Poll'}
