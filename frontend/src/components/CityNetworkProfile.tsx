@@ -204,7 +204,7 @@ const CityNetworkProfile: React.FC = () => {
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                   <PeopleIcon sx={{ mr: 1, fontSize: 18 }} />
                   <Typography variant="body2">
-                    Total population: {totalPopulation.toLocaleString()} residents
+                    Total population: approximately {totalPopulation.toLocaleString()} residents
                   </Typography>
                 </Box>
               )}
@@ -341,15 +341,18 @@ const NetworkMap: React.FC<{ members: EurocitiesMember[] }> = ({ members }) => {
   const navigate = useNavigate();
   
   // Convert members to map points with population-based sizing like in WorldMap
-  const mapPoints: CityMapPoint[] = members.map(member => ({
-    coordinates: [member.longitude, member.latitude] as [number, number],
-    name: member.wikidata_name,
-    wikidataId: member.wikidata_id,
-    // Similar sizing logic to WorldMap
-    size: member.population ? Math.max(3, member.population / 500000) : 3,
-    country: member.country_name,
-    population: member.population
-  }));
+  const mapPoints: CityMapPoint[] = members
+    .map(member => ({
+      coordinates: [member.longitude, member.latitude] as [number, number],
+      name: member.wikidata_name,
+      wikidataId: member.wikidata_id,
+      // Similar sizing logic to WorldMap
+      size: member.population ? Math.max(3, member.population / 500000) : 3,
+      country: member.country_name,
+      population: member.population
+    }))
+    // Sort by population (ascending) so larger cities are rendered last and appear on top
+    .sort((a, b) => (a.population || 0) - (b.population || 0));
 
   const handleCityClick = (city: CityMapPoint) => {
     navigate(`/city/${city.wikidataId}`);
@@ -402,7 +405,11 @@ const NetworkMap: React.FC<{ members: EurocitiesMember[] }> = ({ members }) => {
             >
               <g
                 onClick={() => handleCityClick(city)}
-                style={{ cursor: 'pointer' }}
+                style={{ 
+                  cursor: 'pointer',
+                  // Apply z-index based on population to ensure larger cities' tooltips appear on top
+                  zIndex: city.population ? Math.floor(city.population / 10000) : 1
+                }}
               >
                 {/* Larger invisible hit area */}
                 <circle
