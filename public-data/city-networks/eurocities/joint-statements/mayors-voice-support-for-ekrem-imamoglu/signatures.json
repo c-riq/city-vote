@@ -6,682 +6,852 @@
     "votes": [
       {
         "vote": "Sign",
-        "name": "Anne Hidalgo",
+        "author": {
+          "title": "Mayor of Paris",
+          "name": "Anne Hidalgo",
+          "actingCapacity": "individual"
+        },
         "city": "Paris",
-        "title": "Mayor of Paris",
-        "actingCapacity": "individual",
         "associatedCity": "Q90"
       },
       {
         "vote": "Sign",
-        "name": "Burkhard Jung",
+        "author": {
+          "title": "Mayor of Leipzig and President of Eurocities",
+          "name": "Burkhard Jung",
+          "actingCapacity": "individual"
+        },
         "city": "Leipzig",
-        "title": "Mayor of Leipzig and President of Eurocities",
-        "actingCapacity": "individual",
         "associatedCity": "Q2079"
       },
       {
         "vote": "Sign",
-        "name": "Sibylle Keupen",
+        "author": {
+          "title": "Mayor of Aachen",
+          "name": "Sibylle Keupen",
+          "actingCapacity": "individual"
+        },
         "city": "Aachen",
-        "title": "Mayor of Aachen",
-        "actingCapacity": "individual",
         "associatedCity": null
       },
       {
         "vote": "Sign",
-        "name": "Frederick Brütting",
+        "author": {
+          "title": "Mayor of Aalen",
+          "name": "Frederick Brütting",
+          "actingCapacity": "individual"
+        },
         "city": "Aalen",
-        "title": "Mayor of Aalen",
-        "actingCapacity": "individual",
         "associatedCity": null
       },
       {
         "vote": "Sign",
-        "name": "Femke Halsema",
+        "author": {
+          "title": "Mayor of Amsterdam",
+          "name": "Femke Halsema",
+          "actingCapacity": "individual"
+        },
         "city": "Amsterdam",
-        "title": "Mayor of Amsterdam",
-        "actingCapacity": "individual",
         "associatedCity": "Q727"
       },
       {
         "vote": "Sign",
-        "name": "Háris Doúkas",
+        "author": {
+          "title": "Mayor of Athens",
+          "name": "Háris Doúkas",
+          "actingCapacity": "individual"
+        },
         "city": "Athens",
-        "title": "Mayor of Athens",
-        "actingCapacity": "individual",
         "associatedCity": "Q1524"
       },
       {
         "vote": "Sign",
-        "name": "Jaume Collboni",
+        "author": {
+          "title": "Mayor of Barcelona",
+          "name": "Jaume Collboni",
+          "actingCapacity": "individual"
+        },
         "city": "Barcelona",
-        "title": "Mayor of Barcelona",
-        "actingCapacity": "individual",
         "associatedCity": "Q1492"
       },
       {
         "vote": "Sign",
-        "name": "Kai Wegner",
+        "author": {
+          "title": "Governing Mayor of Berlin",
+          "name": "Kai Wegner",
+          "actingCapacity": "individual"
+        },
         "city": "Berlin",
-        "title": "Governing Mayor of Berlin",
-        "actingCapacity": "individual",
         "associatedCity": "Q64"
       },
       {
         "vote": "Sign",
-        "name": "Juan Mari Aburto",
+        "author": {
+          "title": "Mayor of Bilbao",
+          "name": "Juan Mari Aburto",
+          "actingCapacity": "individual"
+        },
         "city": "Bilbao",
-        "title": "Mayor of Bilbao",
-        "actingCapacity": "individual",
         "associatedCity": "Q8692"
       },
       {
         "vote": "Sign",
-        "name": "Ricardo Rio",
+        "author": {
+          "title": "Mayor of Braga",
+          "name": "Ricardo Rio",
+          "actingCapacity": "individual"
+        },
         "city": "Braga",
-        "title": "Mayor of Braga",
-        "actingCapacity": "individual",
         "associatedCity": "Q83247"
       },
       {
         "vote": "Sign",
-        "name": "Andreas Bovenschulte",
+        "author": {
+          "title": "Mayor and President of the Senate of Bremen",
+          "name": "Andreas Bovenschulte",
+          "actingCapacity": "individual"
+        },
         "city": "Bremen",
-        "title": "Mayor and President of the Senate of Bremen",
-        "actingCapacity": "individual",
         "associatedCity": "Q1209"
       },
       {
         "vote": "Sign",
-        "name": "Philippe Close",
+        "author": {
+          "title": "Mayor of Brussels",
+          "name": "Philippe Close",
+          "actingCapacity": "individual"
+        },
         "city": "Brussels",
-        "title": "Mayor of Brussels",
-        "actingCapacity": "individual",
         "associatedCity": "Q239"
       },
       {
         "vote": "Sign",
-        "name": "Matteo Lepore",
+        "author": {
+          "title": "Mayor of Bologna",
+          "name": "Matteo Lepore",
+          "actingCapacity": "individual"
+        },
         "city": "Bologna",
-        "title": "Mayor of Bologna",
-        "actingCapacity": "individual",
         "associatedCity": "Q1891"
       },
       {
         "vote": "Sign",
-        "name": "Katja Dörner",
+        "author": {
+          "title": "Mayor of Bonn",
+          "name": "Katja Dörner",
+          "actingCapacity": "individual"
+        },
         "city": "Bonn",
-        "title": "Mayor of Bonn",
-        "actingCapacity": "individual",
         "associatedCity": "Q586"
       },
       {
         "vote": "Sign",
-        "name": "Pierre Hurmic",
+        "author": {
+          "title": "Mayor of Bordeaux",
+          "name": "Pierre Hurmic",
+          "actingCapacity": "individual"
+        },
         "city": "Bordeaux",
-        "title": "Mayor of Bordeaux",
-        "actingCapacity": "individual",
         "associatedCity": "Q1479"
       },
       {
         "vote": "Sign",
-        "name": "Christine Bost",
+        "author": {
+          "title": "President of Bordeaux Metropole",
+          "name": "Christine Bost",
+          "actingCapacity": "individual"
+        },
         "city": "Bordeaux Metropole",
-        "title": "President of Bordeaux Metropole",
-        "actingCapacity": "individual",
         "associatedCity": null
       },
       {
         "vote": "Sign",
-        "name": "Dr. Thorsten Kornblum",
+        "author": {
+          "title": "Mayor of Braunschweig",
+          "name": "Dr. Thorsten Kornblum",
+          "actingCapacity": "individual"
+        },
         "city": "Braunschweig",
-        "title": "Mayor of Braunschweig",
-        "actingCapacity": "individual",
         "associatedCity": null
       },
       {
         "vote": "Sign",
-        "name": "Gergely Karácsony",
+        "author": {
+          "title": "Mayor of Budapest",
+          "name": "Gergely Karácsony",
+          "actingCapacity": "individual"
+        },
         "city": "Budapest",
-        "title": "Mayor of Budapest",
-        "actingCapacity": "individual",
         "associatedCity": "Q1781"
       },
       {
         "vote": "Sign",
-        "name": "Emil Boc",
+        "author": {
+          "title": "Mayor of Cluj Napoca",
+          "name": "Emil Boc",
+          "actingCapacity": "individual"
+        },
         "city": "Cluj Napoca",
-        "title": "Mayor of Cluj Napoca",
-        "actingCapacity": "individual",
         "associatedCity": "Q100188"
       },
       {
         "vote": "Sign",
-        "name": "Henriette Reker",
+        "author": {
+          "title": "Mayor of Cologne",
+          "name": "Henriette Reker",
+          "actingCapacity": "individual"
+        },
         "city": "Cologne",
-        "title": "Mayor of Cologne",
-        "actingCapacity": "individual",
         "associatedCity": "Q365"
       },
       {
         "vote": "Sign",
-        "name": "Thomas Westphal",
+        "author": {
+          "title": "Mayor of Dortmund",
+          "name": "Thomas Westphal",
+          "actingCapacity": "individual"
+        },
         "city": "Dortmund",
-        "title": "Mayor of Dortmund",
-        "actingCapacity": "individual",
         "associatedCity": "Q1295"
       },
       {
         "vote": "Sign",
-        "name": "Dr. Stephan Keller",
+        "author": {
+          "title": "Mayor of Dusseldorf",
+          "name": "Dr. Stephan Keller",
+          "actingCapacity": "individual"
+        },
         "city": "Dusseldorf",
-        "title": "Mayor of Dusseldorf",
-        "actingCapacity": "individual",
         "associatedCity": "Q1718"
       },
       {
         "vote": "Sign",
-        "name": "Tim Kruithoff",
+        "author": {
+          "title": "Mayor of Emden",
+          "name": "Tim Kruithoff",
+          "actingCapacity": "individual"
+        },
         "city": "Emden",
-        "title": "Mayor of Emden",
-        "actingCapacity": "individual",
         "associatedCity": null
       },
       {
         "vote": "Sign",
-        "name": "Dr. Florian Janik",
+        "author": {
+          "title": "Mayor of Erlangen",
+          "name": "Dr. Florian Janik",
+          "actingCapacity": "individual"
+        },
         "city": "Erlangen",
-        "title": "Mayor of Erlangen",
-        "actingCapacity": "individual",
         "associatedCity": null
       },
       {
         "vote": "Sign",
-        "name": "Thomas Kufen",
+        "author": {
+          "title": "Lord Mayor of Essen",
+          "name": "Thomas Kufen",
+          "actingCapacity": "individual"
+        },
         "city": "Essen",
-        "title": "Lord Mayor of Essen",
-        "actingCapacity": "individual",
         "associatedCity": "Q2066"
       },
       {
         "vote": "Sign",
-        "name": "Matthias Klopfer",
+        "author": {
+          "title": "Mayor of Esslingen",
+          "name": "Matthias Klopfer",
+          "actingCapacity": "individual"
+        },
         "city": "Esslingen",
-        "title": "Mayor of Esslingen",
-        "actingCapacity": "individual",
         "associatedCity": null
       },
       {
         "vote": "Sign",
-        "name": "Sara Funaro",
+        "author": {
+          "title": "Mayor of Florence",
+          "name": "Sara Funaro",
+          "actingCapacity": "individual"
+        },
         "city": "Florence",
-        "title": "Mayor of Florence",
-        "actingCapacity": "individual",
         "associatedCity": "Q2044"
       },
       {
         "vote": "Sign",
-        "name": "Mike Josef",
+        "author": {
+          "title": "Mayor of Frankfurt",
+          "name": "Mike Josef",
+          "actingCapacity": "individual"
+        },
         "city": "Frankfurt",
-        "title": "Mayor of Frankfurt",
-        "actingCapacity": "individual",
         "associatedCity": "Q1794"
       },
       {
         "vote": "Sign",
-        "name": "Tanya Hristova",
+        "author": {
+          "title": "Mayor of Gabrovo",
+          "name": "Tanya Hristova",
+          "actingCapacity": "individual"
+        },
         "city": "Gabrovo",
-        "title": "Mayor of Gabrovo",
-        "actingCapacity": "individual",
         "associatedCity": null
       },
       {
         "vote": "Sign",
-        "name": "Aleksandra Dulkiewicz",
+        "author": {
+          "title": "Mayor of Gdansk",
+          "name": "Aleksandra Dulkiewicz",
+          "actingCapacity": "individual"
+        },
         "city": "Gdansk",
-        "title": "Mayor of Gdansk",
-        "actingCapacity": "individual",
         "associatedCity": "Q1792"
       },
       {
         "vote": "Sign",
-        "name": "Mathias De Clercq",
+        "author": {
+          "title": "Mayor of Ghent",
+          "name": "Mathias De Clercq",
+          "actingCapacity": "individual"
+        },
         "city": "Ghent",
-        "title": "Mayor of Ghent",
-        "actingCapacity": "individual",
         "associatedCity": "Q1296"
       },
       {
         "vote": "Sign",
-        "name": "Lluc Salellas i Vilar",
+        "author": {
+          "title": "Mayor of Girona",
+          "name": "Lluc Salellas i Vilar",
+          "actingCapacity": "individual"
+        },
         "city": "Girona",
-        "title": "Mayor of Girona",
-        "actingCapacity": "individual",
         "associatedCity": null
       },
       {
         "vote": "Sign",
-        "name": "Urte Schwerdtner",
+        "author": {
+          "title": "Mayor of Goslar",
+          "name": "Urte Schwerdtner",
+          "actingCapacity": "individual"
+        },
         "city": "Goslar",
-        "title": "Mayor of Goslar",
-        "actingCapacity": "individual",
         "associatedCity": null
       },
       {
         "vote": "Sign",
-        "name": "Matthias Trepper",
+        "author": {
+          "title": "Mayor of Gutersloh",
+          "name": "Matthias Trepper",
+          "actingCapacity": "individual"
+        },
         "city": "Gutersloh",
-        "title": "Mayor of Gutersloh",
-        "actingCapacity": "individual",
         "associatedCity": null
       },
       {
         "vote": "Sign",
-        "name": "Stefan Pålsson",
+        "author": {
+          "title": "Mayor of Hamstad",
+          "name": "Stefan Pålsson",
+          "actingCapacity": "individual"
+        },
         "city": "Hamstad",
-        "title": "Mayor of Hamstad",
-        "actingCapacity": "individual",
         "associatedCity": null
       },
       {
         "vote": "Sign",
-        "name": "Belit Onay",
+        "author": {
+          "title": "Mayor of Hannover",
+          "name": "Belit Onay",
+          "actingCapacity": "individual"
+        },
         "city": "Hannover",
-        "title": "Mayor of Hannover",
-        "actingCapacity": "individual",
         "associatedCity": "Q1715"
       },
       {
         "vote": "Sign",
-        "name": "Prof. Dr. Eckart Würzner",
+        "author": {
+          "title": "Mayor of Heidelberg",
+          "name": "Prof. Dr. Eckart Würzner",
+          "actingCapacity": "individual"
+        },
         "city": "Heidelberg",
-        "title": "Mayor of Heidelberg",
-        "actingCapacity": "individual",
         "associatedCity": null
       },
       {
         "vote": "Sign",
-        "name": "Juhana Vartiainen",
+        "author": {
+          "title": "Mayor of Helsinki",
+          "name": "Juhana Vartiainen",
+          "actingCapacity": "individual"
+        },
         "city": "Helsinki",
-        "title": "Mayor of Helsinki",
-        "actingCapacity": "individual",
         "associatedCity": "Q1757"
       },
       {
         "vote": "Sign",
-        "name": "Johan Persson",
+        "author": {
+          "title": "Mayor of Kalmar",
+          "name": "Johan Persson",
+          "actingCapacity": "individual"
+        },
         "city": "Kalmar",
-        "title": "Mayor of Kalmar",
-        "actingCapacity": "individual",
         "associatedCity": null
       },
       {
         "vote": "Sign",
-        "name": "Dr. Frank Mentrup",
+        "author": {
+          "title": "Mayor of Karlsruhe",
+          "name": "Dr. Frank Mentrup",
+          "actingCapacity": "individual"
+        },
         "city": "Karlsruhe",
-        "title": "Mayor of Karlsruhe",
-        "actingCapacity": "individual",
         "associatedCity": "Q1040"
       },
       {
         "vote": "Sign",
-        "name": "Ulf Kämpfer",
+        "author": {
+          "title": "Mayor of Kiel",
+          "name": "Ulf Kämpfer",
+          "actingCapacity": "individual"
+        },
         "city": "Kiel",
-        "title": "Mayor of Kiel",
-        "actingCapacity": "individual",
         "associatedCity": "Q1707"
       },
       {
         "vote": "Sign",
-        "name": "Grégoire Junod",
+        "author": {
+          "title": "Mayor of Lausanne",
+          "name": "Grégoire Junod",
+          "actingCapacity": "individual"
+        },
         "city": "Lausanne",
-        "title": "Mayor of Lausanne",
-        "actingCapacity": "individual",
         "associatedCity": null
       },
       {
         "vote": "Sign",
-        "name": "Jan Lindenau",
+        "author": {
+          "title": "Mayor of Lubeck",
+          "name": "Jan Lindenau",
+          "actingCapacity": "individual"
+        },
         "city": "Lubeck",
-        "title": "Mayor of Lubeck",
-        "actingCapacity": "individual",
         "associatedCity": null
       },
       {
         "vote": "Sign",
-        "name": "Carina Sammeli",
+        "author": {
+          "title": "Mayor of City of Luleå",
+          "name": "Carina Sammeli",
+          "actingCapacity": "individual"
+        },
         "city": "Luleå",
-        "title": "Mayor of City of Luleå",
-        "actingCapacity": "individual",
         "associatedCity": null
       },
       {
         "vote": "Sign",
-        "name": "Nino Haase",
+        "author": {
+          "title": "Mayor of Mainz",
+          "name": "Nino Haase",
+          "actingCapacity": "individual"
+        },
         "city": "Mainz",
-        "title": "Mayor of Mainz",
-        "actingCapacity": "individual",
         "associatedCity": null
       },
       {
         "vote": "Sign",
-        "name": "Katrin Stjernfeldt Jammeh",
+        "author": {
+          "title": "Mayor of Malmö",
+          "name": "Katrin Stjernfeldt Jammeh",
+          "actingCapacity": "individual"
+        },
         "city": "Malmö",
-        "title": "Mayor of Malmö",
-        "actingCapacity": "individual",
         "associatedCity": "Q503361"
       },
       {
         "vote": "Sign",
-        "name": "Christian Specht",
+        "author": {
+          "title": "Mayor of Mannheim",
+          "name": "Christian Specht",
+          "actingCapacity": "individual"
+        },
         "city": "Mannheim",
-        "title": "Mayor of Mannheim",
-        "actingCapacity": "individual",
         "associatedCity": "Q2119"
       },
       {
         "vote": "Sign",
-        "name": "Marc Aloy",
+        "author": {
+          "title": "Mayor of Manresa",
+          "name": "Marc Aloy",
+          "actingCapacity": "individual"
+        },
         "city": "Manresa",
-        "title": "Mayor of Manresa",
-        "actingCapacity": "individual",
         "associatedCity": null
       },
       {
         "vote": "Sign",
-        "name": "Giuseppe Sala",
+        "author": {
+          "title": "Mayor of Milan",
+          "name": "Giuseppe Sala",
+          "actingCapacity": "individual"
+        },
         "city": "Milan",
-        "title": "Mayor of Milan",
-        "actingCapacity": "individual",
         "associatedCity": "Q490"
       },
       {
         "vote": "Sign",
-        "name": "Massimo Mezzetti",
+        "author": {
+          "title": "Mayor of Modena",
+          "name": "Massimo Mezzetti",
+          "actingCapacity": "individual"
+        },
         "city": "Modena",
-        "title": "Mayor of Modena",
-        "actingCapacity": "individual",
         "associatedCity": null
       },
       {
         "vote": "Sign",
-        "name": "Dieter Reiter",
+        "author": {
+          "title": "Lord Mayor of Munich",
+          "name": "Dieter Reiter",
+          "actingCapacity": "individual"
+        },
         "city": "Munich",
-        "title": "Lord Mayor of Munich",
-        "actingCapacity": "individual",
         "associatedCity": "Q1726"
       },
       {
         "vote": "Sign",
-        "name": "Charalambos Prountzos",
+        "author": {
+          "title": "Mayor of Nicosia",
+          "name": "Charalambos Prountzos",
+          "actingCapacity": "individual"
+        },
         "city": "Nicosia",
-        "title": "Mayor of Nicosia",
-        "actingCapacity": "individual",
         "associatedCity": "Q3856"
       },
       {
         "vote": "Sign",
-        "name": "Marcus König",
+        "author": {
+          "title": "Mayor of Nuremberg",
+          "name": "Marcus König",
+          "actingCapacity": "individual"
+        },
         "city": "Nuremberg",
-        "title": "Mayor of Nuremberg",
-        "actingCapacity": "individual",
         "associatedCity": "Q2090"
       },
       {
         "vote": "Sign",
-        "name": "Kazim Kurt",
+        "author": {
+          "title": "Mayor of Odunpazari",
+          "name": "Kazim Kurt",
+          "actingCapacity": "individual"
+        },
         "city": "Odunpazari",
-        "title": "Mayor of Odunpazari",
-        "actingCapacity": "individual",
         "associatedCity": null
       },
       {
         "vote": "Sign",
-        "name": "Jürgen Krogmann",
+        "author": {
+          "title": "Mayor of Oldenburg",
+          "name": "Jürgen Krogmann",
+          "actingCapacity": "individual"
+        },
         "city": "Oldenburg",
-        "title": "Mayor of Oldenburg",
-        "actingCapacity": "individual",
         "associatedCity": null
       },
       {
         "vote": "Sign",
-        "name": "Eirik Lae Solberg",
+        "author": {
+          "title": "Governing Mayor of Oslo",
+          "name": "Eirik Lae Solberg",
+          "actingCapacity": "individual"
+        },
         "city": "Oslo",
-        "title": "Governing Mayor of Oslo",
-        "actingCapacity": "individual",
         "associatedCity": "Q585"
       },
       {
         "vote": "Sign",
-        "name": "Mike Schubert",
+        "author": {
+          "title": "Lord Mayor of Potsdam",
+          "name": "Mike Schubert",
+          "actingCapacity": "individual"
+        },
         "city": "Potsdam",
-        "title": "Lord Mayor of Potsdam",
-        "actingCapacity": "individual",
         "associatedCity": null
       },
       {
         "vote": "Sign",
-        "name": "Triin Varek",
+        "author": {
+          "title": "Mayor of Rakvere",
+          "name": "Triin Varek",
+          "actingCapacity": "individual"
+        },
         "city": "Rakvere",
-        "title": "Mayor of Rakvere",
-        "actingCapacity": "individual",
         "associatedCity": null
       },
       {
         "vote": "Sign",
-        "name": "Gertrud Maltz-Schwarzfischer",
+        "author": {
+          "title": "Mayor of Regensburg",
+          "name": "Gertrud Maltz-Schwarzfischer",
+          "actingCapacity": "individual"
+        },
         "city": "Regensburg",
-        "title": "Mayor of Regensburg",
-        "actingCapacity": "individual",
         "associatedCity": null
       },
       {
         "vote": "Sign",
-        "name": "Nathalie Appéré",
+        "author": {
+          "title": "Mayor of Rennes",
+          "name": "Nathalie Appéré",
+          "actingCapacity": "individual"
+        },
         "city": "Rennes",
-        "title": "Mayor of Rennes",
-        "actingCapacity": "individual",
         "associatedCity": "Q647"
       },
       {
         "vote": "Sign",
-        "name": "Heida Björg Hilmisdóttir",
+        "author": {
+          "title": "Mayor of Reykjavik",
+          "name": "Heida Björg Hilmisdóttir",
+          "actingCapacity": "individual"
+        },
         "city": "Reykjavik",
-        "title": "Mayor of Reykjavik",
-        "actingCapacity": "individual",
         "associatedCity": "Q1764"
       },
       {
         "vote": "Sign",
-        "name": "Vilnis Ķirsis",
+        "author": {
+          "title": "Mayor of Riga",
+          "name": "Vilnis Ķirsis",
+          "actingCapacity": "individual"
+        },
         "city": "Riga",
-        "title": "Mayor of Riga",
-        "actingCapacity": "individual",
         "associatedCity": "Q1773"
       },
       {
         "vote": "Sign",
-        "name": "Roberto Gualtieri",
+        "author": {
+          "title": "Mayor of Rome",
+          "name": "Roberto Gualtieri",
+          "actingCapacity": "individual"
+        },
         "city": "Rome",
-        "title": "Mayor of Rome",
-        "actingCapacity": "individual",
         "associatedCity": "Q220"
       },
       {
         "vote": "Sign",
-        "name": "Carola Schouten",
+        "author": {
+          "title": "Mayor of Rotterdam",
+          "name": "Carola Schouten",
+          "actingCapacity": "individual"
+        },
         "city": "Rotterdam",
-        "title": "Mayor of Rotterdam",
-        "actingCapacity": "individual",
         "associatedCity": "Q34370"
       },
       {
         "vote": "Sign",
-        "name": "Peter Reiß",
+        "author": {
+          "title": "Mayor of Schwabach",
+          "name": "Peter Reiß",
+          "actingCapacity": "individual"
+        },
         "city": "Schwabach",
-        "title": "Mayor of Schwabach",
-        "actingCapacity": "individual",
         "associatedCity": null
       },
       {
         "vote": "Sign",
-        "name": "Dr. Bernd Vöhringer",
+        "author": {
+          "title": "Lord Mayor of Sindelfingen",
+          "name": "Dr. Bernd Vöhringer",
+          "actingCapacity": "individual"
+        },
         "city": "Sindelfingen",
-        "title": "Lord Mayor of Sindelfingen",
-        "actingCapacity": "individual",
         "associatedCity": null
       },
       {
         "vote": "Sign",
-        "name": "Christian Gangl",
+        "author": {
+          "title": "Mayor of Sindelfingen and President of Eurotowns",
+          "name": "Christian Gangl",
+          "actingCapacity": "individual"
+        },
         "city": "Sindelfingen",
-        "title": "Mayor of Sindelfingen and President of Eurotowns",
-        "actingCapacity": "individual",
         "associatedCity": null
       },
       {
         "vote": "Sign",
-        "name": "Mikael Grannas",
+        "author": {
+          "title": "Mayor of Sipoo",
+          "name": "Mikael Grannas",
+          "actingCapacity": "individual"
+        },
         "city": "Sipoo",
-        "title": "Mayor of Sipoo",
-        "actingCapacity": "individual",
         "associatedCity": "Q986320"
       },
       {
         "vote": "Sign",
-        "name": "Bastian Sieler",
+        "author": {
+          "title": "Mayor of Stendal",
+          "name": "Bastian Sieler",
+          "actingCapacity": "individual"
+        },
         "city": "Stendal",
-        "title": "Mayor of Stendal",
-        "actingCapacity": "individual",
         "associatedCity": null
       },
       {
         "vote": "Sign",
-        "name": "Karin Wanngård",
+        "author": {
+          "title": "Mayor of Stockholm",
+          "name": "Karin Wanngård",
+          "actingCapacity": "individual"
+        },
         "city": "Stockholm",
-        "title": "Mayor of Stockholm",
-        "actingCapacity": "individual",
         "associatedCity": "Q506250"
       },
       {
         "vote": "Sign",
-        "name": "Jeanne Barseghian",
+        "author": {
+          "title": "Mayor of Strasbourg",
+          "name": "Jeanne Barseghian",
+          "actingCapacity": "individual"
+        },
         "city": "Strasbourg",
-        "title": "Mayor of Strasbourg",
-        "actingCapacity": "individual",
         "associatedCity": "Q6602"
       },
       {
         "vote": "Sign",
-        "name": "Jevgeni Ossinovski",
+        "author": {
+          "title": "Mayor of Tallinn",
+          "name": "Jevgeni Ossinovski",
+          "actingCapacity": "individual"
+        },
         "city": "Tallinn",
-        "title": "Mayor of Tallinn",
-        "actingCapacity": "individual",
         "associatedCity": "Q1770"
       },
       {
         "vote": "Sign",
-        "name": "Kalervo Kummola",
+        "author": {
+          "title": "Mayor of Tampere",
+          "name": "Kalervo Kummola",
+          "actingCapacity": "individual"
+        },
         "city": "Tampere",
-        "title": "Mayor of Tampere",
-        "actingCapacity": "individual",
         "associatedCity": "Q40840"
       },
       {
         "vote": "Sign",
-        "name": "Dominic Fritz",
+        "author": {
+          "title": "Mayor of Timisoara",
+          "name": "Dominic Fritz",
+          "actingCapacity": "individual"
+        },
         "city": "Timisoara",
-        "title": "Mayor of Timisoara",
-        "actingCapacity": "individual",
         "associatedCity": "Q83404"
       },
       {
         "vote": "Sign",
-        "name": "Minna Arve",
+        "author": {
+          "title": "Mayor of Turku",
+          "name": "Minna Arve",
+          "actingCapacity": "individual"
+        },
         "city": "Turku",
-        "title": "Mayor of Turku",
-        "actingCapacity": "individual",
         "associatedCity": "Q38511"
       },
       {
         "vote": "Sign",
-        "name": "Sharon Dijksma",
+        "author": {
+          "title": "Mayor of Utrecht",
+          "name": "Sharon Dijksma",
+          "actingCapacity": "individual"
+        },
         "city": "Utrecht",
-        "title": "Mayor of Utrecht",
-        "actingCapacity": "individual",
         "associatedCity": "Q803"
       },
       {
         "vote": "Sign",
-        "name": "Tomas Häyry",
+        "author": {
+          "title": "Mayor of Vaasa",
+          "name": "Tomas Häyry",
+          "actingCapacity": "individual"
+        },
         "city": "Vaasa",
-        "title": "Mayor of Vaasa",
-        "actingCapacity": "individual",
         "associatedCity": null
       },
       {
         "vote": "Sign",
-        "name": "Malin Lauber",
+        "author": {
+          "title": "Mayor of Växjö",
+          "name": "Malin Lauber",
+          "actingCapacity": "individual"
+        },
         "city": "Växjö",
-        "title": "Mayor of Växjö",
-        "actingCapacity": "individual",
         "associatedCity": null
       },
       {
         "vote": "Sign",
-        "name": "Uwe Schneidewind",
+        "author": {
+          "title": "Mayor of Wuppertal",
+          "name": "Uwe Schneidewind",
+          "actingCapacity": "individual"
+        },
         "city": "Wuppertal",
-        "title": "Mayor of Wuppertal",
-        "actingCapacity": "individual",
         "associatedCity": null
       },
       {
         "vote": "Sign",
-        "name": "Dejan Tomašević",
+        "author": {
+          "title": "Mayor of Zagreb",
+          "name": "Dejan Tomašević",
+          "actingCapacity": "individual"
+        },
         "city": "Zagreb",
-        "title": "Mayor of Zagreb",
-        "actingCapacity": "individual",
         "associatedCity": "Q1435"
       },
       {
         "vote": "Sign",
-        "name": "Dario Nardella",
+        "author": {
+          "title": "MEP, and former Mayor of Florence",
+          "name": "Dario Nardella",
+          "actingCapacity": "individual"
+        },
         "city": null,
-        "title": "MEP, and former Mayor of Florence",
-        "actingCapacity": "individual",
         "associatedCity": null
       },
       {
         "vote": "Sign",
-        "name": "Eurocities",
+        "author": {
+          "title": null,
+          "name": "Eurocities",
+          "actingCapacity": "organization"
+        },
         "city": null,
-        "title": null,
-        "actingCapacity": "organization",
         "associatedCity": null
       },
       {
         "vote": "Sign",
-        "name": "The Council of European Municipalities and Regions",
+        "author": {
+          "title": null,
+          "name": "The Council of European Municipalities and Regions",
+          "actingCapacity": "organization"
+        },
         "city": null,
-        "title": null,
-        "actingCapacity": "organization",
         "associatedCity": null
       },
       {
         "vote": "Sign",
-        "name": "The International Association of Francophone Mayors (AIMF)",
+        "author": {
+          "title": null,
+          "name": "The International Association of Francophone Mayors (AIMF)",
+          "actingCapacity": "organization"
+        },
         "city": null,
-        "title": null,
-        "actingCapacity": "organization",
         "associatedCity": null
       },
       {
         "vote": "Sign",
-        "name": "Roger Kaliff",
+        "author": {
+          "title": "Union of Baltic Cities",
+          "name": "Roger Kaliff",
+          "actingCapacity": "individual"
+        },
         "city": null,
-        "title": "Union of Baltic Cities",
-        "actingCapacity": "individual",
         "associatedCity": null
       }
     ]
