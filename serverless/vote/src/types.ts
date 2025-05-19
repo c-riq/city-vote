@@ -1,5 +1,29 @@
 // Vote storage format in S3
-export type VoteData = Record<string, Record<string, [number, string, {
+export interface VoteAuthor {
+    title: string;
+    name: string;
+    actingCapacity: 'individual' | 'representingCityAdministration';
+}
+
+export interface VoteEntry {
+    time?: number;
+    vote: 'Yes' | 'No' | 'Sign';
+    author: VoteAuthor;
+    associatedCity?: string; // wikidataId
+    externalVerificationSource?: string; // URL
+}
+
+export interface PollData {
+    organisedBy?: string;
+    URL?: string;
+    type: 'poll' | 'jointStatement';
+    votes: VoteEntry[];
+}
+
+export type VoteData = Record<string, PollData>;
+
+// Legacy vote data format (for backward compatibility)
+export type LegacyVoteData = Record<string, Record<string, [number, string, {
     title: string;
     name: string;
     actingCapacity: 'individual' | 'representingCityAdministration';

@@ -71,7 +71,7 @@ export interface GetPublicCitiesRequest {
 }
 
 export interface GetVotesResponse {
-    votes: VoteData_;
+    votes: VoteData;
     message?: string;
 }
 
@@ -98,7 +98,32 @@ export type VoteData = Record<string, Record<string, [number, string, {
     title: string;
     name: string;
     actingCapacity: 'individual' | 'representingCityAdministration';
+    externallyVerifiedBy?: string;
 }][]>>;
+
+// New vote storage format in S3 (to be used in future)
+export interface VoteAuthor {
+    title: string;
+    name: string;
+    actingCapacity: 'individual' | 'representingCityAdministration';
+}
+
+export interface VoteEntry {
+    time?: number;
+    vote: 'Yes' | 'No' | 'Sign';
+    author: VoteAuthor;
+    associatedCity?: string; // wikidataId
+    externalVerificationSource?: string; // URL
+}
+
+export interface PollData {
+    organisedBy?: string;
+    URL?: string;
+    type: 'poll' | 'jointStatement';
+    votes: VoteEntry[];
+}
+
+export type NewVoteData = Record<string, PollData>;
 
 // City data format
 export interface City {
@@ -147,6 +172,8 @@ export interface CreatePollRequest {
     action: 'createPoll';
     token: string;
     pollId: string;
+    documentUrl?: string;
+    organisedBy?: string;
 }
 
 export interface UploadAttachmentRequest {
@@ -195,5 +222,3 @@ export interface GetCitiesResponse {
 export interface CreatePollResponse {
     message: string;
 }
-
-

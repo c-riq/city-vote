@@ -351,7 +351,6 @@ function App() {
                             action: 'createPoll',
                             token,
                             pollId: basePollId,
-                            pollType,
                             documentUrl,
                             organisedBy: organisedBy.trim() || undefined
                         })
@@ -419,7 +418,7 @@ function App() {
                                 action: 'createPoll',
                                 token,
                                 pollId: urlData.pollId,
-                                pollType,
+                                documentUrl: null,
                                 organisedBy: organisedBy.trim() || undefined
                             })
                         });
@@ -486,10 +485,11 @@ function App() {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
-                            action: 'createPoll',
-                            token,
-                            pollId: urlData.pollId,
-                            pollType
+                    action: 'createPoll',
+                    token,
+                    pollId: urlData.pollId,
+                    documentUrl: null,
+                    organisedBy: organisedBy.trim() || undefined
                         })
                     });
 
@@ -516,7 +516,8 @@ function App() {
                     action: 'createPoll',
                     token,
                     pollId: basePollId,
-                    pollType // Pass the poll type to the backend
+                    documentUrl: null,
+                    organisedBy: organisedBy.trim() || undefined
                 })
             });
 

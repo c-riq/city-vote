@@ -1,0 +1,17 @@
+{
+  "joint_statement_Mayors voice support for Ekrem İmamoğlu": {
+    "type": "jointStatement",
+    "URL": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/#",
+    "organisedBy": "https://city-vote.com/network/eurocities",
+    "votes": [
+      {
+        "vote": "Sign",
+        "name": "Anne Hidalgo",
+        "city": "Paris",
+        "title": "Mayor of Paris",
+        "actingCapacity": "individual",
+        "associatedCity": "Q90"
+      }
+    ]
+  }
+}

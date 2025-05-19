@@ -52,7 +52,7 @@ const createAttachmentId = async (pollQuestion: string): Promise<string> => {
   return hashBase64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 };
 
-function Poll({ token, pollData, onVoteComplete, votesData: propVotesData, cities: propCities, cityInfo }: PollProps) {
+function Poll({ token, pollData: initialPollData, onVoteComplete, votesData: propVotesData, cities: propCities, cityInfo }: PollProps) {
   const navigate = useNavigate();
   const { pollId } = useParams();
   const [error, setError] = useState('');
@@ -94,8 +94,8 @@ function Poll({ token, pollData, onVoteComplete, votesData: propVotesData, citie
   // Fetch poll metadata and check for attachment when poll ID is available
   useEffect(() => {
     const fetchPollData = async () => {
-      if (pollId || pollData?.id) {
-        const question = pollData?.id || decodeURIComponent(pollId || '');
+      if (pollId || initialPollData?.id) {
+        const question = initialPollData?.id || decodeURIComponent(pollId || '');
         const attachmentId = await createAttachmentId(question);
         
         // Request a direct URL for the attachment
@@ -156,7 +156,7 @@ function Poll({ token, pollData, onVoteComplete, votesData: propVotesData, citie
     };
     
     fetchPollData();
-  }, [pollId, pollData, token]);
+  }, [pollId, initialPollData, token]);
 
   // Helper function to get display title and metadata
   const getDisplayTitle = (title: string): string => {
@@ -274,8 +274,8 @@ function Poll({ token, pollData, onVoteComplete, votesData: propVotesData, citie
     }
   };
 
-  const pollVotes = votesData?.[pollData?.id || pollId] || {};
-  const hasVoted = cityInfo?.id ? pollVotes[cityInfo?.id]?.length > 0 : false;
+  const pollVotes = votesData?.[initialPollData?.id || pollId || ''] || {};
+  const hasVoted = cityInfo?.id ? (pollVotes[cityInfo?.id]?.length > 0) : false;
 
   const handleVote = async (option: string) => {
     setVoting(true);
@@ -288,7 +288,7 @@ function Poll({ token, pollData, onVoteComplete, votesData: propVotesData, citie
       const voteRequest: VoteRequest = {
         action: 'vote',
         token,
-        pollId: pollData?.id || pollId || '',
+        pollId: initialPollData?.id || pollId || '',
         option,
         title: personalInfo.title,
         name: personalInfo.name,
@@ -381,7 +381,7 @@ function Poll({ token, pollData, onVoteComplete, votesData: propVotesData, citie
     );
   }
 
-  if (!pollId && !pollData) {
+  if (!pollId && !initialPollData) {
     return (
       <Box
         sx={{
@@ -486,12 +486,12 @@ function Poll({ token, pollData, onVoteComplete, votesData: propVotesData, citie
               fontWeight: 600
             }}
           >
-            {getDisplayTitle(pollData?.title || decodeURIComponent(pollId || ''))}
+            {getDisplayTitle(initialPollData?.title || decodeURIComponent(pollId || ''))}
           </Typography>
           
           {/* Display organised by information if available */}
           {isJointStatement && (
-            (pollMetadata?.organisedBy || getOrganisedBy(pollData?.title || decodeURIComponent(pollId || ''))) && (
+            (pollMetadata?.organisedBy || getOrganisedBy(initialPollData?.title || decodeURIComponent(pollId || ''))) && (
               <Typography 
                 variant="subtitle1" 
                 sx={{ 
@@ -500,14 +500,14 @@ function Poll({ token, pollData, onVoteComplete, votesData: propVotesData, citie
                   color: 'text.secondary'
                 }}
               >
-                Organised by: {pollMetadata?.organisedBy || getOrganisedBy(pollData?.title || decodeURIComponent(pollId || ''))}
+                Organised by: {pollMetadata?.organisedBy || getOrganisedBy(initialPollData?.title || decodeURIComponent(pollId || ''))}
               </Typography>
             )
           )}
           
           {/* Display document URL if available */}
           {isJointStatement && (
-            (pollMetadata?.documentUrl || getDocumentUrl(pollData?.title || decodeURIComponent(pollId || ''))) && (
+            (pollMetadata?.documentUrl || getDocumentUrl(initialPollData?.title || decodeURIComponent(pollId || ''))) && (
               <Box sx={{ 
                 display: 'flex', 
                 justifyContent: 'center', 
@@ -522,7 +522,7 @@ function Poll({ token, pollData, onVoteComplete, votesData: propVotesData, citie
                   variant="outlined"
                   startIcon={<span className="material-icons">open_in_new</span>}
                   component={MuiLink}
-                  href={pollMetadata?.documentUrl || getDocumentUrl(pollData?.title || decodeURIComponent(pollId || '')) || '#'}
+                  href={pollMetadata?.documentUrl || getDocumentUrl(initialPollData?.title || decodeURIComponent(pollId || '')) || '#'}
                   target="_blank"
                   rel="noopener noreferrer"
                   sx={{ 
@@ -656,7 +656,7 @@ function Poll({ token, pollData, onVoteComplete, votesData: propVotesData, citie
                   </Button>
                 ) : (
                   // For regular polls, show Yes/No options
-                  (pollData?.options || ['Yes', 'No']).map((option: string, index: number) => (
+                  (initialPollData?.options || ['Yes', 'No']).map((option: string, index: number) => (
                     <Button
                       key={index}
                       variant="contained"

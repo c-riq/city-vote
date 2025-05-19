@@ -245,9 +245,6 @@ const handleVote = async ({ cityId, resolvedCity, pollId, option, title, name, a
             }
         }
 
-        if (!votes[pollId]) votes[pollId] = {};
-        if (!votes[pollId][resolvedCity.id]) votes[pollId][resolvedCity.id] = [];
-
         // For polls with attachments, the title displayed in the UI should have the _attachment_<hash> part removed
         let displayTitle = title;
         if (pollId.includes('_attachment_')) {
@@ -258,16 +255,30 @@ const handleVote = async ({ cityId, resolvedCity, pollId, option, title, name, a
             }
         }
         
-        votes[pollId][resolvedCity.id].push([
-            Date.now(), 
-            option, 
-            { 
-                title: displayTitle, 
-                name, 
-                actingCapacity,
-                ...(externallyVerifiedBy ? { externallyVerifiedBy } : {})
-            }
-        ]);
+        // Check if poll exists, if not create it with default values
+        if (!votes[pollId]) {
+            const isJointStatement = pollId.startsWith('joint_statement_');
+            votes[pollId] = {
+                type: isJointStatement ? 'jointStatement' : 'poll',
+                votes: []
+            };
+        }
+        
+        // Create the vote entry with the new structure
+        const voteEntry = {
+            time: Date.now(),
+            vote: option as 'Yes' | 'No' | 'Sign',
+            author: {
+                title: displayTitle,
+                name,
+                actingCapacity
+            },
+            associatedCity: resolvedCity.id,
+            ...(externallyVerifiedBy ? { externalVerificationSource: externallyVerifiedBy } : {})
+        };
+        
+        // Add the vote to the poll's votes array
+        votes[pollId].votes.push(voteEntry);
 
         await s3Client.send(new PutObjectCommand({
             Bucket: BUCKET_NAME,
@@ -324,7 +335,7 @@ const handleCreatePoll = async ({ pollId, documentUrl, organisedBy }: CreatePoll
     }
 
     try {
-        // 1. First, handle votes data
+        // Handle votes data with new structure
         let votes: VoteData = {};
         try {
             const existingData = await s3Client.send(new GetObjectCommand({
@@ -352,45 +363,21 @@ const handleCreatePoll = async ({ pollId, documentUrl, organisedBy }: CreatePoll
             };
         }
 
-        // Initialize empty poll
-        votes[pollId] = {};
-
-        await s3Client.send(new PutObjectCommand({
-            Bucket: BUCKET_NAME,
-            Key: VOTES_KEY,
-            Body: JSON.stringify(votes, null, 2), // Format JSON with 2-space indentation
-            ContentType: 'application/json'
-        }));
-
-        // 2. Then, handle poll metadata
-        let pollsMetadata: PollMetadata = {};
-        try {
-            const existingMetadata = await s3Client.send(new GetObjectCommand({
-                Bucket: BUCKET_NAME,
-                Key: POLLS_METADATA_KEY
-            }));
-            
-            if (existingMetadata.Body) {
-                const metadataString = await streamToString(existingMetadata.Body as Readable);
-                pollsMetadata = JSON.parse(metadataString);
-            }
-        } catch (error: any) {
-            if (error.name !== 'NoSuchKey') {
-                throw error;
-            }
-        }
-
-        // Add metadata for the new poll
-        pollsMetadata[pollId] = {
-            createdAt: Date.now(),
-            ...(documentUrl ? { documentUrl } : {}),
+        // Determine poll type based on pollId
+        const isJointStatement = pollId.startsWith('joint_statement_');
+        
+        // Initialize new poll with the new structure
+        votes[pollId] = {
+            type: isJointStatement ? 'jointStatement' : 'poll',
+            votes: [],
+            ...(documentUrl ? { URL: documentUrl } : {}),
             ...(organisedBy ? { organisedBy } : {})
         };
 
         await s3Client.send(new PutObjectCommand({
             Bucket: BUCKET_NAME,
-            Key: POLLS_METADATA_KEY,
-            Body: JSON.stringify(pollsMetadata, null, 2),
+            Key: VOTES_KEY,
+            Body: JSON.stringify(votes, null, 2), // Format JSON with 2-space indentation
             ContentType: 'application/json'
         }));
 
@@ -402,7 +389,11 @@ const handleCreatePoll = async ({ pollId, documentUrl, organisedBy }: CreatePoll
             body: JSON.stringify({ 
                 message: 'Poll created successfully',
                 pollId,
-                metadata: pollsMetadata[pollId]
+                metadata: {
+                    type: votes[pollId].type,
+                    ...(votes[pollId].URL ? { URL: votes[pollId].URL } : {}),
+                    ...(votes[pollId].organisedBy ? { organisedBy: votes[pollId].organisedBy } : {})
+                }
             }, null, 2)
         };
     } catch (error) {
