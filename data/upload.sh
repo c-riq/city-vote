@@ -32,27 +32,24 @@ if ! aws sts get-caller-identity &>/dev/null; then
     exit 1
 fi
 
-# Check if required files exist
-if [ ! -f "cities/cities.json" ]; then
-    echo "cities/cities.json not found"
+# Set the upload directory
+upload_dir="city-vote-data"
+
+# If dev mode, use city-vote-data-dev directory
+if [ "$1" = "dev" ]; then
+    upload_dir="city-vote-data-dev"
+fi
+
+# Check if directory exists
+if [ ! -d "$upload_dir" ]; then
+    echo "$upload_dir directory not found"
     exit 1
 fi
 
-if [ ! -f "auth/auth.json" ]; then
-    echo "auth/auth.json not found"
-    exit 1
-fi
-
-# Upload files to S3
-echo "Uploading cities.json..."
-if ! aws s3 cp cities/cities.json s3://$s3_bucket/cities/cities.json --cache-control max-age=300,public; then
-    echo "ERROR: Failed to upload cities.json"
-    exit 1
-fi
-
-echo "Uploading auth.json..."
-if ! aws s3 cp auth/auth.json s3://$s3_bucket/auth/auth.json --cache-control max-age=300,public; then
-    echo "ERROR: Failed to upload auth.json"
+# Upload all files from the directory to S3
+echo "Uploading all files from $upload_dir..."
+if ! aws s3 sync "$upload_dir/" s3://$s3_bucket/ --cache-control max-age=300,public; then
+    echo "ERROR: Failed to upload files from $upload_dir"
     exit 1
 fi
 

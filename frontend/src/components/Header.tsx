@@ -402,7 +402,7 @@ function Header({ cityInfo, onLogout, onCreatePoll }: HeaderProps) {
             renderInput={(params) => (
               <TextField
                 {...params}
-                placeholder="Search cities..."
+                placeholder="Search 163000 cities..."
                 size="small"
                 InputProps={{
                   ...params.InputProps,

@@ -32,12 +32,20 @@ if ! aws sts get-caller-identity &>/dev/null; then
     exit 1
 fi
 
-# Create directory for the bucket if it doesn't exist
-mkdir -p "$s3_bucket"
+# Set the download directory
+download_dir="city-vote-data"
+
+# If dev mode, use city-vote-data-dev directory
+if [ "$1" = "dev" ]; then
+  download_dir="city-vote-data-dev"
+fi
+
+# Create directory if it doesn't exist
+mkdir -p "$download_dir"
 
 # Download all contents from S3
 echo "Downloading all contents from s3://$s3_bucket..."
-if ! aws s3 sync s3://$s3_bucket/ "$s3_bucket/"; then
+if ! aws s3 sync s3://$s3_bucket/ "$download_dir/"; then
     echo "ERROR: Failed to download contents from S3 bucket"
     exit 1
 fi

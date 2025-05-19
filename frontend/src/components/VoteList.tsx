@@ -73,14 +73,14 @@ const VoteList = ({ votes, cities, variant = 'list', containerStyle, isJointStat
           >
             {new Date(vote.timestamp).toLocaleDateString()} {new Date(vote.timestamp).toLocaleTimeString()} 
             {' · '}
-            {vote.voteInfo.title} {vote.voteInfo.name}
+            {vote.voteInfo?.title} {vote.voteInfo?.name}
             {' · '}
             <em>
-              {vote.voteInfo.actingCapacity === 'individual' ? 
+              {vote.voteInfo?.actingCapacity === 'individual' ? 
                 'personal' : 
                 'city admin'}
             </em>
-            {vote.voteInfo.externallyVerifiedBy && (
+            {vote.voteInfo?.externallyVerifiedBy && (
               <>
                 {' · '}
                 <span style={{ 
@@ -91,7 +91,7 @@ const VoteList = ({ votes, cities, variant = 'list', containerStyle, isJointStat
                   fontWeight: 500,
                   color: '#0d47a1'
                 }}>
-                  Verified by {vote.voteInfo.externallyVerifiedBy}
+                  Verified by {vote.voteInfo?.externallyVerifiedBy}
                 </span>
               </>
             )}
@@ -158,14 +158,14 @@ const VoteList = ({ votes, cities, variant = 'list', containerStyle, isJointStat
                 >
                   {new Date(vote.timestamp).toLocaleDateString()} {new Date(vote.timestamp).toLocaleTimeString()} 
                   {' · '}
-                  {vote.voteInfo.title} {vote.voteInfo.name}
+                  {vote.voteInfo?.title} {vote.voteInfo?.name}
                   {' · '}
                   <em>
-                    {vote.voteInfo.actingCapacity === 'individual' ? 
+                    {vote.voteInfo?.actingCapacity === 'individual' ? 
                       'personal' : 
                       'city admin'}
                   </em>
-                  {vote.voteInfo.externallyVerifiedBy && (
+                  {vote.voteInfo?.externallyVerifiedBy && (
                     <>
                       {' · '}
                       <span style={{ 
@@ -176,7 +176,7 @@ const VoteList = ({ votes, cities, variant = 'list', containerStyle, isJointStat
                         fontWeight: 500,
                         color: '#0d47a1'
                       }}>
-                        Verified by {vote.voteInfo.externallyVerifiedBy}
+                        Verified by {vote.voteInfo?.externallyVerifiedBy}
                       </span>
                     </>
                   )}
