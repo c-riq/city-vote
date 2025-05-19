@@ -18,6 +18,7 @@ export interface PollData {
     URL?: string;
     type: 'poll' | 'jointStatement';
     votes: VoteEntry[];
+    createdAt?: number;
 }
 
 export type VoteData = Record<string, PollData>;

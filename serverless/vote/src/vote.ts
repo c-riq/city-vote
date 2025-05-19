@@ -16,7 +16,6 @@ const BUCKET_NAME = isDev ? 'city-vote-data-dev' : 'city-vote-data';
 const PUBLIC_BUCKET_NAME = isDev ? 'city-vote-data-public-dev' : 'city-vote-data-public';
 
 const VOTES_KEY = 'votes/votes.json';
-const POLLS_METADATA_KEY = 'votes/polls_metadata.json';
 const LOCK_KEY = 'votes/lock.csv';
 const AUTH_KEY = 'auth/auth.json';
 const ACCESS_LOG_KEY = 'logs/access.json';
@@ -370,6 +369,7 @@ const handleCreatePoll = async ({ pollId, documentUrl, organisedBy }: CreatePoll
         votes[pollId] = {
             type: isJointStatement ? 'jointStatement' : 'poll',
             votes: [],
+            createdAt: Date.now(),
             ...(documentUrl ? { URL: documentUrl } : {}),
             ...(organisedBy ? { organisedBy } : {})
         };
@@ -432,17 +432,17 @@ const handleGetPollMetadata = async ({ pollId }: GetPollMetadataParams): Promise
     }
 
     try {
-        // Get poll metadata
-        let pollsMetadata: PollMetadata = {};
+        // Get poll data from votes file
+        let votes: VoteData = {};
         try {
-            const existingMetadata = await s3Client.send(new GetObjectCommand({
+            const existingData = await s3Client.send(new GetObjectCommand({
                 Bucket: BUCKET_NAME,
-                Key: POLLS_METADATA_KEY
+                Key: VOTES_KEY
             }));
             
-            if (existingMetadata.Body) {
-                const metadataString = await streamToString(existingMetadata.Body as Readable);
-                pollsMetadata = JSON.parse(metadataString);
+            if (existingData.Body) {
+                const dataString = await streamToString(existingData.Body as Readable);
+                votes = JSON.parse(dataString);
             }
         } catch (error: any) {
             if (error.name !== 'NoSuchKey') {
@@ -450,21 +450,29 @@ const handleGetPollMetadata = async ({ pollId }: GetPollMetadataParams): Promise
             }
         }
 
-        // Check if poll metadata exists
-        if (!pollsMetadata[pollId]) {
+        // Check if poll exists
+        if (!votes[pollId]) {
             return {
                 statusCode: 404,
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: 'Poll metadata not found' }, null, 2)
+                body: JSON.stringify({ message: 'Poll not found' }, null, 2)
             };
         }
+
+        // Extract metadata from poll data
+        const metadata = {
+            type: votes[pollId].type,
+            ...(votes[pollId].URL ? { documentUrl: votes[pollId].URL } : {}),
+            ...(votes[pollId].organisedBy ? { organisedBy: votes[pollId].organisedBy } : {}),
+            createdAt: votes[pollId].createdAt || Date.now()
+        };
 
         return {
             statusCode: 200,
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 
                 message: 'Poll metadata retrieved successfully',
-                metadata: pollsMetadata[pollId]
+                metadata
             }, null, 2)
         };
     } catch (error) {
