@@ -18,12 +18,12 @@ import {
   City,
   ValidateTokenResponse,
   GetCitiesResponse,
-  GetVotesResponse
+  GetVotesResponse,
+  VoteData,
+  VoteEntry
 } from './backendTypes';
 
-type Vote = [number, string, { title: string; name: string; actingCapacity: 'individual' | 'representingCityAdministration' }];
-type CityVotes = Record<string, Vote[]>;  // cityId -> votes
-type PollVotes = Record<string, CityVotes>;  // pollId -> city votes
+type PollVotes = VoteData;  // Using the new VoteData type from backendTypes.ts
 
 function CityRoute({ cityInfo, cities, theme }: { 
   cityInfo: City | null,
@@ -977,17 +977,15 @@ function App() {
                       {isRefreshingVotes ? 'Refreshing...' : 'Refresh'}
                     </Button>
                   </Box>
-                  {Object.entries(votesData).map(([pollId, citiesVotes]) => {
-                    const allVotes = Object.entries(citiesVotes)
-                      .flatMap(([cityId, votes]) => 
-                        votes.map(([timestamp, option, voteInfo]) => ({
-                          cityId,
-                          timestamp,
-                          option,
-                          voteInfo
-                        }))
-                      )
-                      .sort((a, b) => b.timestamp - a.timestamp);
+                  {Object.entries(votesData).map(([pollId, pollData]) => {
+                    // Convert the new vote structure to the format expected by VoteList
+                    const allVotes = pollData.votes.map(vote => ({
+                      cityId: vote.associatedCity || '',
+                      timestamp: vote.time || 0,
+                      option: vote.vote,
+                      voteInfo: vote.author
+                    }))
+                    .sort((a, b) => b.timestamp - a.timestamp);
 
                     return (
                       <Box 

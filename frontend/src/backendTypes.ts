@@ -70,8 +70,8 @@ export interface GetPublicCitiesRequest {
     action: 'getCities';
 }
 
-export interface GetVotesResponse {
-    votes: VoteData;
+export interface GetPublicVotesResponse {
+    votes: VoteData_;
     message?: string;
 }
 
@@ -94,14 +94,6 @@ export interface RegisterResponse {
 
 // From serverless/vote/src/types.ts
 // Vote storage format in S3
-export type VoteData = Record<string, Record<string, [number, string, {
-    title: string;
-    name: string;
-    actingCapacity: 'individual' | 'representingCityAdministration';
-    externallyVerifiedBy?: string;
-}][]>>;
-
-// New vote storage format in S3 (to be used in future)
 export interface VoteAuthor {
     title: string;
     name: string;
@@ -121,9 +113,11 @@ export interface PollData {
     URL?: string;
     type: 'poll' | 'jointStatement';
     votes: VoteEntry[];
+    createdAt?: number;
 }
 
-export type NewVoteData = Record<string, PollData>;
+export type VoteData = Record<string, PollData>;
+
 
 // City data format
 export interface City {

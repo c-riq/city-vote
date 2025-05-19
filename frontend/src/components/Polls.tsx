@@ -239,17 +239,15 @@ function Polls({ token, cityInfo, votesData: propVotesData, cities: propCities, 
           No polls found.
         </Typography>
       ) : (
-        Object.entries(votesData).map(([pollId, citiesVotes]) => {
-          const allVotes = Object.entries(citiesVotes)
-            .flatMap(([cityId, votes]) => 
-              votes.map(([timestamp, option, voteInfo]) => ({
-                cityId,
-                timestamp,
-                option,
-                voteInfo
-              }))
-            )
-            .sort((a, b) => b.timestamp - a.timestamp);
+        Object.entries(votesData).map(([pollId, pollData]) => {
+          // Convert the new vote structure to the format expected by VoteList
+          const allVotes = pollData.votes.map(vote => ({
+            cityId: vote.associatedCity || '',
+            timestamp: vote.time || 0,
+            option: vote.vote,
+            voteInfo: vote.author
+          }))
+          .sort((a, b) => b.timestamp - a.timestamp);
 
           return (
             <Box 

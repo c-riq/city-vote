@@ -274,8 +274,8 @@ function Poll({ token, pollData: initialPollData, onVoteComplete, votesData: pro
     }
   };
 
-  const pollVotes = votesData?.[initialPollData?.id || pollId || ''] || {};
-  const hasVoted = cityInfo?.id ? (pollVotes[cityInfo?.id]?.length > 0) : false;
+  const pollVotes = votesData?.[initialPollData?.id || pollId || ''] || { votes: [] };
+  const hasVoted = cityInfo?.id ? pollVotes.votes.some(vote => vote.associatedCity === cityInfo?.id) : false;
 
   const handleVote = async (option: string) => {
     setVoting(true);
@@ -414,16 +414,13 @@ function Poll({ token, pollData: initialPollData, onVoteComplete, votesData: pro
   }
 
   // Count votes by option for the results section
-  const allVotes = Object.entries(pollVotes)
-    .flatMap(([cityId, votes]) => 
-      votes.map(([timestamp, option, voteInfo]) => ({
-        cityId,
-        timestamp,
-        option,
-        voteInfo
-      }))
-    )
-    .sort((a, b) => b.timestamp - a.timestamp);
+  const allVotes = pollVotes.votes ? 
+    pollVotes.votes.map(vote => ({
+      cityId: vote.associatedCity || '',
+      timestamp: vote.time || 0,
+      option: vote.vote,
+      voteInfo: vote.author
+    })).sort((a, b) => b.timestamp - a.timestamp) : [];
 
   // Count votes by option
   const votesByOption: Record<string, number> = {};
@@ -735,17 +732,7 @@ function Poll({ token, pollData: initialPollData, onVoteComplete, votesData: pro
           </Typography>
           
           <VoteList 
-            votes={Object.entries(pollVotes)
-              .flatMap(([cityId, votes]) => 
-                votes.map(([timestamp, option, voteInfo]) => ({
-                  cityId,
-                  timestamp,
-                  option,
-                  voteInfo
-                }))
-              )
-              .sort((a, b) => b.timestamp - a.timestamp)
-            }
+            votes={allVotes}
             cities={cities || {}}
             variant="list"
             isJointStatement={isJointStatement}

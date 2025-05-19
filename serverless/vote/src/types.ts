@@ -23,12 +23,6 @@ export interface PollData {
 
 export type VoteData = Record<string, PollData>;
 
-// Legacy vote data format (for backward compatibility)
-export type LegacyVoteData = Record<string, Record<string, [number, string, {
-    title: string;
-    name: string;
-    actingCapacity: 'individual' | 'representingCityAdministration';
-}][]>>;
 
 // City data format
 export interface City {
