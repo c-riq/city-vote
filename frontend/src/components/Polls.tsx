@@ -3,24 +3,32 @@ import { Link } from 'react-router-dom';
 import { Box, Typography, Button, CircularProgress } from '@mui/material';
 import VoteList from './VoteList';
 import { VoteData, GetVotesResponse, City } from '../backendTypes';
-import { PUBLIC_API_HOST, AUTOCOMPLETE_API_HOST } from '../constants';
+import { PUBLIC_API_HOST } from '../constants';
 import { getDisplayTitle, isJointStatement } from '../utils/pollFormat';
+import useCityData from '../hooks/useCityData';
 
 interface PollsProps {
   token?: string;
   cityInfo?: City;
   votesData?: VoteData;
-  cities?: Record<string, City>;
   onRefresh?: () => void;
 }
 
-function Polls({ token, cityInfo, votesData: propVotesData, cities: propCities, onRefresh }: PollsProps) {
+function Polls({ token, cityInfo, votesData: propVotesData, onRefresh }: PollsProps) {
   const [votesData, setVotesData] = useState<VoteData>(propVotesData || {});
-  const [cities, setCities] = useState<Record<string, City>>(propCities || {});
-  const [isLoading, setIsLoading] = useState(!propVotesData);
-  const [error, setError] = useState('');
   const [isRefreshingVotes, setIsRefreshingVotes] = useState(false);
   const [isAuthenticated] = useState(!!token && !!cityInfo);
+  
+  // Use the city data hook to manage cities
+  const { 
+    cities, 
+    fetchAllCities, 
+    isLoading: isCitiesLoading, 
+    error: cityError 
+  } = useCityData(votesData);
+  
+  const [isLoading, setIsLoading] = useState(!propVotesData);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     // Only fetch data if we don't have any votes data from props
@@ -35,120 +43,22 @@ function Polls({ token, cityInfo, votesData: propVotesData, cities: propCities, 
     if (propVotesData) {
       setVotesData(propVotesData);
     }
-    if (propCities) {
-      setCities(propCities);
-    }
-  }, [propVotesData, propCities]);
+  }, [propVotesData]);
 
-  // Keep track of city IDs we've already attempted to fetch
-  const [attemptedCityIds, setAttemptedCityIds] = useState<Set<string>>(new Set());
-  
-  // Fetch missing cities using batch lookup
+  // Update error state if city error occurs
   useEffect(() => {
-    const fetchMissingCities = async () => {
-      // Collect all city IDs from all votes
-      const allCityIds: string[] = [];
-      
-      Object.values(votesData).forEach(pollData => {
-        pollData.votes.forEach(vote => {
-          if (vote.associatedCity) {
-            allCityIds.push(vote.associatedCity);
-          }
-        });
-      });
-      
-      // Find missing city IDs (those that are in votes but not in cities object)
-      // and that we haven't attempted to fetch before
-      const uniqueCityIds = [...new Set(allCityIds)];
-      const missingCityIds = uniqueCityIds.filter(id => 
-        id && !cities[id] && !attemptedCityIds.has(id)
-      );
-      
-      // If there are no missing cities, return
-      if (missingCityIds.length === 0) return;
-      
-      // Add these IDs to the attempted set to prevent refetching
-      const newAttemptedIds = new Set(attemptedCityIds);
-      missingCityIds.forEach(id => newAttemptedIds.add(id));
-      setAttemptedCityIds(newAttemptedIds);
-      
-      // Process in batches of 50 to prevent too many requests
-      const BATCH_SIZE = 50;
-      const newCities: Record<string, City> = { ...cities };
-      
-      // Process missing cities in batches
-      for (let i = 0; i < missingCityIds.length; i += BATCH_SIZE) {
-        const batchIds = missingCityIds.slice(i, i + BATCH_SIZE);
-        
-        try {
-          // Use the batch lookup API to fetch missing cities
-          const response = await fetch(AUTOCOMPLETE_API_HOST, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              action: 'batchGetByQid',
-              qids: batchIds
-            })
-          });
-          
-          if (!response.ok) {
-            console.error('Failed to fetch missing cities');
-            continue;
-          }
-          
-          const data = await response.json();
-          
-          if (data.results && Array.isArray(data.results)) {
-            // Convert the results to the City format and update the cities state
-            data.results.forEach((city: { 
-              wikidataId: string;
-              name: string;
-              countryName: string;
-              population?: number;
-              latitude?: number;
-              longitude?: number;
-            }) => {
-              newCities[city.wikidataId] = {
-                id: city.wikidataId,
-                name: city.name,
-                country: city.countryName,
-                population: city.population || 0,
-                lat: city.latitude || 0,
-                lon: city.longitude || 0,
-                authenticationKeyDistributionChannels: []
-              };
-            });
-          }
-        } catch (error) {
-          console.error('Error fetching missing cities batch:', error);
-        }
-      }
-      
-      // Update cities state with all fetched data
-      setCities(newCities);
-    };
-    
-    fetchMissingCities();
-  }, [votesData, attemptedCityIds]);
+    if (cityError) {
+      setError(cityError);
+    }
+  }, [cityError]);
 
   const fetchData = async () => {
     setError('');
     setIsLoading(true);
     
     try {
-      // Fetch cities data
-      const citiesResponse = await fetch(`${PUBLIC_API_HOST}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'getCities' })
-      });
-
-      if (!citiesResponse.ok) {
-        throw new Error('Failed to fetch cities');
-      }
-
-      const citiesData = await citiesResponse.json();
-      setCities(citiesData.cities);
+      // Fetch cities data using the hook
+      await fetchAllCities();
 
       // Fetch votes data
       const votesResponse = await fetch(`${PUBLIC_API_HOST}`, {
@@ -168,7 +78,6 @@ function Polls({ token, cityInfo, votesData: propVotesData, cities: propCities, 
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch data');
       setVotesData({});
-      setCities({});
     } finally {
       setIsLoading(false);
     }
@@ -206,7 +115,7 @@ function Polls({ token, cityInfo, votesData: propVotesData, cities: propCities, 
     }
   };
 
-  if (isLoading) {
+  if (isLoading || isCitiesLoading) {
     return (
       <Box
         sx={{
@@ -333,8 +242,8 @@ function Polls({ token, cityInfo, votesData: propVotesData, cities: propCities, 
           .sort((a, b) => b.timestamp - a.timestamp);
           
           // Truncate votes to 10 for display
-          const truncatedVotes = allVotes.slice(0, 5);
-          const hasMoreVotes = allVotes.length > 5;
+          const truncatedVotes = allVotes.slice(0, 10);
+          const hasMoreVotes = allVotes.length > 10;
           
           return (
             <Box 

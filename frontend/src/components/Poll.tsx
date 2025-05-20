@@ -6,13 +6,13 @@ import {
   Typography,
   CircularProgress
 } from '@mui/material';
-import { VOTE_HOST, PUBLIC_API_HOST, AUTOCOMPLETE_API_HOST } from '../constants';
+import { VOTE_HOST, PUBLIC_API_HOST } from '../constants';
+import useCityData from '../hooks/useCityData';
 import {
   City,
   VoteData,
   VoteRequest,
-  GetVotesResponse,
-  GetCitiesResponse
+  GetVotesResponse
 } from '../backendTypes';
 import { getDisplayTitle, isJointStatement } from '../utils/pollFormat';
 import PollHeader from './poll/PollHeader';
@@ -32,7 +32,6 @@ interface PollProps {
   };
   onVoteComplete?: () => void;
   votesData?: VoteData;
-  cities?: Record<string, City>;
 }
 
 // Helper function to create a URL-safe base64 SHA-256 hash
@@ -50,7 +49,7 @@ const createAttachmentId = async (pollQuestion: string): Promise<string> => {
   return hashBase64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 };
 
-function Poll({ token, pollData: initialPollData, onVoteComplete, votesData: propVotesData, cities: propCities, cityInfo }: PollProps) {
+function Poll({ token, pollData: initialPollData, onVoteComplete, votesData: propVotesData, cityInfo }: PollProps) {
   const navigate = useNavigate();
   const { pollId } = useParams();
   const [error, setError] = useState('');
@@ -63,7 +62,6 @@ function Poll({ token, pollData: initialPollData, onVoteComplete, votesData: pro
   });
   const [isLoading, setIsLoading] = useState(false);
   const [votesData, setVotesData] = useState<VoteData>(propVotesData || {});
-  const [cities, setCities] = useState<Record<string, City>>(propCities || {});
   const [isAuthenticated] = useState(!!token && !!cityInfo);
   const [attachmentUrl, setAttachmentUrl] = useState<string | null>(null);
   const [pollMetadata, setPollMetadata] = useState<{
@@ -71,6 +69,14 @@ function Poll({ token, pollData: initialPollData, onVoteComplete, votesData: pro
     organisedBy?: string;
     createdAt?: number;
   } | null>(null);
+  
+  // Use the city data hook to manage cities
+  const { 
+    cities, 
+    fetchAllCities, 
+    isLoading: isCitiesLoading, 
+    error: cityError 
+  } = useCityData(votesData);
 
   // Fetch data if not provided as props (unauthenticated mode)
   useEffect(() => {
@@ -86,100 +92,14 @@ function Poll({ token, pollData: initialPollData, onVoteComplete, votesData: pro
     if (propVotesData) {
       setVotesData(propVotesData);
     }
-    if (propCities) {
-      setCities(propCities);
-    }
-  }, [propVotesData, propCities]);
-
-  // Keep track of city IDs we've already attempted to fetch
-  const [attemptedCityIds, setAttemptedCityIds] = useState<Set<string>>(new Set());
+  }, [propVotesData]);
   
-  // Fetch missing cities using batch lookup
+  // Update error state if city error occurs
   useEffect(() => {
-    const fetchMissingCities = async () => {
-      if (!pollId && !initialPollData) return;
-      
-      const currentPollId = initialPollData?.id || pollId || '';
-      const pollVotes = votesData?.[currentPollId]?.votes || [];
-      
-      // Collect city IDs from votes
-      const cityIds = pollVotes
-        .filter(vote => vote.associatedCity)
-        .map(vote => vote.associatedCity as string);
-      
-      // Find missing city IDs (those that are in votes but not in cities object)
-      // and that we haven't attempted to fetch before
-      const uniqueCityIds = [...new Set(cityIds)];
-      const missingCityIds = uniqueCityIds.filter(id => 
-        id && !cities[id] && !attemptedCityIds.has(id)
-      );
-      
-      // If there are no missing cities, return
-      if (missingCityIds.length === 0) return;
-      
-      // Add these IDs to the attempted set to prevent refetching
-      const newAttemptedIds = new Set(attemptedCityIds);
-      missingCityIds.forEach(id => newAttemptedIds.add(id));
-      setAttemptedCityIds(newAttemptedIds);
-      
-      // Process in batches of 50 to prevent too many requests
-      const BATCH_SIZE = 50;
-      const newCities: Record<string, City> = { ...cities };
-      
-      // Process missing cities in batches
-      for (let i = 0; i < missingCityIds.length; i += BATCH_SIZE) {
-        const batchIds = missingCityIds.slice(i, i + BATCH_SIZE);
-        
-        try {
-          // Use the batch lookup API to fetch missing cities
-          const response = await fetch(AUTOCOMPLETE_API_HOST, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              action: 'batchGetByQid',
-              qids: batchIds
-            })
-          });
-          
-          if (!response.ok) {
-            console.error('Failed to fetch missing cities');
-            continue;
-          }
-          
-          const data = await response.json();
-          
-          if (data.results && Array.isArray(data.results)) {
-            // Convert the results to the City format and update the cities state
-            data.results.forEach((city: { 
-              wikidataId: string;
-              name: string;
-              countryName: string;
-              population?: number;
-              latitude?: number;
-              longitude?: number;
-            }) => {
-              newCities[city.wikidataId] = {
-                id: city.wikidataId,
-                name: city.name,
-                country: city.countryName,
-                population: city.population || 0,
-                lat: city.latitude || 0,
-                lon: city.longitude || 0,
-                authenticationKeyDistributionChannels: []
-              };
-            });
-          }
-        } catch (error) {
-          console.error('Error fetching missing cities batch:', error);
-        }
-      }
-      
-      // Update cities state with all fetched data
-      setCities(newCities);
-    };
-    
-    fetchMissingCities();
-  }, [votesData, pollId, initialPollData, attemptedCityIds]);
+    if (cityError) {
+      setError(cityError);
+    }
+  }, [cityError]);
 
   // Fetch poll metadata and check for attachment when poll ID is available
   useEffect(() => {
@@ -258,19 +178,8 @@ function Poll({ token, pollData: initialPollData, onVoteComplete, votesData: pro
     setIsLoading(true);
     
     try {
-      // Fetch cities data
-      const citiesResponse = await fetch(`${PUBLIC_API_HOST}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'getCities' })
-      });
-
-      if (!citiesResponse.ok) {
-        throw new Error('Failed to fetch cities');
-      }
-
-      const citiesData: GetCitiesResponse = await citiesResponse.json();
-      setCities(citiesData.cities);
+      // Fetch cities data using the hook
+      await fetchAllCities();
 
       // Fetch votes data
       const votesFetchResult = await fetch(`${PUBLIC_API_HOST}`, {
@@ -290,7 +199,6 @@ function Poll({ token, pollData: initialPollData, onVoteComplete, votesData: pro
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch data');
       setVotesData({});
-      setCities({});
     } finally {
       setIsLoading(false);
     }
@@ -352,7 +260,7 @@ function Poll({ token, pollData: initialPollData, onVoteComplete, votesData: pro
     await handleVote(confirmDialog.option);
   };
 
-  if (isLoading) {
+  if (isLoading || isCitiesLoading) {
     return (
       <Box
         sx={{
