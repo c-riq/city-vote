@@ -1,21 +1,21 @@
 import { Box, Typography, List, ListItem, ListItemText, Divider } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { VoteAuthor, City } from '../backendTypes';
 
+// Interface for the transformed vote data used in this component
 interface Vote {
   cityId: string;
   timestamp: number;
   option: string;
-  voteInfo: {
-    title: string;
-    name: string;
-    actingCapacity: 'individual' | 'representingCityAdministration';
+  city?: string;
+  voteInfo: VoteAuthor & {
     externallyVerifiedBy?: string; // Platform that verified this vote
   };
 }
 
 interface VoteListProps {
   votes: Vote[];
-  cities: Record<string, any>;
+  cities: Record<string, City>;
   variant?: 'list' | 'cell';
   containerStyle?: React.CSSProperties;  // Optional container styles
   isJointStatement?: boolean;  // Flag to indicate if this is a joint statement poll
@@ -24,33 +24,47 @@ interface VoteListProps {
 const VoteList = ({ votes, cities, variant = 'list', containerStyle, isJointStatement = false }: VoteListProps) => {
   const VoteContent = variant === 'cell' ? (
     <Box>
-      {votes.map((vote, _) => (
+      {votes.map((vote, index) => (
         <Typography
-          key={`${vote.cityId}-${vote.timestamp}`}
+          key={`${vote.cityId || 'anonymous'}-${vote.timestamp || 0}-${vote.voteInfo?.name || ''}-${vote.voteInfo?.title || ''}-${index}`}
           variant="body2"
           color="text.secondary"
           component="div"
           sx={{ py: 0.5 }}
         >
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <Link 
-              to={`/city/${vote.cityId}`} 
-              style={{ 
-                color: 'inherit',
-                textDecoration: 'none'
-              }}
-            >
+            {vote.cityId && cities?.[vote.cityId] ? (
+              <Link 
+                to={`/city/${vote.cityId}`} 
+                style={{ 
+                  color: 'inherit',
+                  textDecoration: 'none'
+                }}
+              >
+                <Typography 
+                  component="span" 
+                  sx={{ 
+                    fontWeight: 600,
+                    color: 'primary.main',
+                    fontSize: '1rem'
+                  }}
+                >
+                  {`${cities[vote.cityId].name}, ${cities[vote.cityId].country}`}
+                </Typography>
+              </Link>
+            ) : (
               <Typography 
                 component="span" 
                 sx={{ 
                   fontWeight: 600,
-                  color: 'primary.main',
-                  fontSize: '1rem'
+                  color: 'text.secondary',
+                  fontSize: '1rem',
+                  fontStyle: 'italic'
                 }}
               >
-                {cities?.[vote.cityId]?.name}, {cities?.[vote.cityId]?.country}
+                {vote.city || 'Unknown city'}
               </Typography>
-            </Link>
+            )}
               <Typography 
                 component="span" 
                 sx={{ 
@@ -71,9 +85,9 @@ const VoteList = ({ votes, cities, variant = 'list', containerStyle, isJointStat
               mt: 0.5
             }}
           >
-            {new Date(vote.timestamp).toLocaleDateString()} {new Date(vote.timestamp).toLocaleTimeString()} 
+            {vote.timestamp ? `${new Date(vote.timestamp).toLocaleDateString()} ${new Date(vote.timestamp).toLocaleTimeString()}` : 'Unknown date'} 
             {' · '}
-            {vote.voteInfo?.title} {vote.voteInfo?.name}
+            {vote.voteInfo?.title || ''} {vote.voteInfo?.name || 'Unknown'}
             {' · '}
             <em>
               {vote.voteInfo?.actingCapacity === 'individual' ? 
@@ -107,7 +121,7 @@ const VoteList = ({ votes, cities, variant = 'list', containerStyle, isJointStat
       overflow: 'hidden'
     }}>
       {votes.map((vote, index) => (
-        <Box key={`${vote.cityId}-${vote.timestamp}`}>
+        <Box key={`${vote.cityId || 'anonymous'}-${vote.timestamp || 0}-${vote.voteInfo?.name || ''}-${vote.voteInfo?.title || ''}-${index}`}>
           <ListItem sx={{ 
             py: 2,
             px: 3,
@@ -116,24 +130,38 @@ const VoteList = ({ votes, cities, variant = 'list', containerStyle, isJointStat
             <ListItemText
               primary={
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                  <Link 
-                    to={`/city/${vote.cityId}`} 
-                    style={{ 
-                      color: 'inherit',
-                      textDecoration: 'none'
-                    }}
-                  >
+                  {vote.cityId && cities?.[vote.cityId] ? (
+                    <Link 
+                      to={`/city/${vote.cityId}`} 
+                      style={{ 
+                        color: 'inherit',
+                        textDecoration: 'none'
+                      }}
+                    >
+                      <Typography 
+                        component="span" 
+                        sx={{ 
+                          fontWeight: 600,
+                          color: 'primary.main',
+                          fontSize: '1rem'
+                        }}
+                      >
+                        {`${cities[vote.cityId].name}, ${cities[vote.cityId].country}`}
+                      </Typography>
+                    </Link>
+                  ) : (
                     <Typography 
                       component="span" 
                       sx={{ 
                         fontWeight: 600,
-                        color: 'primary.main',
-                        fontSize: '1rem'
+                        color: 'text.secondary',
+                        fontSize: '1rem',
+                        fontStyle: 'italic'
                       }}
                     >
-                      {cities?.[vote.cityId]?.name}, {cities?.[vote.cityId]?.country}
+                      {vote.city || 'Unknown city'}
                     </Typography>
-                  </Link>
+                  )}
                   <Typography 
                     component="span" 
                     sx={{ 
@@ -156,9 +184,9 @@ const VoteList = ({ votes, cities, variant = 'list', containerStyle, isJointStat
                     mt: 0.5
                   }}
                 >
-                  {new Date(vote.timestamp).toLocaleDateString()} {new Date(vote.timestamp).toLocaleTimeString()} 
+                  {vote.timestamp ? `${new Date(vote.timestamp).toLocaleDateString()} ${new Date(vote.timestamp).toLocaleTimeString()}` : 'Unknown date'} 
                   {' · '}
-                  {vote.voteInfo?.title} {vote.voteInfo?.name}
+                  {vote.voteInfo?.title || ''} {vote.voteInfo?.name || 'Unknown'}
                   {' · '}
                   <em>
                     {vote.voteInfo?.actingCapacity === 'individual' ? 

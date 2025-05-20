@@ -6,7 +6,6 @@ interface CityInfoBoxProps {
   cityId: string | null;
   cityInfo: City | null;
   cities: Record<string, City>;
-  theme: any;
   token?: string;
 }
 

@@ -3,7 +3,7 @@ import { Button, Container, Typography, TextField, Box, Dialog,
   ThemeProvider  } from '@mui/material';
 import { useState, useEffect } from 'react';
 import { VOTE_HOST, PUBLIC_API_HOST } from './constants';
-import { BrowserRouter, Routes, Route, useParams, useNavigate, Link } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useNavigate, Link } from 'react-router-dom';
 import Poll from './components/Poll';
 import Polls from './components/Polls';
 import Header from './components/Header';
@@ -19,43 +19,11 @@ import {
   ValidateTokenResponse,
   GetCitiesResponse,
   GetVotesResponse,
-  VoteData,
-  VoteEntry
+  VoteData
 } from './backendTypes';
 
-type PollVotes = VoteData;  // Using the new VoteData type from backendTypes.ts
-
-function CityRoute({ cityInfo, cities, theme }: { 
-  cityInfo: City | null,
-  cities: Record<string, City>,
-  theme: any
-}) {
-  const { cityId } = useParams();
-  
-  // If user is logged in, show the city info box
-  if (cityInfo) {
-    return (
-      <Box
-        sx={{
-          padding: { xs: 2, sm: 4 },
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: 3,
-          backgroundColor: 'background.default',
-        }}
-      >
-        <CityInfoBox 
-          cityId={cityId || null} 
-          cityInfo={cityInfo} 
-          cities={cities} 
-          theme={theme} 
-        />
-      </Box>
-    );
-  }
-  
-  // If user is not logged in, show the city profile
+function CityRoute() {
+  // Always show the city profile regardless of login status
   return <CityProfile />;
 }
 
@@ -114,15 +82,10 @@ function App() {
     const saved = localStorage.getItem('cityInfo');
     return saved ? JSON.parse(saved) : null;
   });
-  const [cityId, setCityId] = useState<string | null>(() => {
-    const saved = localStorage.getItem('cityId');
-    return saved ? saved : null;
-  });
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [votesData, setVotesData] = useState<PollVotes>({});
+  const [votesData, setVotesData] = useState<VoteData>({});
   const [cities, setCities] = useState<Record<string, City>>({});
-  const [polls, _] = useState<Record<string, any>>({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isRefreshingVotes, setIsRefreshingVotes] = useState(false);
 
@@ -157,10 +120,8 @@ function App() {
 
       // First set the city info and persist to localStorage
       setCityInfo(data.city);
-      setCityId(data.cityId);
       localStorage.setItem('token', token);
       localStorage.setItem('cityInfo', JSON.stringify(data.city));
-      localStorage.setItem('cityId', data.cityId);
       
       // Then fetch cities data
       const citiesResponse = await fetch(`${PUBLIC_API_HOST}`, {
@@ -195,7 +156,6 @@ function App() {
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to authenticate');
       setCityInfo(null);
-      setCityId(null);
       setVotesData({});
       setCities({});
     } finally {
@@ -219,6 +179,7 @@ function App() {
         return;
       }
 
+      // Set the votes data directly
       setVotesData(votesData?.votes || {});
     } catch (err) {
       console.error('Failed to fetch votes:', err);
@@ -233,7 +194,6 @@ function App() {
 
   const handleLogout = () => {
     setCityInfo(null);
-    setCityId(null);
     setToken('');
     setVotesData({});
     setCities({});
@@ -241,7 +201,6 @@ function App() {
     // Clear localStorage
     localStorage.removeItem('token');
     localStorage.removeItem('cityInfo');
-    localStorage.removeItem('cityId');
   };
 
   function AuthenticatedContent() {
@@ -725,13 +684,13 @@ function App() {
           <AuthenticatedContent />
           <Routes>
             <Route path="/register" element={<CityRegistration />} />
-            <Route path="/polls" element={<Polls theme={theme} />} />
+            <Route path="/polls" element={<Polls />} />
             <Route path="/poll/:pollId" element={
               cityInfo ? (
-                <PollWrapper 
+                <Poll 
                   token={token} 
                   cityInfo={cityInfo} 
-                  polls={polls}
+                  pollData={undefined}
                   onVoteComplete={fetchData}
                   votesData={votesData}
                   cities={cities}
@@ -938,7 +897,13 @@ function App() {
                     backgroundColor: 'background.default',
                   }}
                 >
-                  <CityInfoBox cityId={cityId} cityInfo={cityInfo} cities={cities} theme={theme} token={token} />
+                  {/* Use CityInfoBox for the logged-in user's own city information */}
+                  <CityInfoBox 
+                    cityId={cityInfo?.id || null} 
+                    cityInfo={cityInfo} 
+                    cities={cities} 
+                    token={token}
+                  />
                   
                   {/* Votes Display */}
                   <Box sx={{ 
@@ -979,11 +944,12 @@ function App() {
                   </Box>
                   {Object.entries(votesData).map(([pollId, pollData]) => {
                     // Convert the new vote structure to the format expected by VoteList
-                    const allVotes = pollData.votes.map(vote => ({
+                    const allVotes = pollData.votes.map((vote) => ({
                       cityId: vote.associatedCity || '',
                       timestamp: vote.time || 0,
                       option: vote.vote,
-                      voteInfo: vote.author
+                      voteInfo: vote.author,
+                      city: vote.city
                     }))
                     .sort((a, b) => b.timestamp - a.timestamp);
 
@@ -1043,13 +1009,7 @@ function App() {
             } />
             <Route 
               path="/city/:cityId" 
-              element={
-                <CityRoute 
-                  cityInfo={cityInfo} 
-                  cities={cities} 
-                  theme={theme} 
-                />
-              }
+              element={<CityRoute />}
             />
             <Route 
               path="/network/:networkId" 
@@ -1064,49 +1024,6 @@ function App() {
         </Container>
       </BrowserRouter>
     </ThemeProvider>
-  );
-}
-
-function PollWrapper({ 
-  token, 
-  cityInfo, 
-  polls, 
-  onVoteComplete, 
-  votesData, 
-  cities 
-}: {
-  token: string;
-  cityInfo: City;
-  polls: Record<string, any>;
-  onVoteComplete: () => void;
-  votesData: PollVotes;
-  cities: Record<string, City>;
-}) {
-  const { pollId } = useParams();
-  
-  if (pollId && polls[pollId]) {
-    return (
-      <Poll 
-        token={token} 
-        cityInfo={cityInfo} 
-        pollData={polls[pollId]}
-        onVoteComplete={onVoteComplete}
-        votesData={votesData}
-        cities={cities}
-      />
-    );
-  }
-
-  // If it's a new poll (pollId contains the question)
-  return (
-    <Poll 
-      token={token} 
-      cityInfo={cityInfo} 
-      pollData={null}
-      onVoteComplete={onVoteComplete}
-      votesData={votesData}
-      cities={cities}
-    />
   );
 }
 

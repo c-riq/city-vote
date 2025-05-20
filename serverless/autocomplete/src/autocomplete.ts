@@ -1,5 +1,15 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
-import { AutocompleteRequest } from './types';
+import { 
+  AutocompleteRequest, 
+  AutocompleteActionRequest,
+  GetByQidActionRequest,
+  BatchGetByQidActionRequest,
+  BatchAutocompleteActionRequest,
+  CityResult,
+  AutocompleteResponse,
+  BatchAutocompleteResponse,
+  BatchGetByQidResponse
+} from './types';
 import { countries } from './countries';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -448,7 +458,7 @@ async function searchCities(query: string, limit: number = 10): Promise<CityData
   });
 }
 
-const handleAutocomplete = async (query: string, limit: number = 10): Promise<APIGatewayProxyResult> => {
+const handleAutocomplete = async (query: string | undefined, limit: number = 10): Promise<APIGatewayProxyResult> => {
   if (!query) {
     return {
       statusCode: 400,
@@ -529,6 +539,98 @@ const handleGetByQid = async (qid: string): Promise<APIGatewayProxyResult> => {
   }
 };
 
+// Handler for batchGetByQid action
+const handleBatchGetByQid = async (qids: string[]): Promise<APIGatewayProxyResult> => {
+  if (!qids || !Array.isArray(qids) || qids.length === 0) {
+    return {
+      statusCode: 400,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message: 'Missing or invalid required parameter: qids (must be a non-empty array)'
+      }, null, 2)
+    };
+  }
+
+  try {
+    // Process each QID in parallel
+    const cityPromises = qids.map(qid => findCityByQid(qid));
+    const cities = await Promise.all(cityPromises);
+    
+    // Filter out null results (cities not found)
+    const foundCities = cities.filter(city => city !== null) as CityData[];
+    
+    // Create a map of QIDs that were not found
+    const notFoundQids = qids.filter((qid, index) => cities[index] === null);
+    
+    return {
+      statusCode: 200,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        results: foundCities,
+        notFound: notFoundQids.length > 0 ? notFoundQids : undefined
+      }, null, 2)
+    };
+  } catch (error) {
+    console.error('Error during batch QID lookup:', error);
+    return {
+      statusCode: 500,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message: 'Batch QID lookup error',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      }, null, 2)
+    };
+  }
+};
+
+// Handler for batchAutocomplete action
+const handleBatchAutocomplete = async (queries: string[], limit: number = 10): Promise<APIGatewayProxyResult> => {
+  if (!queries || !Array.isArray(queries) || queries.length === 0) {
+    return {
+      statusCode: 400,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message: 'Missing or invalid required parameter: queries (must be a non-empty array)'
+      }, null, 2)
+    };
+  }
+
+  try {
+    // Process each query in parallel
+    const searchPromises = queries.map(query => searchCities(query, limit));
+    const searchResults = await Promise.all(searchPromises);
+    
+    // Create a map of query to results
+    const resultsByQuery: Record<string, CityData[]> = {};
+    queries.forEach((query, index) => {
+      resultsByQuery[query] = searchResults[index];
+    });
+    
+    return {
+      statusCode: 200,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        results: resultsByQuery
+      }, null, 2)
+    };
+  } catch (error) {
+    console.error('Error during batch autocomplete:', error);
+    return {
+      statusCode: 500,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message: 'Batch autocomplete error',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      }, null, 2)
+    };
+  }
+};
+
+// Type guard to check if the action is valid
+function isValidAction(action: string): action is 'autocomplete' | 'getByQid' | 'batchGetByQid' | 'batchAutocomplete' {
+  return ['autocomplete', 'getByQid', 'batchGetByQid', 'batchAutocomplete'].includes(action);
+}
+
 export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   try {
     if (!event.body) {
@@ -539,9 +641,9 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
       };
     }
 
-    const { action, query, qid, limit } = JSON.parse(event.body) as AutocompleteRequest;
+    const parsedBody = JSON.parse(event.body);
     
-    if (!action) {
+    if (!parsedBody.action) {
       return {
         statusCode: 400,
         headers: { 'Content-Type': 'application/json' },
@@ -551,18 +653,41 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
       };
     }
 
-    if (action === 'autocomplete') {
-      return await handleAutocomplete(query, limit);
-    } else if (action === 'getByQid') {
-      return await handleGetByQid(qid || '');
-    } else {
+    const action = parsedBody.action;
+
+    if (!isValidAction(action)) {
       return {
         statusCode: 400,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          message: `Invalid action: ${action}. Supported actions are: autocomplete, getByQid`
+          message: `Invalid action: ${action}. Supported actions are: autocomplete, getByQid, batchGetByQid, batchAutocomplete`
         }, null, 2)
       };
+    }
+
+    // Now TypeScript knows that action is one of the valid actions
+    const request = parsedBody as AutocompleteRequest;
+
+    switch (action) {
+      case 'autocomplete': {
+        const { query, limit } = request as AutocompleteActionRequest;
+        return await handleAutocomplete(query, limit);
+      }
+      
+      case 'getByQid': {
+        const { qid, limit } = request as GetByQidActionRequest;
+        return await handleGetByQid(qid);
+      }
+      
+      case 'batchGetByQid': {
+        const { qids, limit } = request as BatchGetByQidActionRequest;
+        return await handleBatchGetByQid(qids);
+      }
+      
+      case 'batchAutocomplete': {
+        const { queries, limit } = request as BatchAutocompleteActionRequest;
+        return await handleBatchAutocomplete(queries, limit);
+      }
     }
   } catch (error) {
     console.error('Error:', error);

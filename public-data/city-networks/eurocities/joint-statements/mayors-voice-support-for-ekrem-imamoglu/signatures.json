@@ -32,7 +32,7 @@
           "actingCapacity": "individual"
         },
         "city": "Aachen",
-        "associatedCity": null
+        "associatedCity": "Q1017"
       },
       {
         "vote": "Sign",
@@ -42,7 +42,7 @@
           "actingCapacity": "individual"
         },
         "city": "Aalen",
-        "associatedCity": null
+        "associatedCity": "Q3951"
       },
       {
         "vote": "Sign",
@@ -52,7 +52,7 @@
           "actingCapacity": "individual"
         },
         "city": "Amsterdam",
-        "associatedCity": "Q727"
+        "associatedCity": "Q9899"
       },
       {
         "vote": "Sign",
@@ -172,7 +172,7 @@
           "actingCapacity": "individual"
         },
         "city": "Braunschweig",
-        "associatedCity": null
+        "associatedCity": "Q2773"
       },
       {
         "vote": "Sign",
@@ -232,7 +232,7 @@
           "actingCapacity": "individual"
         },
         "city": "Emden",
-        "associatedCity": null
+        "associatedCity": "Q4174"
       },
       {
         "vote": "Sign",
@@ -242,7 +242,7 @@
           "actingCapacity": "individual"
         },
         "city": "Erlangen",
-        "associatedCity": null
+        "associatedCity": "Q3126"
       },
       {
         "vote": "Sign",
@@ -262,7 +262,7 @@
           "actingCapacity": "individual"
         },
         "city": "Esslingen",
-        "associatedCity": null
+        "associatedCity": "Q3786"
       },
       {
         "vote": "Sign",
@@ -292,7 +292,7 @@
           "actingCapacity": "individual"
         },
         "city": "Gabrovo",
-        "associatedCity": null
+        "associatedCity": "Q180131"
       },
       {
         "vote": "Sign",
@@ -322,7 +322,7 @@
           "actingCapacity": "individual"
         },
         "city": "Girona",
-        "associatedCity": null
+        "associatedCity": "Q7038"
       },
       {
         "vote": "Sign",
@@ -332,7 +332,7 @@
           "actingCapacity": "individual"
         },
         "city": "Goslar",
-        "associatedCity": null
+        "associatedCity": "Q3896"
       },
       {
         "vote": "Sign",
@@ -342,7 +342,7 @@
           "actingCapacity": "individual"
         },
         "city": "Gutersloh",
-        "associatedCity": null
+        "associatedCity": "Q3771"
       },
       {
         "vote": "Sign",
@@ -352,7 +352,7 @@
           "actingCapacity": "individual"
         },
         "city": "Hamstad",
-        "associatedCity": null
+        "associatedCity": "Q504692"
       },
       {
         "vote": "Sign",
@@ -372,7 +372,7 @@
           "actingCapacity": "individual"
         },
         "city": "Heidelberg",
-        "associatedCity": null
+        "associatedCity": "Q2966"
       },
       {
         "vote": "Sign",
@@ -422,7 +422,7 @@
           "actingCapacity": "individual"
         },
         "city": "Lausanne",
-        "associatedCity": null
+        "associatedCity": "Q807"
       },
       {
         "vote": "Sign",
@@ -432,7 +432,7 @@
           "actingCapacity": "individual"
         },
         "city": "Lubeck",
-        "associatedCity": null
+        "associatedCity": "Q2843"
       },
       {
         "vote": "Sign",
@@ -442,7 +442,7 @@
           "actingCapacity": "individual"
         },
         "city": "Luleå",
-        "associatedCity": null
+        "associatedCity": "Q177019"
       },
       {
         "vote": "Sign",
@@ -452,7 +452,7 @@
           "actingCapacity": "individual"
         },
         "city": "Mainz",
-        "associatedCity": null
+        "associatedCity": "Q1720"
       },
       {
         "vote": "Sign",
@@ -482,7 +482,7 @@
           "actingCapacity": "individual"
         },
         "city": "Manresa",
-        "associatedCity": null
+        "associatedCity": "Q16697"
       },
       {
         "vote": "Sign",
@@ -502,7 +502,7 @@
           "actingCapacity": "individual"
         },
         "city": "Modena",
-        "associatedCity": null
+        "associatedCity": "Q279"
       },
       {
         "vote": "Sign",
@@ -552,7 +552,7 @@
           "actingCapacity": "individual"
         },
         "city": "Oldenburg",
-        "associatedCity": null
+        "associatedCity": "Q2936"
       },
       {
         "vote": "Sign",
@@ -572,7 +572,7 @@
           "actingCapacity": "individual"
         },
         "city": "Potsdam",
-        "associatedCity": null
+        "associatedCity": "Q1711"
       },
       {
         "vote": "Sign",
@@ -582,7 +582,7 @@
           "actingCapacity": "individual"
         },
         "city": "Rakvere",
-        "associatedCity": null
+        "associatedCity": "Q191889"
       },
       {
         "vote": "Sign",
@@ -592,7 +592,7 @@
           "actingCapacity": "individual"
         },
         "city": "Regensburg",
-        "associatedCity": null
+        "associatedCity": "Q2978"
       },
       {
         "vote": "Sign",
@@ -662,7 +662,7 @@
           "actingCapacity": "individual"
         },
         "city": "Sindelfingen",
-        "associatedCity": null
+        "associatedCity": "Q14889"
       },
       {
         "vote": "Sign",
@@ -672,7 +672,7 @@
           "actingCapacity": "individual"
         },
         "city": "Sindelfingen",
-        "associatedCity": null
+        "associatedCity": "Q4019"
       },
       {
         "vote": "Sign",
@@ -692,7 +692,7 @@
           "actingCapacity": "individual"
         },
         "city": "Stendal",
-        "associatedCity": null
+        "associatedCity": "Q7082"
       },
       {
         "vote": "Sign",
@@ -772,7 +772,7 @@
           "actingCapacity": "individual"
         },
         "city": "Vaasa",
-        "associatedCity": null
+        "associatedCity": "Q125080"
       },
       {
         "vote": "Sign",
@@ -792,7 +792,7 @@
           "actingCapacity": "individual"
         },
         "city": "Wuppertal",
-        "associatedCity": null
+        "associatedCity": "Q2107"
       },
       {
         "vote": "Sign",

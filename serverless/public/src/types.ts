@@ -1,10 +1,3 @@
-// Vote storage format in S3 (underscore added to prevent name collision in synced file)
-export type VoteData_ = Record<string, Record<string, [number, string, {
-    title: string;
-    name: string;
-    actingCapacity: 'individual' | 'representingCityAdministration';
-}][]>>;
-
 // City data format
 export interface City {
     id: string;
@@ -26,7 +19,10 @@ export interface GetPublicCitiesRequest {
 }
 
 export interface GetVotesResponse {
-    votes: VoteData_;
+    // added here for allowing the backend types to be copied to the frontend VoteData is defined in votes/types.ts
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    votes: VoteData;
     message?: string;
 }
 

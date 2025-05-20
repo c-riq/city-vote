@@ -10,6 +10,7 @@ export interface VoteEntry {
     vote: 'Yes' | 'No' | 'Sign';
     author: VoteAuthor;
     associatedCity?: string; // wikidataId
+    city?: string;
     externalVerificationSource?: string; // URL
 }
 
