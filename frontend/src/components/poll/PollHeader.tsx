@@ -32,7 +32,18 @@ function PollHeader({ title, isJointStatement, organisedBy, documentUrl }: PollH
             color: 'text.secondary'
           }}
         >
-          Organised by: {organisedBy}
+          Organised by: {
+            organisedBy.startsWith('https://') ? (
+              <MuiLink 
+                href={organisedBy} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                sx={{ color: 'primary.main' }}
+              >
+                {organisedBy}
+              </MuiLink>
+            ) : organisedBy
+          }
         </Typography>
       )}
       
