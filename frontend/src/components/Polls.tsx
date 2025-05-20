@@ -331,6 +331,11 @@ function Polls({ token, cityInfo, votesData: propVotesData, cities: propCities, 
             };
           })
           .sort((a, b) => b.timestamp - a.timestamp);
+          
+          // Truncate votes to 10 for display
+          const truncatedVotes = allVotes.slice(0, 5);
+          const hasMoreVotes = allVotes.length > 5;
+          
           return (
             <Box 
               key={pollId} 
@@ -370,11 +375,24 @@ function Polls({ token, cityInfo, votesData: propVotesData, cities: propCities, 
                 </Box>
               </Link>
               <VoteList 
-                votes={allVotes} 
+                votes={truncatedVotes} 
                 cities={cities} 
                 variant="cell" 
                 isJointStatement={isJointStatement(pollId)}
               />
+              {hasMoreVotes && (
+                <Box sx={{ mt: 2, textAlign: 'center' }}>
+                  <Link to={`/poll/${encodeURIComponent(pollId)}`} style={{ textDecoration: 'none' }}>
+                    <Button 
+                      variant="text" 
+                      size="small" 
+                      endIcon={<span className="material-icons">arrow_forward</span>}
+                    >
+                      View all {allVotes.length} votes
+                    </Button>
+                  </Link>
+                </Box>
+              )}
             </Box>
           );
         })
