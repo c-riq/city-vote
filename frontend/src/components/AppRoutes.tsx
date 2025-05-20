@@ -42,7 +42,6 @@ function AppRoutes({
           token={token}
           cityInfo={cityInfo || undefined}
           votesData={votesData}
-          cities={cities}
           onRefresh={fetchVotesOnly}
         />
       } />
@@ -54,12 +53,10 @@ function AppRoutes({
             pollData={undefined}
             onVoteComplete={fetchData}
             votesData={votesData}
-            cities={cities}
           />
         ) : (
           <Poll 
             votesData={votesData}
-            cities={cities}
           />
         )
       } />
