@@ -74,10 +74,12 @@ function Poll({ token, pollData: initialPollData, onVoteComplete, votesData: pro
 
   // Fetch data if not provided as props (unauthenticated mode)
   useEffect(() => {
-    if (pollId && !propVotesData) {
+    // Only fetch data if we have a poll ID, don't have votes data from props,
+    // and we're not already loading data
+    if (pollId && !propVotesData && !isLoading) {
       fetchData();
     }
-  }, [pollId, propVotesData]);
+  }, [pollId, propVotesData, isLoading]);
 
   // Update local state when props change (after a vote is submitted and parent fetches new data)
   useEffect(() => {

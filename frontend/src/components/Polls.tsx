@@ -23,10 +23,12 @@ function Polls({ token, cityInfo, votesData: propVotesData, cities: propCities, 
   const [isAuthenticated] = useState(!!token && !!cityInfo);
 
   useEffect(() => {
-    if (!propVotesData) {
+    // Only fetch data if we don't have any votes data from props
+    // and we're not already loading data
+    if (!propVotesData && Object.keys(votesData).length === 0 && !isLoading) {
       fetchData();
     }
-  }, [propVotesData]);
+  }, [propVotesData, votesData, isLoading]);
 
   // Update state when props change
   useEffect(() => {
