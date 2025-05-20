@@ -1,6 +1,9 @@
 import { Box, Typography, Divider } from '@mui/material';
 import VoteList from '../VoteList';
 import { City, VoteAuthor } from '../../backendTypes';
+import { ComposableMap, Geographies, Geography, Marker } from 'react-simple-maps';
+import { Tooltip } from '@mui/material';
+import countryBorders from '../countryBorders.json';
 
 interface Vote {
   cityId: string;
@@ -77,6 +80,20 @@ function ResultsSection({ votesByOption, allVotes, cities, isJointStatement }: R
         {isJointStatement ? 'Signature History' : 'Voting History'}
       </Typography>
       
+      {/* Map showing cities that have voted/signed */}
+      {allVotes.length > 0 && (
+        <Box sx={{ 
+          width: '100%', 
+          height: '300px',
+          mb: 4,
+          border: '1px solid #e0e0e0',
+          borderRadius: 2,
+          overflow: 'hidden'
+        }}>
+          <PollMap votes={allVotes} cities={cities} />
+        </Box>
+      )}
+      
       <VoteList 
         votes={allVotes}
         cities={cities}
@@ -86,5 +103,95 @@ function ResultsSection({ votesByOption, allVotes, cities, isJointStatement }: R
     </>
   );
 }
+
+// Component to display a map of cities that have voted/signed
+const PollMap: React.FC<{ votes: Vote[], cities: Record<string, City> }> = ({ votes, cities }) => {
+  // Extract city coordinates from votes
+  const mapPoints = votes
+    .filter(vote => {
+      const city = cities[vote.cityId];
+      return city && city.lat && city.lon; // Only include cities with coordinates
+    })
+    .map(vote => {
+      const city = cities[vote.cityId];
+      return {
+        coordinates: [city.lon, city.lat] as [number, number],
+        name: city.name,
+        id: city.id,
+        // Size based on population if available, or default size
+        size: city.population ? Math.max(3, city.population / 500000) : 3
+      };
+    });
+
+  return (
+    <Box sx={{ 
+      width: '100%',
+      height: '100%',
+      overflow: 'hidden',
+      position: 'relative'
+    }}>
+      <ComposableMap
+        projectionConfig={{ 
+          scale: 150,
+          center: [10, 40] // Centered on Europe
+        }}
+        width={800}
+        height={300}
+        style={{
+          width: '100%',
+          height: '100%'
+        }}
+      >
+        <Geographies geography={countryBorders}>
+          {({ geographies }) =>
+            geographies.map((geo) => (
+              <Geography
+                key={geo.rsmKey}
+                geography={geo}
+                fill="#F5F4F6"
+                stroke="#D6D6DA"
+                style={{
+                  default: { outline: 'none', fill: '#E4E5E9' },
+                  hover: { outline: 'none', fill: '#D6D6DA' },
+                  pressed: { outline: 'none' }
+                }}
+              />
+            ))
+          }
+        </Geographies>
+        
+        {/* City markers */}
+        {mapPoints.map((city, i) => (
+          <Marker key={i} coordinates={city.coordinates}>
+            <Tooltip 
+              title={city.name}
+              arrow 
+              placement="top"
+            >
+              <g>
+                {/* Larger invisible hit area */}
+                <circle
+                  r={8}
+                  fill="transparent"
+                />
+                {/* Visible city dot */}
+                <circle
+                  r={city.size / 2}
+                  fill="#1a237e"
+                  opacity={0.75}
+                  stroke="none"
+                  style={{ 
+                    pointerEvents: 'none',
+                    transition: 'fill 0.2s, opacity 0.2s, r 0.3s',
+                  }}
+                />
+              </g>
+            </Tooltip>
+          </Marker>
+        ))}
+      </ComposableMap>
+    </Box>
+  );
+};
 
 export default ResultsSection;
