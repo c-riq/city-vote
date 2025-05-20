@@ -98,7 +98,7 @@ function ResultsSection({ votesByOption, allVotes, cities, isJointStatement }: R
       <VoteList 
         votes={allVotes}
         cities={cities}
-        variant="list"
+        variant="compact"
         isJointStatement={isJointStatement}
       />
     </>

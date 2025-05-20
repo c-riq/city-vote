@@ -16,12 +16,122 @@ interface Vote {
 interface VoteListProps {
   votes: Vote[];
   cities: Record<string, City>;
-  variant?: 'list' | 'cell';
+  variant?: 'list' | 'cell' | 'compact';
   containerStyle?: React.CSSProperties;  // Optional container styles
   isJointStatement?: boolean;  // Flag to indicate if this is a joint statement poll
 }
 
 const VoteList = ({ votes, cities, variant = 'list', containerStyle, isJointStatement = false }: VoteListProps) => {
+  // Compact variant for a more condensed view
+  if (variant === 'compact') {
+    return (
+      <Box sx={containerStyle}>
+        <List sx={{ 
+          bgcolor: 'background.default',
+          borderRadius: 2,
+          p: 0,
+          overflow: 'hidden'
+        }}>
+          {votes.map((vote, index) => (
+            <Box key={`${vote.cityId || 'anonymous'}-${vote.timestamp || 0}-${vote.voteInfo?.name || ''}-${vote.voteInfo?.title || ''}-${index}`}>
+              <ListItem sx={{ 
+                py: 1,
+                px: 2,
+                bgcolor: index % 2 === 0 ? 'background.default' : 'background.paper',
+                minHeight: '40px'
+              }}>
+                <ListItemText
+                  primary={
+                    <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 0.5 }}>
+                      {vote.cityId && cities?.[vote.cityId] ? (
+                        <Link 
+                          to={`/city/${vote.cityId}`} 
+                          style={{ 
+                            color: 'inherit',
+                            textDecoration: 'none'
+                          }}
+                        >
+                          <Typography 
+                            component="span" 
+                            sx={{ 
+                              fontWeight: 600,
+                              color: 'primary.main',
+                              fontSize: '0.875rem'
+                            }}
+                          >
+                            {`${cities[vote.cityId].name}, ${cities[vote.cityId].country}`}
+                          </Typography>
+                        </Link>
+                      ) : (
+                        <Typography 
+                          component="span" 
+                          sx={{ 
+                            fontWeight: 600,
+                            color: 'text.secondary',
+                            fontSize: '0.875rem',
+                            fontStyle: 'italic'
+                          }}
+                        >
+                          {vote.city || 'Unknown city'}
+                        </Typography>
+                      )}
+                      <Typography 
+                        component="span" 
+                        sx={{ 
+                          color: 'text.primary',
+                          fontWeight: 500,
+                          fontSize: '0.875rem'
+                        }}
+                      >
+                        {isJointStatement ? '' : `voted `}<strong>{!isJointStatement && vote.option}</strong>
+                      </Typography>
+                      <Typography 
+                        component="span" 
+                        sx={{ 
+                          color: 'text.secondary',
+                          fontSize: '0.75rem',
+                          ml: 'auto'
+                        }}
+                      >
+                        {vote.voteInfo?.title || ''} {vote.voteInfo?.name || 'Unknown'} 
+                        {' · '}
+                        <span style={{
+                          backgroundColor: vote.voteInfo?.actingCapacity === 'individual' ? '#f3e5f5' : '#e8f5e9',
+                          padding: '1px 4px',
+                          borderRadius: '3px',
+                          fontSize: '0.7rem',
+                          fontWeight: 500,
+                          color: vote.voteInfo?.actingCapacity === 'individual' ? '#6a1b9a' : '#2e7d32'
+                        }}>
+                          {vote.voteInfo?.actingCapacity === 'individual' ? 'Personal capacity' : 'Representing organisation'}
+                        </span>
+                        {vote.voteInfo?.externallyVerifiedBy && (
+                          <span style={{ 
+                            backgroundColor: '#e3f2fd', 
+                            padding: '1px 4px', 
+                            borderRadius: '3px',
+                            fontSize: '0.7rem',
+                            fontWeight: 500,
+                            color: '#0d47a1',
+                            marginLeft: '4px'
+                          }}>
+                            ✓
+                          </span>
+                        )}
+                      </Typography>
+                    </Box>
+                  }
+                  sx={{ my: 0 }}
+                />
+              </ListItem>
+              {index < votes.length - 1 && <Divider />}
+            </Box>
+          ))}
+        </List>
+      </Box>
+    );
+  }
+
   const VoteContent = variant === 'cell' ? (
     <Box>
       {votes.map((vote, index) => (
@@ -74,7 +184,7 @@ const VoteList = ({ votes, cities, variant = 'list', containerStyle, isJointStat
                   fontSize: '1rem'
                 }}
               >
-                {isJointStatement ? 'signed' : 'voted'} <strong>{isJointStatement && vote.option === 'Sign' ? 'document' : vote.option}</strong>
+                {isJointStatement ? '' : `voted `}<strong>{!isJointStatement && vote.option}</strong>
               </Typography>
           </Box>
           <Typography 
@@ -89,11 +199,16 @@ const VoteList = ({ votes, cities, variant = 'list', containerStyle, isJointStat
             {' · '}
             {vote.voteInfo?.title || ''} {vote.voteInfo?.name || 'Unknown'}
             {' · '}
-            <em>
-              {vote.voteInfo?.actingCapacity === 'individual' ? 
-                'personal' : 
-                'city admin'}
-            </em>
+            <span style={{
+              backgroundColor: vote.voteInfo?.actingCapacity === 'individual' ? '#f3e5f5' : '#e8f5e9',
+              padding: '1px 4px',
+              borderRadius: '3px',
+              fontSize: '0.75rem',
+              fontWeight: 500,
+              color: vote.voteInfo?.actingCapacity === 'individual' ? '#6a1b9a' : '#2e7d32'
+            }}>
+              {vote.voteInfo?.actingCapacity === 'individual' ? 'Personal Vote' : 'Official Vote'}
+            </span>
             {vote.voteInfo?.externallyVerifiedBy && (
               <>
                 {' · '}
@@ -123,8 +238,8 @@ const VoteList = ({ votes, cities, variant = 'list', containerStyle, isJointStat
       {votes.map((vote, index) => (
         <Box key={`${vote.cityId || 'anonymous'}-${vote.timestamp || 0}-${vote.voteInfo?.name || ''}-${vote.voteInfo?.title || ''}-${index}`}>
           <ListItem sx={{ 
-            py: 2,
-            px: 3,
+            py: 1.5,
+            px: 2.5,
             bgcolor: index % 2 === 0 ? 'background.default' : 'background.paper'
           }}>
             <ListItemText
@@ -171,7 +286,7 @@ const VoteList = ({ votes, cities, variant = 'list', containerStyle, isJointStat
                       fontSize: '1rem'
                     }}
                   >
-                    {isJointStatement ? 'signed' : 'voted'} <strong>{isJointStatement && vote.option === 'Sign' ? 'document' : vote.option}</strong>
+                    {isJointStatement ? '' : `voted `}<strong>{!isJointStatement && vote.option}</strong>
                   </Typography>
                 </Box>
               }
@@ -188,11 +303,16 @@ const VoteList = ({ votes, cities, variant = 'list', containerStyle, isJointStat
                   {' · '}
                   {vote.voteInfo?.title || ''} {vote.voteInfo?.name || 'Unknown'}
                   {' · '}
-                  <em>
-                    {vote.voteInfo?.actingCapacity === 'individual' ? 
-                      'personal' : 
-                      'city admin'}
-                  </em>
+                  <span style={{
+                    backgroundColor: vote.voteInfo?.actingCapacity === 'individual' ? '#f3e5f5' : '#e8f5e9',
+                    padding: '1px 4px',
+                    borderRadius: '3px',
+                    fontSize: '0.75rem',
+                    fontWeight: 500,
+                    color: vote.voteInfo?.actingCapacity === 'individual' ? '#6a1b9a' : '#2e7d32'
+                  }}>
+                    {vote.voteInfo?.actingCapacity === 'individual' ? 'Personal Vote' : 'Official Vote'}
+                  </span>
                   {vote.voteInfo?.externallyVerifiedBy && (
                     <>
                       {' · '}
