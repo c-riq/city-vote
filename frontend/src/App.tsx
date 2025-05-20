@@ -7,10 +7,8 @@ import { BrowserRouter, Routes, Route, useNavigate, Link } from 'react-router-do
 import Poll from './components/Poll';
 import Polls from './components/Polls';
 import Header from './components/Header';
-// import CityMap from './components/CityMap';
 import WorldMap from './components/WorldMap';
 import CityInfoBox from './components/CityInfoBox';
-import VoteList from './components/VoteList';
 import CityRegistration from './components/CityRegistration';
 import CityProfile from './components/CityProfile';
 import CityNetworkProfile from './components/CityNetworkProfile';
@@ -87,7 +85,6 @@ function App() {
   const [votesData, setVotesData] = useState<VoteData>({});
   const [cities, setCities] = useState<Record<string, City>>({});
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isRefreshingVotes, setIsRefreshingVotes] = useState(false);
 
   // Auto-fetch data if token exists in localStorage
   useEffect(() => {
@@ -164,7 +161,6 @@ function App() {
   };
 
   const fetchVotesOnly = async () => {
-    setIsRefreshingVotes(true);
     try {
       const votesResponse = await fetch(`${PUBLIC_API_HOST}`, {
         method: 'POST',
@@ -183,8 +179,6 @@ function App() {
       setVotesData(votesData?.votes || {});
     } catch (err) {
       console.error('Failed to fetch votes:', err);
-    } finally {
-      setIsRefreshingVotes(false);
     }
   };
 
@@ -684,7 +678,15 @@ function App() {
           <AuthenticatedContent />
           <Routes>
             <Route path="/register" element={<CityRegistration />} />
-            <Route path="/polls" element={<Polls />} />
+            <Route path="/polls" element={
+              <Polls 
+                token={token}
+                cityInfo={cityInfo || undefined}
+                votesData={votesData}
+                cities={cities}
+                onRefresh={fetchVotesOnly}
+              />
+            } />
             <Route path="/poll/:pollId" element={
               cityInfo ? (
                 <Poll 
@@ -897,7 +899,7 @@ function App() {
                     backgroundColor: 'background.default',
                   }}
                 >
-                  {/* Use CityInfoBox for the logged-in user's own city information */}
+                  {/* Only show CityInfoBox for the logged-in user's own city information */}
                   <CityInfoBox 
                     cityId={cityInfo?.id || null} 
                     cityInfo={cityInfo} 
@@ -905,105 +907,24 @@ function App() {
                     token={token}
                   />
                   
-                  {/* Votes Display */}
+                  {/* Link to polls page */}
                   <Box sx={{ 
-                    display: 'flex', 
-                    alignItems: 'center', 
-                    justifyContent: 'center',
-                    gap: 2,
-                    mt: 4,
                     width: '100%',
-                    maxWidth: 800
+                    maxWidth: 800,
+                    display: 'flex',
+                    justifyContent: 'center',
+                    mt: 4
                   }}>
-                    <Typography variant="h5">All Polls</Typography>
                     <Button
-                      onClick={fetchVotesOnly}
-                      startIcon={
-                        isRefreshingVotes ? (
-                          <span className="material-icons" style={{ animation: 'spin 1s linear infinite' }}>sync</span>
-                        ) : (
-                          <span className="material-icons">refresh</span>
-                        )
-                      }
-                      disabled={isRefreshingVotes}
-                      size="small"
-                      sx={{ 
-                        minWidth: 'auto',
-                        '@keyframes spin': {
-                          '0%': {
-                            transform: 'rotate(0deg)',
-                          },
-                          '100%': {
-                            transform: 'rotate(360deg)',
-                          },
-                        },
-                      }}
+                      component={Link}
+                      to="/polls"
+                      variant="contained"
+                      startIcon={<span className="material-icons">how_to_vote</span>}
+                      sx={{ px: 4, py: 1.5 }}
                     >
-                      {isRefreshingVotes ? 'Refreshing...' : 'Refresh'}
+                      View All Polls
                     </Button>
                   </Box>
-                  {Object.entries(votesData).map(([pollId, pollData]) => {
-                    // Convert the new vote structure to the format expected by VoteList
-                    const allVotes = pollData.votes.map((vote) => ({
-                      cityId: vote.associatedCity || '',
-                      timestamp: vote.time || 0,
-                      option: vote.vote,
-                      voteInfo: vote.author,
-                      city: vote.city
-                    }))
-                    .sort((a, b) => b.timestamp - a.timestamp);
-
-                    return (
-                      <Box 
-                        key={pollId} 
-                        sx={{ 
-                          width: '100%',
-                          maxWidth: 800,
-                          backgroundColor: 'background.paper',
-                          p: 3,
-                          borderRadius: 2,
-                          boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
-                          mb: 3,
-                          transition: 'transform 0.2s ease-in-out',
-                          '&:hover': {
-                            transform: 'translateY(-2px)',
-                          }
-                        }}
-                      >
-                        <Link to={`/poll/${encodeURIComponent(pollId)}`} style={{ textDecoration: 'none' }}>
-                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                            <Typography variant="h6" sx={{ color: 'primary.main', fontWeight: 500, mb: 2 }}>
-                              {(() => {
-                                // Helper function to get display title (removes _attachment_<hash> if present)
-                                const attachmentIndex = pollId.indexOf('_attachment_');
-                                return attachmentIndex !== -1 ? pollId.substring(0, attachmentIndex) : pollId;
-                              })()}
-                            </Typography>
-                            {pollId.includes('_attachment_') && (
-                              <span 
-                                className="material-icons" 
-                                style={{ 
-                                  fontSize: '1.2rem', 
-                                  color: '#1a237e',
-                                  opacity: 0.7,
-                                  marginBottom: '16px' // Match the mb: 2 (16px) from Typography
-                                }}
-                                title="Has attachment"
-                              >
-                                attach_file
-                              </span>
-                            )}
-                          </Box>
-                        </Link>
-                        <VoteList 
-                          votes={allVotes} 
-                          cities={cities} 
-                          variant="cell" 
-                          isJointStatement={pollId.startsWith('joint_statement_')}
-                        />
-                      </Box>
-                    );
-                  })}
                 </Box>
               )
             } />
