@@ -4,6 +4,7 @@ import { City, VoteAuthor } from '../../backendTypes';
 import { ComposableMap, Geographies, Geography, Marker } from 'react-simple-maps';
 import { Tooltip } from '@mui/material';
 import countryBorders from '../countryBorders.json';
+import { countries } from '../../countries';
 
 interface Vote {
   cityId: string;
@@ -106,7 +107,7 @@ function ResultsSection({ votesByOption, allVotes, cities, isJointStatement }: R
 
 // Component to display a map of cities that have voted/signed
 const PollMap: React.FC<{ votes: Vote[], cities: Record<string, City> }> = ({ votes, cities }) => {
-  // Extract city coordinates from votes
+  // Extract city coordinates from votes and calculate country population representation
   const mapPoints = votes
     .filter(vote => {
       const city = cities[vote.cityId];
@@ -118,10 +119,127 @@ const PollMap: React.FC<{ votes: Vote[], cities: Record<string, City> }> = ({ vo
         coordinates: [city.lon, city.lat] as [number, number],
         name: city.name,
         id: city.id,
+        country: city.country,
+        population: city.population || 0,
         // Size based on population if available, or default size
         size: city.population ? Math.max(3, city.population / 500000) : 3
       };
     });
+    
+  // Calculate population representation by country
+  const countryPopulationData: Record<string, { 
+    representedPopulation: number, 
+    countryPopulation: number,
+    fraction: number,
+    wikidataId: string
+  }> = {};
+  
+  // Helper function to find country data by name or code
+  const findCountryData = (countryName: string, countryCode?: string) => {
+    return countries.countries.find(country => {
+      // Try to match by name
+      if (typeof country[0] === 'string' && typeof countryName === 'string' &&
+          (country[0] === countryName || 
+           countryName.includes(country[0]) || 
+           country[0].includes(countryName))) {
+        return true;
+      }
+      
+      // Try to match by country code if provided
+      if (countryCode && country[1] === countryCode) {
+        return true;
+      }
+      
+      return false;
+    });
+  };
+
+  // First, collect all represented population by country
+  mapPoints.forEach(city => {
+    if (!city.country || !city.population) return;
+    
+    const countryData = findCountryData(city.country);
+    if (!countryData) return;
+    
+    const countryWikidataId = countryData[4] as string;
+    if (!countryWikidataId) return;
+    
+    if (!countryPopulationData[countryWikidataId]) {
+      countryPopulationData[countryWikidataId] = {
+        representedPopulation: 0,
+        countryPopulation: 0,
+        fraction: 0,
+        wikidataId: countryWikidataId
+      };
+    }
+    
+    countryPopulationData[countryWikidataId].representedPopulation += city.population;
+  });
+  
+  // Calculate country population representation without logging
+  
+  // Then, get total country populations from the countries data
+  const countryData = countries.countries;
+  
+  // Add country population data directly using Wikidata IDs
+  countryData.forEach(country => {
+    const population = country[5] ? Number(country[5]) : null;
+    const wikidataId = country[4] as string;
+    
+    if (wikidataId && population && countryPopulationData[wikidataId]) {
+      countryPopulationData[wikidataId].countryPopulation = population;
+      // Calculate the fraction of population represented
+      const represented = countryPopulationData[wikidataId].representedPopulation;
+      countryPopulationData[wikidataId].fraction = represented / population;
+    }
+  });
+  
+  // No need to log country data
+  
+  // Color scale mapping for population representation - more subtle colors
+  const getColorForFraction = (fraction: number): string => {
+    const colorScale = [
+      { threshold: 0, color: "#F5F5F5" },          // Very light gray - 0%
+      { threshold: 0.0001, color: "#F0F8FF" },     // Alice Blue - 0.01%
+      { threshold: 0.0005, color: "#E6F2FF" },     // Very light blue - 0.05%
+      { threshold: 0.001, color: "#DCE9FC" },      // Lighter blue - 0.1%
+      { threshold: 0.005, color: "#D2E0F9" },      // Light blue - 0.5%
+      { threshold: 0.01, color: "#C7D8F6" },       // Subtle blue - 1%
+      { threshold: 0.05, color: "#BDCFF3" },       // Soft blue - 5%
+      { threshold: 0.1, color: "#B3C6F0" },        // Muted blue - 10%
+      { threshold: 0.2, color: "#A9BDED" },        // Pastel blue - 20%
+      { threshold: 0.3, color: "#9FB4EA" },        // Gentle blue - 30%
+      { threshold: Infinity, color: "#95ABE7" }    // Subtle medium blue - >30%
+    ];
+    
+    for (let i = 0; i < colorScale.length - 1; i++) {
+      if (fraction < colorScale[i + 1].threshold) {
+        return colorScale[i].color;
+      }
+    }
+    
+    return colorScale[colorScale.length - 1].color;
+  };
+
+  // Function to get color based on population fraction
+  const getCountryColor = (geo: { properties: { name: string; iso_a2: string } }) => {
+    const countryName = geo.properties.name;
+    const countryCode = geo.properties.iso_a2;
+    
+    const countryData = findCountryData(countryName, countryCode);
+    
+    if (!countryData) {
+      return "#F5F5F5"; // Default color if country not found - very light gray
+    }
+    
+    const wikidataId = countryData[4] as string;
+    if (!wikidataId || !countryPopulationData[wikidataId]) {
+      return "#F5F5F5"; // Default color if no population data - very light gray
+    }
+    
+    const fraction = countryPopulationData[wikidataId].fraction || 0;
+    return getColorForFraction(fraction);
+  };
 
   // Calculate map bounds based on city coordinates
   const calculateMapProjection = () => {
@@ -209,19 +327,22 @@ const PollMap: React.FC<{ votes: Vote[], cities: Record<string, City> }> = ({ vo
       >
         <Geographies geography={countryBorders}>
           {({ geographies }) =>
-            geographies.map((geo) => (
-              <Geography
-                key={geo.rsmKey}
-                geography={geo}
-                fill="#F5F4F6"
-                stroke="#D6D6DA"
-                style={{
-                  default: { outline: 'none', fill: '#E4E5E9' },
-                  hover: { outline: 'none', fill: '#D6D6DA' },
-                  pressed: { outline: 'none' }
-                }}
-              />
-            ))
+            geographies.map((geo) => {
+              const countryColor = getCountryColor(geo);
+              return (
+                <Geography
+                  key={geo.rsmKey}
+                  geography={geo}
+                  fill={countryColor}
+                  stroke="#D6D6DA"
+                  style={{
+                    default: { outline: 'none', fill: countryColor },
+                    hover: { outline: 'none', fill: countryColor, opacity: 0.8 },
+                    pressed: { outline: 'none' }
+                  }}
+                />
+              );
+            })
           }
         </Geographies>
         
