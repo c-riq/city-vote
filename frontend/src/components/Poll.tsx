@@ -3,22 +3,10 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { 
   Box,
   Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Divider,
-  FormControl,
-  FormControlLabel,
-  Radio,
-  RadioGroup,
-  TextField,
   Typography,
-  CircularProgress,
-  Link as MuiLink
+  CircularProgress
 } from '@mui/material';
 import { VOTE_HOST, PUBLIC_API_HOST, AUTOCOMPLETE_API_HOST } from '../constants';
-import VoteList from './VoteList';
 import {
   City,
   VoteData,
@@ -26,6 +14,13 @@ import {
   GetVotesResponse,
   GetCitiesResponse
 } from '../backendTypes';
+import { getDisplayTitle, isJointStatement } from '../utils/pollFormat';
+import PollHeader from './poll/PollHeader';
+import PollAttachment from './poll/PollAttachment';
+import VoteForm from './poll/VoteForm';
+import VoteButtons from './poll/VoteButtons';
+import ResultsSection from './poll/ResultsSection';
+import ConfirmVoteDialog from './poll/ConfirmVoteDialog';
 
 interface PollProps {
   token?: string;
@@ -79,10 +74,10 @@ function Poll({ token, pollData: initialPollData, onVoteComplete, votesData: pro
 
   // Fetch data if not provided as props (unauthenticated mode)
   useEffect(() => {
-    if (!isAuthenticated && pollId) {
+    if (pollId && !propVotesData) {
       fetchData();
     }
-  }, [pollId, isAuthenticated]);
+  }, [pollId, propVotesData]);
 
   // Update local state when props change (after a vote is submitted and parent fetches new data)
   useEffect(() => {
@@ -250,81 +245,11 @@ function Poll({ token, pollData: initialPollData, onVoteComplete, votesData: pro
     
     fetchPollData();
   }, [pollId, initialPollData, token]);
-
-  // Helper function to get display title and metadata
-  const getDisplayTitle = (title: string): string => {
-    // First check if it's a joint statement
-    if (title === 'joint_statement_' || title.startsWith('joint_statement__attachment_')) {
-      return 'Joint Statement';
-    } else if (title.startsWith('joint_statement_')) {
-      // If it has a custom title, remove the prefix
-      title = title.substring('joint_statement_'.length);
-    }
-    
-    // Remove attachment hash if present
-    const attachmentIndex = title.indexOf('_attachment_');
-    if (attachmentIndex !== -1) {
-      title = title.substring(0, attachmentIndex);
-    }
-    
-    // Remove URL if present
-    const urlIndex = title.indexOf('_url_');
-    if (urlIndex !== -1) {
-      title = title.substring(0, urlIndex);
-    }
-    
-    // Remove organised by if present
-    const organisedByIndex = title.indexOf('_organised_by_');
-    if (organisedByIndex !== -1) {
-      title = title.substring(0, organisedByIndex);
-    }
-    
-    return title;
-  };
   
-  // Helper function to extract organised by information
-  const getOrganisedBy = (title: string): string | null => {
-    const organisedByIndex = title.indexOf('_organised_by_');
-    if (organisedByIndex !== -1) {
-      // Extract everything after _organised_by_
-      let organisedBy = title.substring(organisedByIndex + '_organised_by_'.length);
-      
-      // If there's a URL or attachment after the organised by, remove it
-      const urlIndex = organisedBy.indexOf('_url_');
-      if (urlIndex !== -1) {
-        organisedBy = organisedBy.substring(0, urlIndex);
-      }
-      
-      const attachmentIndex = organisedBy.indexOf('_attachment_');
-      if (attachmentIndex !== -1) {
-        organisedBy = organisedBy.substring(0, attachmentIndex);
-      }
-      
-      return organisedBy;
-    }
-    return null;
-  };
-  
-  // Helper function to extract document URL
-  const getDocumentUrl = (title: string): string | null => {
-    const urlIndex = title.indexOf('_url_');
-    if (urlIndex !== -1) {
-      // Extract everything after _url_
-      let url = title.substring(urlIndex + '_url_'.length);
-      
-      // If there's an attachment after the URL, remove it
-      const attachmentIndex = url.indexOf('_attachment_');
-      if (attachmentIndex !== -1) {
-        url = url.substring(0, attachmentIndex);
-      }
-      
-      return decodeURIComponent(url);
-    }
-    return null;
-  };
   
   // Check if this is a joint statement poll
-  const isJointStatement = (pollId || '').startsWith('joint_statement_');
+  const currentPollId = initialPollData?.id || (pollId ? decodeURIComponent(pollId) : '');
+  const isJointStatementPoll = isJointStatement(currentPollId);
 
   const fetchData = async () => {
     setError('');
@@ -515,7 +440,10 @@ function Poll({ token, pollData: initialPollData, onVoteComplete, votesData: pro
         cityId: vote.associatedCity || '',
         timestamp: vote.time || 0,
         option: vote.vote,
-        voteInfo: vote.author,
+        voteInfo: {
+          ...vote.author,
+          externallyVerifiedBy: vote.externalVerificationSource
+        },
         city: vote.city
       };
     }).sort((a, b) => b.timestamp - a.timestamp) : [];
@@ -525,6 +453,13 @@ function Poll({ token, pollData: initialPollData, onVoteComplete, votesData: pro
   allVotes.forEach(vote => {
     votesByOption[vote.option] = (votesByOption[vote.option] || 0) + 1;
   });
+
+  // Get the display title
+  const displayTitle = getDisplayTitle(initialPollData?.title || decodeURIComponent(pollId || ''));
+
+  // Get organised by and document URL from metadata
+  const organisedBy = pollMetadata?.organisedBy || null;
+  const documentUrl = pollMetadata?.documentUrl || null;
 
   return (
     <Box sx={{ 
@@ -572,324 +507,54 @@ function Poll({ token, pollData: initialPollData, onVoteComplete, votesData: pro
           boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
           p: 4
         }}>
-          <Typography 
-            variant="h4" 
-            sx={{ 
-              mb: 2,
-              color: 'primary.main',
-              textAlign: 'center',
-              fontWeight: 600
-            }}
-          >
-            {getDisplayTitle(initialPollData?.title || decodeURIComponent(pollId || ''))}
-          </Typography>
-          
-          {/* Display organised by information if available */}
-          {isJointStatement && (
-            (pollMetadata?.organisedBy || getOrganisedBy(initialPollData?.title || decodeURIComponent(pollId || ''))) && (
-              <Typography 
-                variant="subtitle1" 
-                sx={{ 
-                  mb: 3,
-                  textAlign: 'center',
-                  color: 'text.secondary'
-                }}
-              >
-                Organised by: {pollMetadata?.organisedBy || getOrganisedBy(initialPollData?.title || decodeURIComponent(pollId || ''))}
-              </Typography>
-            )
-          )}
-          
-          {/* Display document URL if available */}
-          {isJointStatement && (
-            (pollMetadata?.documentUrl || getDocumentUrl(initialPollData?.title || decodeURIComponent(pollId || ''))) && (
-              <Box sx={{ 
-                display: 'flex', 
-                justifyContent: 'center', 
-                mb: 4,
-                flexDirection: 'column',
-                alignItems: 'center'
-              }}>
-                <Typography variant="subtitle2" sx={{ mb: 1 }}>
-                  Document URL:
-                </Typography>
-                <Button
-                  variant="outlined"
-                  startIcon={<span className="material-icons">open_in_new</span>}
-                  component={MuiLink}
-                  href={pollMetadata?.documentUrl || getDocumentUrl(initialPollData?.title || decodeURIComponent(pollId || '')) || '#'}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  sx={{ 
-                    textTransform: 'none',
-                    borderRadius: 2,
-                    px: 3
-                  }}
-                >
-                  Open Document
-                </Button>
-              </Box>
-            )
-          )}
+          <PollHeader 
+            title={displayTitle}
+            isJointStatement={isJointStatementPoll}
+            organisedBy={organisedBy}
+            documentUrl={documentUrl}
+          />
           
           {attachmentUrl && (
+            <PollAttachment attachmentUrl={attachmentUrl} />
+          )}
+
+          {isAuthenticated && cityInfo && (
             <>
-              {/* Embedded PDF viewer */}
-              <Box sx={{ 
-                width: '100%',
-                height: '500px',
-                mb: 4,
-                mt: 2,
-                border: '1px solid rgba(0, 0, 0, 0.12)',
-                borderRadius: 2,
-                overflow: 'hidden'
-              }}>
-                <iframe
-                  src={`${attachmentUrl}#toolbar=0&navpanes=0`}
-                  width="100%"
-                  height="100%"
-                  style={{ border: 'none' }}
-                  title="PDF Attachment"
-                />
-              </Box>
-              
-              {/* Button to open in new tab */}
-              <Box sx={{ 
-                display: 'flex', 
-                justifyContent: 'center', 
-                mb: 4
-              }}>
-                <Button
-                  variant="outlined"
-                  startIcon={<span className="material-icons">open_in_new</span>}
-                  component={MuiLink}
-                  href={attachmentUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  sx={{ 
-                    textTransform: 'none',
-                    borderRadius: 2,
-                    px: 3
-                  }}
-                >
-                  Open PDF in New Tab
-                </Button>
-              </Box>
+              <VoteForm 
+                cityInfo={cityInfo}
+                isPersonal={isPersonal}
+                setIsPersonal={setIsPersonal}
+                personalInfo={personalInfo}
+                setPersonalInfo={setPersonalInfo}
+              />
+
+              <VoteButtons 
+                isJointStatement={isJointStatementPoll}
+                options={initialPollData?.options || ['Yes', 'No']}
+                onVote={handleVoteClick}
+                disabled={voting || !personalInfo.title || !personalInfo.name}
+              />
             </>
           )}
 
-          {isAuthenticated && (
-            <>
-              <Box sx={{ mb: 4, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <Typography variant="subtitle1" sx={{ mb: 2 }}>Vote as:</Typography>
-                <FormControl>
-                  <RadioGroup
-                    value={isPersonal ? 'personal' : 'city'}
-                    onChange={(e) => setIsPersonal(e.target.value === 'personal')}
-                    sx={{ mb: 2 }}
-                  >
-                    <FormControlLabel 
-                      value="city" 
-                      control={<Radio />} 
-                      label={<>On behalf of the City Administration of <strong>{cityInfo?.name}</strong></>}
-                    />
-                    <FormControlLabel 
-                      value="personal"
-                      control={<Radio />} 
-                      label={<>As a <strong>person</strong> expressing their own opinion</>}
-                    />
-                  </RadioGroup>
-                </FormControl>
-
-                <Box sx={{ mt: 3, width: '100%', maxWidth: 400 }}>
-                  <TextField
-                    fullWidth
-                    required
-                    label="Title"
-                    value={personalInfo.title}
-                    onChange={(e) => setPersonalInfo(prev => ({ ...prev, title: e.target.value }))}
-                    margin="normal"
-                    size="small"
-                  />
-                  <TextField
-                    fullWidth
-                    required
-                    label="Name"
-                    value={personalInfo.name}
-                    onChange={(e) => setPersonalInfo(prev => ({ ...prev, name: e.target.value }))}
-                    margin="normal"
-                    size="small"
-                  />
-                </Box>
-              </Box>
-
-              <Box sx={{ 
-                display: 'flex', 
-                gap: 2, 
-                flexDirection: 'column', 
-                mb: 6,
-                maxWidth: 400,
-                mx: 'auto'
-              }}>
-                {isJointStatement ? (
-                  // For joint statements, only show "Sign Document" option
-                  <Button
-                    variant="contained"
-                    onClick={() => handleVoteClick("Sign")}
-                    disabled={voting || !personalInfo.title || !personalInfo.name}
-                    sx={{
-                      py: 1.5,
-                      fontSize: '1.1rem',
-                      backgroundColor: 'primary.main',
-                      '&:hover': {
-                        backgroundColor: 'primary.dark',
-                      }
-                    }}
-                    startIcon={<span className="material-icons">how_to_reg</span>}
-                  >
-                    Sign Document
-                  </Button>
-                ) : (
-                  // For regular polls, show Yes/No options
-                  (initialPollData?.options || ['Yes', 'No']).map((option: string, index: number) => (
-                    <Button
-                      key={index}
-                      variant="contained"
-                      onClick={() => handleVoteClick(option)}
-                      disabled={voting || !personalInfo.title || !personalInfo.name}
-                      sx={{
-                        py: 1.5,
-                        fontSize: '1.1rem',
-                        backgroundColor: index === 0 ? 'primary.main' : 'primary.light',
-                        '&:hover': {
-                          backgroundColor: index === 0 ? 'primary.dark' : 'primary.main',
-                        }
-                      }}
-                    >
-                      {option}
-                    </Button>
-                  ))
-                )}
-              </Box>
-            </>
-          )}
-
-          {/* Results section */}
-          <Box sx={{ 
-            mb: 4, 
-            display: 'flex', 
-            flexDirection: 'column', 
-            alignItems: 'center',
-            gap: 2
-          }}>
-            <Typography variant="h6" sx={{ mb: 2 }}>
-              {isJointStatement ? 'Signatures' : 'Results'}
-            </Typography>
-            
-            {Object.entries(votesByOption).length > 0 ? (
-              Object.entries(votesByOption).map(([option, count]) => (
-                <Box 
-                  key={option}
-                  sx={{
-                    width: '100%',
-                    maxWidth: 400,
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    p: 2,
-                    borderRadius: 2,
-                    bgcolor: 'background.default'
-                  }}
-                >
-                  <Typography variant="body1" sx={{ fontWeight: 500 }}>
-                    {isJointStatement && option === 'Sign' ? 'Signed' : option}
-                  </Typography>
-                  <Typography variant="body1" sx={{ fontWeight: 700 }}>
-                    {count} {isJointStatement ? 'signature' : 'vote'}{count !== 1 ? 's' : ''}
-                  </Typography>
-                </Box>
-              ))
-            ) : (
-              <Typography variant="body1" sx={{ color: 'text.secondary' }}>
-                {isJointStatement ? 'No signatures yet' : 'No votes yet'}
-              </Typography>
-            )}
-          </Box>
-
-          <Divider sx={{ mb: 4 }} />
-
-          <Typography 
-            variant="h6" 
-            sx={{ 
-              mb: 3,
-              color: 'primary.main',
-              fontWeight: 500
-            }}
-          >
-            {isJointStatement ? 'Signature History' : 'Voting History'}
-          </Typography>
-          
-          <VoteList 
-            votes={allVotes}
-            cities={cities || {}}
-            variant="list"
-            isJointStatement={isJointStatement}
+          <ResultsSection 
+            votesByOption={votesByOption}
+            allVotes={allVotes}
+            cities={cities}
+            isJointStatement={isJointStatementPoll}
           />
 
-          <Dialog
+          <ConfirmVoteDialog
             open={confirmDialog.open}
+            option={confirmDialog.option}
+            isPersonal={isPersonal}
+            personalInfo={personalInfo}
+            isJointStatement={isJointStatementPoll}
+            hasVoted={hasVoted}
+            cityInfo={cityInfo}
             onClose={() => setConfirmDialog({ open: false, option: null })}
-          >
-            <DialogTitle>{isJointStatement ? 'Confirm Signature' : 'Confirm Vote'}</DialogTitle>
-            <DialogContent>
-              <Typography>
-                {isJointStatement ? (
-                  <>
-                    Are you sure you want to sign this document{' '}
-                    {isPersonal ? (
-                      <>as a <strong>personal</strong> signature from {personalInfo.title} <strong>{personalInfo.name}</strong></>
-                    ) : (
-                      <>on <strong>behalf of the City Administration </strong> as {personalInfo.title} <strong>{personalInfo.name}</strong></>
-                    )}?
-                  </>
-                ) : (
-                  <>
-                    Are you sure you want to vote "<strong>{confirmDialog.option}</strong>"{' '}
-                    {isPersonal ? (
-                      <>as a <strong>personal</strong> vote from {personalInfo.title} <strong>{personalInfo.name}</strong></>
-                    ) : (
-                      <>on <strong>behalf of the City Administration </strong> as {personalInfo.title} <strong>{personalInfo.name}</strong></>
-                    )}?
-                  </>
-                )}
-              </Typography>
-              {hasVoted && !isPersonal && (
-                <Typography
-                  sx={{ mt: 2, color: 'warning.main' }}
-                >
-                  Note: {cityInfo?.name} has already {isJointStatement ? 'signed this document' : 'voted on this poll'}. 
-                  This will add another {isJointStatement ? 'signature' : 'vote'} to the history.
-                </Typography>
-              )}
-            </DialogContent>
-            <DialogActions>
-              <Button
-                onClick={() => setConfirmDialog({ open: false, option: null })}
-                color="inherit"
-              >
-                Cancel
-              </Button>
-              <Button
-                onClick={handleConfirmVote}
-                variant="contained"
-                color="primary"
-                autoFocus
-                disabled={!personalInfo.title || !personalInfo.name}
-              >
-                {isJointStatement ? 'Confirm Signature' : 'Confirm Vote'}
-              </Button>
-            </DialogActions>
-          </Dialog>
+            onConfirm={handleConfirmVote}
+          />
         </Box>
       )}
     </Box>

@@ -57,7 +57,10 @@ function AppRoutes({
             cities={cities}
           />
         ) : (
-          <Poll />
+          <Poll 
+            votesData={votesData}
+            cities={cities}
+          />
         )
       } />
       <Route path="/" element={

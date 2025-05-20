@@ -23,10 +23,10 @@ function Polls({ token, cityInfo, votesData: propVotesData, cities: propCities, 
   const [isAuthenticated] = useState(!!token && !!cityInfo);
 
   useEffect(() => {
-    if (!isAuthenticated && !propVotesData) {
+    if (!propVotesData) {
       fetchData();
     }
-  }, [isAuthenticated, propVotesData]);
+  }, [propVotesData]);
 
   // Update state when props change
   useEffect(() => {
