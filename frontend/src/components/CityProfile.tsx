@@ -94,6 +94,8 @@ const CityProfile: React.FC = () => {
                 
                 // Check if this city is superseded by another city
                 if (cityDetails.superseded_by && cityDetails.superseded_by !== cityId) {
+                  // This will be handled by the next condition if applicable
+                  console.log('City is superseded by:', cityDetails.superseded_by);
                 }
                 // Check if the returned wikidataId is different from the requested cityId
                 else if (cityDetails.wikidataId && cityDetails.wikidataId !== cityId && cityDetails.supersedes_duplicates?.includes(cityId)) {
@@ -259,7 +261,7 @@ const CityProfile: React.FC = () => {
     };
 
     fetchCityData();
-  }, [cityId]);
+  }, [cityId, navigate]);
 
   if (loading) {
     return (

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Container } from '@mui/material';
 import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material';
@@ -26,47 +26,7 @@ function App() {
   const [cities, setCities] = useState<Record<string, City>>({});
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Auto-fetch data if token exists in localStorage
-  useEffect(() => {
-    if (token) {
-      fetchData();
-    } else {
-      // For unauthenticated users, fetch public data
-      fetchPublicData();
-    }
-  }, []);
-
-  const fetchPublicData = async () => {
-    try {
-      // Fetch cities data
-      const citiesResponse = await fetch(`${PUBLIC_API_HOST}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'getCities' })
-      });
-
-      if (citiesResponse.ok) {
-        const citiesData: GetCitiesResponse = await citiesResponse.json();
-        setCities(citiesData.cities);
-      }
-
-      // Fetch votes data
-      const votesResponse = await fetch(`${PUBLIC_API_HOST}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'getVotes' })
-      });
-
-      if (votesResponse.ok) {
-        const votesData: GetVotesResponse = await votesResponse.json();
-        setVotesData(votesData?.votes || {});
-      }
-    } catch (err) {
-      console.error('Failed to fetch public data:', err);
-    }
-  };
-
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     setError('');
     setIsLoading(true);
     
@@ -131,7 +91,48 @@ function App() {
     } finally {
       setIsLoading(false);
     }
+  }, [token]);
+
+  // Auto-fetch data if token exists in localStorage
+  useEffect(() => {
+    if (token) {
+      fetchData();
+    } else {
+      // For unauthenticated users, fetch public data
+      fetchPublicData();
+    }
+  }, [fetchData, token]);
+
+  const fetchPublicData = async () => {
+    try {
+      // Fetch cities data
+      const citiesResponse = await fetch(`${PUBLIC_API_HOST}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'getCities' })
+      });
+
+      if (citiesResponse.ok) {
+        const citiesData: GetCitiesResponse = await citiesResponse.json();
+        setCities(citiesData.cities);
+      }
+
+      // Fetch votes data
+      const votesResponse = await fetch(`${PUBLIC_API_HOST}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'getVotes' })
+      });
+
+      if (votesResponse.ok) {
+        const votesData: GetVotesResponse = await votesResponse.json();
+        setVotesData(votesData?.votes || {});
+      }
+    } catch (err) {
+      console.error('Failed to fetch public data:', err);
+    }
   };
+
 
   const fetchVotesOnly = async () => {
     try {

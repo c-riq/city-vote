@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { Box, Typography, Button, CircularProgress } from '@mui/material';
 import VoteList from './VoteList';
@@ -30,29 +30,7 @@ function Polls({ token, cityInfo, votesData: propVotesData, onRefresh }: PollsPr
   const [isLoading, setIsLoading] = useState(!propVotesData);
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    // Only fetch data if we don't have any votes data from props
-    // and we're not already loading data
-    if (!propVotesData && Object.keys(votesData).length === 0 && !isLoading) {
-      fetchData();
-    }
-  }, [propVotesData, votesData, isLoading]);
-
-  // Update state when props change
-  useEffect(() => {
-    if (propVotesData) {
-      setVotesData(propVotesData);
-    }
-  }, [propVotesData]);
-
-  // Update error state if city error occurs
-  useEffect(() => {
-    if (cityError) {
-      setError(cityError);
-    }
-  }, [cityError]);
-
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     setError('');
     setIsLoading(true);
     
@@ -81,7 +59,30 @@ function Polls({ token, cityInfo, votesData: propVotesData, onRefresh }: PollsPr
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [fetchAllCities]);
+
+  useEffect(() => {
+    // Only fetch data if we don't have any votes data from props
+    // and we're not already loading data
+    if (!propVotesData && Object.keys(votesData).length === 0 && !isLoading) {
+      fetchData();
+    }
+  }, [propVotesData, votesData, isLoading, fetchData]);
+
+  // Update state when props change
+  useEffect(() => {
+    if (propVotesData) {
+      setVotesData(propVotesData);
+    }
+  }, [propVotesData]);
+
+  // Update error state if city error occurs
+  useEffect(() => {
+    if (cityError) {
+      setError(cityError);
+    }
+  }, [cityError]);
+
 
   const fetchVotesOnly = async () => {
     setIsRefreshingVotes(true);

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { 
   Box,
@@ -58,6 +58,37 @@ function Poll({ token, pollData: initialPollData, onVoteComplete, votesData: pro
     error: cityError 
   } = useCityData(votesData);
 
+  const fetchData = useCallback(async () => {
+    setError('');
+    setIsLoading(true);
+    
+    try {
+      // Fetch cities data using the hook
+      await fetchAllCities();
+
+      // Fetch votes data
+      const votesFetchResult = await fetch(`${PUBLIC_API_HOST}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'getVotes' })
+      });
+
+      if (!votesFetchResult.ok) {
+        throw new Error('Failed to fetch votes');
+      }
+
+      const votesResponse: GetVotesResponse = await votesFetchResult.json();
+      
+      // Set the votes data directly
+      setVotesData(votesResponse?.votes || {});
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to fetch data');
+      setVotesData({});
+    } finally {
+      setIsLoading(false);
+    }
+  }, [fetchAllCities]);
+
   // Fetch data if not provided as props (unauthenticated mode)
   useEffect(() => {
     // Only fetch data if we have a poll ID, don't have votes data from props,
@@ -65,7 +96,7 @@ function Poll({ token, pollData: initialPollData, onVoteComplete, votesData: pro
     if (pollId && !propVotesData && !isLoading) {
       fetchData();
     }
-  }, [pollId, propVotesData, isLoading]);
+  }, [pollId, propVotesData, isLoading, fetchData]);
 
   // Update local state when props change (after a vote is submitted and parent fetches new data)
   useEffect(() => {
@@ -101,36 +132,6 @@ function Poll({ token, pollData: initialPollData, onVoteComplete, votesData: pro
   const currentPollId = initialPollData?.id || (pollId ? decodeURIComponent(pollId) : '');
   const isJointStatementPoll = isJointStatement(currentPollId);
 
-  const fetchData = async () => {
-    setError('');
-    setIsLoading(true);
-    
-    try {
-      // Fetch cities data using the hook
-      await fetchAllCities();
-
-      // Fetch votes data
-      const votesFetchResult = await fetch(`${PUBLIC_API_HOST}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'getVotes' })
-      });
-
-      if (!votesFetchResult.ok) {
-        throw new Error('Failed to fetch votes');
-      }
-
-      const votesResponse: GetVotesResponse = await votesFetchResult.json();
-      
-      // Set the votes data directly
-      setVotesData(votesResponse?.votes || {});
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to fetch data');
-      setVotesData({});
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const pollVotes = votesData?.[initialPollData?.id || pollId || ''] || { votes: [] };
   const hasVoted = cityInfo?.id ? pollVotes.votes.some(vote => vote.associatedCityId === cityInfo?.id) : false;
