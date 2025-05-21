@@ -148,7 +148,7 @@ const CityRegistration: React.FC = () => {
       const userSessionToken = localStorage.getItem('userSessionToken');
       
       if (!userEmail || !userSessionToken) {
-        throw new Error('You must be logged in to register a city');
+        throw new Error('You must be logged in to submit a city registration request');
       }
 
       const response = await fetch(PERSONAL_AUTH_API_HOST, {
@@ -170,7 +170,7 @@ const CityRegistration: React.FC = () => {
         throw new Error(data.message || data.error || 'Registration failed');
       }
 
-      setSuccess('City registered successfully!');
+      setSuccess('Registration request submitted successfully. After manual verification, the city will be added to the system.');
       
       // Reset form
       setCityName('');
@@ -186,10 +186,10 @@ const CityRegistration: React.FC = () => {
     <Box sx={{ py: 4, px: 2 }}>
       <Paper elevation={3} sx={{ p: 4, maxWidth: 800, mx: 'auto' }}>
         <Typography variant="h4" component="h1" gutterBottom align="center">
-          Register Your City
+          City Registration Request
         </Typography>
         <Typography variant="body1" paragraph align="center" color="text.secondary">
-          Complete this form to register your city with the City Vote platform
+          Complete this form to submit a registration request for your city with the City Vote platform
         </Typography>
         
         {isUserLoggedIn && (
@@ -282,7 +282,7 @@ const CityRegistration: React.FC = () => {
                     </Box>
                   ) : (
                     <Typography variant="body2" color="text.secondary">
-                      Select a city to register. Email info@rixdata.net if a city cannot be found.
+                      Select a city to submit a registration request. Email info@rixdata.net if a city cannot be found.
                     </Typography>
                   )}
                 </Grid>
@@ -299,10 +299,10 @@ const CityRegistration: React.FC = () => {
                     {isSubmitting ? (
                       <>
                         <CircularProgress size={24} sx={{ mr: 1 }} />
-                        Registering...
+                        Submitting...
                       </>
                     ) : (
-                      'Register City'
+                      'Submit Registration Request'
                     )}
                   </Button>
                 </Grid>

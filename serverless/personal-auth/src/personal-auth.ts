@@ -545,7 +545,7 @@ async function validatePhoneToken(phoneNumber: string, token: string): Promise<b
   }
 }
 
-// Handle city registration
+// Handle city registration request
 async function handleCityRegistration(
   email: string,
   sessionToken: string,
@@ -565,7 +565,7 @@ async function handleCityRegistration(
 
     // Check if user's email is verified
     if (!user.emailVerified) {
-      return createErrorResponse(403, 'Please verify your email before registering a city');
+      return createErrorResponse(403, 'Please verify your email before submitting a city registration request');
     }
 
     // Get existing registration data
@@ -596,7 +596,8 @@ async function handleCityRegistration(
       name: cityId, // Using cityId as name temporarily, will be enriched later
       userId: user.userId,
       email: email,
-      registeredAt: new Date().toISOString()
+      registeredAt: new Date().toISOString(),
+      status: 'pending' // Add status to indicate pending verification
     };
 
     // Add the city to the registration data
@@ -605,10 +606,43 @@ async function handleCityRegistration(
     // Update the registration data
     await saveFileToS3(registrationFilePath, registrations);
 
+    // Send email notification to info@rixdata.net
+    try {
+      const params = {
+        Destination: {
+          ToAddresses: [SES_SENDER] // Send to info@rixdata.net
+        },
+        Message: {
+          Body: {
+            Text: {
+              Data: `New city registration request:
+              
+City ID: ${cityId}
+User Email: ${email}
+User ID: ${user.userId}
+Timestamp: ${city.registeredAt}
+
+This registration requires manual verification before the city is added to the system.`
+            }
+          },
+          Subject: {
+            Data: "New City Registration Request"
+          }
+        },
+        Source: SES_SENDER
+      };
+
+      const command = new SendEmailCommand(params);
+      await sesClient.send(command);
+    } catch (emailError) {
+      console.error('Error sending registration notification email:', emailError);
+      // Continue even if email fails - we've already saved to S3
+    }
+
     return {
       statusCode: 200,
       body: JSON.stringify({
-        message: 'City registered successfully',
+        message: 'Registration request submitted successfully. After manual verification, the city will be added to the system.',
         cityId,
         time: new Date()
       } as AuthRegisterCityResponse)
