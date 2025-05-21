@@ -235,7 +235,7 @@ function Polls({ token, cityInfo, votesData: propVotesData, onRefresh }: PollsPr
               cityId: vote.associatedCityId || '',
               timestamp: vote.time || 0,
               option: vote.vote,
-              voteInfo: vote.author,
+              voteInfo: {...vote.author, externalVerificationSource: vote.externalVerificationSource},
               city: vote.organisationNameFallback
             };
           })
