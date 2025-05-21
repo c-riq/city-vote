@@ -1,0 +1,23 @@
+{
+  "name": "city-vote-personal-auth",
+  "version": "1.0.0",
+  "description": "Personal authentication service for City Vote",
+  "main": "dist/personal-auth.js",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "clean": "rm -rf dist",
+    "deploy": "npm run clean && npm run build && ./deploy.sh"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.119",
+    "@types/node": "^20.5.7",
+    "@types/bcryptjs": "^2.4.6",
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.400.0",
+    "@aws-sdk/client-ses": "^3.400.0",
+    "bcryptjs": "^2.4.3"
+  }
+}

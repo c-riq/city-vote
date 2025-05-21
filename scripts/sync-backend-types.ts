@@ -13,7 +13,8 @@ const projectRoot = path.resolve(__dirname, '..');
 const typeFilePaths = [
   path.join(projectRoot, 'serverless/autocomplete/src/types.ts'),
   path.join(projectRoot, 'serverless/public/src/types.ts'),
-  path.join(projectRoot, 'serverless/vote/src/types.ts')
+  path.join(projectRoot, 'serverless/vote/src/types.ts'),
+  path.join(projectRoot, 'serverless/personal-auth/src/types.ts')
 ];
 
 // Path to the output file
