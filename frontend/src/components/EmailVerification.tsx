@@ -86,7 +86,7 @@ const EmailVerification: React.FC = () => {
               </Button>
               <Button
                 variant="outlined"
-                onClick={() => navigate('/')}
+                onClick={() => navigate('/login/user')}
               >
                 Go to Login
               </Button>

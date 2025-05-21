@@ -207,7 +207,7 @@ const CityRegistration: React.FC = () => {
                   <Typography variant="subtitle2">Next Steps:</Typography>
                   <Typography variant="body2" sx={{ mt: 1 }}>
                     Please write a brief email to <strong>info@rixdata.net</strong> to start the verification process.
-                    Include your city name and any additional information that might help verify your city's identity.
+                    Please attach any additional information within that email which may help verify your identity and confirm your authorization to represent the city.
                   </Typography>
                 </Box>
               </Alert>
