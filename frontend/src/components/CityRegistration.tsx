@@ -217,6 +217,9 @@ const CityRegistration: React.FC = () => {
         <Typography variant="body1" paragraph align="center" color="text.secondary">
           Complete this form to register your city with the City Vote platform
         </Typography>
+        <Typography variant="body2" paragraph align="center" color="text.secondary" sx={{ mb: 3 }}>
+          Don't have an account yet? <Button color="primary" size="small" onClick={() => window.location.href = '/register/user'}>Create an account first</Button>
+        </Typography>
 
         {error && (
           <Alert severity="error" sx={{ mb: 3 }}>

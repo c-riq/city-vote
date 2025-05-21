@@ -189,7 +189,7 @@ function Header({ cityInfo, onLogout, onCreatePoll }: HeaderProps) {
               <ListItemText primary="Polls" />
             </ListItem>
             <ListItem button onClick={() => {
-              navigate('/register');
+              navigate('/register/user');
               setDrawerOpen(false);
             }}>
               <ListItemIcon>
@@ -363,7 +363,7 @@ function Header({ cityInfo, onLogout, onCreatePoll }: HeaderProps) {
             <Typography 
               variant="body2" 
               component="div"
-              onClick={() => navigate('/register')}
+              onClick={() => navigate('/register/user')}
               sx={{ 
                 color: 'text.secondary',
                 textDecoration: 'none',

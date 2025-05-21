@@ -100,11 +100,11 @@ async function sendVerificationEmail(email: string, verificationToken: string): 
         Text: {
           Data: `Please verify your email by clicking this link: ${verificationLink}
 
-Thank you for registering with City Vote!`
+Thank you for registering with city-vote.com!`
         }
       },
       Subject: {
-        Data: "Verify your email address"
+        Data: "Verify your city-vote.com account"
       }
     },
     Source: SES_SENDER

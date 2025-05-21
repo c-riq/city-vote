@@ -4,6 +4,7 @@ import Poll from './Poll';
 import Polls from './Polls';
 import CityInfoBox from './CityInfoBox';
 import CityRegistration from './CityRegistration';
+import UserRegistration from './UserRegistration';
 import CityProfile from './CityProfile';
 import CityNetworkProfile from './CityNetworkProfile';
 import LoginForm from './LoginForm';
@@ -36,7 +37,9 @@ function AppRoutes({
 }: AppRoutesProps) {
   return (
     <Routes>
-      <Route path="/register" element={<CityRegistration />} />
+      <Route path="/register" element={<UserRegistration />} />
+      <Route path="/register/user" element={<UserRegistration />} />
+      <Route path="/register/city" element={<CityRegistration />} />
       <Route path="/polls" element={
         <Polls 
           token={token}
