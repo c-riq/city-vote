@@ -205,7 +205,7 @@ function Poll({ token, pollData: initialPollData, onVoteComplete, votesData: pro
   };
 
   const pollVotes = votesData?.[initialPollData?.id || pollId || ''] || { votes: [] };
-  const hasVoted = cityInfo?.id ? pollVotes.votes.some(vote => vote.associatedCity === cityInfo?.id) : false;
+  const hasVoted = cityInfo?.id ? pollVotes.votes.some(vote => vote.associatedCityId === cityInfo?.id) : false;
 
   const handleVote = async (option: string) => {
     setVoting(true);
@@ -347,14 +347,14 @@ function Poll({ token, pollData: initialPollData, onVoteComplete, votesData: pro
   const allVotes = pollVotes.votes ? 
     pollVotes.votes.map(vote => {
       return {
-        cityId: vote.associatedCity || '',
+        cityId: vote.associatedCityId || '',
         timestamp: vote.time || 0,
         option: vote.vote,
-        voteInfo: {
-          ...vote.author,
-          externallyVerifiedBy: vote.externalVerificationSource
-        },
-        city: vote.city
+      voteInfo: {
+        ...vote.author,
+        externalVerificationSource: vote.externalVerificationSource
+      },
+        city: vote.organisationNameFallback
       };
     }).sort((a, b) => b.timestamp - a.timestamp) : [];
 

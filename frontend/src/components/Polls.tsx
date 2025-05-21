@@ -232,11 +232,11 @@ function Polls({ token, cityInfo, votesData: propVotesData, onRefresh }: PollsPr
           // Convert the new vote structure to the format expected by VoteList
           const allVotes = pollData.votes.map((vote) => {
             return {
-              cityId: vote.associatedCity || '',
+              cityId: vote.associatedCityId || '',
               timestamp: vote.time || 0,
               option: vote.vote,
               voteInfo: vote.author,
-              city: vote.city
+              city: vote.organisationNameFallback
             };
           })
           .sort((a, b) => b.timestamp - a.timestamp);

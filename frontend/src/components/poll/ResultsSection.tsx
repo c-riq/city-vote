@@ -6,13 +6,14 @@ import { Tooltip } from '@mui/material';
 import countryBorders from '../countryBorders.json';
 import { countries } from '../../countries';
 
+// Use the types from backendTypes.ts
 interface Vote {
   cityId: string;
   timestamp: number;
   option: string;
   city?: string;
   voteInfo: VoteAuthor & {
-    externallyVerifiedBy?: string;
+    externalVerificationSource?: string;
   };
 }
 

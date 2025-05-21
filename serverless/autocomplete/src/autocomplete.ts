@@ -79,6 +79,23 @@ function safeParseJSON(jsonString: string): any {
   }
 }
 
+// Function to safely get a string value from an array element
+function safeGetString(arr: any[], index: number): string | undefined {
+  if (arr[index] !== undefined && arr[index] !== null && typeof arr[index] === 'string' && arr[index] !== '') {
+    return arr[index] as string;
+  }
+  return undefined;
+}
+
+// Function to get the index of a column by its name from the header array
+function getColumnIndex(header: string[], columnName: string): number {
+  const index = header.indexOf(columnName);
+  if (index === -1) {
+    throw new Error(`Column "${columnName}" not found in header`);
+  }
+  return index;
+}
+
 // Function to get the first 2 digits of a QID
 function getQidPrefix(qid: string): string {
   // Remove the 'Q' prefix
@@ -125,13 +142,22 @@ async function findCityByQid(qid: string): Promise<CityData | null> {
   const supersededByIndex = headers.indexOf('superseded_by');
   const supersededDuplicatesIndex = headers.indexOf('supersedes_duplicates');
   
+  // Get column indices from header
+  const countryNameIndex = getColumnIndex(countries.header, "Country");
+  const countryCodeIndex = getColumnIndex(countries.header, "Alpha-2 code");
+  const wikidataIdIndex = getColumnIndex(countries.header, "wikidata id");
+  
   // Create maps for country wikidata IDs to country names and ISO codes
   const countryNameMap = new Map<string, string>();
   const countryCodeMap = new Map<string, string>();
   countries.countries.forEach(country => {
-    if (country[4]) { // Check if wikidata id exists
-      countryNameMap.set(country[4], country[0]);
-      countryCodeMap.set(country[4], country[1]); // Alpha-2 code
+    const wikidataId = safeGetString(country, wikidataIdIndex);
+    const countryName = safeGetString(country, countryNameIndex);
+    const countryCode = safeGetString(country, countryCodeIndex);
+    
+    if (wikidataId && countryName && countryCode) {
+      countryNameMap.set(wikidataId, countryName);
+      countryCodeMap.set(wikidataId, countryCode);
     }
   });
   
@@ -305,13 +331,22 @@ async function searchCities(query: string, limit: number = 10): Promise<CityData
   
   // We already normalized the query at the beginning of the function
   
+  // Get column indices from header
+  const countryNameIndex = getColumnIndex(countries.header, "Country");
+  const countryCodeIndex = getColumnIndex(countries.header, "Alpha-2 code");
+  const wikidataIdIndex = getColumnIndex(countries.header, "wikidata id");
+  
   // Create maps for country wikidata IDs to country names and ISO codes
   const countryNameMap = new Map<string, string>();
   const countryCodeMap = new Map<string, string>();
   countries.countries.forEach(country => {
-    if (country[4]) { // Check if wikidata id exists
-      countryNameMap.set(country[4], country[0]);
-      countryCodeMap.set(country[4], country[1]); // Alpha-2 code
+    const wikidataId = safeGetString(country, wikidataIdIndex);
+    const countryName = safeGetString(country, countryNameIndex);
+    const countryCode = safeGetString(country, countryCodeIndex);
+    
+    if (wikidataId && countryName && countryCode) {
+      countryNameMap.set(wikidataId, countryName);
+      countryCodeMap.set(wikidataId, countryCode);
     }
   });
   

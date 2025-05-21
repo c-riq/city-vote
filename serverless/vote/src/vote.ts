@@ -148,7 +148,7 @@ interface VoteParams {
     title: string;
     name: string;
     actingCapacity: 'individual' | 'representingCityAdministration';
-    externallyVerifiedBy?: string; // Platform that verified this vote
+    externalVerificationSource?: string; // Platform that verified this vote
 }
 
 interface CreatePollParams {
@@ -185,7 +185,7 @@ const handleValidateToken = async ({ resolvedCity }: ValidateTokenParams): Promi
     };
 };
 
-const handleVote = async ({ cityId, resolvedCity, pollId, option, title, name, actingCapacity, externallyVerifiedBy }: VoteParams): Promise<APIGatewayProxyResult> => {
+const handleVote = async ({ cityId, resolvedCity, pollId, option, title, name, actingCapacity, externalVerificationSource }: VoteParams): Promise<APIGatewayProxyResult> => {
     if (!pollId || option === undefined || !title || !name || !actingCapacity) {
         return {
             statusCode: 400,
@@ -272,8 +272,8 @@ const handleVote = async ({ cityId, resolvedCity, pollId, option, title, name, a
                 name,
                 actingCapacity
             },
-            associatedCity: resolvedCity.id,
-            ...(externallyVerifiedBy ? { externalVerificationSource: externallyVerifiedBy } : {})
+            associatedCityId: resolvedCity.id,
+            ...(externalVerificationSource ? { externalVerificationSource: externalVerificationSource } : {})
         };
         
         // Add the vote to the poll's votes array
@@ -660,7 +660,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
             };
         }
 
-        const { action, cityId, token, pollId, option, title, name, actingCapacity, externallyVerifiedBy, documentUrl, organisedBy } = JSON.parse(event.body);
+        const { action, cityId, token, pollId, option, title, name, actingCapacity, externalVerificationSource, documentUrl, organisedBy } = JSON.parse(event.body);
         
         if (!action) {
             return {
@@ -750,7 +750,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
         if (action === 'createPoll') {
             return await handler({ resolvedCity, token, pollId, documentUrl, organisedBy } as any);
         } else {
-            return await handler({ cityId, resolvedCity, token, pollId, option, title, name, actingCapacity, externallyVerifiedBy } as any);
+            return await handler({ cityId, resolvedCity, token, pollId, option, title, name, actingCapacity, externalVerificationSource } as any);
         }
     } catch (error) {
         console.error('Error:', error);

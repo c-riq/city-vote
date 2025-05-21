@@ -140,8 +140,8 @@ export interface VoteEntry {
     time?: number;
     vote: 'Yes' | 'No' | 'Sign';
     author: VoteAuthor;
-    associatedCity?: string; // wikidataId
-    city?: string;
+    associatedCityId?: string; // wikidataId
+    organisationNameFallback?: string;
     externalVerificationSource?: string; // URL
 }
 

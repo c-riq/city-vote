@@ -49,7 +49,7 @@ const handleGetPublicVotes = async (cityId?: string): Promise<APIGatewayProxyRes
             Object.entries(votes).forEach(([pollId, pollData]: [string, any]) => {
                 if (pollData.votes) {
                     // Filter votes array to only include votes from the specified city
-                    const cityVotes = pollData.votes.filter((vote: any) => vote.associatedCity === cityId);
+                    const cityVotes = pollData.votes.filter((vote: any) => vote.associatedCityId === cityId);
                     
                     if (cityVotes.length > 0) {
                         // Create a copy of the poll data with only the filtered votes

@@ -306,7 +306,7 @@ const CityRegistration: React.FC = () => {
                 </Box>
               ) : (
                 <Typography variant="body2" color="text.secondary">
-                  Select a city to display its Wikidata ID
+                  Select a city to register. Email info@rixdata.net if a city cannot be found.
                 </Typography>
               )}
             </Grid>

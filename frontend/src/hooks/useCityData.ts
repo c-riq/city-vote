@@ -47,8 +47,8 @@ export const useCityData = (votesData: VoteData = {}) => {
       
       Object.values(votesData).forEach(pollData => {
         pollData.votes.forEach(vote => {
-          if (vote.associatedCity) {
-            allCityIds.push(vote.associatedCity);
+          if (vote.associatedCityId) {
+            allCityIds.push(vote.associatedCityId);
           }
         });
       });
