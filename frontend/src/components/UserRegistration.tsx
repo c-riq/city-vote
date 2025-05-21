@@ -44,6 +44,24 @@ const UserRegistration: React.FC = () => {
       return false;
     }
 
+    const hasUppercase = /[A-Z]/.test(password);
+    if (!hasUppercase) {
+      setError('Password must contain at least one uppercase letter');
+      return false;
+    }
+
+    const hasLowercase = /[a-z]/.test(password);
+    if (!hasLowercase) {
+      setError('Password must contain at least one lowercase letter');
+      return false;
+    }
+
+    const hasNumber = /[0-9]/.test(password);
+    if (!hasNumber) {
+      setError('Password must contain at least one number');
+      return false;
+    }
+
     if (password !== confirmPassword) {
       setError('Passwords do not match');
       return false;

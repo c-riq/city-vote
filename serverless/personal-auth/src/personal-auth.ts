@@ -336,12 +336,46 @@ async function handleLogin(email: string, password: string): Promise<APIGatewayP
   }
 }
 
+// Validate password strength
+function validatePassword(password: string): { isValid: boolean; message?: string } {
+  if (!password) {
+    return { isValid: false, message: 'Password is required' };
+  }
+
+  if (password.length < 8) {
+    return { isValid: false, message: 'Password must be at least 8 characters long' };
+  }
+
+  const hasUppercase = /[A-Z]/.test(password);
+  if (!hasUppercase) {
+    return { isValid: false, message: 'Password must contain at least one uppercase letter' };
+  }
+
+  const hasLowercase = /[a-z]/.test(password);
+  if (!hasLowercase) {
+    return { isValid: false, message: 'Password must contain at least one lowercase letter' };
+  }
+
+  const hasNumber = /[0-9]/.test(password);
+  if (!hasNumber) {
+    return { isValid: false, message: 'Password must contain at least one number' };
+  }
+
+  return { isValid: true };
+}
+
 // Handle signup
 async function handleSignup(email: string, password: string): Promise<APIGatewayProxyResult> {
   const partition = email.charAt(0).toLowerCase();
   const userFilePath = `${USERS_PATH}/${partition}/users.json`;
 
   try {
+    // Validate password strength
+    const passwordValidation = validatePassword(password);
+    if (!passwordValidation.isValid) {
+      return createErrorResponse(400, passwordValidation.message || 'Invalid password');
+    }
+
     const users = await fetchFileFromS3(userFilePath);
 
     if (users[email]) {
