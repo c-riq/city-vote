@@ -14,7 +14,8 @@ import {
   AuthSignupResponse,
   AuthUpdateSettingsResponse,
   AuthUpdatePhoneVerificationResponse,
-  AuthErrorResponse
+  AuthErrorResponse,
+  AuthRegisterCityResponse
 } from './types';
 
 const s3Client = new S3Client({ region: 'us-east-1' });
@@ -544,6 +545,80 @@ async function validatePhoneToken(phoneNumber: string, token: string): Promise<b
   }
 }
 
+// Handle city registration
+async function handleCityRegistration(
+  email: string,
+  sessionToken: string,
+  cityId: string
+): Promise<APIGatewayProxyResult> {
+  const partition = email.charAt(0).toLowerCase();
+  const userFilePath = `${USERS_PATH}/${partition}/users.json`;
+  const registrationFilePath = 'registration/registration.json';
+
+  try {
+    // Validate session token
+    const { isValid, user } = await validateSessionToken(email, sessionToken);
+    
+    if (!isValid || !user) {
+      return createErrorResponse(401, 'Invalid or expired session');
+    }
+
+    // Check if user's email is verified
+    if (!user.emailVerified) {
+      return createErrorResponse(403, 'Please verify your email before registering a city');
+    }
+
+    // Get existing registration data
+    let registrations: Record<string, any> = {};
+    try {
+      const registrationData = await s3Client.send(new GetObjectCommand({
+        Bucket: BUCKET_NAME,
+        Key: registrationFilePath
+      }));
+
+      if (registrationData.Body) {
+        const registrationString = await streamToString(registrationData.Body as Readable);
+        registrations = JSON.parse(registrationString);
+      }
+    } catch (error) {
+      console.error('Error getting registration data:', error);
+      // If the file doesn't exist yet, we'll create it
+    }
+
+    // Check if city with same ID already exists in registration.json
+    if (registrations[cityId]) {
+      return createErrorResponse(409, `City with ID "${cityId}" already exists in registration data`);
+    }
+
+    // Create city registration with user ID
+    const city = {
+      id: cityId,
+      name: cityId, // Using cityId as name temporarily, will be enriched later
+      userId: user.userId,
+      email: email,
+      registeredAt: new Date().toISOString()
+    };
+
+    // Add the city to the registration data
+    registrations[cityId] = city;
+
+    // Update the registration data
+    await saveFileToS3(registrationFilePath, registrations);
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify({
+        message: 'City registered successfully',
+        cityId,
+        time: new Date()
+      } as AuthRegisterCityResponse)
+    };
+  } catch (error) {
+    console.error('City registration error:', error);
+    return createErrorResponse(500, 'Internal server error');
+  }
+}
+
 // Handle phone verification
 async function handlePhoneVerification(
   email: string, 
@@ -757,6 +832,24 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
       }
       
       return handlePhoneVerification(phoneEmail, phoneToken, phoneData);
+      
+    case 'registerCity':
+      const { email: cityEmail, cityId } = requestData;
+      const cityToken = extractSessionToken(event.headers);
+      
+      if (!cityEmail || !cityToken) {
+        return createErrorResponse(401, 'Missing email or session token');
+      }
+      
+      if (!cityId) {
+        return createErrorResponse(400, 'Missing cityId');
+      }
+      
+      if (!emailRegex.test(cityEmail)) {
+        return createErrorResponse(400, 'Invalid email format');
+      }
+      
+      return handleCityRegistration(cityEmail, cityToken, cityId);
 
     default:
       return createErrorResponse(400, 'Invalid action');

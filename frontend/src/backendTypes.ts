@@ -387,4 +387,14 @@ export interface AuthErrorResponse extends AuthBaseResponse {
   details?: string;
 }
 
+// City registration types
+export interface AuthRegisterCityRequest extends AuthBaseRequest {
+  action: 'registerCity';
+  cityId: string;
+}
+
+export interface AuthRegisterCityResponse extends AuthBaseResponse {
+  cityId: string;
+}
+
 

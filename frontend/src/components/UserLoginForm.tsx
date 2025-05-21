@@ -86,6 +86,12 @@ const UserLoginForm: React.FC<UserLoginFormProps> = ({ onLoginSuccess }) => {
         onLoginSuccess(data.sessionToken, data.userId);
       }
       
+      // Trigger a custom event to notify the header component
+      const loginEvent = new CustomEvent('userLogin', { 
+        detail: { email, userId: data.userId }
+      });
+      window.dispatchEvent(loginEvent);
+      
       // Redirect to home page or dashboard
       navigate('/');
     } catch (err) {

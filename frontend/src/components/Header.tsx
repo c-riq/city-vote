@@ -55,7 +55,50 @@ function Header({ cityInfo, onLogout, onCreatePoll }: HeaderProps) {
   const [options, setOptions] = useState<CityAutocompleteResult[]>([]);
   const [loading, setLoading] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [userEmail, setUserEmail] = useState<string | null>(null);
   const autocompleteTimeoutRef = useRef<number | null>(null);
+  
+  // Check if user is logged in and listen for login/logout events
+  useEffect(() => {
+    // Check localStorage for existing session
+    const storedEmail = localStorage.getItem('userEmail');
+    if (storedEmail) {
+      setUserEmail(storedEmail);
+    }
+    
+    // Listen for login events
+    const handleUserLogin = (event: Event) => {
+      const customEvent = event as CustomEvent<{email: string, userId: string}>;
+      setUserEmail(customEvent.detail.email);
+    };
+    
+    // Listen for logout events
+    const handleUserLogout = () => {
+      setUserEmail(null);
+    };
+    
+    window.addEventListener('userLogin', handleUserLogin);
+    window.addEventListener('userLogout', handleUserLogout);
+    
+    return () => {
+      window.removeEventListener('userLogin', handleUserLogin);
+      window.removeEventListener('userLogout', handleUserLogout);
+    };
+  }, []);
+  
+  // Handle user logout
+  const handleUserLogout = () => {
+    localStorage.removeItem('userSessionToken');
+    localStorage.removeItem('userEmail');
+    localStorage.removeItem('userId');
+    setUserEmail(null);
+    
+    // Dispatch logout event
+    const logoutEvent = new CustomEvent('userLogout');
+    window.dispatchEvent(logoutEvent);
+    
+    navigate('/login/user');
+  };
   
   const toggleDrawer = (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
     if (
@@ -189,13 +232,13 @@ function Header({ cityInfo, onLogout, onCreatePoll }: HeaderProps) {
               <ListItemText primary="Polls" />
             </ListItem>
             <ListItem button onClick={() => {
-              navigate('/register/user');
+              navigate('/register/city');
               setDrawerOpen(false);
             }}>
               <ListItemIcon>
                 <AppRegistrationIcon />
               </ListItemIcon>
-              <ListItemText primary="Register" />
+              <ListItemText primary="Register City" />
             </ListItem>
           </List>
           <Divider />
@@ -247,6 +290,17 @@ function Header({ cityInfo, onLogout, onCreatePoll }: HeaderProps) {
                 Create Poll
               </Button>
             )}
+            {userEmail && !cityInfo && (
+              <Box sx={{ mb: 2, px: 2 }}>
+                <Typography variant="body2" color="text.secondary">
+                  Logged in as:
+                </Typography>
+                <Typography variant="body1" fontWeight="medium">
+                  {userEmail}
+                </Typography>
+              </Box>
+            )}
+            
             <Button
               variant="outlined"
               color="primary"
@@ -254,14 +308,16 @@ function Header({ cityInfo, onLogout, onCreatePoll }: HeaderProps) {
               onClick={() => {
                 if (cityInfo) {
                   onLogout();
+                } else if (userEmail) {
+                  handleUserLogout();
                 } else {
                   navigate('/login/user');
                 }
                 setDrawerOpen(false);
               }}
-              startIcon={cityInfo ? <LogoutIcon /> : <LoginIcon />}
+              startIcon={cityInfo || userEmail ? <LogoutIcon /> : <LoginIcon />}
             >
-              {cityInfo ? 'Logout' : 'Login'}
+              {cityInfo || userEmail ? 'Logout' : 'Login'}
             </Button>
           </Box>
         </Box>
@@ -363,7 +419,7 @@ function Header({ cityInfo, onLogout, onCreatePoll }: HeaderProps) {
             <Typography 
               variant="body2" 
               component="div"
-              onClick={() => navigate('/register/user')}
+              onClick={() => navigate('/register/city')}
               sx={{ 
                 color: 'text.secondary',
                 textDecoration: 'none',
@@ -376,7 +432,7 @@ function Header({ cityInfo, onLogout, onCreatePoll }: HeaderProps) {
                 }
               }}
             >
-              Register
+              Register City
             </Typography>
           </Box>
         </Box>
@@ -422,6 +478,7 @@ function Header({ cityInfo, onLogout, onCreatePoll }: HeaderProps) {
               />
             )}
           />
+          {/* User is logged in with city */}
           {cityInfo ? (
             <>
               <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'right', mr: 2 }}>
@@ -448,7 +505,25 @@ function Header({ cityInfo, onLogout, onCreatePoll }: HeaderProps) {
                 <LogoutIcon />
               </IconButton>
             </>
+          ) : userEmail ? (
+            /* User is logged in without city */
+            <>
+              <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'right', mr: 2 }}>
+                <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
+                  {userEmail}
+                </Typography>
+              </Box>
+              
+              <IconButton 
+                onClick={handleUserLogout}
+                color="inherit"
+                title="Logout"
+              >
+                <LogoutIcon />
+              </IconButton>
+            </>
           ) : (
+            /* User is not logged in */
             <IconButton 
               onClick={() => navigate('/login/user')}
               color="inherit"
