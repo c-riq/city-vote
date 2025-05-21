@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Box,
   Button,
@@ -10,17 +11,21 @@ import {
   CircularProgress,
   InputAdornment,
   IconButton,
+  Divider,
 } from '@mui/material';
 import { PERSONAL_AUTH_API_HOST } from '../constants';
 
-const UserRegistration: React.FC = () => {
+interface UserLoginFormProps {
+  onLoginSuccess?: (sessionToken: string, userId: string) => void;
+}
+
+const UserLoginForm: React.FC<UserLoginFormProps> = ({ onLoginSuccess }) => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
 
   const validateForm = (): boolean => {
     if (!email.trim()) {
@@ -39,23 +44,12 @@ const UserRegistration: React.FC = () => {
       return false;
     }
 
-    if (password.length < 8) {
-      setError('Password must be at least 8 characters long');
-      return false;
-    }
-
-    if (password !== confirmPassword) {
-      setError('Passwords do not match');
-      return false;
-    }
-
     return true;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    setSuccess('');
 
     if (!validateForm()) {
       return;
@@ -70,7 +64,7 @@ const UserRegistration: React.FC = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          action: 'signup',
+          action: 'login',
           email,
           password
         })
@@ -79,17 +73,23 @@ const UserRegistration: React.FC = () => {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || data.details || 'Registration failed');
+        throw new Error(data.message || data.details || 'Login failed');
       }
 
-      setSuccess('Account created successfully! Please check your email to verify your account.');
+      // Store the session token in localStorage
+      localStorage.setItem('userSessionToken', data.sessionToken);
+      localStorage.setItem('userEmail', email);
+      localStorage.setItem('userId', data.userId);
       
-      // Reset form
-      setEmail('');
-      setPassword('');
-      setConfirmPassword('');
+      // Call the onLoginSuccess callback if provided
+      if (onLoginSuccess) {
+        onLoginSuccess(data.sessionToken, data.userId);
+      }
+      
+      // Redirect to home page or dashboard
+      navigate('/');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Registration failed');
+      setError(err instanceof Error ? err.message : 'Login failed');
     } finally {
       setIsSubmitting(false);
     }
@@ -103,30 +103,15 @@ const UserRegistration: React.FC = () => {
     <Box sx={{ py: 4, px: 2 }}>
       <Paper elevation={3} sx={{ p: 4, maxWidth: 500, mx: 'auto' }}>
         <Typography variant="h4" component="h1" gutterBottom align="center">
-          Create an Account
+          User Login
         </Typography>
         <Typography variant="body1" paragraph align="center" color="text.secondary">
-          Register to access the City Vote platform
-        </Typography>
-        <Typography variant="body2" paragraph align="center" color="text.secondary" sx={{ mb: 3 }}>
-          Already have an account? <Button color="primary" size="small" onClick={() => window.location.href = '/login/user'}>Sign in</Button>
+          Sign in to your City Vote account
         </Typography>
 
         {error && (
           <Alert severity="error" sx={{ mb: 3 }}>
             {error}
-          </Alert>
-        )}
-
-        {success && (
-          <Alert severity="success" sx={{ mb: 3 }}>
-            {success}
-            <Box sx={{ mt: 2 }}>
-              <Typography variant="subtitle2">Next Steps:</Typography>
-              <Typography variant="body2" sx={{ mt: 1 }}>
-                Once you've verified your email, you can <Button color="primary" size="small" onClick={() => window.location.href = '/register/city'}>register your city</Button>.
-              </Typography>
-            </Box>
           </Alert>
         )}
 
@@ -173,19 +158,6 @@ const UserRegistration: React.FC = () => {
               />
             </Grid>
 
-            <Grid item xs={12}>
-              <TextField
-                label="Confirm Password"
-                type={showPassword ? 'text' : 'password'}
-                fullWidth
-                required
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                disabled={isSubmitting}
-                autoComplete="new-password"
-              />
-            </Grid>
-
             <Grid item xs={12} sx={{ mt: 2 }}>
               <Button
                 type="submit"
@@ -198,18 +170,33 @@ const UserRegistration: React.FC = () => {
                 {isSubmitting ? (
                   <>
                     <CircularProgress size={24} sx={{ mr: 1 }} />
-                    Creating Account...
+                    Signing In...
                   </>
                 ) : (
-                  'Create Account'
+                  'Sign In'
                 )}
               </Button>
             </Grid>
           </Grid>
         </form>
+
+        <Divider sx={{ my: 3 }} />
+        
+        <Box sx={{ textAlign: 'center' }}>
+          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+            Don't have an account yet?
+          </Typography>
+          <Button
+            variant="outlined"
+            onClick={() => navigate('/register/user')}
+            sx={{ minWidth: 200 }}
+          >
+            Create Account
+          </Button>
+        </Box>
       </Paper>
     </Box>
   );
 };
 
-export default UserRegistration;
+export default UserLoginForm;

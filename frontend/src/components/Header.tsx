@@ -255,7 +255,7 @@ function Header({ cityInfo, onLogout, onCreatePoll }: HeaderProps) {
                 if (cityInfo) {
                   onLogout();
                 } else {
-                  navigate('/');
+                  navigate('/login/user');
                 }
                 setDrawerOpen(false);
               }}
@@ -450,7 +450,7 @@ function Header({ cityInfo, onLogout, onCreatePoll }: HeaderProps) {
             </>
           ) : (
             <IconButton 
-              onClick={() => navigate('/')}
+              onClick={() => navigate('/login/user')}
               color="inherit"
               title="Login"
             >
