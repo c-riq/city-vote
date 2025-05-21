@@ -1,42 +1,40 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { 
   Box,
   Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Divider,
-  FormControl,
-  FormControlLabel,
-  Radio,
-  RadioGroup,
-  TextField,
   Typography,
   CircularProgress
 } from '@mui/material';
-import { VOTE_HOST, PUBLIC_API_HOST } from '../constants';
-import VoteList from './VoteList';
+import { VOTE_HOST, PUBLIC_API_HOST, PUBLIC_DATA_BUCKET_URL } from '../constants';
+import useCityData from '../hooks/useCityData';
 import {
   City,
   VoteData,
   VoteRequest,
-  GetVotesResponse,
-  GetCitiesResponse
+  GetVotesResponse
 } from '../backendTypes';
+import { getDisplayTitle, isJointStatement } from '../utils/pollFormat';
+import PollHeader from './poll/PollHeader';
+import PollAttachment from './poll/PollAttachment';
+import VoteForm from './poll/VoteForm';
+import VoteButtons from './poll/VoteButtons';
+import ResultsSection from './poll/ResultsSection';
+import ConfirmVoteDialog from './poll/ConfirmVoteDialog';
 
 interface PollProps {
   token?: string;
   cityInfo?: City;
-  pollData?: any;
+  pollData?: {
+    id: string;
+    title: string;
+    options?: string[];
+  };
   onVoteComplete?: () => void;
   votesData?: VoteData;
-  cities?: Record<string, City>;
-  theme?: any;
 }
 
-function Poll({ token, pollData, onVoteComplete, votesData: propVotesData, cities: propCities, cityInfo }: PollProps) {
+function Poll({ token, pollData: initialPollData, onVoteComplete, votesData: propVotesData, cityInfo }: PollProps) {
   const navigate = useNavigate();
   const { pollId } = useParams();
   const [error, setError] = useState('');
@@ -49,59 +47,94 @@ function Poll({ token, pollData, onVoteComplete, votesData: propVotesData, citie
   });
   const [isLoading, setIsLoading] = useState(false);
   const [votesData, setVotesData] = useState<VoteData>(propVotesData || {});
-  const [cities, setCities] = useState<Record<string, City>>(propCities || {});
   const [isAuthenticated] = useState(!!token && !!cityInfo);
+  const [attachmentUrl, setAttachmentUrl] = useState<string | null>(null);
+  
+  // Use the city data hook to manage cities
+  const { 
+    cities, 
+    fetchAllCities, 
+    isLoading: isCitiesLoading, 
+    error: cityError 
+  } = useCityData(votesData);
 
-  // Fetch data if not provided as props (unauthenticated mode)
-  useEffect(() => {
-    if (!isAuthenticated && pollId) {
-      fetchData();
-    }
-  }, [pollId, isAuthenticated]);
-
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     setError('');
     setIsLoading(true);
     
     try {
-      // Fetch cities data
-      const citiesResponse = await fetch(`${PUBLIC_API_HOST}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'getCities' })
-      });
-
-      if (!citiesResponse.ok) {
-        throw new Error('Failed to fetch cities');
-      }
-
-      const citiesData: GetCitiesResponse = await citiesResponse.json();
-      setCities(citiesData.cities);
+      // Fetch cities data using the hook
+      await fetchAllCities();
 
       // Fetch votes data
-      const votesResponse = await fetch(`${PUBLIC_API_HOST}`, {
+      const votesFetchResult = await fetch(`${PUBLIC_API_HOST}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'getVotes' })
       });
 
-      if (!votesResponse.ok) {
+      if (!votesFetchResult.ok) {
         throw new Error('Failed to fetch votes');
       }
 
-      const votesData: GetVotesResponse = await votesResponse.json();
-      setVotesData(votesData?.votes || {});
+      const votesResponse: GetVotesResponse = await votesFetchResult.json();
+      
+      // Set the votes data directly
+      setVotesData(votesResponse?.votes || {});
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch data');
       setVotesData({});
-      setCities({});
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [fetchAllCities]);
 
-  const pollVotes = votesData?.[pollData?.id || pollId] || {};
-  const hasVoted = cityInfo?.id ? pollVotes[cityInfo?.id]?.length > 0 : false;
+  // Fetch data if not provided as props (unauthenticated mode)
+  useEffect(() => {
+    // Only fetch data if we have a poll ID, don't have votes data from props,
+    // and we're not already loading data
+    if (pollId && !propVotesData && !isLoading) {
+      fetchData();
+    }
+  }, [pollId, propVotesData, isLoading, fetchData]);
+
+  // Update local state when props change (after a vote is submitted and parent fetches new data)
+  useEffect(() => {
+    if (propVotesData) {
+      setVotesData(propVotesData);
+    }
+  }, [propVotesData]);
+  
+  // Update error state if city error occurs
+  useEffect(() => {
+    if (cityError) {
+      setError(cityError);
+    }
+  }, [cityError]);
+
+  // Set attachment URL when poll ID is available
+  useEffect(() => {
+    if (pollId || initialPollData?.id) {
+      const question = initialPollData?.id || decodeURIComponent(pollId || '');
+      
+      // If the poll ID contains a hash, we can construct the direct URL
+      if (question.includes('_attachment_')) {
+        const hash = question.split('_attachment_')[1];
+        const directUrl = `${PUBLIC_DATA_BUCKET_URL}/attachments/${hash}.pdf`;
+        setAttachmentUrl(directUrl);
+      } else {
+        setAttachmentUrl(null);
+      }
+    }
+  }, [pollId, initialPollData]);
+  
+  // Check if this is a joint statement poll
+  const currentPollId = initialPollData?.id || (pollId ? decodeURIComponent(pollId) : '');
+  const isJointStatementPoll = isJointStatement(currentPollId);
+
+
+  const pollVotes = votesData?.[initialPollData?.id || pollId || ''] || { votes: [] };
+  const hasVoted = cityInfo?.id ? pollVotes.votes.some(vote => vote.associatedCityId === cityInfo?.id) : false;
 
   const handleVote = async (option: string) => {
     setVoting(true);
@@ -114,7 +147,7 @@ function Poll({ token, pollData, onVoteComplete, votesData: propVotesData, citie
       const voteRequest: VoteRequest = {
         action: 'vote',
         token,
-        pollId: pollData?.id || pollId || '',
+        pollId: initialPollData?.id || pollId || '',
         option,
         title: personalInfo.title,
         name: personalInfo.name,
@@ -135,6 +168,8 @@ function Poll({ token, pollData, onVoteComplete, votesData: propVotesData, citie
         throw new Error(data.message || 'Failed to submit vote');
       }
 
+      // Call the parent's callback which will fetch updated data
+      // The useEffect hook will update local state when props change
       onVoteComplete?.();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to submit vote');
@@ -154,7 +189,7 @@ function Poll({ token, pollData, onVoteComplete, votesData: propVotesData, citie
     await handleVote(confirmDialog.option);
   };
 
-  if (isLoading) {
+  if (isLoading || isCitiesLoading) {
     return (
       <Box
         sx={{
@@ -205,7 +240,7 @@ function Poll({ token, pollData, onVoteComplete, votesData: propVotesData, citie
     );
   }
 
-  if (!pollId && !pollData) {
+  if (!pollId && !initialPollData) {
     return (
       <Box
         sx={{
@@ -238,22 +273,32 @@ function Poll({ token, pollData, onVoteComplete, votesData: propVotesData, citie
   }
 
   // Count votes by option for the results section
-  const allVotes = Object.entries(pollVotes)
-    .flatMap(([cityId, votes]) => 
-      votes.map(([timestamp, option, voteInfo]) => ({
-        cityId,
-        timestamp,
-        option,
-        voteInfo
-      }))
-    )
-    .sort((a, b) => b.timestamp - a.timestamp);
+  const allVotes = pollVotes.votes ? 
+    pollVotes.votes.map(vote => {
+      return {
+        cityId: vote.associatedCityId || '',
+        timestamp: vote.time || 0,
+        option: vote.vote,
+      voteInfo: {
+        ...vote.author,
+        externalVerificationSource: vote.externalVerificationSource
+      },
+        city: vote.organisationNameFallback
+      };
+    }).sort((a, b) => b.timestamp - a.timestamp) : [];
 
   // Count votes by option
   const votesByOption: Record<string, number> = {};
   allVotes.forEach(vote => {
     votesByOption[vote.option] = (votesByOption[vote.option] || 0) + 1;
   });
+
+  // Get the display title
+  const displayTitle = getDisplayTitle(initialPollData?.title || decodeURIComponent(pollId || ''));
+
+  // Get organised by and document URL from poll data
+  const organisedBy = pollVotes?.organisedBy || null;
+  const documentUrl = pollVotes?.URL || null;
 
   return (
     <Box sx={{ 
@@ -301,202 +346,54 @@ function Poll({ token, pollData, onVoteComplete, votesData: propVotesData, citie
           boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
           p: 4
         }}>
-          <Typography 
-            variant="h4" 
-            sx={{ 
-              mb: 4,
-              color: 'primary.main',
-              textAlign: 'center',
-              fontWeight: 600
-            }}
-          >
-            {pollData?.title || decodeURIComponent(pollId || '')}
-          </Typography>
+          <PollHeader 
+            title={displayTitle}
+            isJointStatement={isJointStatementPoll}
+            organisedBy={organisedBy}
+            documentUrl={documentUrl}
+          />
+          
+          {attachmentUrl && (
+            <PollAttachment attachmentUrl={attachmentUrl} />
+          )}
 
-          {isAuthenticated && (
+          {isAuthenticated && cityInfo && (
             <>
-              <Box sx={{ mb: 4, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <Typography variant="subtitle1" sx={{ mb: 2 }}>Vote as:</Typography>
-                <FormControl>
-                  <RadioGroup
-                    value={isPersonal ? 'personal' : 'city'}
-                    onChange={(e) => setIsPersonal(e.target.value === 'personal')}
-                    sx={{ mb: 2 }}
-                  >
-                    <FormControlLabel 
-                      value="city" 
-                      control={<Radio />} 
-                      label={<>On behalf of the City Administration of <strong>{cityInfo?.name}</strong></>}
-                    />
-                    <FormControlLabel 
-                      value="personal"
-                      control={<Radio />} 
-                      label={<>As a <strong>person</strong> expressing their own opinion</>}
-                    />
-                  </RadioGroup>
-                </FormControl>
+              <VoteForm 
+                cityInfo={cityInfo}
+                isPersonal={isPersonal}
+                setIsPersonal={setIsPersonal}
+                personalInfo={personalInfo}
+                setPersonalInfo={setPersonalInfo}
+              />
 
-                <Box sx={{ mt: 3, width: '100%', maxWidth: 400 }}>
-                  <TextField
-                    fullWidth
-                    required
-                    label="Title"
-                    value={personalInfo.title}
-                    onChange={(e) => setPersonalInfo(prev => ({ ...prev, title: e.target.value }))}
-                    margin="normal"
-                    size="small"
-                  />
-                  <TextField
-                    fullWidth
-                    required
-                    label="Name"
-                    value={personalInfo.name}
-                    onChange={(e) => setPersonalInfo(prev => ({ ...prev, name: e.target.value }))}
-                    margin="normal"
-                    size="small"
-                  />
-                </Box>
-              </Box>
-
-              <Box sx={{ 
-                display: 'flex', 
-                gap: 2, 
-                flexDirection: 'column', 
-                mb: 6,
-                maxWidth: 400,
-                mx: 'auto'
-              }}>
-                {(pollData?.options || ['Yes', 'No']).map((option: string, index: number) => (
-                  <Button
-                    key={index}
-                    variant="contained"
-                    onClick={() => handleVoteClick(option)}
-                    disabled={voting || !personalInfo.title || !personalInfo.name}
-                    sx={{
-                      py: 1.5,
-                      fontSize: '1.1rem',
-                      backgroundColor: index === 0 ? 'primary.main' : 'primary.light',
-                      '&:hover': {
-                        backgroundColor: index === 0 ? 'primary.dark' : 'primary.main',
-                      }
-                    }}
-                  >
-                    {option}
-                  </Button>
-                ))}
-              </Box>
+              <VoteButtons 
+                isJointStatement={isJointStatementPoll}
+                options={initialPollData?.options || ['Yes', 'No']}
+                onVote={handleVoteClick}
+                disabled={voting || !personalInfo.title || !personalInfo.name}
+              />
             </>
           )}
 
-          {/* Results section */}
-          <Box sx={{ 
-            mb: 4, 
-            display: 'flex', 
-            flexDirection: 'column', 
-            alignItems: 'center',
-            gap: 2
-          }}>
-            <Typography variant="h6" sx={{ mb: 2 }}>Results</Typography>
-            
-            {Object.entries(votesByOption).length > 0 ? (
-              Object.entries(votesByOption).map(([option, count]) => (
-                <Box 
-                  key={option}
-                  sx={{
-                    width: '100%',
-                    maxWidth: 400,
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    p: 2,
-                    borderRadius: 2,
-                    bgcolor: 'background.default'
-                  }}
-                >
-                  <Typography variant="body1" sx={{ fontWeight: 500 }}>
-                    {option}
-                  </Typography>
-                  <Typography variant="body1" sx={{ fontWeight: 700 }}>
-                    {count} vote{count !== 1 ? 's' : ''}
-                  </Typography>
-                </Box>
-              ))
-            ) : (
-              <Typography variant="body1" sx={{ color: 'text.secondary' }}>
-                No votes yet
-              </Typography>
-            )}
-          </Box>
-
-          <Divider sx={{ mb: 4 }} />
-
-          <Typography 
-            variant="h6" 
-            sx={{ 
-              mb: 3,
-              color: 'primary.main',
-              fontWeight: 500
-            }}
-          >
-            Voting History
-          </Typography>
-          
-          <VoteList 
-            votes={Object.entries(pollVotes)
-              .flatMap(([cityId, votes]) => 
-                votes.map(([timestamp, option, voteInfo]) => ({
-                  cityId,
-                  timestamp,
-                  option,
-                  voteInfo
-                }))
-              )
-              .sort((a, b) => b.timestamp - a.timestamp)
-            }
-            cities={cities || {}}
-            variant="list"
+          <ResultsSection 
+            votesByOption={votesByOption}
+            allVotes={allVotes}
+            cities={cities}
+            isJointStatement={isJointStatementPoll}
           />
 
-          <Dialog
+          <ConfirmVoteDialog
             open={confirmDialog.open}
+            option={confirmDialog.option}
+            isPersonal={isPersonal}
+            personalInfo={personalInfo}
+            isJointStatement={isJointStatementPoll}
+            hasVoted={hasVoted}
+            cityInfo={cityInfo}
             onClose={() => setConfirmDialog({ open: false, option: null })}
-          >
-            <DialogTitle>Confirm Vote</DialogTitle>
-            <DialogContent>
-              <Typography>
-                Are you sure you want to vote "<strong>{confirmDialog.option}</strong>"{' '}
-                {isPersonal ? (
-                  <>as a <strong>personal</strong> vote from {personalInfo.title} <strong>{personalInfo.name}</strong></>
-                ) : (
-                  <>on <strong>behalf of the City Administration </strong> as {personalInfo.title} <strong>{personalInfo.name}</strong></>
-                )}?
-              </Typography>
-              {hasVoted && !isPersonal && (
-                <Typography
-                  sx={{ mt: 2, color: 'warning.main' }}
-                >
-                  Note: {cityInfo?.name} has already voted on this poll. This will add another vote to the history.
-                </Typography>
-              )}
-            </DialogContent>
-            <DialogActions>
-              <Button
-                onClick={() => setConfirmDialog({ open: false, option: null })}
-                color="inherit"
-              >
-                Cancel
-              </Button>
-              <Button
-                onClick={handleConfirmVote}
-                variant="contained"
-                color="primary"
-                autoFocus
-                disabled={!personalInfo.title || !personalInfo.name}
-              >
-                Confirm Vote
-              </Button>
-            </DialogActions>
-          </Dialog>
+            onConfirm={handleConfirmVote}
+          />
         </Box>
       )}
     </Box>

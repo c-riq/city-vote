@@ -5,13 +5,21 @@ const path = require('path');
 
 // Directories and files
 const inputDir = path.join(__dirname, './data/cities');
-const outputFile = path.join(__dirname, '../serverless/autocomplete/src/city-data.csv');
+const outputFile = path.join(__dirname, '../../serverless/autocomplete/src/city-data.csv');
 
-// Function to read and parse a JSON file
-function readJsonFile(filePath) {
+// Function to read and parse a JSON Lines file
+function readJsonLinesFile(filePath) {
   try {
     const data = fs.readFileSync(filePath, 'utf8');
-    return JSON.parse(data);
+    const lines = data.trim().split('\n');
+    
+    // First line is the header
+    const header = JSON.parse(lines[0]);
+    
+    // Rest of the lines are city data
+    const cities = lines.slice(1).map(line => JSON.parse(line));
+    
+    return { header, cities };
   } catch (error) {
     console.error(`Error reading file ${filePath}:`, error);
     return null;
@@ -27,6 +35,13 @@ function roundToDecimalPlaces(num, decimalPlaces) {
 // Function to find all result files from the Python script
 function findResultFiles() {
   try {
+    // Create the directory if it doesn't exist
+    if (!fs.existsSync(inputDir)) {
+      console.log(`Creating directory: ${inputDir}`);
+      fs.mkdirSync(inputDir, { recursive: true });
+      return [];
+    }
+    
     const files = fs.readdirSync(inputDir);
     // Filter for files that match the pattern cities_process_*_final.json
     return files
@@ -41,27 +56,52 @@ function findResultFiles() {
 // Function to combine city data from multiple files
 function combineData(files) {
   let allCities = [];
-  let header = ["cityWikidataId", "cityLabelEnglish", "countryWikidataId", "population", "populationDate", "coordinates", "officialWebsite", "socialMedia"];
+  let outputHeader = ["cityWikidataId", "cityLabelEnglish", "countryWikidataId", "population", "populationDate", "latitude", "longitude", "officialWebsite", "socialMedia"];
   
   for (const file of files) {
-    const data = readJsonFile(file);
-    if (data && data.cities && Array.isArray(data.cities)) {
+    const data = readJsonLinesFile(file);
+    if (data && data.cities && Array.isArray(data.cities) && data.header && Array.isArray(data.header)) {
       console.log(`Processing ${file}: Found ${data.cities.length} cities`);
       
+      // Get indices from the header
+      const cityWikidataIdIndex = data.header.indexOf("cityWikidataId");
+      const cityLabelEnglishIndex = data.header.indexOf("cityLabelEnglish");
+      const countryWikidataIdIndex = data.header.indexOf("countryWikidataId");
+      const populationIndex = data.header.indexOf("population");
+      const populationDateIndex = data.header.indexOf("populationDate");
+      const latitudeIndex = data.header.indexOf("latitude");
+      const longitudeIndex = data.header.indexOf("longitude");
+      const officialWebsiteIndex = data.header.indexOf("officialWebsite");
+      const socialMediaIndex = data.header.indexOf("socialMedia");
+      
+      // Check if all required fields are present
+      if (cityWikidataIdIndex === -1 || cityLabelEnglishIndex === -1 || countryWikidataIdIndex === -1) {
+        console.warn(`Warning: Required fields missing in ${file}, skipping`);
+        continue;
+      }
+      
       // Transform the data to match the target format
-      // Each city should be [cityWikidataId, cityLabelEnglish, countryWikidataId, population, populationDate, coordinates, officialWebsite, socialMedia]
       const transformedCities = data.cities.map(city => {
         // Round coordinates to 2 decimal places if they exist
-        let coordinates = city[6];
-        if (coordinates && typeof coordinates === 'object' && 'latitude' in coordinates && 'longitude' in coordinates) {
-          coordinates = {
-            latitude: roundToDecimalPlaces(coordinates.latitude, 2),
-            longitude: roundToDecimalPlaces(coordinates.longitude, 2)
-          };
+        let latitude = latitudeIndex !== -1 ? city[latitudeIndex] : null;
+        let longitude = longitudeIndex !== -1 ? city[longitudeIndex] : null;
+        
+        if (latitude !== null && longitude !== null) {
+          latitude = roundToDecimalPlaces(latitude, 2);
+          longitude = roundToDecimalPlaces(longitude, 2);
         }
         
-        // Assuming the order in the source is [cityWikidataId, cityLabelEnglish, countryWikidataId, ancestorType, population, populationDate, coordinates, officialWebsite, socialMedia]
-        return [city[0], city[1], city[2], city[4], city[5], coordinates, city[7], city[8]]; // Skip ancestorType (index 3)
+        return [
+          cityWikidataIdIndex !== -1 ? city[cityWikidataIdIndex] : null,
+          cityLabelEnglishIndex !== -1 ? city[cityLabelEnglishIndex] : null,
+          countryWikidataIdIndex !== -1 ? city[countryWikidataIdIndex] : null,
+          populationIndex !== -1 ? city[populationIndex] : null,
+          populationDateIndex !== -1 ? city[populationDateIndex] : null,
+          latitude,
+          longitude,
+          officialWebsiteIndex !== -1 ? city[officialWebsiteIndex] : null,
+          socialMediaIndex !== -1 ? city[socialMediaIndex] : null
+        ];
       });
       
       allCities = allCities.concat(transformedCities);
@@ -70,7 +110,7 @@ function combineData(files) {
     }
   }
   
-  return { header, cities: allCities };
+  return { header: outputHeader, cities: allCities };
 }
 
 // Function to escape CSV values properly

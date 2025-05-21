@@ -1,10 +1,3 @@
-// Vote storage format in S3
-export type VoteData_ = Record<string, Record<string, [number, string, {
-    title: string;
-    name: string;
-    actingCapacity: 'individual' | 'representingCityAdministration';
-}][]>>;
-
 // City data format
 export interface City {
     id: string;
@@ -16,7 +9,6 @@ export interface City {
     }[];
 }
 
-// Public API Request/Response types (no authentication required)
 export interface GetPublicVotesRequest {
     action: 'getVotes';
     cityId?: string;
@@ -26,9 +18,11 @@ export interface GetPublicCitiesRequest {
     action: 'getCities';
 }
 
-// API Response types
 export interface GetVotesResponse {
-    votes: VoteData_;
+    // added here for allowing the backend types to be copied to the frontend VoteData is defined in votes/types.ts
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    votes: VoteData;
     message?: string;
 }
 

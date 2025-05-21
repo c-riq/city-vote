@@ -1,5 +1,15 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
-import { AutocompleteRequest, AutocompleteResponse } from './types';
+import { 
+  AutocompleteRequest, 
+  AutocompleteActionRequest,
+  GetByQidActionRequest,
+  BatchGetByQidActionRequest,
+  BatchAutocompleteActionRequest,
+  CityResult,
+  AutocompleteResponse,
+  BatchAutocompleteResponse,
+  BatchGetByQidResponse
+} from './types';
 import { countries } from './countries';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -13,10 +23,8 @@ interface CityData {
   countryCode: string;
   population?: number;
   populationDate?: string;
-  coordinates?: {
-    latitude: number;
-    longitude: number;
-  };
+  latitude?: number;
+  longitude?: number;
   officialWebsite?: string;
   socialMedia?: {
     twitter?: string;
@@ -25,6 +33,8 @@ interface CityData {
     youtube?: string;
     linkedin?: string;
   };
+  supersedes_duplicates?: string[];
+  superseded_by?: string;
 }
 
 // Function to parse a CSV line, handling quoted fields with embedded commas
@@ -69,10 +79,50 @@ function safeParseJSON(jsonString: string): any {
   }
 }
 
+// Function to safely get a string value from an array element
+function safeGetString(arr: any[], index: number): string | undefined {
+  if (arr[index] !== undefined && arr[index] !== null && typeof arr[index] === 'string' && arr[index] !== '') {
+    return arr[index] as string;
+  }
+  return undefined;
+}
+
+// Function to get the index of a column by its name from the header array
+function getColumnIndex(header: string[], columnName: string): number {
+  const index = header.indexOf(columnName);
+  if (index === -1) {
+    throw new Error(`Column "${columnName}" not found in header`);
+  }
+  return index;
+}
+
+// Function to get the first 2 digits of a QID
+function getQidPrefix(qid: string): string {
+  // Remove the 'Q' prefix
+  const numericPart = qid.substring(1);
+  
+  // Pad with leading zeros if needed
+  const paddedNumeric = numericPart.padStart(2, '0');
+  
+  // Get the first 2 digits
+  return paddedNumeric.substring(0, 2);
+}
+
 // Function to find a city by its Wikidata QID
 async function findCityByQid(qid: string): Promise<CityData | null> {
+  // Determine which split file to use based on QID prefix
+  const qidPrefix = getQidPrefix(qid);
+  const splitCsvPath = path.join(__dirname, 'split_by_qid', `Q${qidPrefix}.csv`);
+  
+  // Check if the split file exists, otherwise return null (no fallback to original file)
+  if (!fs.existsSync(splitCsvPath)) {
+    console.log(`Split file for QID prefix ${qidPrefix} not found`);
+    return null;
+  }
+  
+  const csvPath = splitCsvPath;
+  
   // Read and parse the CSV file
-  const csvPath = path.join(__dirname, 'city-data.csv');
   const fileContent = fs.readFileSync(csvPath, 'utf8');
   
   // Split the content into lines
@@ -88,13 +138,26 @@ async function findCityByQid(qid: string): Promise<CityData | null> {
     throw new Error('City wikidata ID column not found in CSV');
   }
   
+  // Find the index of the superseded_by column
+  const supersededByIndex = headers.indexOf('superseded_by');
+  const supersededDuplicatesIndex = headers.indexOf('supersedes_duplicates');
+  
+  // Get column indices from header
+  const countryNameIndex = getColumnIndex(countries.header, "Country");
+  const countryCodeIndex = getColumnIndex(countries.header, "Alpha-2 code");
+  const wikidataIdIndex = getColumnIndex(countries.header, "wikidata id");
+  
   // Create maps for country wikidata IDs to country names and ISO codes
   const countryNameMap = new Map<string, string>();
   const countryCodeMap = new Map<string, string>();
   countries.countries.forEach(country => {
-    if (country[4]) { // Check if wikidata id exists
-      countryNameMap.set(country[4], country[0]);
-      countryCodeMap.set(country[4], country[1]); // Alpha-2 code
+    const wikidataId = safeGetString(country, wikidataIdIndex);
+    const countryName = safeGetString(country, countryNameIndex);
+    const countryCode = safeGetString(country, countryCodeIndex);
+    
+    if (wikidataId && countryName && countryCode) {
+      countryNameMap.set(wikidataId, countryName);
+      countryCodeMap.set(wikidataId, countryCode);
     }
   });
   
@@ -109,6 +172,13 @@ async function findCityByQid(qid: string): Promise<CityData | null> {
     
     // Check if the city wikidata ID matches the query
     if (cityWikidataId === qid) {
+      // Check if this city is superseded by another city
+      if (supersededByIndex !== -1 && cityData[supersededByIndex] && cityData[supersededByIndex] !== '') {
+        // If this city is superseded, recursively find the superseding city
+        console.log(`City ${qid} is superseded by ${cityData[supersededByIndex]}, redirecting...`);
+        return findCityByQid(cityData[supersededByIndex]);
+      }
+      
       const cityName = cityData[1];
       const countryWikidataId = cityData[2];
       const countryName = countryNameMap.get(countryWikidataId) || '';
@@ -126,33 +196,40 @@ async function findCityByQid(qid: string): Promise<CityData | null> {
       // Get population date if it exists
       const populationDate = cityData[4] || undefined;
       
-      // Parse coordinates if they exist
-      let coordinates: { latitude: number; longitude: number } | undefined = undefined;
+      // Parse latitude and longitude if they exist
+      let latitude: number | undefined = undefined;
+      let longitude: number | undefined = undefined;
+      
+      // Parse latitude (index 5)
       if (cityData[5] && cityData[5] !== '') {
-        const coordObj = safeParseJSON(cityData[5]);
-        if (coordObj && typeof coordObj === 'object' && 
-            'latitude' in coordObj && 'longitude' in coordObj) {
-          coordinates = {
-            latitude: Number(coordObj.latitude),
-            longitude: Number(coordObj.longitude)
-          };
+        const parsedLat = Number(cityData[5]);
+        if (!isNaN(parsedLat)) {
+          latitude = parsedLat;
+        }
+      }
+      
+      // Parse longitude (index 6)
+      if (cityData[6] && cityData[6] !== '') {
+        const parsedLong = Number(cityData[6]);
+        if (!isNaN(parsedLong)) {
+          longitude = parsedLong;
         }
       }
       
       // Get official website if it exists
-      const officialWebsite = cityData[6] || undefined;
+      const officialWebsite = cityData[7] || undefined;
       
       // Parse social media accounts if they exist
-      let socialMedia: { 
-        twitter?: string; 
-        facebook?: string; 
-        instagram?: string; 
-        youtube?: string; 
-        linkedin?: string; 
+      let socialMedia: {
+        twitter?: string;
+        facebook?: string;
+        instagram?: string;
+        youtube?: string;
+        linkedin?: string;
       } | undefined = undefined;
       
-      if (cityData[7] && cityData[7] !== '') {
-        const socialObj = safeParseJSON(cityData[7]);
+      if (cityData[8] && cityData[8] !== '') {
+        const socialObj = safeParseJSON(cityData[8]);
         if (socialObj && typeof socialObj === 'object') {
           socialMedia = {};
           
@@ -183,6 +260,12 @@ async function findCityByQid(qid: string): Promise<CityData | null> {
         }
       }
       
+      // Parse supersedes_duplicates if it exists
+      let supersedes_duplicates: string[] | undefined = undefined;
+      if (supersededDuplicatesIndex !== -1 && cityData[supersededDuplicatesIndex] && cityData[supersededDuplicatesIndex] !== '') {
+        supersedes_duplicates = cityData[supersededDuplicatesIndex].split('|');
+      }
+      
       return {
         wikidataId: cityWikidataId,
         name: cityName,
@@ -191,9 +274,11 @@ async function findCityByQid(qid: string): Promise<CityData | null> {
         countryCode,
         population,
         populationDate,
-        coordinates,
+        latitude,
+        longitude,
         officialWebsite,
-        socialMedia
+        socialMedia,
+        supersedes_duplicates
       };
     }
   }
@@ -203,8 +288,28 @@ async function findCityByQid(qid: string): Promise<CityData | null> {
 
 // Efficient search function for CSV data
 async function searchCities(query: string, limit: number = 10): Promise<CityData[]> {
+  // Normalize the query for case-insensitive search
+  const normalizedQuery = query.toLowerCase();
+  
+  // Determine which split file to use based on first letter of query
+  const firstLetter = normalizedQuery.charAt(0).toUpperCase();
+  let csvPath;
+  
+  if (/[A-Z]/.test(firstLetter)) {
+    // Use the appropriate letter file
+    csvPath = path.join(__dirname, 'split_by_letter', `${firstLetter}.csv`);
+  } else {
+    // For non-alphabetic characters, use the # file
+    csvPath = path.join(__dirname, 'split_by_letter', '#.csv');
+  }
+  
+  // Check if the split file exists, otherwise return empty results (no fallback to original file)
+  if (!fs.existsSync(csvPath)) {
+    console.log(`Split file for letter ${firstLetter} not found`);
+    return [];
+  }
+  
   // Read and parse the CSV file
-  const csvPath = path.join(__dirname, 'city-data.csv');
   const fileContent = fs.readFileSync(csvPath, 'utf8');
   
   // Split the content into lines
@@ -220,16 +325,28 @@ async function searchCities(query: string, limit: number = 10): Promise<CityData
     throw new Error('City name column not found in CSV');
   }
   
-  // Normalize the query for case-insensitive search
-  const normalizedQuery = query.toLowerCase();
+  // Find the index of the superseded_by column
+  const supersededByIndex = headers.indexOf('superseded_by');
+  const supersededDuplicatesIndex = headers.indexOf('supersedes_duplicates');
+  
+  // We already normalized the query at the beginning of the function
+  
+  // Get column indices from header
+  const countryNameIndex = getColumnIndex(countries.header, "Country");
+  const countryCodeIndex = getColumnIndex(countries.header, "Alpha-2 code");
+  const wikidataIdIndex = getColumnIndex(countries.header, "wikidata id");
   
   // Create maps for country wikidata IDs to country names and ISO codes
   const countryNameMap = new Map<string, string>();
   const countryCodeMap = new Map<string, string>();
   countries.countries.forEach(country => {
-    if (country[4]) { // Check if wikidata id exists
-      countryNameMap.set(country[4], country[0]);
-      countryCodeMap.set(country[4], country[1]); // Alpha-2 code
+    const wikidataId = safeGetString(country, wikidataIdIndex);
+    const countryName = safeGetString(country, countryNameIndex);
+    const countryCode = safeGetString(country, countryCodeIndex);
+    
+    if (wikidataId && countryName && countryCode) {
+      countryNameMap.set(wikidataId, countryName);
+      countryCodeMap.set(wikidataId, countryCode);
     }
   });
   
@@ -243,10 +360,15 @@ async function searchCities(query: string, limit: number = 10): Promise<CityData
     const cityData = parseCSVLine(lines[i]);
     if (cityData.length <= cityNameIndex) continue; // Skip malformed lines
     
+    // Skip cities that are superseded by others
+    if (supersededByIndex !== -1 && cityData[supersededByIndex] && cityData[supersededByIndex] !== '') {
+      continue;
+    }
+    
     const cityName = cityData[cityNameIndex];
     
-    // Check if the city name includes the query
-    if (cityName.toLowerCase().includes(normalizedQuery)) {
+    // Check if the city name starts with the query (prefix match only)
+    if (cityName.toLowerCase().startsWith(normalizedQuery)) {
       const wikidataId = cityData[0];
       const countryWikidataId = cityData[2];
       const countryName = countryNameMap.get(countryWikidataId) || '';
@@ -264,33 +386,40 @@ async function searchCities(query: string, limit: number = 10): Promise<CityData
       // Get population date if it exists
       const populationDate = cityData[4] || undefined;
       
-      // Parse coordinates if they exist
-      let coordinates: { latitude: number; longitude: number } | undefined = undefined;
+      // Parse latitude and longitude if they exist
+      let latitude: number | undefined = undefined;
+      let longitude: number | undefined = undefined;
+      
+      // Parse latitude (index 5)
       if (cityData[5] && cityData[5] !== '') {
-        const coordObj = safeParseJSON(cityData[5]);
-        if (coordObj && typeof coordObj === 'object' && 
-            'latitude' in coordObj && 'longitude' in coordObj) {
-          coordinates = {
-            latitude: Number(coordObj.latitude),
-            longitude: Number(coordObj.longitude)
-          };
+        const parsedLat = Number(cityData[5]);
+        if (!isNaN(parsedLat)) {
+          latitude = parsedLat;
+        }
+      }
+      
+      // Parse longitude (index 6)
+      if (cityData[6] && cityData[6] !== '') {
+        const parsedLong = Number(cityData[6]);
+        if (!isNaN(parsedLong)) {
+          longitude = parsedLong;
         }
       }
       
       // Get official website if it exists
-      const officialWebsite = cityData[6] || undefined;
+      const officialWebsite = cityData[7] || undefined;
       
       // Parse social media accounts if they exist
-      let socialMedia: { 
-        twitter?: string; 
-        facebook?: string; 
-        instagram?: string; 
-        youtube?: string; 
-        linkedin?: string; 
+      let socialMedia: {
+        twitter?: string;
+        facebook?: string;
+        instagram?: string;
+        youtube?: string;
+        linkedin?: string;
       } | undefined = undefined;
       
-      if (cityData[7] && cityData[7] !== '') {
-        const socialObj = safeParseJSON(cityData[7]);
+      if (cityData[8] && cityData[8] !== '') {
+        const socialObj = safeParseJSON(cityData[8]);
         if (socialObj && typeof socialObj === 'object') {
           socialMedia = {};
           
@@ -321,6 +450,12 @@ async function searchCities(query: string, limit: number = 10): Promise<CityData
         }
       }
       
+      // Parse supersedes_duplicates if it exists
+      let supersedes_duplicates: string[] | undefined = undefined;
+      if (supersededDuplicatesIndex !== -1 && cityData[supersededDuplicatesIndex] && cityData[supersededDuplicatesIndex] !== '') {
+        supersedes_duplicates = cityData[supersededDuplicatesIndex].split('|');
+      }
+      
       matchingCities.push({
         wikidataId,
         name: cityName,
@@ -329,9 +464,11 @@ async function searchCities(query: string, limit: number = 10): Promise<CityData
         countryCode,
         population,
         populationDate,
-        coordinates,
+        latitude,
+        longitude,
         officialWebsite,
-        socialMedia
+        socialMedia,
+        supersedes_duplicates
       });
     }
   }
@@ -356,7 +493,7 @@ async function searchCities(query: string, limit: number = 10): Promise<CityData
   });
 }
 
-const handleAutocomplete = async (query: string, limit: number = 10): Promise<APIGatewayProxyResult> => {
+const handleAutocomplete = async (query: string | undefined, limit: number = 10): Promise<APIGatewayProxyResult> => {
   if (!query) {
     return {
       statusCode: 400,
@@ -437,6 +574,98 @@ const handleGetByQid = async (qid: string): Promise<APIGatewayProxyResult> => {
   }
 };
 
+// Handler for batchGetByQid action
+const handleBatchGetByQid = async (qids: string[]): Promise<APIGatewayProxyResult> => {
+  if (!qids || !Array.isArray(qids) || qids.length === 0) {
+    return {
+      statusCode: 400,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message: 'Missing or invalid required parameter: qids (must be a non-empty array)'
+      }, null, 2)
+    };
+  }
+
+  try {
+    // Process each QID in parallel
+    const cityPromises = qids.map(qid => findCityByQid(qid));
+    const cities = await Promise.all(cityPromises);
+    
+    // Filter out null results (cities not found)
+    const foundCities = cities.filter(city => city !== null) as CityData[];
+    
+    // Create a map of QIDs that were not found
+    const notFoundQids = qids.filter((qid, index) => cities[index] === null);
+    
+    return {
+      statusCode: 200,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        results: foundCities,
+        notFound: notFoundQids.length > 0 ? notFoundQids : undefined
+      }, null, 2)
+    };
+  } catch (error) {
+    console.error('Error during batch QID lookup:', error);
+    return {
+      statusCode: 500,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message: 'Batch QID lookup error',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      }, null, 2)
+    };
+  }
+};
+
+// Handler for batchAutocomplete action
+const handleBatchAutocomplete = async (queries: string[], limit: number = 10): Promise<APIGatewayProxyResult> => {
+  if (!queries || !Array.isArray(queries) || queries.length === 0) {
+    return {
+      statusCode: 400,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message: 'Missing or invalid required parameter: queries (must be a non-empty array)'
+      }, null, 2)
+    };
+  }
+
+  try {
+    // Process each query in parallel
+    const searchPromises = queries.map(query => searchCities(query, limit));
+    const searchResults = await Promise.all(searchPromises);
+    
+    // Create a map of query to results
+    const resultsByQuery: Record<string, CityData[]> = {};
+    queries.forEach((query, index) => {
+      resultsByQuery[query] = searchResults[index];
+    });
+    
+    return {
+      statusCode: 200,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        results: resultsByQuery
+      }, null, 2)
+    };
+  } catch (error) {
+    console.error('Error during batch autocomplete:', error);
+    return {
+      statusCode: 500,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message: 'Batch autocomplete error',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      }, null, 2)
+    };
+  }
+};
+
+// Type guard to check if the action is valid
+function isValidAction(action: string): action is 'autocomplete' | 'getByQid' | 'batchGetByQid' | 'batchAutocomplete' {
+  return ['autocomplete', 'getByQid', 'batchGetByQid', 'batchAutocomplete'].includes(action);
+}
+
 export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   try {
     if (!event.body) {
@@ -447,9 +676,9 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
       };
     }
 
-    const { action, query, qid, limit } = JSON.parse(event.body) as AutocompleteRequest;
+    const parsedBody = JSON.parse(event.body);
     
-    if (!action) {
+    if (!parsedBody.action) {
       return {
         statusCode: 400,
         headers: { 'Content-Type': 'application/json' },
@@ -459,18 +688,41 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
       };
     }
 
-    if (action === 'autocomplete') {
-      return await handleAutocomplete(query, limit);
-    } else if (action === 'getByQid') {
-      return await handleGetByQid(qid || '');
-    } else {
+    const action = parsedBody.action;
+
+    if (!isValidAction(action)) {
       return {
         statusCode: 400,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          message: `Invalid action: ${action}. Supported actions are: autocomplete, getByQid`
+          message: `Invalid action: ${action}. Supported actions are: autocomplete, getByQid, batchGetByQid, batchAutocomplete`
         }, null, 2)
       };
+    }
+
+    // Now TypeScript knows that action is one of the valid actions
+    const request = parsedBody as AutocompleteRequest;
+
+    switch (action) {
+      case 'autocomplete': {
+        const { query, limit } = request as AutocompleteActionRequest;
+        return await handleAutocomplete(query, limit);
+      }
+      
+      case 'getByQid': {
+        const { qid, limit } = request as GetByQidActionRequest;
+        return await handleGetByQid(qid);
+      }
+      
+      case 'batchGetByQid': {
+        const { qids, limit } = request as BatchGetByQidActionRequest;
+        return await handleBatchGetByQid(qids);
+      }
+      
+      case 'batchAutocomplete': {
+        const { queries, limit } = request as BatchAutocompleteActionRequest;
+        return await handleBatchAutocomplete(queries, limit);
+      }
     }
   } catch (error) {
     console.error('Error:', error);

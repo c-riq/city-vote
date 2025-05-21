@@ -23,6 +23,8 @@ interface ExtendedCity extends City {
     youtube?: string;
     linkedin?: string;
   };
+  supersedes_duplicates?: string[];
+  superseded_by?: string;
 }
 
 const CityProfile: React.FC = () => {
@@ -85,10 +87,24 @@ const CityProfile: React.FC = () => {
 
             if (autocompleteResponse.ok) {
               const autocompleteData = await autocompleteResponse.json();
-              console.log('Received detailed city data:', autocompleteData);
+              // Received detailed city data
               
               if (autocompleteData.results && autocompleteData.results.length > 0) {
                 const cityDetails = autocompleteData.results[0];
+                
+                // Check if this city is superseded by another city
+                if (cityDetails.superseded_by && cityDetails.superseded_by !== cityId) {
+                  // This will be handled by the next condition if applicable
+                  console.log('City is superseded by:', cityDetails.superseded_by);
+                }
+                // Check if the returned wikidataId is different from the requested cityId
+                else if (cityDetails.wikidataId && cityDetails.wikidataId !== cityId && cityDetails.supersedes_duplicates?.includes(cityId)) {
+                  
+                  // We already have the primary city details, so we can redirect directly
+                  const redirectUrl = `/city/${cityDetails.wikidataId}?name=${encodeURIComponent(cityDetails.name)}&country=${encodeURIComponent(cityDetails.countryName || '')}`;
+                  navigate(redirectUrl);
+                  return;
+                }
                 
                 // Update city with detailed information
                 setCity(prevCity => ({
@@ -97,10 +113,12 @@ const CityProfile: React.FC = () => {
                   country: cityDetails.countryName || prevCity!.country,
                   population: cityDetails.population || prevCity!.population,
                   populationDate: cityDetails.populationDate,
-                  lat: cityDetails.coordinates?.latitude || prevCity!.lat,
-                  lon: cityDetails.coordinates?.longitude || prevCity!.lon,
+                  lat: cityDetails.latitude || prevCity!.lat,
+                  lon: cityDetails.longitude || prevCity!.lon,
                   officialWebsite: cityDetails.officialWebsite,
-                  socialMedia: cityDetails.socialMedia
+                  socialMedia: cityDetails.socialMedia,
+                  supersedes_duplicates: cityDetails.supersedes_duplicates,
+                  superseded_by: cityDetails.superseded_by
                 }));
                 
                 // Skip the regular API call if we got detailed data
@@ -110,7 +128,6 @@ const CityProfile: React.FC = () => {
           } 
           // For non-Wikidata IDs, search by city name
           else {
-            console.log('Searching for city by name:', cityName);
             const autocompleteResponse = await fetch(AUTOCOMPLETE_API_HOST, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
@@ -123,7 +140,6 @@ const CityProfile: React.FC = () => {
 
             if (autocompleteResponse.ok) {
               const autocompleteData = await autocompleteResponse.json();
-              console.log('Received search results:', autocompleteData);
               
               if (autocompleteData.results && autocompleteData.results.length > 0) {
                 // Find the city with the maximum population
@@ -137,6 +153,52 @@ const CityProfile: React.FC = () => {
                   }
                 }
                 
+                
+                // Check if this city is superseded by another city
+                if (cityDetails.superseded_by) {
+                  
+                  // Fetch details of the superseding city
+                  try {
+                    const supersedingResponse = await fetch(AUTOCOMPLETE_API_HOST, {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({
+                        action: 'getByQid',
+                        qid: cityDetails.superseded_by
+                      })
+                    });
+                    
+                    if (supersedingResponse.ok) {
+                      const supersedingData = await supersedingResponse.json();
+                      
+                      if (supersedingData.results && supersedingData.results.length > 0) {
+                        const supersedingCity = supersedingData.results[0];
+                        
+                        // Redirect to the superseding city with its correct name and country
+                        const redirectUrl = `/city/${cityDetails.superseded_by}?name=${encodeURIComponent(supersedingCity.name)}&country=${encodeURIComponent(supersedingCity.countryName || '')}`;
+                        navigate(redirectUrl);
+                        return;
+                      } else {
+                        console.log('No results found for superseding city');
+                      }
+                    } else {
+                      console.log('Failed to fetch superseding city details, status:', supersedingResponse.status);
+                    }
+                  } catch (err) {
+                    console.error('Error fetching superseding city details:', err);
+                  }
+                  
+                  // Fallback if we couldn't get superseding city details
+                  navigate(`/city/${cityDetails.superseded_by}`);
+                  return;
+                }
+                
+                // If this city has a Wikidata ID and it's different from the current URL, update the URL
+                if (cityDetails.wikidataId && cityDetails.wikidataId !== cityId) {
+                  navigate(`/city/${cityDetails.wikidataId}?name=${encodeURIComponent(cityDetails.name)}&country=${encodeURIComponent(cityDetails.countryName || '')}`);
+                  return;
+                }
+                
                 // Update city with detailed information from the first search result
                 setCity(prevCity => ({
                   ...prevCity!,
@@ -144,12 +206,14 @@ const CityProfile: React.FC = () => {
                   country: cityDetails.countryName || prevCity!.country,
                   population: cityDetails.population || prevCity!.population,
                   populationDate: cityDetails.populationDate,
-                  lat: cityDetails.coordinates?.latitude || prevCity!.lat,
-                  lon: cityDetails.coordinates?.longitude || prevCity!.lon,
+                  lat: cityDetails.latitude || prevCity!.lat,
+                  lon: cityDetails.longitude || prevCity!.lon,
                   officialWebsite: cityDetails.officialWebsite,
                   socialMedia: cityDetails.socialMedia,
                   // Store the Wikidata ID for reference
-                  wikidataId: cityDetails.wikidataId
+                  wikidataId: cityDetails.wikidataId,
+                  supersedes_duplicates: cityDetails.supersedes_duplicates,
+                  superseded_by: cityDetails.superseded_by
                 }));
                 
                 // Skip the regular API call if we got detailed data
@@ -197,7 +261,7 @@ const CityProfile: React.FC = () => {
     };
 
     fetchCityData();
-  }, [cityId]);
+  }, [cityId, navigate]);
 
   if (loading) {
     return (
@@ -350,7 +414,7 @@ const CityProfile: React.FC = () => {
                   {city.wikidataId && (
                     <>
                       {' '}
-                      <Link 
+                      <Link
                         href={`https://www.wikidata.org/wiki/${city.wikidataId}`}
                         target="_blank"
                         rel="noopener noreferrer"
@@ -448,6 +512,8 @@ const CityProfile: React.FC = () => {
                 </Box>
               </Box>
             )}
+
+            {/* Removed duplication information section */}
           </Box>
           
           <Divider sx={{ my: 2 }} />
@@ -527,9 +593,9 @@ const CityProfile: React.FC = () => {
           ) : null}
           
           {/* Wikidata reference */}
-          <Box sx={{ mt: 3, display: 'flex', justifyContent: 'flex-end' }}>
+          <Box sx={{ mt: 3, display: 'flex', justifyContent: 'flex-end', flexDirection: 'column', alignItems: 'flex-end' }}>
             {cityId && (cityId.startsWith('Q') || city.wikidataId) && (
-              <Link 
+              <Link
                 href={`https://www.wikidata.org/wiki/${city.wikidataId || cityId}`}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -538,6 +604,44 @@ const CityProfile: React.FC = () => {
               >
                 Wikidata: {city.wikidataId || cityId}
               </Link>
+            )}
+            
+            {/* Similar entities section */}
+            {((city.supersedes_duplicates && city.supersedes_duplicates.filter(id => id !== cityId && id !== city.wikidataId).length > 0) || city.superseded_by) && (
+              <Typography color="text.secondary" sx={{ fontSize: '0.75rem', mt: 0.5 }}>
+                Similar entities:{' '}
+                {city.superseded_by && (
+                  <Link
+                    href={`https://www.wikidata.org/wiki/${city.superseded_by}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    color="text.secondary"
+                    sx={{ fontSize: '0.75rem' }}
+                  >
+                    {city.superseded_by}
+                  </Link>
+                )}
+                
+                {city.superseded_by && city.supersedes_duplicates && city.supersedes_duplicates.filter(id => id !== cityId && id !== city.wikidataId).length > 0 && ', '}
+                
+                {city.supersedes_duplicates && city.supersedes_duplicates
+                  .filter(id => id !== cityId && id !== city.wikidataId)
+                  .map((duplicateId, index, array) => (
+                    <React.Fragment key={duplicateId}>
+                      <Link
+                        href={`https://www.wikidata.org/wiki/${duplicateId}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        color="text.secondary"
+                        sx={{ fontSize: '0.75rem' }}
+                      >
+                        {duplicateId}
+                      </Link>
+                      {index < array.length - 1 && ', '}
+                    </React.Fragment>
+                  ))
+                }
+              </Typography>
             )}
           </Box>
         </Box>

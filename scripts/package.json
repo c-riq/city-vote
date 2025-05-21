@@ -1,18 +1,10 @@
 {
-  "name": "scripts",
-  "version": "1.0.0",
-  "main": "generate-city-tokens.js",
-  "scripts": {
-    "build": "tsc",
-    "generate-codes": "npm run build && node dist/generate-registration-codes.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
+  "type": "module",
   "devDependencies": {
-    "@types/node": "^22.15.17",
-    "typescript": "^5.8.3"
+    "ts-node": "^10.9.2",
+    "tsx": "^4.19.4"
+  },
+  "scripts": {
+    "sync": "tsx sync-backend-types.ts"
   }
 }

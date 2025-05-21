@@ -1,61 +1,42 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { Box, Typography, Button, CircularProgress } from '@mui/material';
 import VoteList from './VoteList';
 import { VoteData, GetVotesResponse, City } from '../backendTypes';
 import { PUBLIC_API_HOST } from '../constants';
+import { getDisplayTitle, isJointStatement } from '../utils/pollFormat';
+import useCityData from '../hooks/useCityData';
 
 interface PollsProps {
-  theme?: any;
   token?: string;
   cityInfo?: City;
   votesData?: VoteData;
-  cities?: Record<string, City>;
   onRefresh?: () => void;
 }
 
-function Polls({ token, cityInfo, votesData: propVotesData, cities: propCities, onRefresh }: PollsProps) {
+function Polls({ token, cityInfo, votesData: propVotesData, onRefresh }: PollsProps) {
   const [votesData, setVotesData] = useState<VoteData>(propVotesData || {});
-  const [cities, setCities] = useState<Record<string, any>>(propCities || {});
-  const [isLoading, setIsLoading] = useState(!propVotesData);
-  const [error, setError] = useState('');
   const [isRefreshingVotes, setIsRefreshingVotes] = useState(false);
   const [isAuthenticated] = useState(!!token && !!cityInfo);
+  
+  // Use the city data hook to manage cities
+  const { 
+    cities, 
+    fetchAllCities, 
+    isLoading: isCitiesLoading, 
+    error: cityError 
+  } = useCityData(votesData);
+  
+  const [isLoading, setIsLoading] = useState(!propVotesData);
+  const [error, setError] = useState('');
 
-  useEffect(() => {
-    if (!isAuthenticated && !propVotesData) {
-      fetchData();
-    }
-  }, [isAuthenticated, propVotesData]);
-
-  // Update state when props change
-  useEffect(() => {
-    if (propVotesData) {
-      setVotesData(propVotesData);
-    }
-    if (propCities) {
-      setCities(propCities);
-    }
-  }, [propVotesData, propCities]);
-
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     setError('');
     setIsLoading(true);
     
     try {
-      // Fetch cities data
-      const citiesResponse = await fetch(`${PUBLIC_API_HOST}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'getCities' })
-      });
-
-      if (!citiesResponse.ok) {
-        throw new Error('Failed to fetch cities');
-      }
-
-      const citiesData = await citiesResponse.json();
-      setCities(citiesData.cities);
+      // Fetch cities data using the hook
+      await fetchAllCities();
 
       // Fetch votes data
       const votesResponse = await fetch(`${PUBLIC_API_HOST}`, {
@@ -69,15 +50,39 @@ function Polls({ token, cityInfo, votesData: propVotesData, cities: propCities, 
       }
 
       const votesData: GetVotesResponse = await votesResponse.json();
+      
+      // Set the votes data directly
       setVotesData(votesData?.votes || {});
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch data');
       setVotesData({});
-      setCities({});
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [fetchAllCities]);
+
+  useEffect(() => {
+    // Only fetch data if we don't have any votes data from props
+    // and we're not already loading data
+    if (!propVotesData && Object.keys(votesData).length === 0 && !isLoading) {
+      fetchData();
+    }
+  }, [propVotesData, votesData, isLoading, fetchData]);
+
+  // Update state when props change
+  useEffect(() => {
+    if (propVotesData) {
+      setVotesData(propVotesData);
+    }
+  }, [propVotesData]);
+
+  // Update error state if city error occurs
+  useEffect(() => {
+    if (cityError) {
+      setError(cityError);
+    }
+  }, [cityError]);
+
 
   const fetchVotesOnly = async () => {
     setIsRefreshingVotes(true);
@@ -101,6 +106,8 @@ function Polls({ token, cityInfo, votesData: propVotesData, cities: propCities, 
       }
 
       const votesData: GetVotesResponse = await votesResponse.json();
+      
+      // Set the votes data directly
       setVotesData(votesData?.votes || {});
     } catch (err) {
       console.error('Failed to fetch votes:', err);
@@ -109,7 +116,7 @@ function Polls({ token, cityInfo, votesData: propVotesData, cities: propCities, 
     }
   };
 
-  if (isLoading) {
+  if (isLoading || isCitiesLoading) {
     return (
       <Box
         sx={{
@@ -222,18 +229,23 @@ function Polls({ token, cityInfo, votesData: propVotesData, cities: propCities, 
           No polls found.
         </Typography>
       ) : (
-        Object.entries(votesData).map(([pollId, citiesVotes]) => {
-          const allVotes = Object.entries(citiesVotes)
-            .flatMap(([cityId, votes]) => 
-              votes.map(([timestamp, option, voteInfo]) => ({
-                cityId,
-                timestamp,
-                option,
-                voteInfo
-              }))
-            )
-            .sort((a, b) => b.timestamp - a.timestamp);
-
+        Object.entries(votesData).map(([pollId, pollData]) => {
+          // Convert the new vote structure to the format expected by VoteList
+          const allVotes = pollData.votes.map((vote) => {
+            return {
+              cityId: vote.associatedCityId || '',
+              timestamp: vote.time || 0,
+              option: vote.vote,
+              voteInfo: {...vote.author, externalVerificationSource: vote.externalVerificationSource},
+              city: vote.organisationNameFallback
+            };
+          })
+          .sort((a, b) => b.timestamp - a.timestamp);
+          
+          // Truncate votes to 10 for display
+          const truncatedVotes = allVotes.slice(0, 10);
+          const hasMoreVotes = allVotes.length > 10;
+          
           return (
             <Box 
               key={pollId} 
@@ -252,15 +264,45 @@ function Polls({ token, cityInfo, votesData: propVotesData, cities: propCities, 
               }}
             >
               <Link to={`/poll/${encodeURIComponent(pollId)}`} style={{ textDecoration: 'none' }}>
-                <Typography variant="h6" sx={{ color: 'primary.main', fontWeight: 500, mb: 2 }}>
-                  {pollId}
-                </Typography>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <Typography variant="h6" sx={{ color: 'primary.main', fontWeight: 500, mb: 2 }}>
+                    {getDisplayTitle(pollId)}
+                  </Typography>
+                  {pollId.includes('_attachment_') && (
+                    <span 
+                      className="material-icons" 
+                      style={{ 
+                        fontSize: '1.2rem', 
+                        color: '#1a237e',
+                        opacity: 0.7,
+                        marginBottom: '16px' // Match the mb: 2 (16px) from Typography
+                      }}
+                      title="Has attachment"
+                    >
+                      attach_file
+                    </span>
+                  )}
+                </Box>
               </Link>
               <VoteList 
-                votes={allVotes} 
+                votes={truncatedVotes} 
                 cities={cities} 
                 variant="cell" 
+                isJointStatement={isJointStatement(pollId)}
               />
+              {hasMoreVotes && (
+                <Box sx={{ mt: 2, textAlign: 'center' }}>
+                  <Link to={`/poll/${encodeURIComponent(pollId)}`} style={{ textDecoration: 'none' }}>
+                    <Button 
+                      variant="text" 
+                      size="small" 
+                      endIcon={<span className="material-icons">arrow_forward</span>}
+                    >
+                      View all {allVotes.length} votes
+                    </Button>
+                  </Link>
+                </Box>
+              )}
             </Box>
           );
         })

@@ -1,0 +1,944 @@
+{
+  "joint_statement_Mayors voice support for Ekrem İmamoğlu": {
+    "type": "jointStatement",
+    "URL": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/#",
+    "organisedBy": "https://city-vote.com/network/eurocities",
+    "votes": [
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Paris",
+          "name": "Anne Hidalgo",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Paris",
+        "associatedCityId": "Q90",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Leipzig and President of Eurocities",
+          "name": "Burkhard Jung",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Leipzig",
+        "associatedCityId": "Q2079",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Aachen",
+          "name": "Sibylle Keupen",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Aachen",
+        "associatedCityId": "Q1017",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Aalen",
+          "name": "Frederick Brütting",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Aalen",
+        "associatedCityId": "Q3951",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Amsterdam",
+          "name": "Femke Halsema",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Amsterdam",
+        "associatedCityId": "Q9899",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Athens",
+          "name": "Háris Doúkas",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Athens",
+        "associatedCityId": "Q1524",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Barcelona",
+          "name": "Jaume Collboni",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Barcelona",
+        "associatedCityId": "Q1492",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Governing Mayor of Berlin",
+          "name": "Kai Wegner",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Berlin",
+        "associatedCityId": "Q64",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Bilbao",
+          "name": "Juan Mari Aburto",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Bilbao",
+        "associatedCityId": "Q8692",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Braga",
+          "name": "Ricardo Rio",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Braga",
+        "associatedCityId": "Q83247",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor and President of the Senate of Bremen",
+          "name": "Andreas Bovenschulte",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Bremen",
+        "associatedCityId": "Q1209",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Brussels",
+          "name": "Philippe Close",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Brussels",
+        "associatedCityId": "Q239",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Bologna",
+          "name": "Matteo Lepore",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Bologna",
+        "associatedCityId": "Q1891",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Bonn",
+          "name": "Katja Dörner",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Bonn",
+        "associatedCityId": "Q586",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Bordeaux",
+          "name": "Pierre Hurmic",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Bordeaux",
+        "associatedCityId": "Q1479",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "President of Bordeaux Metropole",
+          "name": "Christine Bost",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Bordeaux Metropole",
+        "associatedCityId": null,
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Braunschweig",
+          "name": "Dr. Thorsten Kornblum",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Braunschweig",
+        "associatedCityId": "Q2773",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Budapest",
+          "name": "Gergely Karácsony",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Budapest",
+        "associatedCityId": "Q1781",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Cluj Napoca",
+          "name": "Emil Boc",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Cluj Napoca",
+        "associatedCityId": "Q100188",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Cologne",
+          "name": "Henriette Reker",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Cologne",
+        "associatedCityId": "Q365",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Dortmund",
+          "name": "Thomas Westphal",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Dortmund",
+        "associatedCityId": "Q1295",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Dusseldorf",
+          "name": "Dr. Stephan Keller",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Dusseldorf",
+        "associatedCityId": "Q1718",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Emden",
+          "name": "Tim Kruithoff",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Emden",
+        "associatedCityId": "Q4174",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Erlangen",
+          "name": "Dr. Florian Janik",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Erlangen",
+        "associatedCityId": "Q3126",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Lord Mayor of Essen",
+          "name": "Thomas Kufen",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Essen",
+        "associatedCityId": "Q2066",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Esslingen",
+          "name": "Matthias Klopfer",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Esslingen",
+        "associatedCityId": "Q3786",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Florence",
+          "name": "Sara Funaro",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Florence",
+        "associatedCityId": "Q2044",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Frankfurt",
+          "name": "Mike Josef",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Frankfurt",
+        "associatedCityId": "Q1794",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Gabrovo",
+          "name": "Tanya Hristova",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Gabrovo",
+        "associatedCityId": "Q180131",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Gdansk",
+          "name": "Aleksandra Dulkiewicz",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Gdansk",
+        "associatedCityId": "Q1792",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Ghent",
+          "name": "Mathias De Clercq",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Ghent",
+        "associatedCityId": "Q1296",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Girona",
+          "name": "Lluc Salellas i Vilar",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Girona",
+        "associatedCityId": "Q7038",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Goslar",
+          "name": "Urte Schwerdtner",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Goslar",
+        "associatedCityId": "Q3896",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Gutersloh",
+          "name": "Matthias Trepper",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Gutersloh",
+        "associatedCityId": "Q3771",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Hamstad",
+          "name": "Stefan Pålsson",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Hamstad",
+        "associatedCityId": "Q504692",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Hannover",
+          "name": "Belit Onay",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Hannover",
+        "associatedCityId": "Q1715",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Heidelberg",
+          "name": "Prof. Dr. Eckart Würzner",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Heidelberg",
+        "associatedCityId": "Q2966",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Helsinki",
+          "name": "Juhana Vartiainen",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Helsinki",
+        "associatedCityId": "Q1757",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Kalmar",
+          "name": "Johan Persson",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Kalmar",
+        "associatedCityId": null,
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Karlsruhe",
+          "name": "Dr. Frank Mentrup",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Karlsruhe",
+        "associatedCityId": "Q1040",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Kiel",
+          "name": "Ulf Kämpfer",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Kiel",
+        "associatedCityId": "Q1707",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Lausanne",
+          "name": "Grégoire Junod",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Lausanne",
+        "associatedCityId": "Q807",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Lubeck",
+          "name": "Jan Lindenau",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Lubeck",
+        "associatedCityId": "Q2843",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of City of Luleå",
+          "name": "Carina Sammeli",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Luleå",
+        "associatedCityId": "Q177019",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Mainz",
+          "name": "Nino Haase",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Mainz",
+        "associatedCityId": "Q1720",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Malmö",
+          "name": "Katrin Stjernfeldt Jammeh",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Malmö",
+        "associatedCityId": "Q503361",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Mannheim",
+          "name": "Christian Specht",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Mannheim",
+        "associatedCityId": "Q2119",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Manresa",
+          "name": "Marc Aloy",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Manresa",
+        "associatedCityId": "Q16697",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Milan",
+          "name": "Giuseppe Sala",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Milan",
+        "associatedCityId": "Q490",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Modena",
+          "name": "Massimo Mezzetti",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Modena",
+        "associatedCityId": "Q279",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Lord Mayor of Munich",
+          "name": "Dieter Reiter",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Munich",
+        "associatedCityId": "Q1726",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Nicosia",
+          "name": "Charalambos Prountzos",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Nicosia",
+        "associatedCityId": "Q3856",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Nuremberg",
+          "name": "Marcus König",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Nuremberg",
+        "associatedCityId": "Q2090",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Odunpazari",
+          "name": "Kazim Kurt",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Odunpazari",
+        "associatedCityId": null,
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Oldenburg",
+          "name": "Jürgen Krogmann",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Oldenburg",
+        "associatedCityId": "Q2936",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Governing Mayor of Oslo",
+          "name": "Eirik Lae Solberg",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Oslo",
+        "associatedCityId": "Q585",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Lord Mayor of Potsdam",
+          "name": "Mike Schubert",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Potsdam",
+        "associatedCityId": "Q1711",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Rakvere",
+          "name": "Triin Varek",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Rakvere",
+        "associatedCityId": "Q191889",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Regensburg",
+          "name": "Gertrud Maltz-Schwarzfischer",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Regensburg",
+        "associatedCityId": "Q2978",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Rennes",
+          "name": "Nathalie Appéré",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Rennes",
+        "associatedCityId": "Q647",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Reykjavik",
+          "name": "Heida Björg Hilmisdóttir",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Reykjavik",
+        "associatedCityId": "Q1764",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Riga",
+          "name": "Vilnis Ķirsis",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Riga",
+        "associatedCityId": "Q1773",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Rome",
+          "name": "Roberto Gualtieri",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Rome",
+        "associatedCityId": "Q220",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Rotterdam",
+          "name": "Carola Schouten",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Rotterdam",
+        "associatedCityId": "Q34370",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Schwabach",
+          "name": "Peter Reiß",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Schwabach",
+        "associatedCityId": null,
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Lord Mayor of Sindelfingen",
+          "name": "Dr. Bernd Vöhringer",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Sindelfingen",
+        "associatedCityId": "Q14889",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Sindelfingen and President of Eurotowns",
+          "name": "Christian Gangl",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Sindelfingen",
+        "associatedCityId": "Q4019",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Sipoo",
+          "name": "Mikael Grannas",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Sipoo",
+        "associatedCityId": "Q986320",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Stendal",
+          "name": "Bastian Sieler",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Stendal",
+        "associatedCityId": "Q7082",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Stockholm",
+          "name": "Karin Wanngård",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Stockholm",
+        "associatedCityId": "Q1754",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Strasbourg",
+          "name": "Jeanne Barseghian",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Strasbourg",
+        "associatedCityId": "Q6602",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Tallinn",
+          "name": "Jevgeni Ossinovski",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Tallinn",
+        "associatedCityId": "Q1770",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Tampere",
+          "name": "Kalervo Kummola",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Tampere",
+        "associatedCityId": "Q40840",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Timisoara",
+          "name": "Dominic Fritz",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Timisoara",
+        "associatedCityId": "Q83404",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Turku",
+          "name": "Minna Arve",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Turku",
+        "associatedCityId": "Q38511",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Utrecht",
+          "name": "Sharon Dijksma",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Utrecht",
+        "associatedCityId": "Q803",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Vaasa",
+          "name": "Tomas Häyry",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Vaasa",
+        "associatedCityId": "Q125080",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Växjö",
+          "name": "Malin Lauber",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Växjö",
+        "associatedCityId": null,
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Wuppertal",
+          "name": "Uwe Schneidewind",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Wuppertal",
+        "associatedCityId": "Q2107",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Mayor of Zagreb",
+          "name": "Dejan Tomašević",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": "Zagreb",
+        "associatedCityId": "Q1435",
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "MEP, and former Mayor of Florence",
+          "name": "Dario Nardella",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": null,
+        "associatedCityId": null,
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": null,
+          "name": "Eurocities",
+          "actingCapacity": "organization"
+        },
+        "organisationNameFallback": null,
+        "associatedCityId": null,
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": null,
+          "name": "The Council of European Municipalities and Regions",
+          "actingCapacity": "organization"
+        },
+        "organisationNameFallback": null,
+        "associatedCityId": null,
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": null,
+          "name": "The International Association of Francophone Mayors (AIMF)",
+          "actingCapacity": "organization"
+        },
+        "organisationNameFallback": null,
+        "associatedCityId": null,
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      },
+      {
+        "vote": "Sign",
+        "author": {
+          "title": "Union of Baltic Cities",
+          "name": "Roger Kaliff",
+          "actingCapacity": "individual"
+        },
+        "organisationNameFallback": null,
+        "associatedCityId": null,
+        "externalVerificationSource": "https://eurocities.eu/latest/mayors-voice-support-for-ekrem-imamoglu/"
+      }
+    ]
+  }
+}

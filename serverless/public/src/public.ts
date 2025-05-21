@@ -7,7 +7,10 @@ import {
 import { handleRegister } from './registration';
 
 const s3Client = new S3Client({ region: 'us-east-1' });
-const BUCKET_NAME = 'city-vote-data';
+// Check if running in dev environment based on environment variable
+const isDev = process.env.CITY_VOTE_ENV === 'dev';
+const BUCKET_NAME = isDev ? 'city-vote-data-dev' : 'city-vote-data';
+
 const VOTES_KEY = 'votes/votes.json';
 
 async function streamToString(stream: Readable): Promise<string> {
@@ -40,23 +43,35 @@ const handleGetPublicVotes = async (cityId?: string): Promise<APIGatewayProxyRes
 
         // If cityId is specified, filter votes for that city only
         if (cityId) {
-            const cityVotes: Record<string, [number, string, { title: string; name: string; } | undefined][]> = {};
+            const filteredVotes: Record<string, any> = {};
+            
+            // Filter each poll's votes to only include those from the specified city
             Object.entries(votes).forEach(([pollId, pollData]: [string, any]) => {
-                if (pollData[cityId]) {
-                    cityVotes[pollId] = pollData[cityId];
+                if (pollData.votes) {
+                    // Filter votes array to only include votes from the specified city
+                    const cityVotes = pollData.votes.filter((vote: any) => vote.associatedCityId === cityId);
+                    
+                    if (cityVotes.length > 0) {
+                        // Create a copy of the poll data with only the filtered votes
+                        filteredVotes[pollId] = {
+                            ...pollData,
+                            votes: cityVotes
+                        };
+                    }
                 }
             });
+            
             return {
                 statusCode: 200,
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ votes: cityVotes }, null, 2)
+                body: JSON.stringify({ votes: filteredVotes }, null, 2)
             };
         }
 
         // Otherwise return all votes data
         return {
-                statusCode: 200,
-                headers: { 'Content-Type': 'application/json' },
+            statusCode: 200,
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ votes }, null, 2)
         };
     } catch (error: any) {

@@ -1,0 +1,55 @@
+# SPARQL Query to get population of countries with their Wikidata IDs and ISO codes
+# This query retrieves:
+# - Country name
+# - ISO Alpha-2 code
+# - ISO Alpha-3 code
+# - Wikidata ID
+# - Population
+# - Population determination date
+
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX p: <http://www.wikidata.org/prop/>
+PREFIX ps: <http://www.wikidata.org/prop/statement/>
+PREFIX pq: <http://www.wikidata.org/prop/qualifier/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?country ?countryLabel ?iso2Code ?iso3Code ?wikidataId ?population ?determinationDate WHERE {
+  # Get countries with ISO codes
+  ?country wdt:P31 wd:Q6256 .  # Instance of country
+  
+  # Get ISO codes - using both direct property and statement pattern for better coverage
+  OPTIONAL { 
+    ?country wdt:P297 ?iso2Code . # ISO 3166-1 alpha-2 code (direct property)
+  }
+  OPTIONAL {
+    ?country wdt:P298 ?iso3Code . # ISO 3166-1 alpha-3 code (direct property)
+  }
+  
+  # Extract Wikidata ID from URI
+  BIND(STRAFTER(STR(?country), "http://www.wikidata.org/entity/") AS ?wikidataId)
+  
+  # Get the most recent population data
+  OPTIONAL {
+    # Get the population statement
+    ?country p:P1082 ?populationStatement .
+    ?populationStatement ps:P1082 ?population .
+    
+    # Get determination date if available
+    OPTIONAL {
+      ?populationStatement pq:P585 ?determinationDate .
+    }
+    
+    # Filter to get only the most recent population data
+    FILTER NOT EXISTS {
+      ?country p:P1082 ?newerStatement .
+      ?newerStatement pq:P585 ?newerDate .
+      ?populationStatement pq:P585 ?currentDate .
+      FILTER(?newerDate > ?currentDate)
+    }
+  }
+  
+  # Get labels in English
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "en" . }
+}
+ORDER BY ?countryLabel

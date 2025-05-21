@@ -4,7 +4,17 @@ import { Readable } from 'stream';
 import { City, RegisterRequest, RegisterResponse } from './types';
 
 const s3Client = new S3Client({ region: 'us-east-1' });
-const BUCKET_NAME = 'city-vote-data';
+// Check if running in dev environment based on environment variable
+const isDev = process.env.CITY_VOTE_ENV === 'dev';
+const BUCKET_NAME = isDev ? 'city-vote-data-dev' : 'city-vote-data';
+
+// Debug logs for environment detection
+console.log('Environment variables (registration.ts):', {
+  CITY_VOTE_ENV: process.env.CITY_VOTE_ENV,
+  AWS_LAMBDA_FUNCTION_NAME: process.env.AWS_LAMBDA_FUNCTION_NAME,
+  isDev,
+  BUCKET_NAME
+});
 const REGISTRATION_KEY = 'registration/registration.json';
 
 async function streamToString(stream: Readable): Promise<string> {

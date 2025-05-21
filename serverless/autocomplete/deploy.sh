@@ -5,9 +5,23 @@ export AWS_PROFILE="rix-admin-chris"
 # Change to the directory containing the function
 cd "$(dirname "$0")"
 
+# Check if "dev" argument is provided
+if [ "$1" == "dev" ]; then
+  ENV="dev"
+  FUNCTION_NAME="city-vote-autocomplete-city-dev"
+  echo "Deploying to DEV environment..."
+else
+  ENV="prod"
+  FUNCTION_NAME="city-vote-autocomplete-city"
+  echo "Deploying to PRODUCTION environment..."
+fi
+
 REGION="us-east-1"      # N. Virginia
-FUNCTION_NAME="city-vote-autocomplete-city"
 ZIP_FILE="function.zip"
+
+# Generate split CSV files
+echo "Generating split CSV files..."
+npm run split-csv
 
 # Build the TypeScript code
 echo "Building TypeScript..."
@@ -24,10 +38,21 @@ fi
 TEMP_DIR=$(mktemp -d)
 echo "Created temporary directory: $TEMP_DIR"
 
-# Copy function file, dependencies, and CSV data file
+# Copy function file, dependencies, and CSV data files
 cp -r dist/* "$TEMP_DIR/"
 cp package.json "$TEMP_DIR/"
+
+# Copy the original CSV file
 cp src/city-data.csv "$TEMP_DIR/"
+
+# Create directories for split CSV files
+mkdir -p "$TEMP_DIR/split_by_letter"
+mkdir -p "$TEMP_DIR/split_by_qid"
+
+# Copy split CSV files
+echo "Copying split CSV files..."
+cp -r src/split_by_letter/* "$TEMP_DIR/split_by_letter/"
+cp -r src/split_by_qid/* "$TEMP_DIR/split_by_qid/"
 
 # Install dependencies
 cd "$TEMP_DIR"
@@ -39,6 +64,9 @@ rm -f $ZIP_FILE  # Remove any existing zip file
 cd "$TEMP_DIR"
 zip -r "$OLDPWD/$ZIP_FILE" .
 cd -
+
+# Set environment variables based on deployment environment
+ENVIRONMENT_VARIABLES="{\"Variables\":{\"CITY_VOTE_ENV\":\"$ENV\"}}"
 
 # Update function code
 echo "Updating function $FUNCTION_NAME in $REGION..."
@@ -54,12 +82,13 @@ aws lambda wait function-updated \
     --function-name $FUNCTION_NAME \
     --region $REGION
 
-# Set memory to 256 MB and timeout to 5 seconds
-echo "Setting memory to 256 MB and timeout to 5 seconds..."
+# Set memory to 512 MB and timeout to 15 seconds
+echo "Setting memory to 512 MB and timeout to 15 seconds..."
 aws lambda update-function-configuration \
     --function-name $FUNCTION_NAME \
-    --memory-size 256 \
-    --timeout 10 \
+    --memory-size 512 \
+    --timeout 15 \
+    --environment "$ENVIRONMENT_VARIABLES" \
     --region $REGION \
     --no-cli-pager
 

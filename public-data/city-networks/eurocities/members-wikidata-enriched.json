@@ -1,0 +1,2115 @@
+{
+  "members": [
+    {
+      "name_on_website": "Izmir",
+      "wikidata_id": "Q35997",
+      "wikidata_name": "İzmir",
+      "latitude": 38.41,
+      "longitude": 27.14,
+      "population": 4493242.0,
+      "country": "Q43",
+      "country_name": "Turkey"
+    },
+    {
+      "name_on_website": "Kadikoy",
+      "wikidata_id": "Q932886",
+      "wikidata_name": "Kadıköy",
+      "latitude": 40.99,
+      "longitude": 29.04,
+      "population": null,
+      "country": "Q43",
+      "country_name": "Turkey"
+    },
+    {
+      "name_on_website": "Karlsruhe",
+      "wikidata_id": "Q1040",
+      "wikidata_name": "Karlsruhe",
+      "latitude": 49.02,
+      "longitude": 8.4,
+      "population": 309964.0,
+      "country": "Q183",
+      "country_name": "Germany"
+    },
+    {
+      "name_on_website": "Karlstad",
+      "wikidata_id": "Q498453",
+      "wikidata_name": "Karlstad Municipality",
+      "latitude": 59.38,
+      "longitude": 13.53,
+      "population": 98084.0,
+      "country": "Q34",
+      "country_name": "Sweden"
+    },
+    {
+      "name_on_website": "Katowice",
+      "wikidata_id": "Q588",
+      "wikidata_name": "Katowice",
+      "latitude": 50.25,
+      "longitude": 19.0,
+      "population": 278090.0,
+      "country": "Q36",
+      "country_name": "Poland"
+    },
+    {
+      "name_on_website": "Kharkiv",
+      "wikidata_id": "Q42308",
+      "wikidata_name": "Kharkiv",
+      "latitude": 49.99,
+      "longitude": 36.23,
+      "population": 1421125.0,
+      "country": "Q212",
+      "country_name": "Ukraine"
+    },
+    {
+      "name_on_website": "Kherson",
+      "wikidata_id": "Q156732",
+      "wikidata_name": "Kherson",
+      "latitude": 46.64,
+      "longitude": 32.63,
+      "population": 279131.0,
+      "country": "Q212",
+      "country_name": "Ukraine"
+    },
+    {
+      "name_on_website": "Khmelnytskyi",
+      "wikidata_id": "Q156717",
+      "wikidata_name": "Khmelnytskyi",
+      "latitude": 49.42,
+      "longitude": 27.0,
+      "population": 274452.0,
+      "country": "Q212",
+      "country_name": "Ukraine"
+    },
+    {
+      "name_on_website": "Kiel",
+      "wikidata_id": "Q1707",
+      "wikidata_name": "Kiel",
+      "latitude": 54.32,
+      "longitude": 10.14,
+      "population": 248873.0,
+      "country": "Q183",
+      "country_name": "Germany"
+    },
+    {
+      "name_on_website": "Klaipeda",
+      "wikidata_id": "Q776965",
+      "wikidata_name": "Klaipėda",
+      "latitude": 55.71,
+      "longitude": 21.14,
+      "population": 158420.0,
+      "country": "Q37",
+      "country_name": "Lithuania"
+    },
+    {
+      "name_on_website": "Kortrijk",
+      "wikidata_id": "Q12995",
+      "wikidata_name": "Kortrijk",
+      "latitude": 50.83,
+      "longitude": 3.27,
+      "population": 77741.0,
+      "country": "Q31",
+      "country_name": "Belgium"
+    },
+    {
+      "name_on_website": "Kyiv",
+      "wikidata_id": "Q1899",
+      "wikidata_name": "Kyiv",
+      "latitude": 50.45,
+      "longitude": 30.52,
+      "population": 2952301.0,
+      "country": "Q212",
+      "country_name": "Ukraine"
+    },
+    {
+      "name_on_website": "Lahti",
+      "wikidata_id": "Q28911",
+      "wikidata_name": "Lahti",
+      "latitude": 60.98,
+      "longitude": 25.65,
+      "population": 120809.0,
+      "country": "Q33",
+      "country_name": "Finland"
+    },
+    {
+      "name_on_website": "Leeds",
+      "wikidata_id": "Q39121",
+      "wikidata_name": "Leeds",
+      "latitude": 53.8,
+      "longitude": -1.54,
+      "population": 536280.0,
+      "country": "Q145",
+      "country_name": "United Kingdom"
+    },
+    {
+      "name_on_website": "Leeuwarden",
+      "wikidata_id": "Q2311189",
+      "wikidata_name": "Leeuwarden",
+      "latitude": 53.2,
+      "longitude": 5.78,
+      "population": 124481.0,
+      "country": "Q55",
+      "country_name": "Netherlands"
+    },
+    {
+      "name_on_website": "Leipzig",
+      "wikidata_id": "Q2079",
+      "wikidata_name": "Leipzig",
+      "latitude": 51.34,
+      "longitude": 12.37,
+      "population": 619879.0,
+      "country": "Q183",
+      "country_name": "Germany"
+    },
+    {
+      "name_on_website": "Leuven",
+      "wikidata_id": "Q118958",
+      "wikidata_name": "Leuven",
+      "latitude": 50.88,
+      "longitude": 4.7,
+      "population": 101032.0,
+      "country": "Q31",
+      "country_name": "Belgium"
+    },
+    {
+      "name_on_website": "Liege",
+      "wikidata_id": "Q3992",
+      "wikidata_name": "Liège",
+      "latitude": 50.64,
+      "longitude": 5.57,
+      "population": 195278.0,
+      "country": "Q31",
+      "country_name": "Belgium"
+    },
+    {
+      "name_on_website": "Linkoping",
+      "wikidata_id": "Q25413",
+      "wikidata_name": "Linköping",
+      "latitude": 58.41,
+      "longitude": 15.63,
+      "population": 116851.0,
+      "country": "Q34",
+      "country_name": "Sweden"
+    },
+    {
+      "name_on_website": "Lille Metropole",
+      "wikidata_id": "Q648",
+      "wikidata_name": "Lille",
+      "latitude": 50.63,
+      "longitude": 3.06,
+      "population": 238695.0,
+      "country": "Q142",
+      "country_name": "France"
+    },
+    {
+      "name_on_website": "Lyon Metropole",
+      "wikidata_id": "Q456",
+      "wikidata_name": "Lyon",
+      "latitude": 45.76,
+      "longitude": 4.84,
+      "population": 520774.0,
+      "country": "Q142",
+      "country_name": "France"
+    },
+    {
+      "name_on_website": "Irpin",
+      "wikidata_id": "Q71727",
+      "wikidata_name": "Irpin",
+      "latitude": 50.52,
+      "longitude": 30.25,
+      "population": 65167.0,
+      "country": "Q212",
+      "country_name": "Ukraine"
+    },
+    {
+      "name_on_website": "Istanbul",
+      "wikidata_id": "Q406",
+      "wikidata_name": "Istanbul",
+      "latitude": 41.01,
+      "longitude": 28.96,
+      "population": 15655924.0,
+      "country": "Q43",
+      "country_name": "Turkey"
+    },
+    {
+      "name_on_website": "Lisbon",
+      "wikidata_id": "Q597",
+      "wikidata_name": "Lisbon",
+      "latitude": 38.71,
+      "longitude": -9.14,
+      "population": 545796.0,
+      "country": "Q45",
+      "country_name": "Portugal"
+    },
+    {
+      "name_on_website": "Ljubljana",
+      "wikidata_id": "Q437",
+      "wikidata_name": "Ljubljana",
+      "latitude": 46.05,
+      "longitude": 14.51,
+      "population": 284293.0,
+      "country": "Q215",
+      "country_name": "Slovenia"
+    },
+    {
+      "name_on_website": "Aarhus",
+      "wikidata_id": "Q25319",
+      "wikidata_name": "Aarhus",
+      "latitude": 56.16,
+      "longitude": 10.21,
+      "population": 290598.0,
+      "country": "Q35",
+      "country_name": "Denmark"
+    },
+    {
+      "name_on_website": "Aix-Marseille-Provence Metropole",
+      "wikidata_id": "Q23482",
+      "wikidata_name": "Marseille",
+      "latitude": 43.3,
+      "longitude": 5.38,
+      "population": 877215.0,
+      "country": "Q142",
+      "country_name": "France"
+    },
+    {
+      "name_on_website": "Alcobendas",
+      "wikidata_id": "Q487679",
+      "wikidata_name": "Alcobendas",
+      "latitude": 40.53,
+      "longitude": -3.63,
+      "population": 121373.0,
+      "country": "Q29",
+      "country_name": "Spain"
+    },
+    {
+      "name_on_website": "Almere",
+      "wikidata_id": "Q83178",
+      "wikidata_name": "Almere",
+      "latitude": 52.38,
+      "longitude": 5.23,
+      "population": 214715.0,
+      "country": "Q55",
+      "country_name": "Netherlands"
+    },
+    {
+      "name_on_website": "Amaroussion",
+      "wikidata_id": "Q25162085",
+      "wikidata_name": "Amarusio Municipality",
+      "latitude": 38.05,
+      "longitude": 23.8,
+      "population": 58999.0,
+      "country": "Q41",
+      "country_name": "Greece"
+    },
+    {
+      "name_on_website": "Ambelokipi-Menemeni",
+      "wikidata_id": "Q302020",
+      "wikidata_name": "Ampelokipoi-Menemeni Municipality",
+      "latitude": 40.66,
+      "longitude": 22.9,
+      "population": 42000.0,
+      "country": "Q41",
+      "country_name": "Greece"
+    },
+    {
+      "name_on_website": "Amiens Metropole",
+      "wikidata_id": "Q41604",
+      "wikidata_name": "Amiens",
+      "latitude": 49.89,
+      "longitude": 2.3,
+      "population": 134780.0,
+      "country": "Q142",
+      "country_name": "France"
+    },
+    {
+      "name_on_website": "Ampelokipoi-Menemeni",
+      "wikidata_id": "Q302020",
+      "wikidata_name": "Ampelokipoi-Menemeni Municipality",
+      "latitude": 40.66,
+      "longitude": 22.9,
+      "population": 42000.0,
+      "country": "Q41",
+      "country_name": "Greece"
+    },
+    {
+      "name_on_website": "Amsterdam",
+      "wikidata_id": "Q727",
+      "wikidata_name": "Amsterdam",
+      "latitude": 52.37,
+      "longitude": 4.88,
+      "population": 921468.0,
+      "country": "Q55",
+      "country_name": "Netherlands"
+    },
+    {
+      "name_on_website": "Angers Loire Metropole",
+      "wikidata_id": "Q38380",
+      "wikidata_name": "Angers",
+      "latitude": 47.47,
+      "longitude": -0.56,
+      "population": 157555.0,
+      "country": "Q142",
+      "country_name": "France"
+    },
+    {
+      "name_on_website": "Antwerp",
+      "wikidata_id": "Q12892",
+      "wikidata_name": "Antwerp",
+      "latitude": 51.22,
+      "longitude": 4.4,
+      "population": 536079.0,
+      "country": "Q31",
+      "country_name": "Belgium"
+    },
+    {
+      "name_on_website": "Arezzo",
+      "wikidata_id": "Q13378",
+      "wikidata_name": "Arezzo",
+      "latitude": 43.46,
+      "longitude": 11.88,
+      "population": 96260.0,
+      "country": "Q38",
+      "country_name": "Italy"
+    },
+    {
+      "name_on_website": "Athens",
+      "wikidata_id": "Q1524",
+      "wikidata_name": "Athens",
+      "latitude": 37.98,
+      "longitude": 23.73,
+      "population": 643452.0,
+      "country": "Q41",
+      "country_name": "Greece"
+    },
+    {
+      "name_on_website": "Barcelona",
+      "wikidata_id": "Q1492",
+      "wikidata_name": "Barcelona",
+      "latitude": 41.38,
+      "longitude": 2.18,
+      "population": 1702547.0,
+      "country": "Q29",
+      "country_name": "Spain"
+    },
+    {
+      "name_on_website": "Barcelos",
+      "wikidata_id": "Q213242",
+      "wikidata_name": "Barcelos",
+      "latitude": 41.53,
+      "longitude": -8.62,
+      "population": 116752.0,
+      "country": "Q45",
+      "country_name": "Portugal"
+    },
+    {
+      "name_on_website": "Bari",
+      "wikidata_id": "Q3519",
+      "wikidata_name": "Bari",
+      "latitude": 41.13,
+      "longitude": 16.87,
+      "population": 316015.0,
+      "country": "Q38",
+      "country_name": "Italy"
+    },
+    {
+      "name_on_website": "Belfast",
+      "wikidata_id": "Q10686",
+      "wikidata_name": "Belfast",
+      "latitude": 54.6,
+      "longitude": -5.93,
+      "population": 345006.0,
+      "country": "Q145",
+      "country_name": "United Kingdom"
+    },
+    {
+      "name_on_website": "Bergen",
+      "wikidata_id": "Q26793",
+      "wikidata_name": "Bergen",
+      "latitude": 60.39,
+      "longitude": 5.32,
+      "population": 291189.0,
+      "country": "Q20",
+      "country_name": "Norway"
+    },
+    {
+      "name_on_website": "Berlin",
+      "wikidata_id": "Q64",
+      "wikidata_name": "Berlin",
+      "latitude": 52.52,
+      "longitude": 13.38,
+      "population": 3782202.0,
+      "country": "Q183",
+      "country_name": "Germany"
+    },
+    {
+      "name_on_website": "Bialystok",
+      "wikidata_id": "Q761",
+      "wikidata_name": "Białystok",
+      "latitude": 53.12,
+      "longitude": 23.17,
+      "population": 294242.0,
+      "country": "Q36",
+      "country_name": "Poland"
+    },
+    {
+      "name_on_website": "Bilbao",
+      "wikidata_id": "Q8692",
+      "wikidata_name": "Bilbao",
+      "latitude": 43.26,
+      "longitude": -2.93,
+      "population": 348089.0,
+      "country": "Q29",
+      "country_name": "Spain"
+    },
+    {
+      "name_on_website": "Birmingham",
+      "wikidata_id": "Q2256",
+      "wikidata_name": "Birmingham",
+      "latitude": 52.48,
+      "longitude": -1.9,
+      "population": 1137100.0,
+      "country": "Q145",
+      "country_name": "United Kingdom"
+    },
+    {
+      "name_on_website": "Bochum",
+      "wikidata_id": "Q2103",
+      "wikidata_name": "Bochum",
+      "latitude": 51.48,
+      "longitude": 7.22,
+      "population": 366385.0,
+      "country": "Q183",
+      "country_name": "Germany"
+    },
+    {
+      "name_on_website": "Bologna",
+      "wikidata_id": "Q1891",
+      "wikidata_name": "Bologna",
+      "latitude": 44.49,
+      "longitude": 11.34,
+      "population": 387971.0,
+      "country": "Q38",
+      "country_name": "Italy"
+    },
+    {
+      "name_on_website": "Bonn",
+      "wikidata_id": "Q586",
+      "wikidata_name": "Bonn",
+      "latitude": 50.74,
+      "longitude": 7.1,
+      "population": 335789.0,
+      "country": "Q183",
+      "country_name": "Germany"
+    },
+    {
+      "name_on_website": "Bordeaux",
+      "wikidata_id": "Q1479",
+      "wikidata_name": "Bordeaux",
+      "latitude": 44.84,
+      "longitude": -0.58,
+      "population": 265328.0,
+      "country": "Q142",
+      "country_name": "France"
+    },
+    {
+      "name_on_website": "Borlange",
+      "wikidata_id": "Q503209",
+      "wikidata_name": "Borlänge Municipality",
+      "latitude": 60.48,
+      "longitude": 15.44,
+      "population": 51425.0,
+      "country": "Q34",
+      "country_name": "Sweden"
+    },
+    {
+      "name_on_website": "Braga",
+      "wikidata_id": "Q83247",
+      "wikidata_name": "Braga",
+      "latitude": 41.53,
+      "longitude": -8.42,
+      "population": 193324.0,
+      "country": "Q45",
+      "country_name": "Portugal"
+    },
+    {
+      "name_on_website": "Bratislava",
+      "wikidata_id": "Q1780",
+      "wikidata_name": "Bratislava",
+      "latitude": 48.14,
+      "longitude": 17.11,
+      "population": 479389.0,
+      "country": "Q214",
+      "country_name": "Slovakia"
+    },
+    {
+      "name_on_website": "Bremen",
+      "wikidata_id": "Q1209",
+      "wikidata_name": "Bremen",
+      "latitude": 53.13,
+      "longitude": 8.73,
+      "population": 693204.0,
+      "country": "Q183",
+      "country_name": "Germany"
+    },
+    {
+      "name_on_website": "Brescia",
+      "wikidata_id": "Q6221",
+      "wikidata_name": "Brescia",
+      "latitude": 45.54,
+      "longitude": 10.22,
+      "population": 196446.0,
+      "country": "Q38",
+      "country_name": "Italy"
+    },
+    {
+      "name_on_website": "Brest Metropole",
+      "wikidata_id": "Q12193",
+      "wikidata_name": "Brest",
+      "latitude": 48.39,
+      "longitude": -4.49,
+      "population": 140993.0,
+      "country": "Q142",
+      "country_name": "France"
+    },
+    {
+      "name_on_website": "Brighton & Hove",
+      "wikidata_id": "Q131491",
+      "wikidata_name": "Brighton",
+      "latitude": 50.82,
+      "longitude": -0.14,
+      "population": 134293.0,
+      "country": "Q145",
+      "country_name": "United Kingdom"
+    },
+    {
+      "name_on_website": "Bristol",
+      "wikidata_id": "Q23154",
+      "wikidata_name": "Bristol",
+      "latitude": 51.45,
+      "longitude": -2.6,
+      "population": 472465.0,
+      "country": "Q145",
+      "country_name": "United Kingdom"
+    },
+    {
+      "name_on_website": "Brno",
+      "wikidata_id": "Q14960",
+      "wikidata_name": "Brno",
+      "latitude": 49.2,
+      "longitude": 16.61,
+      "population": 400566.0,
+      "country": "Q213",
+      "country_name": "Czechia"
+    },
+    {
+      "name_on_website": "Bruges",
+      "wikidata_id": "Q12994",
+      "wikidata_name": "Bruges",
+      "latitude": 51.21,
+      "longitude": 3.22,
+      "population": 118509.0,
+      "country": "Q31",
+      "country_name": "Belgium"
+    },
+    {
+      "name_on_website": "Brussels",
+      "wikidata_id": "Q239",
+      "wikidata_name": "City of Brussels",
+      "latitude": 50.85,
+      "longitude": 4.35,
+      "population": 195546.0,
+      "country": "Q31",
+      "country_name": "Belgium"
+    },
+    {
+      "name_on_website": "Budapest",
+      "wikidata_id": "Q1781",
+      "wikidata_name": "Budapest",
+      "latitude": 47.5,
+      "longitude": 19.04,
+      "population": 1686222.0,
+      "country": "Q28",
+      "country_name": "Hungary"
+    },
+    {
+      "name_on_website": "Burgas",
+      "wikidata_id": "Q167807",
+      "wikidata_name": "Burgas",
+      "latitude": 42.49,
+      "longitude": 27.47,
+      "population": 232311.0,
+      "country": "Q219",
+      "country_name": "Bulgaria"
+    },
+    {
+      "name_on_website": "Bydgoszcz",
+      "wikidata_id": "Q41252",
+      "wikidata_name": "Bydgoszcz",
+      "latitude": 53.12,
+      "longitude": 18.0,
+      "population": 324984.0,
+      "country": "Q36",
+      "country_name": "Poland"
+    },
+    {
+      "name_on_website": "Cagliari",
+      "wikidata_id": "Q1897",
+      "wikidata_name": "Cagliari",
+      "latitude": 39.22,
+      "longitude": 9.12,
+      "population": 148117.0,
+      "country": "Q38",
+      "country_name": "Italy"
+    },
+    {
+      "name_on_website": "Cardiff",
+      "wikidata_id": "Q10690",
+      "wikidata_name": "Cardiff",
+      "latitude": 51.48,
+      "longitude": -3.18,
+      "population": 361469.0,
+      "country": "Q145",
+      "country_name": "United Kingdom"
+    },
+    {
+      "name_on_website": "Cesena",
+      "wikidata_id": "Q6662",
+      "wikidata_name": "Cesena",
+      "latitude": 44.13,
+      "longitude": 12.23,
+      "population": 95778.0,
+      "country": "Q38",
+      "country_name": "Italy"
+    },
+    {
+      "name_on_website": "Chemnitz",
+      "wikidata_id": "Q2795",
+      "wikidata_name": "Chemnitz",
+      "latitude": 50.83,
+      "longitude": 12.92,
+      "population": 250681.0,
+      "country": "Q183",
+      "country_name": "Germany"
+    },
+    {
+      "name_on_website": "Chernihiv",
+      "wikidata_id": "Q157053",
+      "wikidata_name": "Chernihiv",
+      "latitude": 51.49,
+      "longitude": 31.29,
+      "population": 286899.0,
+      "country": "Q212",
+      "country_name": "Ukraine"
+    },
+    {
+      "name_on_website": "Chisinau",
+      "wikidata_id": "Q21197",
+      "wikidata_name": "Chișinău",
+      "latitude": 47.02,
+      "longitude": 28.84,
+      "population": 639000.0,
+      "country": "Q217",
+      "country_name": "Moldova"
+    },
+    {
+      "name_on_website": "Cluj-Napoca",
+      "wikidata_id": "Q100188",
+      "wikidata_name": "Cluj-Napoca",
+      "latitude": 46.77,
+      "longitude": 23.59,
+      "population": 286598.0,
+      "country": "Q218",
+      "country_name": "Romania"
+    },
+    {
+      "name_on_website": "Cologne",
+      "wikidata_id": "Q365",
+      "wikidata_name": "Cologne",
+      "latitude": 50.94,
+      "longitude": 6.96,
+      "population": 1087353.0,
+      "country": "Q183",
+      "country_name": "Germany"
+    },
+    {
+      "name_on_website": "Constanta",
+      "wikidata_id": "Q79808",
+      "wikidata_name": "Constanța",
+      "latitude": 44.18,
+      "longitude": 28.65,
+      "population": 263707.0,
+      "country": "Q218",
+      "country_name": "Romania"
+    },
+    {
+      "name_on_website": "Copenhagen",
+      "wikidata_id": "Q1748",
+      "wikidata_name": "Copenhagen",
+      "latitude": 55.68,
+      "longitude": 12.57,
+      "population": 644431.0,
+      "country": "Q35",
+      "country_name": "Denmark"
+    },
+    {
+      "name_on_website": "Coventry",
+      "wikidata_id": "Q6225",
+      "wikidata_name": "Coventry",
+      "latitude": 52.42,
+      "longitude": -1.52,
+      "population": 366785.0,
+      "country": "Q145",
+      "country_name": "United Kingdom"
+    },
+    {
+      "name_on_website": "Dijon",
+      "wikidata_id": "Q7003",
+      "wikidata_name": "Dijon",
+      "latitude": 47.32,
+      "longitude": 5.04,
+      "population": 159941.0,
+      "country": "Q142",
+      "country_name": "France"
+    },
+    {
+      "name_on_website": "Donostia – San Sebastian",
+      "wikidata_id": "Q10313",
+      "wikidata_name": "Donostia-San Sebastián",
+      "latitude": 43.32,
+      "longitude": -1.98,
+      "population": 189093.0,
+      "country": "Q29",
+      "country_name": "Spain"
+    },
+    {
+      "name_on_website": "Dordrecht",
+      "wikidata_id": "Q26421",
+      "wikidata_name": "Dordrecht",
+      "latitude": 51.8,
+      "longitude": 4.68,
+      "population": 122070.0,
+      "country": "Q55",
+      "country_name": "Netherlands"
+    },
+    {
+      "name_on_website": "Dortmund",
+      "wikidata_id": "Q1295",
+      "wikidata_name": "Dortmund",
+      "latitude": 51.51,
+      "longitude": 7.47,
+      "population": 595471.0,
+      "country": "Q183",
+      "country_name": "Germany"
+    },
+    {
+      "name_on_website": "Dresden",
+      "wikidata_id": "Q1731",
+      "wikidata_name": "Dresden",
+      "latitude": 51.05,
+      "longitude": 13.74,
+      "population": 566222.0,
+      "country": "Q183",
+      "country_name": "Germany"
+    },
+    {
+      "name_on_website": "Dublin",
+      "wikidata_id": "Q1761",
+      "wikidata_name": "Dublin",
+      "latitude": 53.35,
+      "longitude": -6.26,
+      "population": 592713.0,
+      "country": "Q27",
+      "country_name": "Ireland"
+    },
+    {
+      "name_on_website": "Dusseldorf",
+      "wikidata_id": "Q1718",
+      "wikidata_name": "Düsseldorf",
+      "latitude": 51.23,
+      "longitude": 6.78,
+      "population": 631217.0,
+      "country": "Q183",
+      "country_name": "Germany"
+    },
+    {
+      "name_on_website": "Eindhoven",
+      "wikidata_id": "Q9832",
+      "wikidata_name": "Eindhoven",
+      "latitude": 51.43,
+      "longitude": 5.48,
+      "population": 243730.0,
+      "country": "Q55",
+      "country_name": "Netherlands"
+    },
+    {
+      "name_on_website": "Espoo",
+      "wikidata_id": "Q47034",
+      "wikidata_name": "Espoo",
+      "latitude": 60.21,
+      "longitude": 24.66,
+      "population": 314821.0,
+      "country": "Q33",
+      "country_name": "Finland"
+    },
+    {
+      "name_on_website": "Essen",
+      "wikidata_id": "Q2066",
+      "wikidata_name": "Essen",
+      "latitude": 51.45,
+      "longitude": 7.01,
+      "population": 586608.0,
+      "country": "Q183",
+      "country_name": "Germany"
+    },
+    {
+      "name_on_website": "Florence",
+      "wikidata_id": "Q2044",
+      "wikidata_name": "Florence",
+      "latitude": 43.77,
+      "longitude": 11.25,
+      "population": 360930.0,
+      "country": "Q38",
+      "country_name": "Italy"
+    },
+    {
+      "name_on_website": "Frankfurt",
+      "wikidata_id": "Q1794",
+      "wikidata_name": "Frankfurt",
+      "latitude": 50.11,
+      "longitude": 8.68,
+      "population": 775790.0,
+      "country": "Q183",
+      "country_name": "Germany"
+    },
+    {
+      "name_on_website": "Fuenlabrada",
+      "wikidata_id": "Q54902",
+      "wikidata_name": "Fuenlabrada",
+      "latitude": 40.28,
+      "longitude": -3.8,
+      "population": 190790.0,
+      "country": "Q29",
+      "country_name": "Spain"
+    },
+    {
+      "name_on_website": "Gaziantep",
+      "wikidata_id": "Q93338",
+      "wikidata_name": "Gaziantep",
+      "latitude": 37.06,
+      "longitude": 37.38,
+      "population": 1680723.0,
+      "country": "Q43",
+      "country_name": "Turkey"
+    },
+    {
+      "name_on_website": "Gdansk",
+      "wikidata_id": "Q1792",
+      "wikidata_name": "Gdańsk",
+      "latitude": 54.35,
+      "longitude": 18.65,
+      "population": 487834.0,
+      "country": "Q36",
+      "country_name": "Poland"
+    },
+    {
+      "name_on_website": "Genoa",
+      "wikidata_id": "Q1449",
+      "wikidata_name": "Genoa",
+      "latitude": 44.41,
+      "longitude": 8.93,
+      "population": 558745.0,
+      "country": "Q38",
+      "country_name": "Italy"
+    },
+    {
+      "name_on_website": "Ghent",
+      "wikidata_id": "Q1296",
+      "wikidata_name": "Ghent",
+      "latitude": 51.05,
+      "longitude": 3.73,
+      "population": 265086.0,
+      "country": "Q31",
+      "country_name": "Belgium"
+    },
+    {
+      "name_on_website": "Gijon",
+      "wikidata_id": "Q12273",
+      "wikidata_name": "Gijón",
+      "latitude": 43.53,
+      "longitude": -5.68,
+      "population": 268561.0,
+      "country": "Q29",
+      "country_name": "Spain"
+    },
+    {
+      "name_on_website": "Glasgow",
+      "wikidata_id": "Q4093",
+      "wikidata_name": "Glasgow",
+      "latitude": 55.86,
+      "longitude": -4.25,
+      "population": 635640.0,
+      "country": "Q145",
+      "country_name": "United Kingdom"
+    },
+    {
+      "name_on_website": "Gothenburg",
+      "wikidata_id": "Q25287",
+      "wikidata_name": "Gothenburg",
+      "latitude": 57.71,
+      "longitude": 11.97,
+      "population": 674529.0,
+      "country": "Q34",
+      "country_name": "Sweden"
+    },
+    {
+      "name_on_website": "Grenoble Alpes Metropole",
+      "wikidata_id": "Q1289",
+      "wikidata_name": "Grenoble",
+      "latitude": 45.19,
+      "longitude": 5.73,
+      "population": 156389.0,
+      "country": "Q142",
+      "country_name": "France"
+    },
+    {
+      "name_on_website": "Groningen",
+      "wikidata_id": "Q749",
+      "wikidata_name": "Groningen",
+      "latitude": 53.22,
+      "longitude": 6.57,
+      "population": 238147.0,
+      "country": "Q55",
+      "country_name": "Netherlands"
+    },
+    {
+      "name_on_website": "Guimaraes",
+      "wikidata_id": "Q170903",
+      "wikidata_name": "Guimarães",
+      "latitude": 41.45,
+      "longitude": -8.29,
+      "population": 156830.0,
+      "country": "Q45",
+      "country_name": "Portugal"
+    },
+    {
+      "name_on_website": "Haarlem",
+      "wikidata_id": "Q9920",
+      "wikidata_name": "Haarlem",
+      "latitude": 52.38,
+      "longitude": 4.64,
+      "population": 162543.0,
+      "country": "Q55",
+      "country_name": "Netherlands"
+    },
+    {
+      "name_on_website": "Hagen",
+      "wikidata_id": "Q2871",
+      "wikidata_name": "Hagen",
+      "latitude": 51.36,
+      "longitude": 7.48,
+      "population": 190490.0,
+      "country": "Q183",
+      "country_name": "Germany"
+    },
+    {
+      "name_on_website": "Hamburg",
+      "wikidata_id": "Q1055",
+      "wikidata_name": "Hamburg",
+      "latitude": 53.55,
+      "longitude": 10.0,
+      "population": 1910160.0,
+      "country": "Q183",
+      "country_name": "Germany"
+    },
+    {
+      "name_on_website": "Hannover",
+      "wikidata_id": "Q1715",
+      "wikidata_name": "Hanover",
+      "latitude": 52.37,
+      "longitude": 9.74,
+      "population": 548186.0,
+      "country": "Q183",
+      "country_name": "Germany"
+    },
+    {
+      "name_on_website": "Hatay",
+      "wikidata_id": "Q28479116",
+      "wikidata_name": "Hatay Metropolitan Municipality",
+      "latitude": 36.2,
+      "longitude": 36.16,
+      "population": null,
+      "country": "Q43",
+      "country_name": "Turkey"
+    },
+    {
+      "name_on_website": "Helsinki",
+      "wikidata_id": "Q1757",
+      "wikidata_name": "Helsinki",
+      "latitude": 60.17,
+      "longitude": 24.94,
+      "population": 675747.0,
+      "country": "Q33",
+      "country_name": "Finland"
+    },
+    {
+      "name_on_website": "Lodz",
+      "wikidata_id": "Q580",
+      "wikidata_name": "Łódź",
+      "latitude": 51.75,
+      "longitude": 19.47,
+      "population": 648711.0,
+      "country": "Q36",
+      "country_name": "Poland"
+    },
+    {
+      "name_on_website": "Logrono",
+      "wikidata_id": "Q14325",
+      "wikidata_name": "Logroño",
+      "latitude": 42.47,
+      "longitude": -2.45,
+      "population": 151164.0,
+      "country": "Q29",
+      "country_name": "Spain"
+    },
+    {
+      "name_on_website": "London",
+      "wikidata_id": "Q84",
+      "wikidata_name": "London",
+      "latitude": 51.51,
+      "longitude": -0.13,
+      "population": 8799728.0,
+      "country": "Q145",
+      "country_name": "United Kingdom"
+    },
+    {
+      "name_on_website": "Lublin",
+      "wikidata_id": "Q37333",
+      "wikidata_name": "Lublin",
+      "latitude": 51.25,
+      "longitude": 22.57,
+      "population": 334681.0,
+      "country": "Q36",
+      "country_name": "Poland"
+    },
+    {
+      "name_on_website": "Luxembourg",
+      "wikidata_id": "Q1842",
+      "wikidata_name": "Luxembourg",
+      "latitude": 49.61,
+      "longitude": 6.13,
+      "population": 136208.0,
+      "country": "Q32",
+      "country_name": "Luxembourg"
+    },
+    {
+      "name_on_website": "Lviv",
+      "wikidata_id": "Q36036",
+      "wikidata_name": "Lviv",
+      "latitude": 49.84,
+      "longitude": 24.03,
+      "population": 717273.0,
+      "country": "Q212",
+      "country_name": "Ukraine"
+    },
+    {
+      "name_on_website": "Lyon",
+      "wikidata_id": "Q456",
+      "wikidata_name": "Lyon",
+      "latitude": 45.76,
+      "longitude": 4.84,
+      "population": 520774.0,
+      "country": "Q142",
+      "country_name": "France"
+    },
+    {
+      "name_on_website": "Madrid",
+      "wikidata_id": "Q2807",
+      "wikidata_name": "Madrid",
+      "latitude": 40.42,
+      "longitude": -3.7,
+      "population": 3416771.0,
+      "country": "Q29",
+      "country_name": "Spain"
+    },
+    {
+      "name_on_website": "Maia",
+      "wikidata_id": "Q990403",
+      "wikidata_name": "Maia",
+      "latitude": 41.23,
+      "longitude": -8.62,
+      "population": 134977.0,
+      "country": "Q45",
+      "country_name": "Portugal"
+    },
+    {
+      "name_on_website": "Malaga",
+      "wikidata_id": "Q8851",
+      "wikidata_name": "Málaga",
+      "latitude": 36.72,
+      "longitude": -4.42,
+      "population": 591637.0,
+      "country": "Q29",
+      "country_name": "Spain"
+    },
+    {
+      "name_on_website": "Malmo",
+      "wikidata_id": "Q503361",
+      "wikidata_name": "Malmö Municipality",
+      "latitude": 55.57,
+      "longitude": 13.02,
+      "population": 365644.0,
+      "country": "Q34",
+      "country_name": "Sweden"
+    },
+    {
+      "name_on_website": "Manchester",
+      "wikidata_id": "Q18125",
+      "wikidata_name": "Manchester",
+      "latitude": 53.47,
+      "longitude": -2.23,
+      "population": 547627.0,
+      "country": "Q145",
+      "country_name": "United Kingdom"
+    },
+    {
+      "name_on_website": "Mannheim",
+      "wikidata_id": "Q2119",
+      "wikidata_name": "Mannheim",
+      "latitude": 49.49,
+      "longitude": 8.47,
+      "population": 316877.0,
+      "country": "Q183",
+      "country_name": "Germany"
+    },
+    {
+      "name_on_website": "Mariupol (city government in exile)",
+      "wikidata_id": "Q37133",
+      "wikidata_name": "Mariupol",
+      "latitude": 47.13,
+      "longitude": 37.56,
+      "population": 449498.0,
+      "country": "Q212",
+      "country_name": "Ukraine"
+    },
+    {
+      "name_on_website": "Marseille",
+      "wikidata_id": "Q23482",
+      "wikidata_name": "Marseille",
+      "latitude": 43.3,
+      "longitude": 5.38,
+      "population": 877215.0,
+      "country": "Q142",
+      "country_name": "France"
+    },
+    {
+      "name_on_website": "Matosinhos",
+      "wikidata_id": "Q841299",
+      "wikidata_name": "Matosinhos",
+      "latitude": 41.19,
+      "longitude": -8.68,
+      "population": 172557.0,
+      "country": "Q45",
+      "country_name": "Portugal"
+    },
+    {
+      "name_on_website": "Milan",
+      "wikidata_id": "Q490",
+      "wikidata_name": "Milan",
+      "latitude": 45.47,
+      "longitude": 9.19,
+      "population": 1354196.0,
+      "country": "Q38",
+      "country_name": "Italy"
+    },
+    {
+      "name_on_website": "Montpellier Metropole",
+      "wikidata_id": "Q6441",
+      "wikidata_name": "Montpellier",
+      "latitude": 43.61,
+      "longitude": 3.88,
+      "population": 307101.0,
+      "country": "Q142",
+      "country_name": "France"
+    },
+    {
+      "name_on_website": "Muenster",
+      "wikidata_id": "Q2742",
+      "wikidata_name": "Münster",
+      "latitude": 51.96,
+      "longitude": 7.63,
+      "population": 322904.0,
+      "country": "Q183",
+      "country_name": "Germany"
+    },
+    {
+      "name_on_website": "Munich",
+      "wikidata_id": "Q1726",
+      "wikidata_name": "Munich",
+      "latitude": 48.14,
+      "longitude": 11.58,
+      "population": 1510378.0,
+      "country": "Q183",
+      "country_name": "Germany"
+    },
+    {
+      "name_on_website": "Murcia",
+      "wikidata_id": "Q12225",
+      "wikidata_name": "Murcia",
+      "latitude": 37.99,
+      "longitude": -1.13,
+      "population": 474617.0,
+      "country": "Q29",
+      "country_name": "Spain"
+    },
+    {
+      "name_on_website": "Nancy",
+      "wikidata_id": "Q40898",
+      "wikidata_name": "Nancy",
+      "latitude": 48.69,
+      "longitude": 6.18,
+      "population": 104387.0,
+      "country": "Q142",
+      "country_name": "France"
+    },
+    {
+      "name_on_website": "Naples",
+      "wikidata_id": "Q2634",
+      "wikidata_name": "Naples",
+      "latitude": 40.84,
+      "longitude": 14.25,
+      "population": 913462.0,
+      "country": "Q38",
+      "country_name": "Italy"
+    },
+    {
+      "name_on_website": "Newcastle",
+      "wikidata_id": "Q1425428",
+      "wikidata_name": "Newcastle upon Tyne",
+      "latitude": 54.98,
+      "longitude": -1.61,
+      "population": 300196.0,
+      "country": "Q145",
+      "country_name": "United Kingdom"
+    },
+    {
+      "name_on_website": "Nice Côte d'Azur",
+      "wikidata_id": "Q33959",
+      "wikidata_name": "Nice",
+      "latitude": 43.7,
+      "longitude": 7.27,
+      "population": 353701.0,
+      "country": "Q142",
+      "country_name": "France"
+    },
+    {
+      "name_on_website": "Nicosia",
+      "wikidata_id": "Q3856",
+      "wikidata_name": "Nicosia",
+      "latitude": 35.17,
+      "longitude": 33.37,
+      "population": 56848.0,
+      "country": "Q229",
+      "country_name": "Cyprus"
+    },
+    {
+      "name_on_website": "Novi Sad",
+      "wikidata_id": "Q55630",
+      "wikidata_name": "Novi Sad",
+      "latitude": 45.26,
+      "longitude": 19.83,
+      "population": 260438.0,
+      "country": "Q403",
+      "country_name": "Serbia"
+    },
+    {
+      "name_on_website": "Nuremberg",
+      "wikidata_id": "Q2090",
+      "wikidata_name": "Nuremberg",
+      "latitude": 49.45,
+      "longitude": 11.08,
+      "population": 526091.0,
+      "country": "Q183",
+      "country_name": "Germany"
+    },
+    {
+      "name_on_website": "Odense",
+      "wikidata_id": "Q25331",
+      "wikidata_name": "Odense",
+      "latitude": 55.4,
+      "longitude": 10.38,
+      "population": 180863.0,
+      "country": "Q35",
+      "country_name": "Denmark"
+    },
+    {
+      "name_on_website": "Odesa",
+      "wikidata_id": "Q1874",
+      "wikidata_name": "Odesa",
+      "latitude": 46.48,
+      "longitude": 30.73,
+      "population": 1010537.0,
+      "country": "Q212",
+      "country_name": "Ukraine"
+    },
+    {
+      "name_on_website": "Orihuela",
+      "wikidata_id": "Q487786",
+      "wikidata_name": "Orihuela",
+      "latitude": 38.09,
+      "longitude": -0.95,
+      "population": 83720.0,
+      "country": "Q29",
+      "country_name": "Spain"
+    },
+    {
+      "name_on_website": "Oslo",
+      "wikidata_id": "Q585",
+      "wikidata_name": "Oslo",
+      "latitude": 59.91,
+      "longitude": 10.74,
+      "population": 717710.0,
+      "country": "Q20",
+      "country_name": "Norway"
+    },
+    {
+      "name_on_website": "Ostend",
+      "wikidata_id": "Q12996",
+      "wikidata_name": "Ostend",
+      "latitude": 51.23,
+      "longitude": 2.92,
+      "population": 71557.0,
+      "country": "Q31",
+      "country_name": "Belgium"
+    },
+    {
+      "name_on_website": "Oulu",
+      "wikidata_id": "Q47048",
+      "wikidata_name": "Oulu",
+      "latitude": 65.01,
+      "longitude": 25.47,
+      "population": 214814.0,
+      "country": "Q33",
+      "country_name": "Finland"
+    },
+    {
+      "name_on_website": "Palermo",
+      "wikidata_id": "Q2656",
+      "wikidata_name": "Palermo",
+      "latitude": 38.12,
+      "longitude": 13.36,
+      "population": 630167.0,
+      "country": "Q38",
+      "country_name": "Italy"
+    },
+    {
+      "name_on_website": "Paris",
+      "wikidata_id": "Q90",
+      "wikidata_name": "Paris",
+      "latitude": 48.86,
+      "longitude": 2.35,
+      "population": 2145906.0,
+      "country": "Q142",
+      "country_name": "France"
+    },
+    {
+      "name_on_website": "Parma",
+      "wikidata_id": "Q2683",
+      "wikidata_name": "Parma",
+      "latitude": 44.8,
+      "longitude": 10.33,
+      "population": 196764.0,
+      "country": "Q38",
+      "country_name": "Italy"
+    },
+    {
+      "name_on_website": "Pau",
+      "wikidata_id": "Q132671",
+      "wikidata_name": "Pau",
+      "latitude": 43.3,
+      "longitude": -0.37,
+      "population": 78620.0,
+      "country": "Q142",
+      "country_name": "France"
+    },
+    {
+      "name_on_website": "Pesaro",
+      "wikidata_id": "Q13134",
+      "wikidata_name": "Pesaro",
+      "latitude": 43.91,
+      "longitude": 12.91,
+      "population": 95376.0,
+      "country": "Q38",
+      "country_name": "Italy"
+    },
+    {
+      "name_on_website": "Pilsen",
+      "wikidata_id": "Q43453",
+      "wikidata_name": "Plzeň",
+      "latitude": 49.74,
+      "longitude": 13.38,
+      "population": 185599.0,
+      "country": "Q213",
+      "country_name": "Czechia"
+    },
+    {
+      "name_on_website": "Pisa",
+      "wikidata_id": "Q13375",
+      "wikidata_name": "Pisa",
+      "latitude": 43.72,
+      "longitude": 10.4,
+      "population": 88737.0,
+      "country": "Q38",
+      "country_name": "Italy"
+    },
+    {
+      "name_on_website": "Podgorica",
+      "wikidata_id": "Q23564",
+      "wikidata_name": "Podgorica",
+      "latitude": 42.44,
+      "longitude": 19.26,
+      "population": 150977.0,
+      "country": "Q236",
+      "country_name": "Montenegro"
+    },
+    {
+      "name_on_website": "Pokrovsk",
+      "wikidata_id": "Q1000446",
+      "wikidata_name": "Pokrovsk",
+      "latitude": 48.28,
+      "longitude": 37.18,
+      "population": 63437.0,
+      "country": "Q212",
+      "country_name": "Ukraine"
+    },
+    {
+      "name_on_website": "Poltava",
+      "wikidata_id": "Q156747",
+      "wikidata_name": "Poltava",
+      "latitude": 49.59,
+      "longitude": 34.55,
+      "population": 279593.0,
+      "country": "Q212",
+      "country_name": "Ukraine"
+    },
+    {
+      "name_on_website": "Porto",
+      "wikidata_id": "Q36433",
+      "wikidata_name": "Porto",
+      "latitude": 41.15,
+      "longitude": -8.61,
+      "population": 231800.0,
+      "country": "Q45",
+      "country_name": "Portugal"
+    },
+    {
+      "name_on_website": "Poznan",
+      "wikidata_id": "Q268",
+      "wikidata_name": "Poznań",
+      "latitude": 52.41,
+      "longitude": 16.93,
+      "population": 546859.0,
+      "country": "Q36",
+      "country_name": "Poland"
+    },
+    {
+      "name_on_website": "Prague",
+      "wikidata_id": "Q1085",
+      "wikidata_name": "Prague",
+      "latitude": 50.09,
+      "longitude": 14.42,
+      "population": 1384732.0,
+      "country": "Q213",
+      "country_name": "Czechia"
+    },
+    {
+      "name_on_website": "Reggio Calabria Metropolitan City",
+      "wikidata_id": "Q8471",
+      "wikidata_name": "Reggio Calabria",
+      "latitude": 38.11,
+      "longitude": 15.65,
+      "population": 170951.0,
+      "country": "Q38",
+      "country_name": "Italy"
+    },
+    {
+      "name_on_website": "Rennes Metropole",
+      "wikidata_id": "Q647",
+      "wikidata_name": "Rennes",
+      "latitude": 48.11,
+      "longitude": -1.68,
+      "population": 227830.0,
+      "country": "Q142",
+      "country_name": "France"
+    },
+    {
+      "name_on_website": "Reykjavik",
+      "wikidata_id": "Q1764",
+      "wikidata_name": "Reykjavík",
+      "latitude": 64.15,
+      "longitude": -21.93,
+      "population": 139875.0,
+      "country": "Q189",
+      "country_name": "Iceland"
+    },
+    {
+      "name_on_website": "Riga",
+      "wikidata_id": "Q1773",
+      "wikidata_name": "Riga",
+      "latitude": 56.95,
+      "longitude": 24.11,
+      "population": 605273.0,
+      "country": "Q211",
+      "country_name": "Latvia"
+    },
+    {
+      "name_on_website": "Rijeka",
+      "wikidata_id": "Q1647",
+      "wikidata_name": "Rijeka",
+      "latitude": 45.33,
+      "longitude": 14.43,
+      "population": 107964.0,
+      "country": "Q224",
+      "country_name": "Croatia"
+    },
+    {
+      "name_on_website": "Rome",
+      "wikidata_id": "Q220",
+      "wikidata_name": "Rome",
+      "latitude": 41.89,
+      "longitude": 12.48,
+      "population": 2748109.0,
+      "country": "Q38",
+      "country_name": "Italy"
+    },
+    {
+      "name_on_website": "Rotterdam",
+      "wikidata_id": "Q34370",
+      "wikidata_name": "Rotterdam",
+      "latitude": 51.92,
+      "longitude": 4.48,
+      "population": 664311.0,
+      "country": "Q55",
+      "country_name": "Netherlands"
+    },
+    {
+      "name_on_website": "Rubi",
+      "wikidata_id": "Q13934",
+      "wikidata_name": "Rubí",
+      "latitude": 41.49,
+      "longitude": 2.03,
+      "population": 81532.0,
+      "country": "Q29",
+      "country_name": "Spain"
+    },
+    {
+      "name_on_website": "Rzeszow",
+      "wikidata_id": "Q598",
+      "wikidata_name": "Rzeszów",
+      "latitude": 50.04,
+      "longitude": 22.0,
+      "population": 195871.0,
+      "country": "Q36",
+      "country_name": "Poland"
+    },
+    {
+      "name_on_website": "Saint-Denis",
+      "wikidata_id": "Q131575588",
+      "wikidata_name": "Saint-Denis",
+      "latitude": 48.94,
+      "longitude": 2.35,
+      "population": 148907.0,
+      "country": "Q142",
+      "country_name": "France"
+    },
+    {
+      "name_on_website": "Sant Boi de Llobregat",
+      "wikidata_id": "Q15635",
+      "wikidata_name": "Sant Boi de Llobregat",
+      "latitude": 41.35,
+      "longitude": 2.04,
+      "population": 84831.0,
+      "country": "Q29",
+      "country_name": "Spain"
+    },
+    {
+      "name_on_website": "Sarajevo",
+      "wikidata_id": "Q11194",
+      "wikidata_name": "Sarajevo",
+      "latitude": 43.86,
+      "longitude": 18.41,
+      "population": 275524.0,
+      "country": "Q225",
+      "country_name": "Bosnia and Herzegovina"
+    },
+    {
+      "name_on_website": "Seville",
+      "wikidata_id": "Q8717",
+      "wikidata_name": "Seville",
+      "latitude": 37.39,
+      "longitude": -6.0,
+      "population": 687488.0,
+      "country": "Q29",
+      "country_name": "Spain"
+    },
+    {
+      "name_on_website": "Sheffield",
+      "wikidata_id": "Q42448",
+      "wikidata_name": "Sheffield",
+      "latitude": 53.38,
+      "longitude": -1.47,
+      "population": 577800.0,
+      "country": "Q145",
+      "country_name": "United Kingdom"
+    },
+    {
+      "name_on_website": "Sipoo",
+      "wikidata_id": "Q986320",
+      "wikidata_name": "Sipoo",
+      "latitude": 60.38,
+      "longitude": 25.26,
+      "population": 22595.0,
+      "country": "Q33",
+      "country_name": "Finland"
+    },
+    {
+      "name_on_website": "Sofia",
+      "wikidata_id": "Q472",
+      "wikidata_name": "Sofia",
+      "latitude": 42.7,
+      "longitude": 23.32,
+      "population": 1205548.0,
+      "country": "Q219",
+      "country_name": "Bulgaria"
+    },
+    {
+      "name_on_website": "Solna",
+      "wikidata_id": "Q109010",
+      "wikidata_name": "Solna Municipality",
+      "latitude": 59.37,
+      "longitude": 18.02,
+      "population": 85789.0,
+      "country": "Q34",
+      "country_name": "Sweden"
+    },
+    {
+      "name_on_website": "Stavanger",
+      "wikidata_id": "Q25416",
+      "wikidata_name": "Stavanger",
+      "latitude": 58.97,
+      "longitude": 5.73,
+      "population": 146011.0,
+      "country": "Q20",
+      "country_name": "Norway"
+    },
+    {
+      "name_on_website": "Stockholm",
+      "wikidata_id": "Q506250",
+      "wikidata_name": "Stockholm",
+      "latitude": 59.33,
+      "longitude": 18.05,
+      "population": 995574.0,
+      "country": "Q34",
+      "country_name": "Sweden"
+    },
+    {
+      "name_on_website": "Strasbourg",
+      "wikidata_id": "Q6602",
+      "wikidata_name": "Strasbourg",
+      "latitude": 48.57,
+      "longitude": 7.75,
+      "population": 291709.0,
+      "country": "Q142",
+      "country_name": "France"
+    },
+    {
+      "name_on_website": "Strovolos",
+      "wikidata_id": "Q668370",
+      "wikidata_name": "Strovolos",
+      "latitude": 35.14,
+      "longitude": 33.35,
+      "population": 67904.0,
+      "country": "Q229",
+      "country_name": "Cyprus"
+    },
+    {
+      "name_on_website": "Stuttgart",
+      "wikidata_id": "Q1022",
+      "wikidata_name": "Stuttgart",
+      "latitude": 48.78,
+      "longitude": 9.18,
+      "population": 633484.0,
+      "country": "Q183",
+      "country_name": "Germany"
+    },
+    {
+      "name_on_website": "Sunderland",
+      "wikidata_id": "Q188304",
+      "wikidata_name": "Sunderland",
+      "latitude": 54.9,
+      "longitude": -1.38,
+      "population": 277417.0,
+      "country": "Q145",
+      "country_name": "United Kingdom"
+    },
+    {
+      "name_on_website": "Tallinn",
+      "wikidata_id": "Q1770",
+      "wikidata_name": "Tallinn",
+      "latitude": 59.44,
+      "longitude": 24.75,
+      "population": 457572.0,
+      "country": "Q191",
+      "country_name": "Estonia"
+    },
+    {
+      "name_on_website": "Tampere",
+      "wikidata_id": "Q40840",
+      "wikidata_name": "Tampere",
+      "latitude": 61.5,
+      "longitude": 23.76,
+      "population": 255333.0,
+      "country": "Q33",
+      "country_name": "Finland"
+    },
+    {
+      "name_on_website": "Taranto",
+      "wikidata_id": "Q13498",
+      "wikidata_name": "Taranto",
+      "latitude": 40.47,
+      "longitude": 17.24,
+      "population": 188098.0,
+      "country": "Q38",
+      "country_name": "Italy"
+    },
+    {
+      "name_on_website": "Tbilisi",
+      "wikidata_id": "Q994",
+      "wikidata_name": "Tbilisi",
+      "latitude": 41.72,
+      "longitude": 44.79,
+      "population": 1258526.0,
+      "country": "Q230",
+      "country_name": "Georgia"
+    },
+    {
+      "name_on_website": "Terrassa Metropolitan Area",
+      "wikidata_id": "Q13939",
+      "wikidata_name": "Terrassa",
+      "latitude": 41.56,
+      "longitude": 2.01,
+      "population": 228708.0,
+      "country": "Q29",
+      "country_name": "Spain"
+    },
+    {
+      "name_on_website": "The Hague",
+      "wikidata_id": "Q36600",
+      "wikidata_name": "The Hague",
+      "latitude": 52.08,
+      "longitude": 4.31,
+      "population": 548320.0,
+      "country": "Q55",
+      "country_name": "Netherlands"
+    },
+    {
+      "name_on_website": "Thessaloniki",
+      "wikidata_id": "Q17151",
+      "wikidata_name": "Thessaloniki",
+      "latitude": 40.64,
+      "longitude": 22.94,
+      "population": 309617.0,
+      "country": "Q41",
+      "country_name": "Greece"
+    },
+    {
+      "name_on_website": "Timisoara",
+      "wikidata_id": "Q83404",
+      "wikidata_name": "Timișoara",
+      "latitude": 45.76,
+      "longitude": 21.23,
+      "population": 250849.0,
+      "country": "Q218",
+      "country_name": "Romania"
+    },
+    {
+      "name_on_website": "Tirana",
+      "wikidata_id": "Q19689",
+      "wikidata_name": "Tirana",
+      "latitude": 41.33,
+      "longitude": 19.82,
+      "population": 418495.0,
+      "country": "Q222",
+      "country_name": "Albania"
+    },
+    {
+      "name_on_website": "Toulouse",
+      "wikidata_id": "Q7880",
+      "wikidata_name": "Toulouse",
+      "latitude": 43.6,
+      "longitude": 1.44,
+      "population": 511684.0,
+      "country": "Q142",
+      "country_name": "France"
+    },
+    {
+      "name_on_website": "Treviso",
+      "wikidata_id": "Q5475",
+      "wikidata_name": "Treviso",
+      "latitude": 45.67,
+      "longitude": 12.24,
+      "population": 84607.0,
+      "country": "Q38",
+      "country_name": "Italy"
+    },
+    {
+      "name_on_website": "Trondheim",
+      "wikidata_id": "Q25804",
+      "wikidata_name": "Trondheim",
+      "latitude": 63.44,
+      "longitude": 10.4,
+      "population": 212660.0,
+      "country": "Q20",
+      "country_name": "Norway"
+    },
+    {
+      "name_on_website": "Turin",
+      "wikidata_id": "Q495",
+      "wikidata_name": "Turin",
+      "latitude": 45.08,
+      "longitude": 7.68,
+      "population": 841600.0,
+      "country": "Q38",
+      "country_name": "Italy"
+    },
+    {
+      "name_on_website": "Turku",
+      "wikidata_id": "Q38511",
+      "wikidata_name": "Turku",
+      "latitude": 60.45,
+      "longitude": 22.27,
+      "population": 202250.0,
+      "country": "Q33",
+      "country_name": "Finland"
+    },
+    {
+      "name_on_website": "Umea",
+      "wikidata_id": "Q507709",
+      "wikidata_name": "Umeå Municipality",
+      "latitude": 63.83,
+      "longitude": 20.25,
+      "population": 134249.0,
+      "country": "Q34",
+      "country_name": "Sweden"
+    },
+    {
+      "name_on_website": "Ungheni",
+      "wikidata_id": "Q858713",
+      "wikidata_name": "Ungheni",
+      "latitude": 47.2,
+      "longitude": 27.8,
+      "population": 25800.0,
+      "country": "Q217",
+      "country_name": "Moldova"
+    },
+    {
+      "name_on_website": "Utrecht",
+      "wikidata_id": "Q803",
+      "wikidata_name": "Utrecht",
+      "latitude": 52.09,
+      "longitude": 5.12,
+      "population": 359370.0,
+      "country": "Q55",
+      "country_name": "Netherlands"
+    },
+    {
+      "name_on_website": "Valencia",
+      "wikidata_id": "Q8818",
+      "wikidata_name": "Valencia",
+      "latitude": 39.47,
+      "longitude": -0.38,
+      "population": 825948.0,
+      "country": "Q29",
+      "country_name": "Spain"
+    },
+    {
+      "name_on_website": "Valladolid",
+      "wikidata_id": "Q8356",
+      "wikidata_name": "Valladolid",
+      "latitude": 41.65,
+      "longitude": -4.73,
+      "population": 300618.0,
+      "country": "Q29",
+      "country_name": "Spain"
+    },
+    {
+      "name_on_website": "Valongo",
+      "wikidata_id": "Q604262",
+      "wikidata_name": "Valongo",
+      "latitude": 41.18,
+      "longitude": -8.5,
+      "population": 93858.0,
+      "country": "Q45",
+      "country_name": "Portugal"
+    },
+    {
+      "name_on_website": "Vantaa",
+      "wikidata_id": "Q127623",
+      "wikidata_name": "Vantaa",
+      "latitude": 60.29,
+      "longitude": 25.04,
+      "population": 248199.0,
+      "country": "Q33",
+      "country_name": "Finland"
+    },
+    {
+      "name_on_website": "Varna",
+      "wikidata_id": "Q6506",
+      "wikidata_name": "Varna",
+      "latitude": 43.21,
+      "longitude": 27.91,
+      "population": 369781.0,
+      "country": "Q219",
+      "country_name": "Bulgaria"
+    },
+    {
+      "name_on_website": "Venice",
+      "wikidata_id": "Q641",
+      "wikidata_name": "Venice",
+      "latitude": 45.44,
+      "longitude": 12.33,
+      "population": 250369.0,
+      "country": "Q38",
+      "country_name": "Italy"
+    },
+    {
+      "name_on_website": "Vienna",
+      "wikidata_id": "Q1741",
+      "wikidata_name": "Vienna",
+      "latitude": 48.21,
+      "longitude": 16.37,
+      "population": 1973403.0,
+      "country": "Q40",
+      "country_name": "Austria"
+    },
+    {
+      "name_on_website": "Vilnius",
+      "wikidata_id": "Q216",
+      "wikidata_name": "Vilnius",
+      "latitude": 54.69,
+      "longitude": 25.28,
+      "population": 581475.0,
+      "country": "Q37",
+      "country_name": "Lithuania"
+    },
+    {
+      "name_on_website": "Vinnytsia",
+      "wikidata_id": "Q157144",
+      "wikidata_name": "Vinnytsia",
+      "latitude": 49.24,
+      "longitude": 28.47,
+      "population": 369739.0,
+      "country": "Q212",
+      "country_name": "Ukraine"
+    },
+    {
+      "name_on_website": "Warsaw",
+      "wikidata_id": "Q270",
+      "wikidata_name": "Warsaw",
+      "latitude": 52.23,
+      "longitude": 21.01,
+      "population": 1862402.0,
+      "country": "Q36",
+      "country_name": "Poland"
+    },
+    {
+      "name_on_website": "Wiesbaden",
+      "wikidata_id": "Q1721",
+      "wikidata_name": "Wiesbaden",
+      "latitude": 50.08,
+      "longitude": 8.24,
+      "population": 285522.0,
+      "country": "Q183",
+      "country_name": "Germany"
+    },
+    {
+      "name_on_website": "Wroclaw",
+      "wikidata_id": "Q1799",
+      "wikidata_name": "Wrocław",
+      "latitude": 51.11,
+      "longitude": 17.03,
+      "population": 673531.0,
+      "country": "Q36",
+      "country_name": "Poland"
+    },
+    {
+      "name_on_website": "Yerevan",
+      "wikidata_id": "Q1953",
+      "wikidata_name": "Yerevan",
+      "latitude": 40.18,
+      "longitude": 44.51,
+      "population": 1106300.0,
+      "country": "Q399",
+      "country_name": "Armenia"
+    },
+    {
+      "name_on_website": "Zagreb",
+      "wikidata_id": "Q1435",
+      "wikidata_name": "Zagreb",
+      "latitude": 45.81,
+      "longitude": 15.98,
+      "population": 767131.0,
+      "country": "Q224",
+      "country_name": "Croatia"
+    },
+    {
+      "name_on_website": "Zaragoza",
+      "wikidata_id": "Q10305",
+      "wikidata_name": "Zaragoza",
+      "latitude": 41.65,
+      "longitude": -0.88,
+      "population": 686986.0,
+      "country": "Q29",
+      "country_name": "Spain"
+    },
+    {
+      "name_on_website": "Zhytomyr",
+      "wikidata_id": "Q156713",
+      "wikidata_name": "Zhytomyr",
+      "latitude": 50.25,
+      "longitude": 28.66,
+      "population": 261624.0,
+      "country": "Q212",
+      "country_name": "Ukraine"
+    },
+    {
+      "name_on_website": "Zurich",
+      "wikidata_id": "Q72",
+      "wikidata_name": "Zurich",
+      "latitude": 47.37,
+      "longitude": 8.54,
+      "population": 448664.0,
+      "country": "Q39",
+      "country_name": "Switzerland"
+    }
+  ],
+  "not_found": [
+    "Beyoglu",
+    "Bordeaux Metropole",
+    "Brabantstad",
+    "Brussels Capital Region",
+    "Debrecen",
+    "Derry-Strabane",
+    "Edinburgh",
+    "Grand Paris Sud",
+    "Greater Paris Metropole",
+    "Kungsbacka",
+    "Mezitli",
+    "Nantes Metropole",
+    "Netwerkstad Twente",
+    "Odunpazari",
+    "Oeiras",
+    "Osmangazi",
+    "Rome Metropolitan Area",
+    "St Nazaire",
+    "Uppsala"
+  ]
+}
