@@ -176,12 +176,8 @@ const PollMap: React.FC<{ votes: Vote[], cities: Record<string, City> }> = ({ vo
     countryPopulationData[countryWikidataId].representedPopulation += city.population;
   });
   
-  // Calculate country population representation without logging
-  
-  // Then, get total country populations from the countries data
   const countryData = countries.countries;
   
-  // Add country population data directly using Wikidata IDs
   countryData.forEach(country => {
     const population = country[5] ? Number(country[5]) : null;
     const wikidataId = country[4] as string;
@@ -198,18 +194,18 @@ const PollMap: React.FC<{ votes: Vote[], cities: Record<string, City> }> = ({ vo
   
   // Color scale mapping for population representation - more subtle colors
   const getColorForFraction = (fraction: number): string => {
-    const colorScale = [
-      { threshold: 0, color: "#F5F5F5" },          // Very light gray - 0%
-      { threshold: 0.0001, color: "#F0F8FF" },     // Alice Blue - 0.01%
-      { threshold: 0.0005, color: "#E6F2FF" },     // Very light blue - 0.05%
-      { threshold: 0.001, color: "#DCE9FC" },      // Lighter blue - 0.1%
-      { threshold: 0.005, color: "#D2E0F9" },      // Light blue - 0.5%
-      { threshold: 0.01, color: "#C7D8F6" },       // Subtle blue - 1%
-      { threshold: 0.05, color: "#BDCFF3" },       // Soft blue - 5%
-      { threshold: 0.1, color: "#B3C6F0" },        // Muted blue - 10%
-      { threshold: 0.2, color: "#A9BDED" },        // Pastel blue - 20%
-      { threshold: 0.3, color: "#9FB4EA" },        // Gentle blue - 30%
-      { threshold: Infinity, color: "#95ABE7" }    // Subtle medium blue - >30%
+  const colorScale = [
+    { threshold: 0, color: "#F5F5F5" },          // Very light gray - 0%
+    { threshold: 0.0001, color: "#F0F8FF" },     // Alice Blue - 0.01%
+    { threshold: 0.001, color: "#E6F2FF" },      // Very light blue - 0.1%
+    { threshold: 0.01, color: "#DCE9FC" },       // Lighter blue - 1%
+    { threshold: 0.05, color: "#D2E0F9" },       // Light blue - 5%
+    { threshold: 0.1, color: "#C7D8F6" },        // Subtle blue - 10%
+    { threshold: 0.15, color: "#BDCFF3" },       // Soft blue - 15%
+    { threshold: 0.2, color: "#B3C6F0" },        // Muted blue - 20%
+    { threshold: 0.25, color: "#A9BDED" },       // Pastel blue - 25%
+    { threshold: 0.3, color: "#9FB4EA" },        // Gentle blue - 30%
+    { threshold: Infinity, color: "#95ABE7" }    // Subtle medium blue - >30%
     ];
     
     for (let i = 0; i < colorScale.length - 1; i++) {
