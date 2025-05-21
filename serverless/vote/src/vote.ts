@@ -3,14 +3,17 @@ import { S3Client, GetObjectCommand, PutObjectCommand, DeleteObjectCommand } fro
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { Readable } from 'stream';
 import crypto from 'crypto';
-import { createHash } from 'crypto';
 import {
     City,
     VoteData,
+    ValidateTokenParams,
+    VoteParams,
+    CreatePollParams,
+    GetUploadUrlParams
 } from './types';
 
 const s3Client = new S3Client({ region: 'us-east-1' });
-// Check if running in dev environment based on environment variable
+
 const isDev = process.env.CITY_VOTE_ENV === 'dev';
 const BUCKET_NAME = isDev ? 'city-vote-data-dev' : 'city-vote-data';
 const PUBLIC_BUCKET_NAME = isDev ? 'city-vote-data-public-dev' : 'city-vote-data-public';
@@ -133,47 +136,6 @@ async function logAccess(city: City, action: string): Promise<void> {
     }
 }
 
-// Update interface to use imported type
-interface ValidateTokenParams {
-    resolvedCity: City;
-    token: string;
-}
-
-interface VoteParams {
-    cityId?: string;
-    resolvedCity: City;
-    token: string;
-    pollId: string;
-    option: string;
-    title: string;
-    name: string;
-    actingCapacity: 'individual' | 'representingCityAdministration';
-    externalVerificationSource?: string; // Platform that verified this vote
-}
-
-interface CreatePollParams {
-    resolvedCity: City;
-    token: string;
-    pollId: string;
-    documentUrl?: string;
-    organisedBy?: string;
-}
-
-interface UploadAttachmentParams {
-    resolvedCity: City;
-    token: string;
-    pollId: string;
-    contentType?: string;
-    attachmentId?: string;
-}
-
-// Helper function to create a URL-safe base64 SHA-256 hash
-const createUrlSafeB64Hash = (input: string): string => {
-    const hash = createHash('sha256').update(input).digest('base64');
-    return hash.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-};
-
-// Update action handlers with specific types
 const handleValidateToken = async ({ resolvedCity }: ValidateTokenParams): Promise<APIGatewayProxyResult> => {
     return {
         statusCode: 200,
@@ -300,15 +262,6 @@ const handleVote = async ({ cityId, resolvedCity, pollId, option, title, name, a
     }
 };
 
-// Interface for poll metadata
-interface PollMetadata {
-    [pollId: string]: {
-        documentUrl?: string;
-        organisedBy?: string;
-        createdAt: number;
-    };
-}
-
 const handleCreatePoll = async ({ pollId, documentUrl, organisedBy }: CreatePollParams): Promise<APIGatewayProxyResult> => {
     if (!pollId) {
         return {
@@ -319,7 +272,7 @@ const handleCreatePoll = async ({ pollId, documentUrl, organisedBy }: CreatePoll
     }
     
     // Note: For polls with attachments, the pollId must be in the format <poll_question>_attachment_<hash>
-    // This is enforced in the handleUploadAttachment function
+    // This is enforced in the getUploadUrl function
 
     const sessionId = Buffer.from(crypto.getRandomValues(new Uint8Array(16))).toString('base64');
     let lockAcquired = false;
@@ -404,129 +357,27 @@ const handleCreatePoll = async ({ pollId, documentUrl, organisedBy }: CreatePoll
     }
 };
 
-// No multipart form data parsing needed - using only JSON
-
-// Interface for getAttachmentUrl params
-interface GetAttachmentUrlParams {
-    resolvedCity?: City;
-    token?: string;
-    pollId: string;
-    attachmentId?: string;
-}
-
-// Interface for getPollMetadata params
-interface GetPollMetadataParams {
-    resolvedCity?: City;
-    token?: string;
-    pollId: string;
-}
-
-// Handler for getting poll metadata
-const handleGetPollMetadata = async ({ pollId }: GetPollMetadataParams): Promise<APIGatewayProxyResult> => {
-    if (!pollId) {
-        return {
-            statusCode: 400,
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: 'Missing required parameter: pollId' }, null, 2)
-        };
+const generatePutPresignedUrl = async (pollId: string, contentType: string, fileHash: string): Promise<{url: string, key: string}> => {
+    if (!fileHash) {
+        throw new Error('File hash is required for attachment ID');
     }
-
-    try {
-        // Get poll data from votes file
-        let votes: VoteData = {};
-        try {
-            const existingData = await s3Client.send(new GetObjectCommand({
-                Bucket: BUCKET_NAME,
-                Key: VOTES_KEY
-            }));
-            
-            if (existingData.Body) {
-                const dataString = await streamToString(existingData.Body as Readable);
-                votes = JSON.parse(dataString);
-            }
-        } catch (error: any) {
-            if (error.name !== 'NoSuchKey') {
-                throw error;
-            }
-        }
-
-        // Check if poll exists
-        if (!votes[pollId]) {
-            return {
-                statusCode: 404,
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: 'Poll not found' }, null, 2)
-            };
-        }
-
-        // Extract metadata from poll data
-        const metadata = {
-            type: votes[pollId].type,
-            ...(votes[pollId].URL ? { documentUrl: votes[pollId].URL } : {}),
-            ...(votes[pollId].organisedBy ? { organisedBy: votes[pollId].organisedBy } : {}),
-            createdAt: votes[pollId].createdAt || Date.now()
-        };
-
-        return {
-            statusCode: 200,
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-                message: 'Poll metadata retrieved successfully',
-                metadata
-            }, null, 2)
-        };
-    } catch (error) {
-        console.error('Error retrieving poll metadata:', error);
-        return {
-            statusCode: 500,
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                message: 'Failed to retrieve poll metadata',
-                details: error instanceof Error ? error.message : 'Unknown error'
-            }, null, 2)
-        };
-    }
-};
-
-// Update action handlers type
-type ActionHandlers = {
-    validateToken: (params: ValidateTokenParams) => Promise<APIGatewayProxyResult>;
-    vote: (params: VoteParams) => Promise<APIGatewayProxyResult>;
-    createPoll: (params: CreatePollParams) => Promise<APIGatewayProxyResult>;
-    uploadAttachment: (params: UploadAttachmentParams) => Promise<APIGatewayProxyResult>;
-    getAttachmentUrl: (params: GetAttachmentUrlParams) => Promise<APIGatewayProxyResult>;
-    getPollMetadata: (params: GetPollMetadataParams) => Promise<APIGatewayProxyResult>;
-};
-
-// Get the direct URL for an attachment (bucket is public)
-const getAttachmentDirectUrl = (hash: string): string => {
-    // Create the attachment key using the hash
-    const attachmentKey = `attachments/${hash}.pdf`;
     
-    // Return direct URL to the public bucket
-    return `https://${PUBLIC_BUCKET_NAME}.s3.amazonaws.com/${attachmentKey}`;
-};
-
-// Generate a presigned URL for uploading an attachment
-const generatePutPresignedUrl = async (pollId: string, contentType: string, attachmentId?: string): Promise<string> => {
-    // Use the provided attachmentId or generate one if not provided
-    const hash = attachmentId || createUrlSafeB64Hash(pollId);
-    
-    // Create the attachment key using just the hash
-    const attachmentKey = `attachments/${hash}.pdf`;
-    
-    // Create the command for putting the object
+    const attachmentKey = `attachments/${fileHash}.pdf`;
     const command = new PutObjectCommand({
         Bucket: PUBLIC_BUCKET_NAME,
         Key: attachmentKey,
         ContentType: contentType
     });
     
-    // Generate a presigned URL that expires in 15 minutes (900 seconds)
-    return await getSignedUrl(s3Client, command, { expiresIn: 900 });
+    const url = await getSignedUrl(s3Client, command, { expiresIn: 900 });
+    return { url, key: attachmentKey };
 };
 
-const handleUploadAttachment = async ({ resolvedCity, pollId, attachmentId }: UploadAttachmentParams): Promise<APIGatewayProxyResult> => {
+const getAttachmentDirectUrl = (hash: string): string => {
+    return `https://${PUBLIC_BUCKET_NAME}.s3.amazonaws.com/attachments/${hash}.pdf`;
+};
+
+const getUploadUrl = async ({ resolvedCity, pollId, fileHash }: GetUploadUrlParams): Promise<APIGatewayProxyResult> => {
     if (!pollId) {
         return {
             statusCode: 400,
@@ -535,22 +386,23 @@ const handleUploadAttachment = async ({ resolvedCity, pollId, attachmentId }: Up
         };
     }
 
+    if (!fileHash) {
+        return {
+            statusCode: 400,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: 'Missing required parameter: fileHash (attachment ID)' }, null, 2)
+        };
+    }
+
     try {
-        // Use the provided attachmentId or generate one if not provided
-        const hash = attachmentId || createUrlSafeB64Hash(pollId);
-        
-        // Ensure pollId follows the required format for attachments: <poll_question>_attachment_<hash>
-        // Check if pollId already has the correct format
         if (!pollId.includes('_attachment_')) {
-            pollId = `${pollId}_attachment_${hash}`;
+            pollId = `${pollId}_attachment_${fileHash}`;
         }
         
-        // Generate presigned URL for upload and direct URL for retrieval
         const contentType = 'application/pdf';
-        const uploadUrl = await generatePutPresignedUrl(pollId, contentType, attachmentId);
-        const getUrl = getAttachmentDirectUrl(hash);
+        const { url: uploadUrl, key: attachmentKey } = await generatePutPresignedUrl(pollId, contentType, fileHash);
+        const getUrl = getAttachmentDirectUrl(fileHash);
         
-        // Return the presigned URL for upload, direct URL for retrieval, and the formatted pollId
         return {
             statusCode: 200,
             headers: { 'Content-Type': 'application/json' },
@@ -574,83 +426,23 @@ const handleUploadAttachment = async ({ resolvedCity, pollId, attachmentId }: Up
     }
 };
 
-// Handler for getting a direct URL for an attachment
-const handleGetAttachmentUrl = async ({ pollId, attachmentId }: GetAttachmentUrlParams): Promise<APIGatewayProxyResult> => {
-    if (!pollId) {
-        return {
-            statusCode: 400,
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: 'Missing required parameter: pollId' }, null, 2)
-        };
-    }
-
-    try {
-        // Use the provided attachmentId or generate one if not provided
-        const hash = attachmentId || createUrlSafeB64Hash(pollId);
-        
-        // Ensure pollId follows the required format for attachments: <poll_question>_attachment_<hash>
-        // Check if pollId already has the correct format
-        if (!pollId.includes('_attachment_')) {
-            pollId = `${pollId}_attachment_${hash}`;
-        }
-        
-        // Create the attachment key using just the hash
-        const attachmentKey = `attachments/${hash}.pdf`;
-        
-        // Check if the attachment exists
-        try {
-            await s3Client.send(new GetObjectCommand({
-                Bucket: PUBLIC_BUCKET_NAME,
-                Key: attachmentKey
-            }));
-            
-            // If we get here, the attachment exists, so return the direct URL
-            const directUrl = getAttachmentDirectUrl(hash);
-            
-            return {
-                statusCode: 200,
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                    message: 'Attachment URL generated successfully',
-                    attachmentUrl: directUrl
-                }, null, 2)
-            };
-        } catch (error: any) {
-            if (error.name === 'NoSuchKey') {
-                // Attachment doesn't exist
-                return {
-                    statusCode: 404,
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: 'Attachment not found' }, null, 2)
-                };
-            }
-            throw error;
-        }
-    } catch (error) {
-        console.error('Error generating attachment URL:', error);
-        return {
-            statusCode: 500,
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                message: 'Failed to generate attachment URL',
-                details: error instanceof Error ? error.message : 'Unknown error'
-            }, null, 2)
-        };
-    }
+// Update action handlers type
+type ActionHandlers = {
+    validateToken: (params: ValidateTokenParams) => Promise<APIGatewayProxyResult>;
+    vote: (params: VoteParams) => Promise<APIGatewayProxyResult>;
+    createPoll: (params: CreatePollParams) => Promise<APIGatewayProxyResult>;
+    getUploadUrl: (params: GetUploadUrlParams) => Promise<APIGatewayProxyResult>;
 };
 
 const actionHandlers: ActionHandlers = {
     validateToken: handleValidateToken,
     vote: handleVote,
     createPoll: handleCreatePoll,
-    uploadAttachment: handleUploadAttachment,
-    getAttachmentUrl: handleGetAttachmentUrl,
-    getPollMetadata: handleGetPollMetadata
+    getUploadUrl: getUploadUrl
 };
 
 export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     try {
-
         // Handle regular JSON requests
         if (!event.body) {
             return {
@@ -660,7 +452,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
             };
         }
 
-        const { action, cityId, token, pollId, option, title, name, actingCapacity, externalVerificationSource, documentUrl, organisedBy } = JSON.parse(event.body);
+        const { action, cityId, token, pollId, option, title, name, actingCapacity, externalVerificationSource, documentUrl, organisedBy, fileHash } = JSON.parse(event.body);
         
         if (!action) {
             return {
@@ -670,17 +462,6 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
                     message: 'Missing required parameter: action'
                 }, null, 2)
             };
-        }
-        
-        // Special cases that don't require token validation
-        if (action === 'getAttachmentUrl') {
-            const { pollId, attachmentId } = JSON.parse(event.body);
-            return await handleGetAttachmentUrl({ pollId, attachmentId });
-        }
-        
-        if (action === 'getPollMetadata') {
-            const { pollId } = JSON.parse(event.body);
-            return await handleGetPollMetadata({ pollId });
         }
         
         if (!token) {
@@ -749,6 +530,8 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
         // Type assertion to ensure correct params are passed to each handler
         if (action === 'createPoll') {
             return await handler({ resolvedCity, token, pollId, documentUrl, organisedBy } as any);
+        } else if (action === 'getUploadUrl') {
+            return await handler({ resolvedCity, token, pollId, fileHash } as any);
         } else {
             return await handler({ cityId, resolvedCity, token, pollId, option, title, name, actingCapacity, externalVerificationSource } as any);
         }

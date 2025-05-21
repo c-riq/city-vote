@@ -6,7 +6,7 @@ import {
   Typography,
   CircularProgress
 } from '@mui/material';
-import { VOTE_HOST, PUBLIC_API_HOST } from '../constants';
+import { VOTE_HOST, PUBLIC_API_HOST, PUBLIC_DATA_BUCKET_URL } from '../constants';
 import useCityData from '../hooks/useCityData';
 import {
   City,
@@ -34,21 +34,6 @@ interface PollProps {
   votesData?: VoteData;
 }
 
-// Helper function to create a URL-safe base64 SHA-256 hash
-const createAttachmentId = async (pollQuestion: string): Promise<string> => {
-  // Use the SubtleCrypto API to create a SHA-256 hash
-  const encoder = new TextEncoder();
-  const data = encoder.encode(pollQuestion);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-  
-  // Convert the hash to a base64 string
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  const hashBase64 = btoa(String.fromCharCode(...hashArray));
-  
-  // Make it URL-safe by replacing characters
-  return hashBase64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-};
-
 function Poll({ token, pollData: initialPollData, onVoteComplete, votesData: propVotesData, cityInfo }: PollProps) {
   const navigate = useNavigate();
   const { pollId } = useParams();
@@ -64,11 +49,6 @@ function Poll({ token, pollData: initialPollData, onVoteComplete, votesData: pro
   const [votesData, setVotesData] = useState<VoteData>(propVotesData || {});
   const [isAuthenticated] = useState(!!token && !!cityInfo);
   const [attachmentUrl, setAttachmentUrl] = useState<string | null>(null);
-  const [pollMetadata, setPollMetadata] = useState<{
-    documentUrl?: string;
-    organisedBy?: string;
-    createdAt?: number;
-  } | null>(null);
   
   // Use the city data hook to manage cities
   const { 
@@ -101,73 +81,21 @@ function Poll({ token, pollData: initialPollData, onVoteComplete, votesData: pro
     }
   }, [cityError]);
 
-  // Fetch poll metadata and check for attachment when poll ID is available
+  // Set attachment URL when poll ID is available
   useEffect(() => {
-    const fetchPollData = async () => {
-      if (pollId || initialPollData?.id) {
-        const question = initialPollData?.id || decodeURIComponent(pollId || '');
-        const attachmentId = await createAttachmentId(question);
-        
-        // Request a direct URL for the attachment
-        try {
-          const response = await fetch(`${VOTE_HOST}`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              action: 'getAttachmentUrl',
-              pollId: question,
-              attachmentId: attachmentId,
-              token: token || '' // Token may be optional for public polls
-            })
-          });
-          
-          if (response.ok) {
-            const data = await response.json();
-            if (data.attachmentUrl) {
-              setAttachmentUrl(data.attachmentUrl);
-            } else {
-              setAttachmentUrl(null);
-            }
-          } else {
-            setAttachmentUrl(null);
-          }
-        } catch (error) {
-          console.error('Error checking attachment:', error);
-          setAttachmentUrl(null);
-        }
-        
-        // Fetch poll metadata
-        try {
-          const metadataResponse = await fetch(`${VOTE_HOST}`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              action: 'getPollMetadata',
-              pollId: question,
-              token: token || '' // Token may be optional for public polls
-            })
-          });
-          
-          if (metadataResponse.ok) {
-            const metadataData = await metadataResponse.json();
-            if (metadataData.metadata) {
-              setPollMetadata(metadataData.metadata);
-            } else {
-              setPollMetadata(null);
-            }
-          } else {
-            setPollMetadata(null);
-          }
-        } catch (error) {
-          console.error('Error fetching poll metadata:', error);
-          setPollMetadata(null);
-        }
+    if (pollId || initialPollData?.id) {
+      const question = initialPollData?.id || decodeURIComponent(pollId || '');
+      
+      // If the poll ID contains a hash, we can construct the direct URL
+      if (question.includes('_attachment_')) {
+        const hash = question.split('_attachment_')[1];
+        const directUrl = `${PUBLIC_DATA_BUCKET_URL}/attachments/${hash}.pdf`;
+        setAttachmentUrl(directUrl);
+      } else {
+        setAttachmentUrl(null);
       }
-    };
-    
-    fetchPollData();
-  }, [pollId, initialPollData, token]);
-  
+    }
+  }, [pollId, initialPollData]);
   
   // Check if this is a joint statement poll
   const currentPollId = initialPollData?.id || (pollId ? decodeURIComponent(pollId) : '');
@@ -367,9 +295,9 @@ function Poll({ token, pollData: initialPollData, onVoteComplete, votesData: pro
   // Get the display title
   const displayTitle = getDisplayTitle(initialPollData?.title || decodeURIComponent(pollId || ''));
 
-  // Get organised by and document URL from metadata
-  const organisedBy = pollMetadata?.organisedBy || null;
-  const documentUrl = pollMetadata?.documentUrl || null;
+  // Get organised by and document URL from poll data
+  const organisedBy = pollVotes?.organisedBy || null;
+  const documentUrl = pollVotes?.URL || null;
 
   return (
     <Box sx={{ 

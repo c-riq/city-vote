@@ -53,19 +53,16 @@ function CreatePollDialog({ isOpen, onClose, token }: CreatePollDialogProps) {
     }
   };
 
-  // Helper function to create a URL-safe base64 SHA-256 hash
-  const createAttachmentId = async (pollQuestion: string): Promise<string> => {
-    // Use the SubtleCrypto API to create a SHA-256 hash
-    const encoder = new TextEncoder();
-    const data = encoder.encode(pollQuestion);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-    
-    // Convert the hash to a base64 string
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const hashBase64 = btoa(String.fromCharCode(...hashArray));
-    
-    // Make it URL-safe by replacing characters
-    return hashBase64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  // Compute a hash of the file contents
+  const computeFileHash = async (pdfBlob: Blob): Promise<string> => {
+    const buffer = await pdfBlob.arrayBuffer();
+    const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
+    // Convert to base64 and make URL safe
+    const base64 = btoa(String.fromCharCode(...new Uint8Array(hashBuffer)))
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_')
+      .replace(/=+$/, '');
+    return base64;
   };
 
   const handleCreatePoll = async () => {
@@ -139,17 +136,18 @@ function CreatePollDialog({ isOpen, onClose, token }: CreatePollDialogProps) {
           return;
         } else if (attachment) {
           // For PDF-based joint statements
-          const attachmentId = await createAttachmentId(basePollId);
+          // First, compute the file hash
+          const fileHash = await computeFileHash(attachment);
           
-          // First, get the presigned URL
+          // Then, get the presigned URL with the file hash
           const getUrlResponse = await fetch(VOTE_HOST, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              action: 'uploadAttachment',
+              action: 'getUploadUrl',
               token,
               pollId: basePollId,
-              attachmentId
+              fileHash
             })
           });
 
@@ -206,17 +204,18 @@ function CreatePollDialog({ isOpen, onClose, token }: CreatePollDialogProps) {
         }
       } else if (attachment) {
         // Handle regular poll with attachment
-        const attachmentId = await createAttachmentId(basePollId);
+        // First, compute the file hash
+        const fileHash = await computeFileHash(attachment);
         
-        // First, get the presigned URL
+        // Then, get the presigned URL with the file hash
         const getUrlResponse = await fetch(VOTE_HOST, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            action: 'uploadAttachment',
+            action: 'getUploadUrl',
             token,
             pollId: basePollId,
-            attachmentId
+            fileHash
           })
         });
 

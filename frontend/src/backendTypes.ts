@@ -207,11 +207,44 @@ export interface CreatePollRequest {
     organisedBy?: string;
 }
 
-export interface UploadAttachmentRequest {
-    action: 'uploadAttachment';
+export interface GetUploadUrlRequest {
+    action: 'getUploadUrl';
+    pollId: string;
+    token: string;
+    fileHash: string; // Hash of the file contents (required)
+}
+
+// Internal interfaces used by the backend
+export interface ValidateTokenParams {
+    resolvedCity: City;
+    token: string;
+}
+
+export interface VoteParams {
+    cityId?: string;
+    resolvedCity: City;
     token: string;
     pollId: string;
-    attachmentId?: string;
+    option: string;
+    title: string;
+    name: string;
+    actingCapacity: 'individual' | 'representingCityAdministration';
+    externalVerificationSource?: string; // Platform that verified this vote
+}
+
+export interface CreatePollParams {
+    resolvedCity: City;
+    token: string;
+    pollId: string;
+    documentUrl?: string;
+    organisedBy?: string;
+}
+
+export interface GetUploadUrlParams {
+    resolvedCity: City;
+    token: string;
+    pollId: string;
+    fileHash: string; // Hash of the file contents (required)
 }
 
 // API Response types
@@ -224,16 +257,9 @@ export interface ValidateTokenResponse {
 
 export interface UploadAttachmentResponse {
     message: string;
-    attachmentUrl?: string;
     uploadUrl?: string;
     getUrl?: string;
-    pollId?: string; // Added to return the formatted pollId for attachments
-    details?: string;
-}
-
-export interface GetAttachmentUrlResponse {
-    message: string;
-    attachmentUrl?: string; // Direct URL to the attachment (no longer a presigned URL)
+    pollId?: string;
     details?: string;
 }
 
