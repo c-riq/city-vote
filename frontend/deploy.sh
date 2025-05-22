@@ -36,10 +36,6 @@ if [ ! -f "dist/index.html" ]; then
     exit 1
 fi
 
-# Copy about-city-vote.html to dist directory
-echo "Copying about-city-vote.html to dist directory..."
-cp about-city-vote.html dist/
-
 echo "Copy images..."
 mkdir -p dist/public/img
 cp -r public/img/* dist/public/img/
