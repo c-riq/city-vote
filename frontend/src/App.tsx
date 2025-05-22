@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Container } from '@mui/material';
+import { Container, Box } from '@mui/material';
 import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material';
 import Header from './components/Header';
@@ -174,12 +174,18 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <BrowserRouter>
-        <Header
-          cityInfo={cityInfo}
-          onLogout={handleLogout}
-          onCreatePoll={() => setIsModalOpen(true)}
-        />
-        <Container sx={{ pt: '80px' }}>
+        <Box sx={{ 
+          bgcolor: 'background.default',
+          minHeight: '100vh',
+          display: 'flex',
+          flexDirection: 'column'
+        }}>
+          <Header
+            cityInfo={cityInfo}
+            onLogout={handleLogout}
+            onCreatePoll={() => setIsModalOpen(true)}
+          />
+          <Container sx={{ pt: '80px', flex: 1 }}>
           {cityInfo && (
             <CreatePollDialog
               isOpen={isModalOpen}
@@ -199,7 +205,8 @@ function App() {
             fetchVotesOnly={fetchVotesOnly}
             handleSubmit={handleSubmit}
           />
-        </Container>
+          </Container>
+        </Box>
       </BrowserRouter>
     </ThemeProvider>
   );

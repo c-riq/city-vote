@@ -7,11 +7,15 @@ function About() {
         <Box 
           component="section" 
           sx={{ 
-            background: 'white', 
-            borderRadius: '12px', 
-            padding: '2rem', 
-            marginBottom: '2rem', 
-            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' 
+            backgroundColor: 'background.paper', 
+            borderRadius: 2, 
+            padding: 3, 
+            marginBottom: 3, 
+            boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+            transition: 'transform 0.2s ease-in-out',
+            '&:hover': {
+              transform: 'translateY(-2px)',
+            }
           }}
         >
           <Typography variant="h4" sx={{ color: '#1a237e', marginBottom: '1rem' }}>
@@ -45,11 +49,15 @@ function About() {
         <Box 
           component="section" 
           sx={{ 
-            background: 'white', 
-            borderRadius: '12px', 
-            padding: '2rem', 
-            marginBottom: '2rem', 
-            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' 
+            backgroundColor: 'background.paper', 
+            borderRadius: 2, 
+            padding: 3, 
+            marginBottom: 3, 
+            boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+            transition: 'transform 0.2s ease-in-out',
+            '&:hover': {
+              transform: 'translateY(-2px)',
+            }
           }}
         >
           <Typography variant="h4" sx={{ color: '#1a237e', marginBottom: '1rem' }}>
@@ -104,11 +112,15 @@ function About() {
         <Box 
           component="section" 
           sx={{ 
-            background: 'linear-gradient(to bottom right, #ffffff, #f8f9fa)', 
-            borderRadius: '12px', 
-            padding: '2rem', 
-            marginBottom: '2rem', 
-            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' 
+            background: (theme) => `linear-gradient(to bottom right, ${theme.palette.background.paper}, ${theme.palette.background.default})`, 
+            borderRadius: 2, 
+            padding: 3, 
+            marginBottom: 3, 
+            boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+            transition: 'transform 0.2s ease-in-out',
+            '&:hover': {
+              transform: 'translateY(-2px)',
+            }
           }}
         >
           <Typography variant="h4" sx={{ color: '#1a237e', marginBottom: '1rem' }}>

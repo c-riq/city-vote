@@ -8,9 +8,15 @@ const theme = createTheme({
       light: '#534bae',
       contrastText: '#ffffff',
     },
+    secondary: {
+      main: '#455a64',
+      light: '#718792',
+      dark: '#1c313a',
+      contrastText: '#ffffff',
+    },
     background: {
-      default: '#f5f5f7',
-      paper: '#ffffff',
+      default: '#eef2f6',  // Subtle blue-gray background
+      paper: '#f8fafc',    // Slightly off-white for paper elements
     },
   },
   typography: {
