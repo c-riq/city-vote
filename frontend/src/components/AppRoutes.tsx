@@ -1,4 +1,4 @@
-import { Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route, Link, Navigate } from 'react-router-dom';
 import { Box, Button } from '@mui/material';
 import Poll from './Poll';
 import Polls from './Polls';
@@ -10,6 +10,7 @@ import EmailVerification from './EmailVerification';
 import CityProfile from './CityProfile';
 import CityNetworkProfile from './CityNetworkProfile';
 import LoginForm from './LoginForm';
+import About from './About';
 import { City, VoteData } from '../backendTypes';
 
 interface AppRoutesProps {
@@ -124,6 +125,8 @@ function AppRoutes({
         path="/network/:networkId" 
         element={<CityNetworkProfile />}
       />
+      <Route path="/about" element={<About />} />
+      <Route path="/about-city-vote.html" element={<Navigate to="/about" replace />} />
     </Routes>
   );
 }

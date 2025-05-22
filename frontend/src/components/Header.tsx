@@ -214,7 +214,7 @@ function Header({ cityInfo, onLogout, onCreatePoll }: HeaderProps) {
               <ListItemText primary="Home" />
             </ListItem>
             <ListItem button onClick={() => {
-              window.location.href = '/about-city-vote.html';
+              navigate('/about');
               setDrawerOpen(false);
             }}>
               <ListItemIcon>
@@ -382,14 +382,15 @@ function Header({ cityInfo, onLogout, onCreatePoll }: HeaderProps) {
             </Box>
             <Typography 
               variant="body2" 
-              component="a"
-              href="/about-city-vote.html"
+              component="div"
+              onClick={() => navigate('/about')}
               sx={{ 
                 color: 'text.secondary',
                 textDecoration: 'none',
                 marginRight: '12px',
                 marginLeft: '12px',
                 display: { xs: 'none', md: 'block' },
+                cursor: 'pointer',
                 '&:hover': { 
                   color: 'primary.main',
                   textDecoration: 'underline'
