@@ -129,6 +129,12 @@ def extract_city_data(record, best_type):
     # Extract social media accounts
     social_media = extract_social_media(record)
     
+    # Extract mayor data
+    mayor_name, mayor_wikidata_id = extract_mayor_data(record)
+    
+    # Extract sister cities
+    sister_cities = extract_sister_cities(record)
+    
     return {
         "cityWikidataId": city_wikidata_id,
         "cityLabelEnglish": city_label_english,
@@ -141,7 +147,10 @@ def extract_city_data(record, best_type):
         "latitude": latitude,
         "longitude": longitude,
         "officialWebsite": official_website,
-        "socialMedia": social_media if social_media else None
+        "socialMedia": social_media if social_media else None,
+        "mayorName": mayor_name,
+        "mayorWikidataId": mayor_wikidata_id,
+        "sisterCities": sister_cities if sister_cities else None
     }
 
 def extract_population(record):
@@ -306,4 +315,177 @@ def extract_social_media(record):
             linkedin_id = pydash.get(linkedin_claim, 'mainsnak.datavalue.value')
             social_media['linkedin'] = linkedin_id
     
+    # Bluesky handle (P8605)
+    if pydash.has(record, 'claims.P8605'):
+        bluesky_claim = pydash.get(record, 'claims.P8605[0]')
+        if pydash.has(bluesky_claim, 'mainsnak.datavalue.value'):
+            bluesky_handle = pydash.get(bluesky_claim, 'mainsnak.datavalue.value')
+            social_media['bluesky'] = bluesky_handle
+    
+    # Mastodon address (P4033)
+    if pydash.has(record, 'claims.P4033'):
+        mastodon_claim = pydash.get(record, 'claims.P4033[0]')
+        if pydash.has(mastodon_claim, 'mainsnak.datavalue.value'):
+            mastodon_address = pydash.get(mastodon_claim, 'mainsnak.datavalue.value')
+            social_media['mastodon'] = mastodon_address
+    
+    # TikTok username (P7085)
+    if pydash.has(record, 'claims.P7085'):
+        tiktok_claim = pydash.get(record, 'claims.P7085[0]')
+        if pydash.has(tiktok_claim, 'mainsnak.datavalue.value'):
+            tiktok_username = pydash.get(tiktok_claim, 'mainsnak.datavalue.value')
+            social_media['tiktok'] = tiktok_username
+    
+    # Threads profile (P10566)
+    if pydash.has(record, 'claims.P10566'):
+        threads_claim = pydash.get(record, 'claims.P10566[0]')
+        if pydash.has(threads_claim, 'mainsnak.datavalue.value'):
+            threads_profile = pydash.get(threads_claim, 'mainsnak.datavalue.value')
+            social_media['threads'] = threads_profile
+    
     return social_media
+
+def extract_mayor_data(record):
+    """Extract current mayor name and Wikidata ID from a Wikidata record."""
+    mayor_name = None
+    mayor_wikidata_id = None
+    
+    # Head of government (P6) - commonly used for mayors
+    if pydash.has(record, 'claims.P6'):
+        mayor_claims = pydash.get(record, 'claims.P6', [])
+        valid_mayor_data = []
+        
+        for mayor_claim in mayor_claims:
+            if pydash.has(mayor_claim, 'mainsnak.datavalue.value.id'):
+                mayor_id = pydash.get(mayor_claim, 'mainsnak.datavalue.value.id')
+                
+                # Check if this is a current position (no end date)
+                has_end_date = False
+                if pydash.has(mayor_claim, 'qualifiers.P582'):  # End date qualifier
+                    has_end_date = True
+                
+                # Check for preferred rank
+                rank = pydash.get(mayor_claim, 'rank', 'normal')
+                is_preferred = (rank == 'preferred')
+                
+                # Extract start date for sorting if needed
+                start_date = None
+                parsed_start_date = None
+                if pydash.has(mayor_claim, 'qualifiers.P580'):  # Start date qualifier
+                    date_qualifier = pydash.get(mayor_claim, 'qualifiers.P580[0]')
+                    if pydash.has(date_qualifier, 'datavalue.value.time'):
+                        time_str = pydash.get(date_qualifier, 'datavalue.value.time')
+                        parsed_start_date, start_date = parse_wikidata_date(time_str)
+                
+                if not has_end_date:  # Only consider current mayors (no end date)
+                    valid_mayor_data.append({
+                        'id': mayor_id,
+                        'start_date': start_date,
+                        'parsed_start_date': parsed_start_date,
+                        'is_preferred': is_preferred
+                    })
+        
+        if valid_mayor_data:
+            # First check for preferred rank
+            preferred_mayors = [m for m in valid_mayor_data if m['is_preferred']]
+            if preferred_mayors:
+                # If there are multiple preferred mayors, sort by start date (most recent first)
+                if len(preferred_mayors) > 1:
+                    sorted_data = sorted(
+                        preferred_mayors,
+                        key=lambda x: (x['parsed_start_date'] is None, x['parsed_start_date'] or datetime.datetime.min),
+                        reverse=True
+                    )
+                    mayor_wikidata_id = sorted_data[0]['id']
+                else:
+                    mayor_wikidata_id = preferred_mayors[0]['id']
+            else:
+                # Sort by start date (most recent first)
+                sorted_data = sorted(
+                    valid_mayor_data,
+                    key=lambda x: (x['parsed_start_date'] is None, x['parsed_start_date'] or datetime.datetime.min),
+                    reverse=True
+                )
+                mayor_wikidata_id = sorted_data[0]['id']
+    
+    # If no mayor found with P6, try P1308 (officeholder)
+    if not mayor_wikidata_id and pydash.has(record, 'claims.P1308'):
+        officeholder_claims = pydash.get(record, 'claims.P1308', [])
+        valid_officeholder_data = []
+        
+        for officeholder_claim in officeholder_claims:
+            if pydash.has(officeholder_claim, 'mainsnak.datavalue.value.id'):
+                officeholder_id = pydash.get(officeholder_claim, 'mainsnak.datavalue.value.id')
+                
+                # Check if this is a current position (no end date)
+                has_end_date = False
+                if pydash.has(officeholder_claim, 'qualifiers.P582'):  # End date qualifier
+                    has_end_date = True
+                
+                # Check for preferred rank
+                rank = pydash.get(officeholder_claim, 'rank', 'normal')
+                is_preferred = (rank == 'preferred')
+                
+                # Extract start date for sorting if needed
+                start_date = None
+                parsed_start_date = None
+                if pydash.has(officeholder_claim, 'qualifiers.P580'):  # Start date qualifier
+                    date_qualifier = pydash.get(officeholder_claim, 'qualifiers.P580[0]')
+                    if pydash.has(date_qualifier, 'datavalue.value.time'):
+                        time_str = pydash.get(date_qualifier, 'datavalue.value.time')
+                        parsed_start_date, start_date = parse_wikidata_date(time_str)
+                
+                if not has_end_date:  # Only consider current officeholders (no end date)
+                    valid_officeholder_data.append({
+                        'id': officeholder_id,
+                        'start_date': start_date,
+                        'parsed_start_date': parsed_start_date,
+                        'is_preferred': is_preferred
+                    })
+        
+        if valid_officeholder_data:
+            # First check for preferred rank
+            preferred_officeholders = [o for o in valid_officeholder_data if o['is_preferred']]
+            if preferred_officeholders:
+                # If there are multiple preferred officeholders, sort by start date (most recent first)
+                if len(preferred_officeholders) > 1:
+                    sorted_data = sorted(
+                        preferred_officeholders,
+                        key=lambda x: (x['parsed_start_date'] is None, x['parsed_start_date'] or datetime.datetime.min),
+                        reverse=True
+                    )
+                    mayor_wikidata_id = sorted_data[0]['id']
+                else:
+                    mayor_wikidata_id = preferred_officeholders[0]['id']
+            else:
+                # Sort by start date (most recent first)
+                sorted_data = sorted(
+                    valid_officeholder_data,
+                    key=lambda x: (x['parsed_start_date'] is None, x['parsed_start_date'] or datetime.datetime.min),
+                    reverse=True
+                )
+                mayor_wikidata_id = sorted_data[0]['id']
+    
+    return mayor_name, mayor_wikidata_id
+
+def extract_sister_cities(record):
+    """Extract list of sister cities' Wikidata IDs from a Wikidata record."""
+    sister_cities = []
+    
+    # Twin/sister city (P190)
+    if pydash.has(record, 'claims.P190'):
+        sister_city_claims = pydash.get(record, 'claims.P190', [])
+        
+        for sister_city_claim in sister_city_claims:
+            if pydash.has(sister_city_claim, 'mainsnak.datavalue.value.id'):
+                sister_city_id = pydash.get(sister_city_claim, 'mainsnak.datavalue.value.id')
+                
+                # Check if this relationship is current (no end date)
+                has_end_date = False
+                if pydash.has(sister_city_claim, 'qualifiers.P582'):  # End date qualifier
+                    has_end_date = True
+                
+                if not has_end_date:  # Only consider current sister city relationships
+                    sister_cities.append(sister_city_id)
+    
+    return sister_cities

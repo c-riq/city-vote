@@ -16,8 +16,6 @@ WIKIDATA_DUMP_PATH = '/Users/c/Desktop/project/data_20221022/wikidata/latest-all
 CITY_SUBCLASSES_PATH = str(SCRIPT_DIR / 'city-subclasses.json')
 OUTPUT_DIR = str(SCRIPT_DIR / 'data/cities')
 
-# TODO: add bluesky, major, sister cities
-
 def main():
     """Extract cities and municipalities from Wikidata dump."""
     # Ensure output directory exists
@@ -30,7 +28,7 @@ def main():
     skip_lines = 0
     
     # Maximum number of lines to process (None for no limit)
-    max_lines = None
+    max_lines = 100_000
     
     # Load city and municipality subclasses
     city_subclasses = load_city_subclasses(CITY_SUBCLASSES_PATH)
