@@ -130,7 +130,7 @@ def extract_city_data(record, best_type):
     social_media = extract_social_media(record)
     
     # Extract mayor data
-    mayor_name, mayor_wikidata_id = extract_mayor_data(record)
+    mayor_wikidata_id = extract_mayor_data(record)
     
     # Extract sister cities
     sister_cities = extract_sister_cities(record)
@@ -148,7 +148,6 @@ def extract_city_data(record, best_type):
         "longitude": longitude,
         "officialWebsite": official_website,
         "socialMedia": social_media if social_media else None,
-        "mayorName": mayor_name,
         "mayorWikidataId": mayor_wikidata_id,
         "sisterCities": sister_cities if sister_cities else None
     }
@@ -346,8 +345,7 @@ def extract_social_media(record):
     return social_media
 
 def extract_mayor_data(record):
-    """Extract current mayor name and Wikidata ID from a Wikidata record."""
-    mayor_name = None
+    """Extract current mayor Wikidata ID from a Wikidata record."""
     mayor_wikidata_id = None
     
     # Head of government (P6) - commonly used for mayors
@@ -466,7 +464,7 @@ def extract_mayor_data(record):
                 )
                 mayor_wikidata_id = sorted_data[0]['id']
     
-    return mayor_name, mayor_wikidata_id
+    return mayor_wikidata_id
 
 def extract_sister_cities(record):
     """Extract list of sister cities' Wikidata IDs from a Wikidata record."""

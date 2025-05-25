@@ -60,7 +60,7 @@ def save_results(cities, filename):
     
     header = ["cityWikidataId", "cityLabelEnglish", "countryWikidataId", "countryDate", "ancestorType",
               "classLabel", "population", "populationDate", "latitude", "longitude",
-              "officialWebsite", "socialMedia", "mayorName", "mayorWikidataId", "sisterCities"]
+              "officialWebsite", "socialMedia", "mayorWikidataId", "sisterCities"]
     
     with open(filename, 'w', encoding='utf-8') as f:
         f.write(json.dumps(header, ensure_ascii=False) + '\n')
@@ -79,7 +79,6 @@ def save_results(cities, filename):
                 city["longitude"],
                 city["officialWebsite"],
                 city["socialMedia"],
-                city["mayorName"],
                 city["mayorWikidataId"],
                 city["sisterCities"]
             ]
