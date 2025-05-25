@@ -6,6 +6,23 @@ const path = require('path');
 // Directories and files
 const inputDir = path.join(__dirname, './data/cities');
 const outputFile = path.join(__dirname, '../../serverless/autocomplete/src/city-data.csv');
+const provinceLookupFile = path.join(__dirname, './data/cities/province_lookup.json');
+
+// Function to read the province lookup file
+function readProvinceLookup() {
+  try {
+    if (fs.existsSync(provinceLookupFile)) {
+      const data = fs.readFileSync(provinceLookupFile, 'utf8');
+      return JSON.parse(data);
+    } else {
+      console.warn(`Warning: Province lookup file not found at ${provinceLookupFile}`);
+      return {};
+    }
+  } catch (error) {
+    console.error(`Error reading province lookup file:`, error);
+    return {};
+  }
+}
 
 // Function to read and parse a JSON Lines file
 function readJsonLinesFile(filePath) {
@@ -55,8 +72,12 @@ function findResultFiles() {
 
 // Function to combine city data from multiple files
 function combineData(files) {
+  // Read the province lookup data
+  const provinceLookup = readProvinceLookup();
+  console.log(`Loaded province lookup with ${Object.keys(provinceLookup).length} provinces`);
+  
   let allCities = [];
-  let outputHeader = ["cityWikidataId", "cityLabelEnglish", "countryWikidataId", "population", "populationDate", "latitude", "longitude", "officialWebsite", "socialMedia"];
+  let outputHeader = ["cityWikidataId", "cityLabelEnglish", "countryWikidataId", "stateProvinceWikidataId", "stateProvinceLabel", "population", "populationDate", "latitude", "longitude", "officialWebsite", "socialMedia"];
   
   for (const file of files) {
     const data = readJsonLinesFile(file);
@@ -67,6 +88,7 @@ function combineData(files) {
       const cityWikidataIdIndex = data.header.indexOf("cityWikidataId");
       const cityLabelEnglishIndex = data.header.indexOf("cityLabelEnglish");
       const countryWikidataIdIndex = data.header.indexOf("countryWikidataId");
+      const stateProvinceWikidataIdIndex = data.header.indexOf("stateProvinceWikidataId");
       const populationIndex = data.header.indexOf("population");
       const populationDateIndex = data.header.indexOf("populationDate");
       const latitudeIndex = data.header.indexOf("latitude");
@@ -91,10 +113,17 @@ function combineData(files) {
           longitude = roundToDecimalPlaces(longitude, 2);
         }
         
+        // Get the state/province ID and look up its label
+        const stateProvinceId = stateProvinceWikidataIdIndex !== -1 ? city[stateProvinceWikidataIdIndex] : null;
+        const stateProvinceLabel = stateProvinceId && provinceLookup[stateProvinceId] ? 
+                                  provinceLookup[stateProvinceId].name : null;
+        
         return [
           cityWikidataIdIndex !== -1 ? city[cityWikidataIdIndex] : null,
           cityLabelEnglishIndex !== -1 ? city[cityLabelEnglishIndex] : null,
           countryWikidataIdIndex !== -1 ? city[countryWikidataIdIndex] : null,
+          stateProvinceId,
+          stateProvinceLabel,
           populationIndex !== -1 ? city[populationIndex] : null,
           populationDateIndex !== -1 ? city[populationDateIndex] : null,
           latitude,

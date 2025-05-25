@@ -28,7 +28,7 @@ def main():
     skip_lines = 0
     
     # Maximum number of lines to process (None for no limit)
-    max_lines = 100_000
+    max_lines = None
     
     # Load city and municipality subclasses
     city_subclasses = load_city_subclasses(CITY_SUBCLASSES_PATH)

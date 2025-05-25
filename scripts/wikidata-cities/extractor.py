@@ -12,6 +12,39 @@ from parser import parse_wikidata_date, save_results
 
 # State/province extraction added
 
+# Set of province/state entity types for USA and Canada
+PROVINCE_TYPES = {
+    "Q35657",    # state of the United States
+    "Q11828004",  # province of Canada
+    "Q5852411",   # territory of Canada
+    "Q107390",    # territory of the United States
+    "Q48091"      # federal district (for Washington D.C.)
+}
+
+# Dictionary to store province IDs (only used in process 0)
+province_ids = set()
+
+def save_province_data(province_ids, output_dir):
+    """Save the province IDs to a JSON file."""
+    import json
+    
+    # Create a simple lookup map with empty names
+    province_lookup = {}
+    for province_id in province_ids:
+        province_lookup[province_id] = {
+            "name": ""
+        }
+    
+    # Ensure the output directory exists
+    os.makedirs(output_dir, exist_ok=True)
+    
+    # Save the province lookup map
+    output_file = f"{output_dir}/province_lookup.json"
+    with open(output_file, 'w', encoding='utf-8') as f:
+        json.dump(province_lookup, f, ensure_ascii=False, indent=2)
+    
+    print(f"Province lookup map saved to {output_file}")
+
 def process_lines(process_id, wikidata_dump_path, city_subclasses, output_dir, skip_lines=0, num_processes=4, max_lines=None):
     """Process lines from the Wikidata dump file."""
     print(f"Process {process_id}: Starting processing")
@@ -49,6 +82,33 @@ def process_lines(process_id, wikidata_dump_path, city_subclasses, output_dir, s
                     record = json.loads(line.rstrip(',\n'))
                     lines_processed += 1
                     
+                    # If this is process 0, check if this entity is a province/state for USA or Canada
+                    if process_id == 0 and pydash.has(record, 'claims.P31'):
+                        entity_id = pydash.get(record, 'id')
+                        
+                        # Check if this entity is a province/state
+                        is_province = False
+                        country_id = None
+                        
+                        # Check instance of (P31) claims
+                        for p31 in pydash.get(record, 'claims.P31', []):
+                            entity_type_id = pydash.get(p31, 'mainsnak.datavalue.value.id')
+                            if entity_type_id in PROVINCE_TYPES:
+                                is_province = True
+                                break
+                        
+                        # If it's a province, check which country it belongs to
+                        if is_province and pydash.has(record, 'claims.P17'):
+                            for country_claim in pydash.get(record, 'claims.P17', []):
+                                if pydash.has(country_claim, 'mainsnak.datavalue.value.id'):
+                                    country_id = pydash.get(country_claim, 'mainsnak.datavalue.value.id')
+                                    if country_id in ['Q30', 'Q16']:  # USA or Canada
+                                        # Add to province IDs set
+                                        province_ids.add(entity_id)
+                                        print(f"Process {process_id}: Found province {entity_id} in {country_id}")
+                                        break
+                    
+                    # Process cities
                     if pydash.has(record, 'claims.P31') and pydash.get(record, 'labels.en.value'):
                         matching_city_types = []
                         for p31 in pydash.get(record, 'claims.P31'):
@@ -82,7 +142,7 @@ def process_lines(process_id, wikidata_dump_path, city_subclasses, output_dir, s
                                 print(f"Process {process_id}: Skipping city {city_id} ({city_name}) - replaced by {replaced_by}")
                                 continue
                             
-                            city_data = extract_city_data(record, best_type)
+                            city_data = extract_city_data(record, best_type, process_id)
                             cities.append(city_data)
                             
                             if len(cities) % save_interval == 0:
@@ -103,9 +163,14 @@ def process_lines(process_id, wikidata_dump_path, city_subclasses, output_dir, s
         save_results(cities, output_file)
         print(f"Process {process_id}: Completed. Found {len(cities)} cities")
     
+    # If this is process 0, save the province data
+    if process_id == 0 and province_ids:
+        save_province_data(province_ids, output_dir)
+        print(f"Process {process_id}: Saved {len(province_ids)} provinces")
+    
     return len(cities)
 
-def extract_city_data(record, best_type):
+def extract_city_data(record, best_type, process_id=None):
     """Extract city data from a Wikidata record."""
     city_wikidata_id = pydash.get(record, 'id')
     city_label_english = pydash.get(record, 'labels.en.value')
@@ -138,7 +203,7 @@ def extract_city_data(record, best_type):
     sister_cities = extract_sister_cities(record)
     
     # Extract state/province
-    state_province_id = extract_state_province(record, country_wikidata_id)
+    state_province_id = extract_state_province(record, country_wikidata_id, process_id)
     
     return {
         "cityWikidataId": city_wikidata_id,
@@ -510,11 +575,13 @@ def extract_sister_cities(record):
     
     return sister_cities
 
-def extract_state_province(record, country_wikidata_id):
+def extract_state_province(record, country_wikidata_id, process_id=None):
     """Extract state or province information from a Wikidata record.
     
     For cities in the USA (Q30) and Canada (Q16), this is particularly important.
     For other countries, it's included but not strictly required.
+    
+    If process_id is 0, also collect province labels for the province lookup.
     """
     state_province_id = None
     
@@ -552,5 +619,9 @@ def extract_state_province(record, country_wikidata_id):
             else:
                 # Just take the first entity
                 state_province_id = valid_admin_entities[0]['id']
+    
+    # If this is process 0 and we found a state/province ID for USA or Canada, add it to our collection
+    if process_id == 0 and state_province_id and country_wikidata_id in ['Q30', 'Q16']:
+        province_ids.add(state_province_id)
     
     return state_province_id

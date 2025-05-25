@@ -28,7 +28,7 @@ Extracts city and municipality data from Wikidata dump.
 5. The combined CSV file will be saved to `serverless/autocomplete/src/city-data.csv`.
 
 6. Deduplicate by coordinates and name
-in the project root, run
-```
-python scripts/deduplicate_cities.py
-```
+   in the project root, run
+   ```
+   python scripts/deduplicate_cities.py
+   ```

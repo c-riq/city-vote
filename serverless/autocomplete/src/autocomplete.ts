@@ -21,6 +21,8 @@ interface CityData {
   countryWikidataId: string;
   countryName: string;
   countryCode: string;
+  stateProvinceWikidataId?: string;
+  stateProvinceLabel?: string;
   population?: number;
   populationDate?: string;
   latitude?: number;
@@ -184,40 +186,57 @@ async function findCityByQid(qid: string): Promise<CityData | null> {
       const countryName = countryNameMap.get(countryWikidataId) || '';
       const countryCode = countryCodeMap.get(countryWikidataId) || '';
       
+      // Get state/province ID and label if they exist
+      const stateProvinceWikidataIdIndex = headers.indexOf('stateProvinceWikidataId');
+      const stateProvinceLabelIndex = headers.indexOf('stateProvinceLabel');
+      
+      const stateProvinceWikidataId = stateProvinceWikidataIdIndex !== -1 ? cityData[stateProvinceWikidataIdIndex] || undefined : undefined;
+      const stateProvinceLabel = stateProvinceLabelIndex !== -1 ? cityData[stateProvinceLabelIndex] || undefined : undefined;
+      
+      // Get indices for other fields from header
+      const populationIndex = headers.indexOf('population');
+      const populationDateIndex = headers.indexOf('populationDate');
+      const latitudeIndex = headers.indexOf('latitude');
+      const longitudeIndex = headers.indexOf('longitude');
+      const officialWebsiteIndex = headers.indexOf('officialWebsite');
+      
       // Parse population as number if it exists
       let population: number | undefined = undefined;
-      if (cityData[3] && cityData[3] !== '') {
-        const parsedPopulation = Number(cityData[3]);
+      if (populationIndex !== -1 && cityData[populationIndex] && cityData[populationIndex] !== '') {
+        const parsedPopulation = Number(cityData[populationIndex]);
         if (!isNaN(parsedPopulation)) {
           population = parsedPopulation;
         }
       }
       
       // Get population date if it exists
-      const populationDate = cityData[4] || undefined;
+      const populationDate = populationDateIndex !== -1 ? cityData[populationDateIndex] || undefined : undefined;
       
       // Parse latitude and longitude if they exist
       let latitude: number | undefined = undefined;
       let longitude: number | undefined = undefined;
       
-      // Parse latitude (index 5)
-      if (cityData[5] && cityData[5] !== '') {
-        const parsedLat = Number(cityData[5]);
+      // Parse latitude
+      if (latitudeIndex !== -1 && cityData[latitudeIndex] && cityData[latitudeIndex] !== '') {
+        const parsedLat = Number(cityData[latitudeIndex]);
         if (!isNaN(parsedLat)) {
           latitude = parsedLat;
         }
       }
       
-      // Parse longitude (index 6)
-      if (cityData[6] && cityData[6] !== '') {
-        const parsedLong = Number(cityData[6]);
+      // Parse longitude
+      if (longitudeIndex !== -1 && cityData[longitudeIndex] && cityData[longitudeIndex] !== '') {
+        const parsedLong = Number(cityData[longitudeIndex]);
         if (!isNaN(parsedLong)) {
           longitude = parsedLong;
         }
       }
       
       // Get official website if it exists
-      const officialWebsite = cityData[7] || undefined;
+      const officialWebsite = officialWebsiteIndex !== -1 ? cityData[officialWebsiteIndex] || undefined : undefined;
+      
+      // Get social media index from header
+      const socialMediaIndex = headers.indexOf('socialMedia');
       
       // Parse social media accounts if they exist
       let socialMedia: {
@@ -228,8 +247,8 @@ async function findCityByQid(qid: string): Promise<CityData | null> {
         linkedin?: string;
       } | undefined = undefined;
       
-      if (cityData[8] && cityData[8] !== '') {
-        const socialObj = safeParseJSON(cityData[8]);
+      if (socialMediaIndex !== -1 && cityData[socialMediaIndex] && cityData[socialMediaIndex] !== '') {
+        const socialObj = safeParseJSON(cityData[socialMediaIndex]);
         if (socialObj && typeof socialObj === 'object') {
           socialMedia = {};
           
@@ -272,6 +291,8 @@ async function findCityByQid(qid: string): Promise<CityData | null> {
         countryWikidataId,
         countryName,
         countryCode,
+        stateProvinceWikidataId,
+        stateProvinceLabel,
         population,
         populationDate,
         latitude,
@@ -374,40 +395,57 @@ async function searchCities(query: string, limit: number = 10): Promise<CityData
       const countryName = countryNameMap.get(countryWikidataId) || '';
       const countryCode = countryCodeMap.get(countryWikidataId) || '';
       
+      // Get state/province ID and label if they exist
+      const stateProvinceWikidataIdIndex = headers.indexOf('stateProvinceWikidataId');
+      const stateProvinceLabelIndex = headers.indexOf('stateProvinceLabel');
+      
+      const stateProvinceWikidataId = stateProvinceWikidataIdIndex !== -1 ? cityData[stateProvinceWikidataIdIndex] || undefined : undefined;
+      const stateProvinceLabel = stateProvinceLabelIndex !== -1 ? cityData[stateProvinceLabelIndex] || undefined : undefined;
+      
+      // Get indices for other fields from header
+      const populationIndex = headers.indexOf('population');
+      const populationDateIndex = headers.indexOf('populationDate');
+      const latitudeIndex = headers.indexOf('latitude');
+      const longitudeIndex = headers.indexOf('longitude');
+      const officialWebsiteIndex = headers.indexOf('officialWebsite');
+      
       // Parse population as number if it exists
       let population: number | undefined = undefined;
-      if (cityData[3] && cityData[3] !== '') {
-        const parsedPopulation = Number(cityData[3]);
+      if (populationIndex !== -1 && cityData[populationIndex] && cityData[populationIndex] !== '') {
+        const parsedPopulation = Number(cityData[populationIndex]);
         if (!isNaN(parsedPopulation)) {
           population = parsedPopulation;
         }
       }
       
       // Get population date if it exists
-      const populationDate = cityData[4] || undefined;
+      const populationDate = populationDateIndex !== -1 ? cityData[populationDateIndex] || undefined : undefined;
       
       // Parse latitude and longitude if they exist
       let latitude: number | undefined = undefined;
       let longitude: number | undefined = undefined;
       
-      // Parse latitude (index 5)
-      if (cityData[5] && cityData[5] !== '') {
-        const parsedLat = Number(cityData[5]);
+      // Parse latitude
+      if (latitudeIndex !== -1 && cityData[latitudeIndex] && cityData[latitudeIndex] !== '') {
+        const parsedLat = Number(cityData[latitudeIndex]);
         if (!isNaN(parsedLat)) {
           latitude = parsedLat;
         }
       }
       
-      // Parse longitude (index 6)
-      if (cityData[6] && cityData[6] !== '') {
-        const parsedLong = Number(cityData[6]);
+      // Parse longitude
+      if (longitudeIndex !== -1 && cityData[longitudeIndex] && cityData[longitudeIndex] !== '') {
+        const parsedLong = Number(cityData[longitudeIndex]);
         if (!isNaN(parsedLong)) {
           longitude = parsedLong;
         }
       }
       
       // Get official website if it exists
-      const officialWebsite = cityData[7] || undefined;
+      const officialWebsite = officialWebsiteIndex !== -1 ? cityData[officialWebsiteIndex] || undefined : undefined;
+      
+      // Get social media index from header
+      const socialMediaIndex = headers.indexOf('socialMedia');
       
       // Parse social media accounts if they exist
       let socialMedia: {
@@ -418,8 +456,8 @@ async function searchCities(query: string, limit: number = 10): Promise<CityData
         linkedin?: string;
       } | undefined = undefined;
       
-      if (cityData[8] && cityData[8] !== '') {
-        const socialObj = safeParseJSON(cityData[8]);
+      if (socialMediaIndex !== -1 && cityData[socialMediaIndex] && cityData[socialMediaIndex] !== '') {
+        const socialObj = safeParseJSON(cityData[socialMediaIndex]);
         if (socialObj && typeof socialObj === 'object') {
           socialMedia = {};
           
@@ -462,6 +500,8 @@ async function searchCities(query: string, limit: number = 10): Promise<CityData
         countryWikidataId,
         countryName,
         countryCode,
+        stateProvinceWikidataId,
+        stateProvinceLabel,
         population,
         populationDate,
         latitude,

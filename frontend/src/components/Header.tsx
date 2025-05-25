@@ -34,6 +34,8 @@ interface CityAutocompleteResult {
   countryWikidataId: string;
   countryName: string;
   countryCode: string;
+  stateProvinceWikidataId?: string;
+  stateProvinceLabel?: string;
   registered?: boolean;
 }
 
@@ -255,7 +257,13 @@ function Header({ cityInfo, onLogout, onCreatePoll }: HeaderProps) {
               onInputChange={(_, newInputValue) => {
                 setInputValue(newInputValue);
               }}
-              getOptionLabel={(option) => `${option.name}, ${option.countryCode}`}
+              getOptionLabel={(option) => {
+                // Include province/state if available
+                if (option.stateProvinceLabel) {
+                  return `${option.name}, ${option.stateProvinceLabel}, ${option.countryCode}`;
+                }
+                return `${option.name}, ${option.countryCode}`;
+              }}
               renderInput={(params) => (
                 <TextField
                   {...params}
@@ -455,11 +463,17 @@ function Header({ cityInfo, onLogout, onCreatePoll }: HeaderProps) {
             onInputChange={(_, newInputValue) => {
               setInputValue(newInputValue);
             }}
-            getOptionLabel={(option) => `${option.name}, ${option.countryCode}`}
+            getOptionLabel={(option) => {
+              // Include province/state if available
+              if (option.stateProvinceLabel) {
+                return `${option.name}, ${option.stateProvinceLabel}, ${option.countryCode}`;
+              }
+              return `${option.name}, ${option.countryCode}`;
+            }}
             renderInput={(params) => (
               <TextField
                 {...params}
-                placeholder="Search 163000 cities..."
+                placeholder="Search 215000 cities and towns..."
                 size="small"
                 InputProps={{
                   ...params.InputProps,

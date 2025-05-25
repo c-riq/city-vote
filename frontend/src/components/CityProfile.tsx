@@ -16,6 +16,8 @@ interface ExtendedCity extends City {
   populationDate?: string;
   officialWebsite?: string;
   wikidataId?: string;
+  stateProvinceWikidataId?: string;
+  stateProvinceLabel?: string;
   socialMedia?: {
     twitter?: string;
     facebook?: string;
@@ -117,6 +119,8 @@ const CityProfile: React.FC = () => {
                   lon: cityDetails.longitude || prevCity!.lon,
                   officialWebsite: cityDetails.officialWebsite,
                   socialMedia: cityDetails.socialMedia,
+                  stateProvinceWikidataId: cityDetails.stateProvinceWikidataId,
+                  stateProvinceLabel: cityDetails.stateProvinceLabel,
                   supersedes_duplicates: cityDetails.supersedes_duplicates,
                   superseded_by: cityDetails.superseded_by
                 }));
@@ -212,6 +216,8 @@ const CityProfile: React.FC = () => {
                   socialMedia: cityDetails.socialMedia,
                   // Store the Wikidata ID for reference
                   wikidataId: cityDetails.wikidataId,
+                  stateProvinceWikidataId: cityDetails.stateProvinceWikidataId,
+                  stateProvinceLabel: cityDetails.stateProvinceLabel,
                   supersedes_duplicates: cityDetails.supersedes_duplicates,
                   superseded_by: cityDetails.superseded_by
                 }));
@@ -392,7 +398,7 @@ const CityProfile: React.FC = () => {
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <PublicIcon sx={{ mr: 1, fontSize: 18 }} />
                 <Typography variant="body2">
-                  {city.country}
+                  {city.stateProvinceLabel ? `${city.stateProvinceLabel}, ${city.country}` : city.country}
                 </Typography>
               </Box>
               
@@ -520,7 +526,11 @@ const CityProfile: React.FC = () => {
           
           {/* City description */}
           <Typography variant="body1" paragraph>
-            {city.name} {city.country !== 'Unknown' ? `is a city in ${city.country}.` : ''}
+            {city.name} {city.country !== 'Unknown' ? 
+              (city.stateProvinceLabel ? 
+                `is a city in ${city.stateProvinceLabel}, ${city.country}.` : 
+                `is a city in ${city.country}.`) : 
+              ''}
             {city.population > 0 ? ` It has a population of approximately ${city.population.toLocaleString()} residents.` : ''}
           </Typography>
           

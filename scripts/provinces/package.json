@@ -1,0 +1,11 @@
+{
+  "name": "province-data-extractor",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "node province_script.js"
+  },
+  "dependencies": {
+    "node-fetch": "^3.3.0"
+  }
+}
