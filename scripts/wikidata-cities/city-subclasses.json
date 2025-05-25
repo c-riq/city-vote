@@ -396,6 +396,12 @@
     "ancestorClassLabel": "city"
   },
   {
+    "citySubclassId": "Q2234073",
+    "citySubclassLabel": "Greater Milano",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
     "citySubclassId": "Q448801",
     "citySubclassLabel": "Greater district town",
     "ancestorClassId": "Q515",
@@ -434,6 +440,12 @@
   {
     "citySubclassId": "Q115458966",
     "citySubclassLabel": "Ighrem",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q134530002",
+    "citySubclassLabel": "Integrated Infrastructure Ecosystem",
     "ancestorClassId": "Q515",
     "ancestorClassLabel": "city"
   },
@@ -704,6 +716,12 @@
   {
     "citySubclassId": "Q810652",
     "citySubclassLabel": "bastide",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q134528840",
+    "citySubclassLabel": "bell infrastructure platform",
     "ancestorClassId": "Q515",
     "ancestorClassLabel": "city"
   },
@@ -1292,6 +1310,12 @@
   {
     "citySubclassId": "Q8452914",
     "citySubclassLabel": "district town",
+    "ancestorClassId": "Q515",
+    "ancestorClassLabel": "city"
+  },
+  {
+    "citySubclassId": "Q134562495",
+    "citySubclassLabel": "divided city",
     "ancestorClassId": "Q515",
     "ancestorClassLabel": "city"
   },
@@ -2610,6 +2634,12 @@
     "ancestorClassLabel": "city or town"
   },
   {
+    "citySubclassId": "Q2234073",
+    "citySubclassLabel": "Greater Milano",
+    "ancestorClassId": "Q7930989",
+    "ancestorClassLabel": "city or town"
+  },
+  {
     "citySubclassId": "Q448801",
     "citySubclassLabel": "Greater district town",
     "ancestorClassId": "Q7930989",
@@ -2820,13 +2850,13 @@
     "ancestorClassLabel": "city or town"
   },
   {
-    "citySubclassId": "Q7574799",
+    "citySubclassId": "Q482810",
     "citySubclassLabel": "Special City of Korea",
     "ancestorClassId": "Q7930989",
     "ancestorClassLabel": "city or town"
   },
   {
-    "citySubclassId": "Q482810",
+    "citySubclassId": "Q7574799",
     "citySubclassLabel": "Special City of Korea",
     "ancestorClassId": "Q7930989",
     "ancestorClassLabel": "city or town"
@@ -3534,13 +3564,13 @@
     "ancestorClassLabel": "city or town"
   },
   {
-    "citySubclassId": "Q5124045",
+    "citySubclassId": "Q3678424",
     "citySubclassLabel": "city with special status",
     "ancestorClassId": "Q7930989",
     "ancestorClassLabel": "city or town"
   },
   {
-    "citySubclassId": "Q3678424",
+    "citySubclassId": "Q5124045",
     "citySubclassLabel": "city with special status",
     "ancestorClassId": "Q7930989",
     "ancestorClassLabel": "city or town"
@@ -3698,6 +3728,12 @@
   {
     "citySubclassId": "Q8452914",
     "citySubclassLabel": "district town",
+    "ancestorClassId": "Q7930989",
+    "ancestorClassLabel": "city or town"
+  },
+  {
+    "citySubclassId": "Q134562495",
+    "citySubclassLabel": "divided city",
     "ancestorClassId": "Q7930989",
     "ancestorClassLabel": "city or town"
   },
@@ -3974,6 +4010,12 @@
   {
     "citySubclassId": "Q105742499",
     "citySubclassLabel": "judicial capital",
+    "ancestorClassId": "Q7930989",
+    "ancestorClassLabel": "city or town"
+  },
+  {
+    "citySubclassId": "Q909458",
+    "citySubclassLabel": "jōkamachi",
     "ancestorClassId": "Q7930989",
     "ancestorClassLabel": "city or town"
   },
@@ -4836,6 +4878,126 @@
     "ancestorClassLabel": "city or town"
   },
   {
+    "citySubclassId": "Q104828357",
+    "citySubclassLabel": "County of city",
+    "ancestorClassId": "Q3299260",
+    "ancestorClassLabel": "local government area"
+  },
+  {
+    "citySubclassId": "Q4272761",
+    "citySubclassLabel": "administrative city of Indonesia",
+    "ancestorClassId": "Q3299260",
+    "ancestorClassLabel": "local government area"
+  },
+  {
+    "citySubclassId": "Q11127777",
+    "citySubclassLabel": "administrative regency of Indonesia",
+    "ancestorClassId": "Q3299260",
+    "ancestorClassLabel": "local government area"
+  },
+  {
+    "citySubclassId": "Q108454666",
+    "citySubclassLabel": "big city of South Korea",
+    "ancestorClassId": "Q3299260",
+    "ancestorClassLabel": "local government area"
+  },
+  {
+    "citySubclassId": "Q3199141",
+    "citySubclassLabel": "city of Indonesia",
+    "ancestorClassId": "Q3299260",
+    "ancestorClassLabel": "local government area"
+  },
+  {
+    "citySubclassId": "Q29045252",
+    "citySubclassLabel": "city of South Korea",
+    "ancestorClassId": "Q3299260",
+    "ancestorClassLabel": "local government area"
+  },
+  {
+    "citySubclassId": "Q1867183",
+    "citySubclassLabel": "local government area of Australia",
+    "ancestorClassId": "Q3299260",
+    "ancestorClassLabel": "local government area"
+  },
+  {
+    "citySubclassId": "Q55558200",
+    "citySubclassLabel": "local government area of New South Wales",
+    "ancestorClassId": "Q3299260",
+    "ancestorClassLabel": "local government area"
+  },
+  {
+    "citySubclassId": "Q55593624",
+    "citySubclassLabel": "local government area of Queensland",
+    "ancestorClassId": "Q3299260",
+    "ancestorClassLabel": "local government area"
+  },
+  {
+    "citySubclassId": "Q55558027",
+    "citySubclassLabel": "local government area of South Australia",
+    "ancestorClassId": "Q3299260",
+    "ancestorClassLabel": "local government area"
+  },
+  {
+    "citySubclassId": "Q55687066",
+    "citySubclassLabel": "local government area of Tasmania",
+    "ancestorClassId": "Q3299260",
+    "ancestorClassLabel": "local government area"
+  },
+  {
+    "citySubclassId": "Q1426035",
+    "citySubclassLabel": "local government area of Victoria",
+    "ancestorClassId": "Q3299260",
+    "ancestorClassLabel": "local government area"
+  },
+  {
+    "citySubclassId": "Q55557858",
+    "citySubclassLabel": "local government area of Western Australia",
+    "ancestorClassId": "Q3299260",
+    "ancestorClassLabel": "local government area"
+  },
+  {
+    "citySubclassId": "Q55671590",
+    "citySubclassLabel": "local government area of the Northern Territory",
+    "ancestorClassId": "Q3299260",
+    "ancestorClassLabel": "local government area"
+  },
+  {
+    "citySubclassId": "Q123127825",
+    "citySubclassLabel": "regencies and cities of Indonesia",
+    "ancestorClassId": "Q3299260",
+    "ancestorClassLabel": "local government area"
+  },
+  {
+    "citySubclassId": "Q3191695",
+    "citySubclassLabel": "regency of Indonesia",
+    "ancestorClassId": "Q3299260",
+    "ancestorClassLabel": "local government area"
+  },
+  {
+    "citySubclassId": "Q12479774",
+    "citySubclassLabel": "second-level administrative country subdivision in Indonesia",
+    "ancestorClassId": "Q3299260",
+    "ancestorClassLabel": "local government area"
+  },
+  {
+    "citySubclassId": "Q15643757",
+    "citySubclassLabel": "shire of Western Australia",
+    "ancestorClassId": "Q3299260",
+    "ancestorClassLabel": "local government area"
+  },
+  {
+    "citySubclassId": "Q11279677",
+    "citySubclassLabel": "special self-governing province and state of South Korea",
+    "ancestorClassId": "Q3299260",
+    "ancestorClassLabel": "local government area"
+  },
+  {
+    "citySubclassId": "Q4249901",
+    "citySubclassLabel": "special-status city",
+    "ancestorClassId": "Q3299260",
+    "ancestorClassLabel": "local government area"
+  },
+  {
     "citySubclassId": "Q10423826",
     "citySubclassLabel": "Q10423826",
     "ancestorClassId": "Q15284",
@@ -4880,6 +5042,12 @@
   {
     "citySubclassId": "Q112893163",
     "citySubclassLabel": "Q112893163",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q118307590",
+    "citySubclassLabel": "Q118307590",
     "ancestorClassId": "Q15284",
     "ancestorClassLabel": "municipality"
   },
@@ -6984,13 +7152,13 @@
     "ancestorClassLabel": "municipality"
   },
   {
-    "citySubclassId": "Q3559003",
+    "citySubclassId": "Q115861271",
     "citySubclassLabel": "northern village",
     "ancestorClassId": "Q15284",
     "ancestorClassLabel": "municipality"
   },
   {
-    "citySubclassId": "Q115861271",
+    "citySubclassId": "Q3559003",
     "citySubclassLabel": "northern village",
     "ancestorClassId": "Q15284",
     "ancestorClassLabel": "municipality"
@@ -7116,12 +7284,6 @@
     "ancestorClassLabel": "municipality"
   },
   {
-    "citySubclassId": "Q12336315",
-    "citySubclassLabel": "rural municipality",
-    "ancestorClassId": "Q15284",
-    "ancestorClassLabel": "municipality"
-  },
-  {
     "citySubclassId": "Q3504085",
     "citySubclassLabel": "rural municipality",
     "ancestorClassId": "Q15284",
@@ -7129,6 +7291,12 @@
   },
   {
     "citySubclassId": "Q1650922",
+    "citySubclassLabel": "rural municipality",
+    "ancestorClassId": "Q15284",
+    "ancestorClassLabel": "municipality"
+  },
+  {
+    "citySubclassId": "Q12336315",
     "citySubclassLabel": "rural municipality",
     "ancestorClassId": "Q15284",
     "ancestorClassLabel": "municipality"
