@@ -10,7 +10,7 @@ import pathlib
 sys.path.insert(0, str(pathlib.Path(__file__).parent))
 from parser import parse_wikidata_date, save_results
 
-# TODO: Add state for US cities
+# State/province extraction added
 
 def process_lines(process_id, wikidata_dump_path, city_subclasses, output_dir, skip_lines=0, num_processes=4, max_lines=None):
     """Process lines from the Wikidata dump file."""
@@ -137,11 +137,15 @@ def extract_city_data(record, best_type):
     # Extract sister cities
     sister_cities = extract_sister_cities(record)
     
+    # Extract state/province
+    state_province_id = extract_state_province(record, country_wikidata_id)
+    
     return {
         "cityWikidataId": city_wikidata_id,
         "cityLabelEnglish": city_label_english,
         "countryWikidataId": country_wikidata_id,
         "countryDate": country_date,
+        "stateProvinceWikidataId": state_province_id,
         "ancestorType": ancestor_type,
         "classLabel": class_label,
         "population": population,
@@ -505,3 +509,48 @@ def extract_sister_cities(record):
                     sister_cities.append(sister_city_id)
     
     return sister_cities
+
+def extract_state_province(record, country_wikidata_id):
+    """Extract state or province information from a Wikidata record.
+    
+    For cities in the USA (Q30) and Canada (Q16), this is particularly important.
+    For other countries, it's included but not strictly required.
+    """
+    state_province_id = None
+    
+    # Located in the administrative territorial entity (P131)
+    if pydash.has(record, 'claims.P131'):
+        admin_claims = pydash.get(record, 'claims.P131', [])
+        valid_admin_entities = []
+        
+        for admin_claim in admin_claims:
+            if pydash.has(admin_claim, 'mainsnak.datavalue.value.id'):
+                admin_id = pydash.get(admin_claim, 'mainsnak.datavalue.value.id')
+                
+                # Check for preferred rank
+                rank = pydash.get(admin_claim, 'rank', 'normal')
+                is_preferred = (rank == 'preferred')
+                
+                # Check if this is a current relationship (no end date)
+                has_end_date = False
+                if pydash.has(admin_claim, 'qualifiers.P582'):  # End date qualifier
+                    has_end_date = True
+                
+                if not has_end_date:  # Only consider current administrative relationships
+                    valid_admin_entities.append({
+                        'id': admin_id,
+                        'is_preferred': is_preferred
+                    })
+        
+        if valid_admin_entities:
+            # First check for preferred rank
+            preferred_entities = [e for e in valid_admin_entities if e['is_preferred']]
+            
+            if preferred_entities:
+                # Just take the first preferred entity
+                state_province_id = preferred_entities[0]['id']
+            else:
+                # Just take the first entity
+                state_province_id = valid_admin_entities[0]['id']
+    
+    return state_province_id
