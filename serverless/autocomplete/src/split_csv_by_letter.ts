@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
+import { specialCharacterMap } from './special-character-map';
 
 // Function to parse a CSV line, handling quoted fields with embedded commas
 function parseCSVLine(line: string): string[] {
@@ -82,17 +83,25 @@ async function splitCSVByFirstLetter() {
       const cityName = cityData[cityNameIndex];
       if (!cityName) continue; // Skip if city name is empty
       
-      // Get the first letter and convert to uppercase
-      const firstLetter = cityName.charAt(0).toUpperCase();
-      
-      // Check if the first letter is alphabetic
-      if (/[A-Z]/.test(firstLetter)) {
-        // Add to the appropriate letter array
-        linesByLetter[firstLetter].push(lines[i]);
-      } else {
-        // Add to the non-alphabetic category
-        linesByLetter['#'].push(lines[i]);
-      }
+    // Function to normalize special characters to their ASCII equivalents
+    function normalizeCharacter(char: string): string {
+      return specialCharacterMap[char] || char;
+    }
+    
+    // Get the first letter and convert to uppercase
+    let firstLetter = cityName.charAt(0).toUpperCase();
+    
+    // Normalize the first letter if it's a special character
+    firstLetter = normalizeCharacter(firstLetter);
+    
+    // Check if the first letter is alphabetic
+    if (/[A-Z]/.test(firstLetter)) {
+      // Add to the appropriate letter array
+      linesByLetter[firstLetter].push(lines[i]);
+    } else {
+      // Add to the non-alphabetic category
+      linesByLetter['#'].push(lines[i]);
+    }
     }
     
     // Write each letter's lines to a separate file

@@ -13,6 +13,7 @@ import {
 import { countries } from './countries';
 import * as fs from 'fs';
 import * as path from 'path';
+import { normalizeCharacter } from './character-map';
 
 // CSV parsing and search functions
 interface CityData {
@@ -312,12 +313,18 @@ async function searchCities(query: string, limit: number = 10): Promise<CityData
   // Normalize the query for case-insensitive search
   const normalizedQuery = query.toLowerCase();
   
+  // Use the normalizeCharacter function imported at the top level
+  
   // Determine which split file to use based on first letter of query
-  const firstLetter = normalizedQuery.charAt(0).toUpperCase();
+  let firstLetter = normalizedQuery.charAt(0).toUpperCase();
+  
+  // Normalize the first letter if it's a special character
+  firstLetter = normalizeCharacter(firstLetter);
+  
   let csvPath;
   
   if (/[A-Z]/.test(firstLetter)) {
-    // Use the appropriate letter file
+    // Use the appropriate letter file for standard Latin alphabet
     csvPath = path.join(__dirname, 'split_by_letter', `${firstLetter}.csv`);
   } else {
     // For non-alphabetic characters, use the # file
