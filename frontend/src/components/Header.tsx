@@ -128,7 +128,7 @@ function Header({ cityInfo, onLogout, onCreatePoll }: HeaderProps) {
         body: JSON.stringify({
           action: 'autocomplete',
           query,
-          limit: 10
+          limit: 50
         })
       });
 

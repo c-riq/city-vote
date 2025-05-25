@@ -353,8 +353,8 @@ async function searchCities(query: string, limit: number = 10): Promise<CityData
   // Filter cities based on the query
   const matchingCities: CityData[] = [];
   
-  // Start from line 1 (skip header)
-  for (let i = 1; i < lines.length && matchingCities.length < limit; i++) {
+  // Start from line 1 (skip header) - collect ALL matches first
+  for (let i = 1; i < lines.length; i++) {
     if (!lines[i].trim()) continue; // Skip empty lines
     
     const cityData = parseCSVLine(lines[i]);
@@ -475,7 +475,7 @@ async function searchCities(query: string, limit: number = 10): Promise<CityData
   
   // Sort results by population in descending order
   // Cities with no population will be at the end
-  return matchingCities.sort((a, b) => {
+  const sortedCities = matchingCities.sort((a, b) => {
     // If both have population, sort by population (descending)
     if (a.population && b.population) {
       return b.population - a.population;
@@ -491,6 +491,9 @@ async function searchCities(query: string, limit: number = 10): Promise<CityData
     // If neither has population, maintain original order
     return 0;
   });
+  
+  // Return only the requested number of results after sorting
+  return sortedCities.slice(0, limit);
 }
 
 const handleAutocomplete = async (query: string | undefined, limit: number = 10): Promise<APIGatewayProxyResult> => {
