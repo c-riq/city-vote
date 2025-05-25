@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, Link } from 'react-router-dom';
 import { 
   Box,
   Button,
@@ -357,7 +357,7 @@ function Poll({ token, pollData: initialPollData, onVoteComplete, votesData: pro
             <PollAttachment attachmentUrl={attachmentUrl} />
           )}
 
-          {isAuthenticated && cityInfo && (
+          {isAuthenticated && cityInfo ? (
             <>
               <VoteForm 
                 cityInfo={cityInfo}
@@ -374,6 +374,32 @@ function Poll({ token, pollData: initialPollData, onVoteComplete, votesData: pro
                 disabled={voting || !personalInfo.title || !personalInfo.name}
               />
             </>
+          ) : (
+            <Box sx={{ 
+              mt: 4, 
+              mb: 4, 
+              p: 3, 
+              bgcolor: 'action.hover', 
+              borderRadius: 2,
+              textAlign: 'center'
+            }}>
+              <Typography variant="h6" sx={{ mb: 2 }}>
+                Want to vote or sign this poll?
+              </Typography>
+              <Typography variant="body1" sx={{ mb: 3 }}>
+                You need to register and log in to participate in this poll.
+              </Typography>
+              <Button 
+                variant="contained" 
+                color="primary"
+                component={Link}
+                to="/register"
+                startIcon={<span className="material-icons">how_to_reg</span>}
+                sx={{ px: 3, py: 1 }}
+              >
+                Register Now
+              </Button>
+            </Box>
           )}
 
           <ResultsSection 
