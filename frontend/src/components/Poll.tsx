@@ -383,12 +383,6 @@ function Poll({ token, pollData: initialPollData, onVoteComplete, votesData: pro
               borderRadius: 2,
               textAlign: 'center'
             }}>
-              <Typography variant="h6" sx={{ mb: 2 }}>
-                Want to vote or sign this poll?
-              </Typography>
-              <Typography variant="body1" sx={{ mb: 3 }}>
-                You need to register and log in to participate in this poll.
-              </Typography>
               <Button 
                 variant="contained" 
                 color="primary"
@@ -397,7 +391,7 @@ function Poll({ token, pollData: initialPollData, onVoteComplete, votesData: pro
                 startIcon={<span className="material-icons">how_to_reg</span>}
                 sx={{ px: 3, py: 1 }}
               >
-                Register Now
+                {isJointStatementPoll ? 'Register to sign this statement' : 'Register to vote in this poll'}
               </Button>
             </Box>
           )}
