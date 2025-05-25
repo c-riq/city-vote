@@ -10,6 +10,8 @@ import pathlib
 sys.path.insert(0, str(pathlib.Path(__file__).parent))
 from parser import parse_wikidata_date, save_results
 
+# TODO: Add state for US cities
+
 def process_lines(process_id, wikidata_dump_path, city_subclasses, output_dir, skip_lines=0, num_processes=4, max_lines=None):
     """Process lines from the Wikidata dump file."""
     print(f"Process {process_id}: Starting processing")
@@ -177,8 +179,12 @@ def extract_population(record):
                     if pydash.has(pop_claim, 'qualifiers.P585'):
                         date_qualifier = pydash.get(pop_claim, 'qualifiers.P585[0]')
                         if pydash.has(date_qualifier, 'datavalue.value.time'):
-                            time_str = pydash.get(date_qualifier, 'datavalue.value.time')
-                            parsed_date, pop_date = parse_wikidata_date(time_str)
+                            try:
+                                time_str = pydash.get(date_qualifier, 'datavalue.value.time')
+                                parsed_date, pop_date = parse_wikidata_date(time_str)
+                            except Exception as e:
+                                print(f"Error parsing population date: {str(e)}")
+                                parsed_date, pop_date = None, None
                     
                     valid_population_data.append({
                         'value': pop_value,
@@ -219,8 +225,12 @@ def extract_country(record):
                 if pydash.has(country_claim, 'qualifiers.P585'):
                     date_qualifier = pydash.get(country_claim, 'qualifiers.P585[0]')
                     if pydash.has(date_qualifier, 'datavalue.value.time'):
-                        time_str = pydash.get(date_qualifier, 'datavalue.value.time')
-                        parsed_date, country_date_str = parse_wikidata_date(time_str)
+                        try:
+                            time_str = pydash.get(date_qualifier, 'datavalue.value.time')
+                            parsed_date, country_date_str = parse_wikidata_date(time_str)
+                        except Exception as e:
+                            print(f"Error parsing country date: {str(e)}")
+                            parsed_date, country_date_str = None, None
                 
                 # Check for preferred rank
                 rank = pydash.get(country_claim, 'rank', 'normal')
@@ -372,8 +382,12 @@ def extract_mayor_data(record):
                 if pydash.has(mayor_claim, 'qualifiers.P580'):  # Start date qualifier
                     date_qualifier = pydash.get(mayor_claim, 'qualifiers.P580[0]')
                     if pydash.has(date_qualifier, 'datavalue.value.time'):
-                        time_str = pydash.get(date_qualifier, 'datavalue.value.time')
-                        parsed_start_date, start_date = parse_wikidata_date(time_str)
+                        try:
+                            time_str = pydash.get(date_qualifier, 'datavalue.value.time')
+                            parsed_start_date, start_date = parse_wikidata_date(time_str)
+                        except Exception as e:
+                            print(f"Error parsing mayor start date: {str(e)}")
+                            parsed_start_date, start_date = None, None
                 
                 if not has_end_date:  # Only consider current mayors (no end date)
                     valid_mayor_data.append({
@@ -430,8 +444,12 @@ def extract_mayor_data(record):
                 if pydash.has(officeholder_claim, 'qualifiers.P580'):  # Start date qualifier
                     date_qualifier = pydash.get(officeholder_claim, 'qualifiers.P580[0]')
                     if pydash.has(date_qualifier, 'datavalue.value.time'):
-                        time_str = pydash.get(date_qualifier, 'datavalue.value.time')
-                        parsed_start_date, start_date = parse_wikidata_date(time_str)
+                        try:
+                            time_str = pydash.get(date_qualifier, 'datavalue.value.time')
+                            parsed_start_date, start_date = parse_wikidata_date(time_str)
+                        except Exception as e:
+                            print(f"Error parsing officeholder start date: {str(e)}")
+                            parsed_start_date, start_date = None, None
                 
                 if not has_end_date:  # Only consider current officeholders (no end date)
                     valid_officeholder_data.append({
