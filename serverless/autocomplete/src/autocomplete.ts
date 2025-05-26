@@ -16,7 +16,7 @@ import * as path from 'path';
 import { normalizeCharacter } from './character-map';
 
 // CSV parsing and search functions
-interface CityData {
+export interface CityData {
   wikidataId: string;
   name: string;
   countryWikidataId: string;
@@ -308,15 +308,32 @@ async function findCityByQid(qid: string): Promise<CityData | null> {
   return null; // City not found
 }
 
+// Function to check if a string contains non-ASCII characters
+function containsNonASCII(str: string): boolean {
+  return /[^\x00-\x7F]/.test(str);
+}
+
+
+
+// Function to normalize a string by replacing all special characters
+function normalizeString(str: string): string {
+  // Then normalize special characters
+  return str.split('').map(char => normalizeCharacter(char)).join('');
+}
+
 // Efficient search function for CSV data
-async function searchCities(query: string, limit: number = 10): Promise<CityData[]> {
-  // Normalize the query for case-insensitive search
-  const normalizedQuery = query.toLowerCase();
+export async function searchCities(query: string, limit: number = 10): Promise<CityData[]> {
+  // Convert query to lowercase for case-insensitive search
+  const lowercaseQuery = query.toLowerCase();
   
-  // Use the normalizeCharacter function imported at the top level
+  // Check if the query contains special characters
+  const hasSpecialChars = containsNonASCII(lowercaseQuery);
+  
+  // Normalize the query for normalized search
+  const normalizedQuery = normalizeString(lowercaseQuery);
   
   // Determine which split file to use based on first letter of query
-  let firstLetter = normalizedQuery.charAt(0).toUpperCase();
+  let firstLetter = lowercaseQuery.charAt(0).toUpperCase();
   
   // Normalize the first letter if it's a special character
   firstLetter = normalizeCharacter(firstLetter);
@@ -357,8 +374,6 @@ async function searchCities(query: string, limit: number = 10): Promise<CityData
   const supersededByIndex = headers.indexOf('superseded_by');
   const supersededDuplicatesIndex = headers.indexOf('supersedes_duplicates');
   
-  // We already normalized the query at the beginning of the function
-  
   // Get column indices from header
   const countryNameIndex = getColumnIndex(countries.header, "Country");
   const countryCodeIndex = getColumnIndex(countries.header, "Alpha-2 code");
@@ -380,6 +395,8 @@ async function searchCities(query: string, limit: number = 10): Promise<CityData
   
   // Filter cities based on the query
   const matchingCities: CityData[] = [];
+  const exactMatches: CityData[] = [];
+  const normalizedMatches: CityData[] = [];
   
   // Start from line 1 (skip header) - collect ALL matches first
   for (let i = 1; i < lines.length; i++) {
@@ -394,9 +411,32 @@ async function searchCities(query: string, limit: number = 10): Promise<CityData
     }
     
     const cityName = cityData[cityNameIndex];
+    const cityNameLower = cityName.toLowerCase();
     
-    // Check if the city name starts with the query (prefix match only)
-    if (cityName.toLowerCase().startsWith(normalizedQuery)) {
+    // Get the ascii column index
+    const asciiIndex = headers.indexOf('ascii');
+    
+    let isMatch = false;
+    let isExactMatch = false;
+    
+    // Check for exact match if query has special characters
+    if (hasSpecialChars && cityNameLower.startsWith(lowercaseQuery)) {
+      isMatch = true;
+      isExactMatch = true;
+    }
+    // Check for normalized match using the ascii column if available
+    else if (asciiIndex !== -1 && cityData[asciiIndex] && cityData[asciiIndex].toLowerCase().startsWith(normalizedQuery)) {
+      isMatch = true;
+    }
+    // Fallback to normalizing the city name on the fly if ascii column is not available or empty
+    else {
+      const normalizedCityName = normalizeString(cityNameLower);
+      if (normalizedCityName.startsWith(normalizedQuery)) {
+        isMatch = true;
+      }
+    }
+    
+    if (isMatch) {
       const wikidataId = cityData[0];
       const countryWikidataId = cityData[2];
       const countryName = countryNameMap.get(countryWikidataId) || '';

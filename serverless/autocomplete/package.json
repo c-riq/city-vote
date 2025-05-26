@@ -10,7 +10,7 @@
     "deploy": "npm run clean && npm run build && ./deploy.sh",
     "split-csv-letter": "npx ts-node src/split_csv_by_letter.ts",
     "split-csv-qid": "npx ts-node src/split_csv_by_qid.ts",
-    "split-csv": "npx ts-node src/split_csv_files.ts"
+    "split": "npx ts-node src/split_csv_files.ts"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.119",

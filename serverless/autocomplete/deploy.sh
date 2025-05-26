@@ -21,7 +21,7 @@ ZIP_FILE="function.zip"
 
 # Generate split CSV files
 echo "Generating split CSV files..."
-npm run split-csv
+npm run split
 
 # Build the TypeScript code
 echo "Building TypeScript..."
