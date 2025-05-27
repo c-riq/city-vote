@@ -1,4 +1,4 @@
-# SPARQL query to get all subclasses of city (Q515), municipality (Q15284), and city or town (Q7930989)
+# SPARQL query to get all subclasses of city (Q515), municipality (Q15284), city or town (Q7930989), and local government area (Q3299260)
 # Currently not including: village (Q532), town (Q3957) (subclass of Q7930989)
 # This can be executed at https://query.wikidata.org/
 
@@ -54,6 +54,21 @@ WHERE {
     ?intermediate2 wdt:P279 ?intermediate1.
     ?citySubclass wdt:P279 ?intermediate2.
     BIND(wd:Q7930989 AS ?ancestorClass)
+  } UNION {
+    # Direct subclasses of local government area
+    ?citySubclass wdt:P279 wd:Q3299260.
+    BIND(wd:Q3299260 AS ?ancestorClass)
+  } UNION {
+    # Subclasses one level down from local government area
+    ?intermediate wdt:P279 wd:Q3299260.
+    ?citySubclass wdt:P279 ?intermediate.
+    BIND(wd:Q3299260 AS ?ancestorClass)
+  } UNION {
+    # Subclasses two levels down from local government area
+    ?intermediate1 wdt:P279 wd:Q3299260.
+    ?intermediate2 wdt:P279 ?intermediate1.
+    ?citySubclass wdt:P279 ?intermediate2.
+    BIND(wd:Q3299260 AS ?ancestorClass)
   }
   
   # Get labels in English

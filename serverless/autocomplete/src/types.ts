@@ -11,6 +11,8 @@ export interface CityResult {
     countryWikidataId: string;
     countryName: string;
     countryCode: string;
+    stateProvinceWikidataId?: string;
+    stateProvinceLabel?: string;
     population?: number;
     populationDate?: string;
     latitude?: number;

@@ -10,6 +10,41 @@ import pathlib
 sys.path.insert(0, str(pathlib.Path(__file__).parent))
 from parser import parse_wikidata_date, save_results
 
+# State/province extraction added
+
+# Set of province/state entity types for USA and Canada
+PROVINCE_TYPES = {
+    "Q35657",    # state of the United States
+    "Q11828004",  # province of Canada
+    "Q5852411",   # territory of Canada
+    "Q107390",    # territory of the United States
+    "Q48091"      # federal district (for Washington D.C.)
+}
+
+# Dictionary to store province IDs (only used in process 0)
+province_ids = set()
+
+def save_province_data(province_ids, output_dir):
+    """Save the province IDs to a JSON file."""
+    import json
+    
+    # Create a simple lookup map with empty names
+    province_lookup = {}
+    for province_id in province_ids:
+        province_lookup[province_id] = {
+            "name": ""
+        }
+    
+    # Ensure the output directory exists
+    os.makedirs(output_dir, exist_ok=True)
+    
+    # Save the province lookup map
+    output_file = f"{output_dir}/province_lookup.json"
+    with open(output_file, 'w', encoding='utf-8') as f:
+        json.dump(province_lookup, f, ensure_ascii=False, indent=2)
+    
+    print(f"Province lookup map saved to {output_file}")
+
 def process_lines(process_id, wikidata_dump_path, city_subclasses, output_dir, skip_lines=0, num_processes=4, max_lines=None):
     """Process lines from the Wikidata dump file."""
     print(f"Process {process_id}: Starting processing")
@@ -47,6 +82,33 @@ def process_lines(process_id, wikidata_dump_path, city_subclasses, output_dir, s
                     record = json.loads(line.rstrip(',\n'))
                     lines_processed += 1
                     
+                    # If this is process 0, check if this entity is a province/state for USA or Canada
+                    if process_id == 0 and pydash.has(record, 'claims.P31'):
+                        entity_id = pydash.get(record, 'id')
+                        
+                        # Check if this entity is a province/state
+                        is_province = False
+                        country_id = None
+                        
+                        # Check instance of (P31) claims
+                        for p31 in pydash.get(record, 'claims.P31', []):
+                            entity_type_id = pydash.get(p31, 'mainsnak.datavalue.value.id')
+                            if entity_type_id in PROVINCE_TYPES:
+                                is_province = True
+                                break
+                        
+                        # If it's a province, check which country it belongs to
+                        if is_province and pydash.has(record, 'claims.P17'):
+                            for country_claim in pydash.get(record, 'claims.P17', []):
+                                if pydash.has(country_claim, 'mainsnak.datavalue.value.id'):
+                                    country_id = pydash.get(country_claim, 'mainsnak.datavalue.value.id')
+                                    if country_id in ['Q30', 'Q16']:  # USA or Canada
+                                        # Add to province IDs set
+                                        province_ids.add(entity_id)
+                                        print(f"Process {process_id}: Found province {entity_id} in {country_id}")
+                                        break
+                    
+                    # Process cities
                     if pydash.has(record, 'claims.P31') and pydash.get(record, 'labels.en.value'):
                         matching_city_types = []
                         for p31 in pydash.get(record, 'claims.P31'):
@@ -80,7 +142,7 @@ def process_lines(process_id, wikidata_dump_path, city_subclasses, output_dir, s
                                 print(f"Process {process_id}: Skipping city {city_id} ({city_name}) - replaced by {replaced_by}")
                                 continue
                             
-                            city_data = extract_city_data(record, best_type)
+                            city_data = extract_city_data(record, best_type, process_id)
                             cities.append(city_data)
                             
                             if len(cities) % save_interval == 0:
@@ -101,9 +163,14 @@ def process_lines(process_id, wikidata_dump_path, city_subclasses, output_dir, s
         save_results(cities, output_file)
         print(f"Process {process_id}: Completed. Found {len(cities)} cities")
     
+    # If this is process 0, save the province data
+    if process_id == 0 and province_ids:
+        save_province_data(province_ids, output_dir)
+        print(f"Process {process_id}: Saved {len(province_ids)} provinces")
+    
     return len(cities)
 
-def extract_city_data(record, best_type):
+def extract_city_data(record, best_type, process_id=None):
     """Extract city data from a Wikidata record."""
     city_wikidata_id = pydash.get(record, 'id')
     city_label_english = pydash.get(record, 'labels.en.value')
@@ -129,11 +196,21 @@ def extract_city_data(record, best_type):
     # Extract social media accounts
     social_media = extract_social_media(record)
     
+    # Extract mayor data
+    mayor_wikidata_id = extract_mayor_data(record)
+    
+    # Extract sister cities
+    sister_cities = extract_sister_cities(record)
+    
+    # Extract state/province
+    state_province_id = extract_state_province(record, country_wikidata_id, process_id)
+    
     return {
         "cityWikidataId": city_wikidata_id,
         "cityLabelEnglish": city_label_english,
         "countryWikidataId": country_wikidata_id,
         "countryDate": country_date,
+        "stateProvinceWikidataId": state_province_id,
         "ancestorType": ancestor_type,
         "classLabel": class_label,
         "population": population,
@@ -141,7 +218,9 @@ def extract_city_data(record, best_type):
         "latitude": latitude,
         "longitude": longitude,
         "officialWebsite": official_website,
-        "socialMedia": social_media if social_media else None
+        "socialMedia": social_media if social_media else None,
+        "mayorWikidataId": mayor_wikidata_id,
+        "sisterCities": sister_cities if sister_cities else None
     }
 
 def extract_population(record):
@@ -169,8 +248,12 @@ def extract_population(record):
                     if pydash.has(pop_claim, 'qualifiers.P585'):
                         date_qualifier = pydash.get(pop_claim, 'qualifiers.P585[0]')
                         if pydash.has(date_qualifier, 'datavalue.value.time'):
-                            time_str = pydash.get(date_qualifier, 'datavalue.value.time')
-                            parsed_date, pop_date = parse_wikidata_date(time_str)
+                            try:
+                                time_str = pydash.get(date_qualifier, 'datavalue.value.time')
+                                parsed_date, pop_date = parse_wikidata_date(time_str)
+                            except Exception as e:
+                                print(f"Error parsing population date: {str(e)}")
+                                parsed_date, pop_date = None, None
                     
                     valid_population_data.append({
                         'value': pop_value,
@@ -211,8 +294,12 @@ def extract_country(record):
                 if pydash.has(country_claim, 'qualifiers.P585'):
                     date_qualifier = pydash.get(country_claim, 'qualifiers.P585[0]')
                     if pydash.has(date_qualifier, 'datavalue.value.time'):
-                        time_str = pydash.get(date_qualifier, 'datavalue.value.time')
-                        parsed_date, country_date_str = parse_wikidata_date(time_str)
+                        try:
+                            time_str = pydash.get(date_qualifier, 'datavalue.value.time')
+                            parsed_date, country_date_str = parse_wikidata_date(time_str)
+                        except Exception as e:
+                            print(f"Error parsing country date: {str(e)}")
+                            parsed_date, country_date_str = None, None
                 
                 # Check for preferred rank
                 rank = pydash.get(country_claim, 'rank', 'normal')
@@ -306,4 +393,235 @@ def extract_social_media(record):
             linkedin_id = pydash.get(linkedin_claim, 'mainsnak.datavalue.value')
             social_media['linkedin'] = linkedin_id
     
+    # Bluesky handle (P8605)
+    if pydash.has(record, 'claims.P8605'):
+        bluesky_claim = pydash.get(record, 'claims.P8605[0]')
+        if pydash.has(bluesky_claim, 'mainsnak.datavalue.value'):
+            bluesky_handle = pydash.get(bluesky_claim, 'mainsnak.datavalue.value')
+            social_media['bluesky'] = bluesky_handle
+    
+    # Mastodon address (P4033)
+    if pydash.has(record, 'claims.P4033'):
+        mastodon_claim = pydash.get(record, 'claims.P4033[0]')
+        if pydash.has(mastodon_claim, 'mainsnak.datavalue.value'):
+            mastodon_address = pydash.get(mastodon_claim, 'mainsnak.datavalue.value')
+            social_media['mastodon'] = mastodon_address
+    
+    # TikTok username (P7085)
+    if pydash.has(record, 'claims.P7085'):
+        tiktok_claim = pydash.get(record, 'claims.P7085[0]')
+        if pydash.has(tiktok_claim, 'mainsnak.datavalue.value'):
+            tiktok_username = pydash.get(tiktok_claim, 'mainsnak.datavalue.value')
+            social_media['tiktok'] = tiktok_username
+    
+    # Threads profile (P10566)
+    if pydash.has(record, 'claims.P10566'):
+        threads_claim = pydash.get(record, 'claims.P10566[0]')
+        if pydash.has(threads_claim, 'mainsnak.datavalue.value'):
+            threads_profile = pydash.get(threads_claim, 'mainsnak.datavalue.value')
+            social_media['threads'] = threads_profile
+    
     return social_media
+
+def extract_mayor_data(record):
+    """Extract current mayor Wikidata ID from a Wikidata record."""
+    mayor_wikidata_id = None
+    
+    # Head of government (P6) - commonly used for mayors
+    if pydash.has(record, 'claims.P6'):
+        mayor_claims = pydash.get(record, 'claims.P6', [])
+        valid_mayor_data = []
+        
+        for mayor_claim in mayor_claims:
+            if pydash.has(mayor_claim, 'mainsnak.datavalue.value.id'):
+                mayor_id = pydash.get(mayor_claim, 'mainsnak.datavalue.value.id')
+                
+                # Check if this is a current position (no end date)
+                has_end_date = False
+                if pydash.has(mayor_claim, 'qualifiers.P582'):  # End date qualifier
+                    has_end_date = True
+                
+                # Check for preferred rank
+                rank = pydash.get(mayor_claim, 'rank', 'normal')
+                is_preferred = (rank == 'preferred')
+                
+                # Extract start date for sorting if needed
+                start_date = None
+                parsed_start_date = None
+                if pydash.has(mayor_claim, 'qualifiers.P580'):  # Start date qualifier
+                    date_qualifier = pydash.get(mayor_claim, 'qualifiers.P580[0]')
+                    if pydash.has(date_qualifier, 'datavalue.value.time'):
+                        try:
+                            time_str = pydash.get(date_qualifier, 'datavalue.value.time')
+                            parsed_start_date, start_date = parse_wikidata_date(time_str)
+                        except Exception as e:
+                            print(f"Error parsing mayor start date: {str(e)}")
+                            parsed_start_date, start_date = None, None
+                
+                if not has_end_date:  # Only consider current mayors (no end date)
+                    valid_mayor_data.append({
+                        'id': mayor_id,
+                        'start_date': start_date,
+                        'parsed_start_date': parsed_start_date,
+                        'is_preferred': is_preferred
+                    })
+        
+        if valid_mayor_data:
+            # First check for preferred rank
+            preferred_mayors = [m for m in valid_mayor_data if m['is_preferred']]
+            if preferred_mayors:
+                # If there are multiple preferred mayors, sort by start date (most recent first)
+                if len(preferred_mayors) > 1:
+                    sorted_data = sorted(
+                        preferred_mayors,
+                        key=lambda x: (x['parsed_start_date'] is None, x['parsed_start_date'] or datetime.datetime.min),
+                        reverse=True
+                    )
+                    mayor_wikidata_id = sorted_data[0]['id']
+                else:
+                    mayor_wikidata_id = preferred_mayors[0]['id']
+            else:
+                # Sort by start date (most recent first)
+                sorted_data = sorted(
+                    valid_mayor_data,
+                    key=lambda x: (x['parsed_start_date'] is None, x['parsed_start_date'] or datetime.datetime.min),
+                    reverse=True
+                )
+                mayor_wikidata_id = sorted_data[0]['id']
+    
+    # If no mayor found with P6, try P1308 (officeholder)
+    if not mayor_wikidata_id and pydash.has(record, 'claims.P1308'):
+        officeholder_claims = pydash.get(record, 'claims.P1308', [])
+        valid_officeholder_data = []
+        
+        for officeholder_claim in officeholder_claims:
+            if pydash.has(officeholder_claim, 'mainsnak.datavalue.value.id'):
+                officeholder_id = pydash.get(officeholder_claim, 'mainsnak.datavalue.value.id')
+                
+                # Check if this is a current position (no end date)
+                has_end_date = False
+                if pydash.has(officeholder_claim, 'qualifiers.P582'):  # End date qualifier
+                    has_end_date = True
+                
+                # Check for preferred rank
+                rank = pydash.get(officeholder_claim, 'rank', 'normal')
+                is_preferred = (rank == 'preferred')
+                
+                # Extract start date for sorting if needed
+                start_date = None
+                parsed_start_date = None
+                if pydash.has(officeholder_claim, 'qualifiers.P580'):  # Start date qualifier
+                    date_qualifier = pydash.get(officeholder_claim, 'qualifiers.P580[0]')
+                    if pydash.has(date_qualifier, 'datavalue.value.time'):
+                        try:
+                            time_str = pydash.get(date_qualifier, 'datavalue.value.time')
+                            parsed_start_date, start_date = parse_wikidata_date(time_str)
+                        except Exception as e:
+                            print(f"Error parsing officeholder start date: {str(e)}")
+                            parsed_start_date, start_date = None, None
+                
+                if not has_end_date:  # Only consider current officeholders (no end date)
+                    valid_officeholder_data.append({
+                        'id': officeholder_id,
+                        'start_date': start_date,
+                        'parsed_start_date': parsed_start_date,
+                        'is_preferred': is_preferred
+                    })
+        
+        if valid_officeholder_data:
+            # First check for preferred rank
+            preferred_officeholders = [o for o in valid_officeholder_data if o['is_preferred']]
+            if preferred_officeholders:
+                # If there are multiple preferred officeholders, sort by start date (most recent first)
+                if len(preferred_officeholders) > 1:
+                    sorted_data = sorted(
+                        preferred_officeholders,
+                        key=lambda x: (x['parsed_start_date'] is None, x['parsed_start_date'] or datetime.datetime.min),
+                        reverse=True
+                    )
+                    mayor_wikidata_id = sorted_data[0]['id']
+                else:
+                    mayor_wikidata_id = preferred_officeholders[0]['id']
+            else:
+                # Sort by start date (most recent first)
+                sorted_data = sorted(
+                    valid_officeholder_data,
+                    key=lambda x: (x['parsed_start_date'] is None, x['parsed_start_date'] or datetime.datetime.min),
+                    reverse=True
+                )
+                mayor_wikidata_id = sorted_data[0]['id']
+    
+    return mayor_wikidata_id
+
+def extract_sister_cities(record):
+    """Extract list of sister cities' Wikidata IDs from a Wikidata record."""
+    sister_cities = []
+    
+    # Twin/sister city (P190)
+    if pydash.has(record, 'claims.P190'):
+        sister_city_claims = pydash.get(record, 'claims.P190', [])
+        
+        for sister_city_claim in sister_city_claims:
+            if pydash.has(sister_city_claim, 'mainsnak.datavalue.value.id'):
+                sister_city_id = pydash.get(sister_city_claim, 'mainsnak.datavalue.value.id')
+                
+                # Check if this relationship is current (no end date)
+                has_end_date = False
+                if pydash.has(sister_city_claim, 'qualifiers.P582'):  # End date qualifier
+                    has_end_date = True
+                
+                if not has_end_date:  # Only consider current sister city relationships
+                    sister_cities.append(sister_city_id)
+    
+    return sister_cities
+
+def extract_state_province(record, country_wikidata_id, process_id=None):
+    """Extract state or province information from a Wikidata record.
+    
+    For cities in the USA (Q30) and Canada (Q16), this is particularly important.
+    For other countries, it's included but not strictly required.
+    
+    If process_id is 0, also collect province labels for the province lookup.
+    """
+    state_province_id = None
+    
+    # Located in the administrative territorial entity (P131)
+    if pydash.has(record, 'claims.P131'):
+        admin_claims = pydash.get(record, 'claims.P131', [])
+        valid_admin_entities = []
+        
+        for admin_claim in admin_claims:
+            if pydash.has(admin_claim, 'mainsnak.datavalue.value.id'):
+                admin_id = pydash.get(admin_claim, 'mainsnak.datavalue.value.id')
+                
+                # Check for preferred rank
+                rank = pydash.get(admin_claim, 'rank', 'normal')
+                is_preferred = (rank == 'preferred')
+                
+                # Check if this is a current relationship (no end date)
+                has_end_date = False
+                if pydash.has(admin_claim, 'qualifiers.P582'):  # End date qualifier
+                    has_end_date = True
+                
+                if not has_end_date:  # Only consider current administrative relationships
+                    valid_admin_entities.append({
+                        'id': admin_id,
+                        'is_preferred': is_preferred
+                    })
+        
+        if valid_admin_entities:
+            # First check for preferred rank
+            preferred_entities = [e for e in valid_admin_entities if e['is_preferred']]
+            
+            if preferred_entities:
+                # Just take the first preferred entity
+                state_province_id = preferred_entities[0]['id']
+            else:
+                # Just take the first entity
+                state_province_id = valid_admin_entities[0]['id']
+    
+    # If this is process 0 and we found a state/province ID for USA or Canada, add it to our collection
+    if process_id == 0 and state_province_id and country_wikidata_id in ['Q30', 'Q16']:
+        province_ids.add(state_province_id)
+    
+    return state_province_id

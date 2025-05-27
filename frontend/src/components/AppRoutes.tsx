@@ -127,6 +127,7 @@ function AppRoutes({
       />
       <Route path="/about" element={<About />} />
       <Route path="/about-city-vote.html" element={<Navigate to="/about" replace />} />
+      <Route path="/about.html" element={<Navigate to="/about" replace />} />
     </Routes>
   );
 }

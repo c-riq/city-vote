@@ -78,9 +78,22 @@ def main():
     print(f"Loading city data from {args.input}...")
     df = pd.read_csv(args.input)
     
+    # Get the socialMedia column if it exists
+    has_social_media = 'socialMedia' in df.columns
+    
+    # If socialMedia exists, temporarily store it
+    if has_social_media:
+        social_media_data = df['socialMedia'].copy()
+        # Drop the socialMedia column to add it back at the end
+        df = df.drop(columns=['socialMedia'])
+    
     # Create new columns for deduplication results
     df['supersedes_duplicates'] = ''
     df['superseded_by'] = ''
+    
+    # Add socialMedia back as the last column if it existed
+    if has_social_media:
+        df['socialMedia'] = social_media_data
     
     # Convert latitude and longitude to numeric values
     df['latitude_num'] = pd.to_numeric(df['latitude'], errors='coerce')
