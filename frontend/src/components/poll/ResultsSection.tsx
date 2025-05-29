@@ -1,4 +1,4 @@
-import { Box, Typography, Divider } from '@mui/material';
+import { Box, Typography, Divider, CircularProgress, Skeleton } from '@mui/material';
 import VoteList from '../VoteList';
 import { City, VoteAuthor } from '../../backendTypes';
 import { ComposableMap, Geographies, Geography, Marker } from 'react-simple-maps';
@@ -22,9 +22,10 @@ interface ResultsSectionProps {
   allVotes: Vote[];
   cities: Record<string, City>;
   isJointStatement: boolean;
+  isLoadingVotes?: boolean;
 }
 
-function ResultsSection({ votesByOption, allVotes, cities, isJointStatement }: ResultsSectionProps) {
+function ResultsSection({ votesByOption, allVotes, cities, isJointStatement, isLoadingVotes = false }: ResultsSectionProps) {
   return (
     <>
       {/* Results summary */}
@@ -39,9 +40,20 @@ function ResultsSection({ votesByOption, allVotes, cities, isJointStatement }: R
           {isJointStatement ? 'Signatures' : 'Results'}
         </Typography>
         
-        {Object.entries(votesByOption).length > 0 ? (
+        {isLoadingVotes ? (
+          <Box sx={{
+            width: '100%',
+            maxWidth: 400,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 2
+          }}>
+            <Skeleton variant="rectangular" height={56} sx={{ borderRadius: 2 }} />
+            <Skeleton variant="rectangular" height={56} sx={{ borderRadius: 2 }} />
+          </Box>
+        ) : Object.entries(votesByOption).length > 0 ? (
           Object.entries(votesByOption).map(([option, count]) => (
-            <Box 
+            <Box
               key={option}
               sx={{
                 width: '100%',
@@ -82,26 +94,58 @@ function ResultsSection({ votesByOption, allVotes, cities, isJointStatement }: R
         {isJointStatement ? 'Signature History' : 'Voting History'}
       </Typography>
       
-      {/* Map showing cities that have voted/signed */}
-      {allVotes.length > 0 && (
-        <Box sx={{ 
-          width: '100%', 
-          height: '300px',
-          mb: 4,
-          border: '1px solid #e0e0e0',
-          borderRadius: 2,
-          overflow: 'hidden'
+      {isLoadingVotes ? (
+        <Box sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: 3,
+          py: 4
         }}>
-          <PollMap votes={allVotes} cities={cities} />
+          <CircularProgress size={40} />
+          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+            Loading {isJointStatement ? 'signatures' : 'votes'}...
+          </Typography>
+          
+          <Skeleton
+            variant="rectangular"
+            width="100%"
+            height={300}
+            sx={{ borderRadius: 2, mb: 2 }}
+          />
+          
+          <Box sx={{ width: '100%' }}>
+            {[...Array(3)].map((_, index) => (
+              <Box key={index} sx={{ mb: 2 }}>
+                <Skeleton variant="rectangular" height={60} sx={{ borderRadius: 2 }} />
+              </Box>
+            ))}
+          </Box>
         </Box>
+      ) : (
+        <>
+          {allVotes.length > 0 && (
+            <Box sx={{
+              width: '100%',
+              height: '300px',
+              mb: 4,
+              border: '1px solid #e0e0e0',
+              borderRadius: 2,
+              overflow: 'hidden'
+            }}>
+              <PollMap votes={allVotes} cities={cities} />
+            </Box>
+          )}
+          
+          <VoteList
+            votes={allVotes}
+            cities={cities}
+            variant="compact"
+            isJointStatement={isJointStatement}
+            isLoading={isLoadingVotes}
+          />
+        </>
       )}
-      
-      <VoteList 
-        votes={allVotes}
-        cities={cities}
-        variant="compact"
-        isJointStatement={isJointStatement}
-      />
     </>
   );
 }

@@ -1,13 +1,14 @@
-import { Box, Button } from '@mui/material';
+import { Box, Button, CircularProgress } from '@mui/material';
 
 interface VoteButtonsProps {
   isJointStatement: boolean;
   options: string[];
   onVote: (option: string) => void;
   disabled: boolean;
+  isVoting?: boolean;
 }
 
-function VoteButtons({ isJointStatement, options, onVote, disabled }: VoteButtonsProps) {
+function VoteButtons({ isJointStatement, options, onVote, disabled, isVoting = false }: VoteButtonsProps) {
   return (
     <Box sx={{ 
       display: 'flex', 
@@ -31,9 +32,15 @@ function VoteButtons({ isJointStatement, options, onVote, disabled }: VoteButton
               backgroundColor: 'primary.dark',
             }
           }}
-          startIcon={<span className="material-icons">how_to_reg</span>}
+          startIcon={
+            isVoting ? (
+              <CircularProgress size={20} sx={{ color: 'white' }} />
+            ) : (
+              <span className="material-icons">how_to_reg</span>
+            )
+          }
         >
-          Sign Document
+          {isVoting ? 'Signing...' : 'Sign Document'}
         </Button>
       ) : (
         // For regular polls, show Yes/No options
@@ -51,8 +58,13 @@ function VoteButtons({ isJointStatement, options, onVote, disabled }: VoteButton
                 backgroundColor: index === 0 ? 'primary.dark' : 'primary.main',
               }
             }}
+            startIcon={
+              isVoting ? (
+                <CircularProgress size={20} sx={{ color: 'white' }} />
+              ) : undefined
+            }
           >
-            {option}
+            {isVoting ? 'Voting...' : option}
           </Button>
         ))
       )}

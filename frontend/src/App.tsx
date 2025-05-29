@@ -104,6 +104,7 @@ function App() {
   }, [fetchData, token]);
 
   const fetchPublicData = async () => {
+    setIsLoading(true);
     try {
       // Fetch cities data
       const citiesResponse = await fetch(`${PUBLIC_API_HOST}`, {
@@ -130,6 +131,8 @@ function App() {
       }
     } catch (err) {
       console.error('Failed to fetch public data:', err);
+    } finally {
+      setIsLoading(false);
     }
   };
 

@@ -55,16 +55,18 @@ function AppRoutes({
       } />
       <Route path="/poll/:pollId" element={
         cityInfo ? (
-          <Poll 
-            token={token} 
-            cityInfo={cityInfo} 
+          <Poll
+            token={token}
+            cityInfo={cityInfo}
             pollData={undefined}
             onVoteComplete={fetchData}
             votesData={votesData}
+            isLoadingVotes={isLoading}
           />
         ) : (
-          <Poll 
+          <Poll
             votesData={votesData}
+            isLoadingVotes={isLoading}
           />
         )
       } />

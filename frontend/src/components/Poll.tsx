@@ -32,9 +32,10 @@ interface PollProps {
   };
   onVoteComplete?: () => void;
   votesData?: VoteData;
+  isLoadingVotes?: boolean;
 }
 
-function Poll({ token, pollData: initialPollData, onVoteComplete, votesData: propVotesData, cityInfo }: PollProps) {
+function Poll({ token, pollData: initialPollData, onVoteComplete, votesData: propVotesData, cityInfo, isLoadingVotes: propIsLoadingVotes }: PollProps) {
   const navigate = useNavigate();
   const { pollId } = useParams();
   const [error, setError] = useState('');
@@ -46,6 +47,9 @@ function Poll({ token, pollData: initialPollData, onVoteComplete, votesData: pro
     option: null
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingVotes, setIsLoadingVotes] = useState(!propVotesData && !!pollId);
+  
+  const effectiveIsLoadingVotes = propIsLoadingVotes !== undefined ? propIsLoadingVotes : isLoadingVotes;
   const [votesData, setVotesData] = useState<VoteData>(propVotesData || {});
   const [isAuthenticated] = useState(!!token && !!cityInfo);
   const [attachmentUrl, setAttachmentUrl] = useState<string | null>(null);
@@ -61,6 +65,7 @@ function Poll({ token, pollData: initialPollData, onVoteComplete, votesData: pro
   const fetchData = useCallback(async () => {
     setError('');
     setIsLoading(true);
+    setIsLoadingVotes(true);
     
     try {
       // Fetch cities data using the hook
@@ -86,22 +91,23 @@ function Poll({ token, pollData: initialPollData, onVoteComplete, votesData: pro
       setVotesData({});
     } finally {
       setIsLoading(false);
+      setIsLoadingVotes(false);
     }
   }, [fetchAllCities]);
 
-  // Fetch data if not provided as props (unauthenticated mode)
   useEffect(() => {
-    // Only fetch data if we have a poll ID, don't have votes data from props,
-    // and we're not already loading data
     if (pollId && !propVotesData && !isLoading) {
+      setIsLoadingVotes(true);
       fetchData();
+    } else if (propVotesData) {
+      setIsLoadingVotes(false);
     }
   }, [pollId, propVotesData, isLoading, fetchData]);
 
-  // Update local state when props change (after a vote is submitted and parent fetches new data)
   useEffect(() => {
     if (propVotesData) {
       setVotesData(propVotesData);
+      setIsLoadingVotes(false);
     }
   }, [propVotesData]);
   
@@ -168,8 +174,7 @@ function Poll({ token, pollData: initialPollData, onVoteComplete, votesData: pro
         throw new Error(data.message || 'Failed to submit vote');
       }
 
-      // Call the parent's callback which will fetch updated data
-      // The useEffect hook will update local state when props change
+      setIsLoadingVotes(true);
       onVoteComplete?.();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to submit vote');
@@ -367,11 +372,12 @@ function Poll({ token, pollData: initialPollData, onVoteComplete, votesData: pro
                 setPersonalInfo={setPersonalInfo}
               />
 
-              <VoteButtons 
+              <VoteButtons
                 isJointStatement={isJointStatementPoll}
                 options={initialPollData?.options || ['Yes', 'No']}
                 onVote={handleVoteClick}
                 disabled={voting || !personalInfo.title || !personalInfo.name}
+                isVoting={voting}
               />
             </>
           ) : (
@@ -396,11 +402,12 @@ function Poll({ token, pollData: initialPollData, onVoteComplete, votesData: pro
             </Box>
           )}
 
-          <ResultsSection 
+          <ResultsSection
             votesByOption={votesByOption}
             allVotes={allVotes}
             cities={cities}
             isJointStatement={isJointStatementPoll}
+            isLoadingVotes={effectiveIsLoadingVotes}
           />
 
           <ConfirmVoteDialog

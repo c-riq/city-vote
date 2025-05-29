@@ -1,4 +1,4 @@
-import { Box, Typography, List, ListItem, ListItemText, Divider, Link as MuiLink } from '@mui/material';
+import { Box, Typography, List, ListItem, ListItemText, Divider, Link as MuiLink, Skeleton } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { VoteAuthor, City } from '../backendTypes';
 
@@ -18,12 +18,66 @@ interface VoteListProps {
   containerStyle?: React.CSSProperties;  // Optional container styles
   isJointStatement?: boolean;  // Flag to indicate if this is a joint statement poll
   variant?: string; // Kept for backward compatibility but not used
+  isLoading?: boolean;
 }
 
-const VoteList = ({ votes, cities, containerStyle, isJointStatement = false }: VoteListProps) => {
+const VoteList = ({ votes, cities, containerStyle, isJointStatement = false, isLoading = false }: VoteListProps) => {
+  if (isLoading) {
+    return (
+      <Box sx={containerStyle}>
+        <List sx={{
+          bgcolor: 'background.default',
+          borderRadius: 2,
+          p: 0,
+          overflow: 'hidden'
+        }}>
+          {[...Array(5)].map((_, index) => (
+            <Box key={index}>
+              <ListItem sx={{
+                py: 1,
+                px: 2,
+                bgcolor: index % 2 === 0 ? 'background.default' : 'background.paper',
+                minHeight: '40px'
+              }}>
+                <ListItemText
+                  primary={
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                      <Skeleton variant="text" width="30%" height={20} />
+                      <Skeleton variant="text" width="20%" height={20} />
+                      <Skeleton variant="text" width="40%" height={16} sx={{ ml: 'auto' }} />
+                    </Box>
+                  }
+                  sx={{ my: 0 }}
+                />
+              </ListItem>
+              {index < 4 && <Divider />}
+            </Box>
+          ))}
+        </List>
+      </Box>
+    );
+  }
+
+  if (votes.length === 0) {
+    return (
+      <Box sx={containerStyle}>
+        <Box sx={{
+          bgcolor: 'background.default',
+          borderRadius: 2,
+          p: 3,
+          textAlign: 'center'
+        }}>
+          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+            {isJointStatement ? 'No signatures yet' : 'No votes yet'}
+          </Typography>
+        </Box>
+      </Box>
+    );
+  }
+
   return (
     <Box sx={containerStyle}>
-      <List sx={{ 
+      <List sx={{
         bgcolor: 'background.default',
         borderRadius: 2,
         p: 0,
