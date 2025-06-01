@@ -213,6 +213,7 @@ export interface VoteRequest {
     title: string;
     name: string;
     actingCapacity: 'individual' | 'representingCityAdministration';
+    organisationNameFallback?: string;
 }
 
 export interface GetVotesRequest {
@@ -391,6 +392,7 @@ export interface AuthSessionVerificationResponse extends AuthBaseResponse {
     token: string;
     timestamp: string;
   } | null;
+  cityAssociations?: CityAssociation[];
 }
 
 export interface AuthLoginResponse extends AuthSessionVerificationResponse {

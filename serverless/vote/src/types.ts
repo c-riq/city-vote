@@ -88,6 +88,7 @@ export interface VoteRequest {
     title: string;
     name: string;
     actingCapacity: 'individual' | 'representingCityAdministration';
+    organisationNameFallback?: string;
 }
 
 export interface GetVotesRequest {

@@ -51,7 +51,17 @@ function Poll({ pollData: initialPollData, onVoteComplete, votesData: propVotesD
   const [votesData, setVotesData] = useState<VoteData>(propVotesData || {});
   
   // Check for personal authentication instead of city-based authentication
-  const [userSessionToken] = useState(() => localStorage.getItem('userSessionToken'));
+  const [userSessionToken] = useState(() => {
+    const token = localStorage.getItem('userSessionToken');
+    const email = localStorage.getItem('userEmail');
+    
+    // Clean up stale authentication data if token is missing but email exists
+    if (!token && email) {
+      localStorage.removeItem('userEmail');
+    }
+    
+    return token;
+  });
   const [userEmail] = useState(() => localStorage.getItem('userEmail'));
   const [isAuthenticated] = useState(!!userSessionToken && !!userEmail);
   const [userCityInfo, setUserCityInfo] = useState<City | null>(null);
@@ -85,6 +95,7 @@ function Poll({ pollData: initialPollData, onVoteComplete, votesData: propVotesD
 
         if (response.ok) {
           const userData = await response.json();
+          
           if (userData.cityAssociations && userData.cityAssociations.length > 0) {
             // Use the first city association for now
             const cityAssociation = userData.cityAssociations[0];
@@ -97,6 +108,8 @@ function Poll({ pollData: initialPollData, onVoteComplete, votesData: propVotesD
               lat: 0,
               lon: 0
             });
+          } else {
+            setUserCityInfo(null);
           }
         }
       } catch (error) {
@@ -209,7 +222,8 @@ function Poll({ pollData: initialPollData, onVoteComplete, votesData: propVotesD
         option,
         title: personalInfo.title,
         name: personalInfo.name,
-        actingCapacity: isPersonal ? 'individual' : 'representingCityAdministration'
+        actingCapacity: isPersonal ? 'individual' : 'representingCityAdministration',
+        organisationNameFallback: userCityInfo?.name || ''
       };
 
       const response = await fetch(VOTE_HOST, {
@@ -436,42 +450,54 @@ function Poll({ pollData: initialPollData, onVoteComplete, votesData: propVotesD
             </>
           ) : isAuthenticated && !userCityInfo ? (
             <Box sx={{
-              mt: 4,
-              mb: 4,
-              p: 3,
-              bgcolor: 'action.hover',
+              textAlign: 'center',
+              py: 3,
+              px: 2,
+              backgroundColor: 'background.paper',
               borderRadius: 2,
-              textAlign: 'center'
+              border: '1px solid',
+              borderColor: 'divider'
             }}>
+              <Typography variant="h6" gutterBottom>
+                Register Your City
+              </Typography>
+              <Typography variant="body2" color="text.secondary" paragraph>
+                To vote on this poll, you need to register your city first.
+              </Typography>
               <Button
                 variant="contained"
                 color="primary"
                 component={Link}
                 to="/register/city"
-                startIcon={<span className="material-icons">location_city</span>}
-                sx={{ px: 3, py: 1 }}
+                sx={{ mt: 1 }}
               >
-                Register your city to {isJointStatementPoll ? 'sign this statement' : 'vote in this poll'}
+                Register City
               </Button>
             </Box>
           ) : (
             <Box sx={{
-              mt: 4,
-              mb: 4,
-              p: 3,
-              bgcolor: 'action.hover',
+              textAlign: 'center',
+              py: 3,
+              px: 2,
+              backgroundColor: 'background.paper',
               borderRadius: 2,
-              textAlign: 'center'
+              border: '1px solid',
+              borderColor: 'divider'
             }}>
+              <Typography variant="h6" gutterBottom>
+                {isJointStatementPoll ? 'Login to sign this statement' : 'Login to vote in this poll'}
+              </Typography>
+              <Typography variant="body2" color="text.secondary" paragraph>
+                You need to be logged in to vote on this poll.
+              </Typography>
               <Button
                 variant="contained"
                 color="primary"
                 component={Link}
                 to="/login/user"
-                startIcon={<span className="material-icons">login</span>}
-                sx={{ px: 3, py: 1 }}
+                sx={{ mt: 1 }}
               >
-                {isJointStatementPoll ? 'Login to sign this statement' : 'Login to vote in this poll'}
+                Login
               </Button>
             </Box>
           )}

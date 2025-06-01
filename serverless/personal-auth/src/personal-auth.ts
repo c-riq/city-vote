@@ -266,6 +266,7 @@ async function handleSessionVerification(email: string, sessionToken: string): P
         settings: publicProfile.settings || DEFAULT_SETTINGS,
         userId: user.userId,
         phoneVerification: user.phoneVerification || null,
+        cityAssociations: user.cityAssociations || [],
         time: new Date()
       } as AuthSessionVerificationResponse)
     };
