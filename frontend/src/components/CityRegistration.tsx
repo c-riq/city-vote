@@ -183,7 +183,7 @@ const CityRegistration: React.FC = () => {
   };
 
   return (
-    <Box sx={{ py: 4, px: 2 }}>
+    <Box sx={{ py: 4, px: 2, mt: 10 }}>
       <Paper elevation={3} sx={{ p: 4, maxWidth: 800, mx: 'auto' }}>
         <Typography variant="h4" component="h1" gutterBottom align="center">
           City Registration Request

@@ -14,6 +14,12 @@ interface Vote {
   city?: string;
   voteInfo: VoteAuthor & {
     externalVerificationSource?: string;
+    cityAssociation?: {
+      title: string;
+      confidence: number;
+      identityVerifiedBy: string;
+      verificationTime: string;
+    };
   };
 }
 

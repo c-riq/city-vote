@@ -3,7 +3,7 @@ import { Box, Container, Typography, Link as MuiLink } from '@mui/material';
 function About() {
   return (
     <Container>
-      <Box sx={{ maxWidth: 800, margin: '0 auto', padding: '0 1rem' }}>
+      <Box sx={{ maxWidth: 800, margin: '0 auto', padding: '0 1rem', mt: 10 }}>
         <Box 
           component="section" 
           sx={{ 

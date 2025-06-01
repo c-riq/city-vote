@@ -106,7 +106,7 @@ const UserLoginForm: React.FC<UserLoginFormProps> = ({ onLoginSuccess }) => {
   };
 
   return (
-    <Box sx={{ py: 4, px: 2 }}>
+    <Box sx={{ py: 4, px: 2, mt: 10 }}>
       <Paper elevation={3} sx={{ p: 4, maxWidth: 500, mx: 'auto' }}>
         <Typography variant="h4" component="h1" gutterBottom align="center">
           User Login

@@ -9,7 +9,9 @@ import {
     ValidateTokenParams,
     VoteParams,
     CreatePollParams,
-    GetUploadUrlParams
+    GetUploadUrlParams,
+    UserProfile,
+    CityAssociation
 } from './types';
 
 const s3Client = new S3Client({ region: 'us-east-1' });
@@ -20,8 +22,8 @@ const PUBLIC_BUCKET_NAME = isDev ? 'city-vote-data-public-dev' : 'city-vote-data
 
 const VOTES_KEY = 'votes/votes.json';
 const LOCK_KEY = 'votes/lock.csv';
-const AUTH_KEY = 'auth/auth.json';
 const ACCESS_LOG_KEY = 'logs/access.json';
+const USERS_PATH = 'users';
 const LOCK_TIMEOUT_MS = 10000; // 10 seconds
 const LOCK_CHECK_DELAY_MS = 50;
 
@@ -136,6 +138,74 @@ async function logAccess(city: City, action: string): Promise<void> {
     }
 }
 
+// Helper function to fetch user from S3 based on email
+async function fetchUserFromS3(email: string): Promise<UserProfile | null> {
+    try {
+        const partition = email.charAt(0).toLowerCase();
+        const userFilePath = `${USERS_PATH}/${partition}/users.json`;
+        
+        const command = new GetObjectCommand({
+            Bucket: BUCKET_NAME,
+            Key: userFilePath,
+        });
+        const response = await s3Client.send(command);
+        if (!response.Body) {
+            return null;
+        }
+        const data = await streamToString(response.Body as Readable);
+        const users: Record<string, UserProfile> = JSON.parse(data);
+        return users[email] || null;
+    } catch (error: any) {
+        if (error.name === 'NoSuchKey') {
+            return null;
+        }
+        throw error;
+    }
+}
+
+// Validate user session token and return associated city
+async function validateUserToken(token: string): Promise<{ user: UserProfile; cityAssociation: CityAssociation } | null> {
+    try {
+        // Token format: email:sessionToken
+        const [email, sessionToken] = token.split(':');
+        if (!email || !sessionToken) {
+            return null;
+        }
+
+        const user = await fetchUserFromS3(email);
+        if (!user || !user.sessions) {
+            return null;
+        }
+
+        // Validate session token
+        const currentTime = Math.floor(Date.now() / 1000);
+        const isValidToken = user.sessions.some(userToken => {
+            const [tokenValue, expiry] = userToken.split('_');
+            return userToken === sessionToken && parseInt(expiry) > currentTime;
+        });
+
+        if (!isValidToken) {
+            return null;
+        }
+
+        // Check if user has city associations
+        if (!user.cityAssociations || user.cityAssociations.length === 0) {
+            return null;
+        }
+
+        // For now, use the first city association with isAuthorisedRepresentative = true
+        const authorizedAssociation = user.cityAssociations.find(assoc => assoc.isAuthorisedRepresentative);
+        if (!authorizedAssociation) {
+            return null;
+        }
+
+        return { user, cityAssociation: authorizedAssociation };
+    } catch (error) {
+        console.error('Error validating user token:', error);
+        return null;
+    }
+}
+
 const handleValidateToken = async ({ resolvedCity }: ValidateTokenParams): Promise<APIGatewayProxyResult> => {
     return {
         statusCode: 200,
@@ -147,7 +217,7 @@ const handleValidateToken = async ({ resolvedCity }: ValidateTokenParams): Promi
     };
 };
 
-const handleVote = async ({ cityId, resolvedCity, pollId, option, title, name, actingCapacity, externalVerificationSource }: VoteParams): Promise<APIGatewayProxyResult> => {
+const handleVote = async ({ cityId, resolvedCity, pollId, option, title, name, actingCapacity, externalVerificationSource, userCityAssociation }: VoteParams): Promise<APIGatewayProxyResult> => {
     if (!pollId || option === undefined || !title || !name || !actingCapacity) {
         return {
             statusCode: 400,
@@ -170,6 +240,28 @@ const handleVote = async ({ cityId, resolvedCity, pollId, option, title, name, a
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 message: 'Token does not match the specified city'
+            }, null, 2)
+        };
+    }
+
+    // Validate that the user is authorized to vote for this city
+    if (!userCityAssociation || !userCityAssociation.isAuthorisedRepresentative) {
+        return {
+            statusCode: 403,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                message: 'User is not authorized to vote for this city'
+            }, null, 2)
+        };
+    }
+
+    // Validate confidence level (require at least 0.5 confidence)
+    if (userCityAssociation.confidence < 0.5) {
+        return {
+            statusCode: 403,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                message: 'Insufficient confidence level for city association'
             }, null, 2)
         };
     }
@@ -235,6 +327,12 @@ const handleVote = async ({ cityId, resolvedCity, pollId, option, title, name, a
                 actingCapacity
             },
             associatedCityId: resolvedCity.id,
+            cityAssociation: {
+                title: userCityAssociation.title,
+                confidence: userCityAssociation.confidence,
+                identityVerifiedBy: userCityAssociation.identityVerifiedBy,
+                verificationTime: userCityAssociation.time
+            },
             ...(externalVerificationSource ? { externalVerificationSource: externalVerificationSource } : {})
         };
         
@@ -474,33 +572,33 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
             };
         }
 
-        // Validate token and get resolvedCity
+        // Validate token and get user with city association
         let resolvedCity: City;
+        let userCityAssociation: CityAssociation;
         try {
-            const authData = await s3Client.send(new GetObjectCommand({
-                Bucket: BUCKET_NAME,
-                Key: AUTH_KEY
-            }));
-            
-            if (!authData.Body) {
-                return {
-                    statusCode: 500,
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: 'Authentication system unavailable' }, null, 2)
-                };
-            }
-
-            const authString = await streamToString(authData.Body as Readable);
-            const auth: Record<string, City> = JSON.parse(authString);
-
-            resolvedCity = auth[token];
-            if (!resolvedCity) {
+            const authResult = await validateUserToken(token);
+            if (!authResult) {
                 return {
                     statusCode: 403,
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: 'Invalid token' }, null, 2)
+                    body: JSON.stringify({ message: 'Invalid token or no authorized city association' }, null, 2)
                 };
             }
+
+            const { user, cityAssociation } = authResult;
+            userCityAssociation = cityAssociation;
+
+            // Create a minimal City object from the city association
+            // Note: In a real implementation, you might want to fetch full city data from another source
+            resolvedCity = {
+                id: cityAssociation.cityId,
+                name: cityAssociation.title.replace(/^(Mayor of|Representative of)\s+/i, ''),
+                population: 0, // This would need to be fetched from city data
+                country: '', // This would need to be fetched from city data
+                lat: 0, // This would need to be fetched from city data
+                lon: 0, // This would need to be fetched from city data
+                authenticationKeyDistributionChannels: []
+            };
 
             // Log successful access
             await logAccess(resolvedCity, action);
@@ -533,7 +631,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
         } else if (action === 'getUploadUrl') {
             return await handler({ resolvedCity, token, pollId, fileHash } as any);
         } else {
-            return await handler({ cityId, resolvedCity, token, pollId, option, title, name, actingCapacity, externalVerificationSource } as any);
+            return await handler({ cityId, resolvedCity, token, pollId, option, title, name, actingCapacity, externalVerificationSource, userCityAssociation } as any);
         }
     } catch (error) {
         console.error('Error:', error);

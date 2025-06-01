@@ -45,7 +45,7 @@ interface HeaderProps {
     id: string;
   } | null;
   onLogout: () => void;
-  onCreatePoll: () => void;
+  onCreatePoll?: () => void;
 }
 
 function Header({ cityInfo, onLogout, onCreatePoll }: HeaderProps) {
@@ -287,7 +287,7 @@ function Header({ cityInfo, onLogout, onCreatePoll }: HeaderProps) {
                 />
               )}
             />
-            {cityInfo && (
+            {cityInfo && onCreatePoll && (
               <Button
                 variant="contained"
                 color="primary"
@@ -503,14 +503,16 @@ function Header({ cityInfo, onLogout, onCreatePoll }: HeaderProps) {
                 </Typography>
               </Box>
               
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={onCreatePoll}
-                sx={{ mr: 2 }}
-              >
-                Create Poll
-              </Button>
+              {onCreatePoll && (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={onCreatePoll}
+                  sx={{ mr: 2 }}
+                >
+                  Create Poll
+                </Button>
+              )}
 
               <IconButton 
                 onClick={onLogout}

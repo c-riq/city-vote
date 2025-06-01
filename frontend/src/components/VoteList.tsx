@@ -9,6 +9,12 @@ interface Vote {
   city?: string;
   voteInfo: VoteAuthor & {
     externalVerificationSource?: string;
+    cityAssociation?: {
+      title: string;
+      confidence: number;
+      identityVerifiedBy: string;
+      verificationTime: string;
+    };
   };
 }
 
@@ -156,21 +162,34 @@ const VoteList = ({ votes, cities, containerStyle, isJointStatement = false, isL
                       }}>
                         {vote.voteInfo?.actingCapacity === 'individual' ? 'Personal capacity' : 'Representing organisation'}
                       </span>
+                      {vote.voteInfo?.cityAssociation && (
+                        <span style={{
+                          backgroundColor: '#f3e5f5',
+                          padding: '1px 4px',
+                          borderRadius: '3px',
+                          fontSize: '0.7rem',
+                          fontWeight: 500,
+                          color: '#6a1b9a',
+                          marginLeft: '4px'
+                        }}>
+                          Verified ({Math.round(vote.voteInfo.cityAssociation.confidence * 100)}%)
+                        </span>
+                      )}
                       {vote.voteInfo?.externalVerificationSource && (
-                        <MuiLink 
+                        <MuiLink
                           href={vote.voteInfo.externalVerificationSource}
                           target="_blank"
                           rel="noopener noreferrer"
-                          sx={{ 
+                          sx={{
                             textDecoration: 'none',
                             marginLeft: '4px',
                             display: 'inline-flex',
                             alignItems: 'center'
                           }}
                         >
-                          <span style={{ 
-                            backgroundColor: '#e3f2fd', 
-                            padding: '1px 4px', 
+                          <span style={{
+                            backgroundColor: '#e3f2fd',
+                            padding: '1px 4px',
                             borderRadius: '3px',
                             fontSize: '0.7rem',
                             fontWeight: 500,
