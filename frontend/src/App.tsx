@@ -73,7 +73,6 @@ function App() {
           flexDirection: 'column'
         }}>
           <Header
-            cityInfo={null}
             onLogout={handleLogout}
           />
           <Container maxWidth="lg" sx={{ flex: 1, py: 0 }}>

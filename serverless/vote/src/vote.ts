@@ -217,7 +217,7 @@ const handleValidateToken = async ({ resolvedCity }: ValidateTokenParams): Promi
     };
 };
 
-const handleVote = async ({ cityId, resolvedCity, pollId, option, title, name, actingCapacity, externalVerificationSource, userCityAssociation }: VoteParams): Promise<APIGatewayProxyResult> => {
+const handleVote = async ({ cityId, resolvedCity, pollId, option, title, name, actingCapacity, organisationNameFallback, externalVerificationSource, userCityAssociation }: VoteParams): Promise<APIGatewayProxyResult> => {
     if (!pollId || option === undefined || !title || !name || !actingCapacity) {
         return {
             statusCode: 400,
@@ -327,6 +327,7 @@ const handleVote = async ({ cityId, resolvedCity, pollId, option, title, name, a
                 actingCapacity
             },
             associatedCityId: resolvedCity.id,
+            organisationNameFallback,
             cityAssociation: {
                 title: userCityAssociation.title,
                 confidence: userCityAssociation.confidence,

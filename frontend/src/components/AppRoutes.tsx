@@ -9,6 +9,7 @@ import CityProfile from './CityProfile';
 import CityNetworkProfile from './CityNetworkProfile';
 import LandingPage from './LandingPage';
 import About from './About';
+import CreatePollPage from './CreatePollPage';
 import { VoteData } from '../backendTypes';
 
 interface AppRoutesProps {
@@ -31,8 +32,9 @@ function AppRoutes({
       <Route path="/register/city" element={<CityRegistration />} />
       <Route path="/verify" element={<EmailVerification />} />
       <Route path="/login/user" element={<UserLoginForm />} />
+      <Route path="/create-poll" element={<CreatePollPage />} />
       <Route path="/polls" element={
-        <Polls 
+        <Polls
           votesData={votesData}
           onRefresh={fetchVotesOnly}
         />

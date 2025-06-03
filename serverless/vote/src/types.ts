@@ -127,6 +127,7 @@ export interface VoteParams {
     title: string;
     name: string;
     actingCapacity: 'individual' | 'representingCityAdministration';
+    organisationNameFallback?: string;
     externalVerificationSource?: string; // Platform that verified this vote
     userCityAssociation?: CityAssociation; // User's city association for authentication
 }

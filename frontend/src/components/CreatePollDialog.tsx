@@ -15,10 +15,11 @@ import { VOTE_HOST } from '../constants';
 interface CreatePollDialogProps {
   isOpen: boolean;
   onClose: () => void;
-  token: string;
+  userSessionToken: string;
+  userEmail: string;
 }
 
-function CreatePollDialog({ isOpen, onClose, token }: CreatePollDialogProps) {
+function CreatePollDialog({ isOpen, onClose, userSessionToken, userEmail }: CreatePollDialogProps) {
   const navigate = useNavigate();
   const [question, setQuestion] = useState('');
   const [isCreatingPoll, setIsCreatingPoll] = useState(false);
@@ -66,6 +67,9 @@ function CreatePollDialog({ isOpen, onClose, token }: CreatePollDialogProps) {
   };
 
   const handleCreatePoll = async () => {
+    // Create auth token for API calls
+    const authToken = `${userEmail}:${userSessionToken}`;
+    
     // Validate inputs based on poll type
     if (pollType === 'regular' && !question.trim()) {
       return; // Regular polls require a question
@@ -117,7 +121,7 @@ function CreatePollDialog({ isOpen, onClose, token }: CreatePollDialogProps) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               action: 'createPoll',
-              token,
+              token: authToken,
               pollId: basePollId,
               documentUrl,
               organisedBy: organisedBy.trim() || undefined
@@ -145,7 +149,7 @@ function CreatePollDialog({ isOpen, onClose, token }: CreatePollDialogProps) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               action: 'getUploadUrl',
-              token,
+              token: authToken,
               pollId: basePollId,
               fileHash
             })
@@ -183,7 +187,7 @@ function CreatePollDialog({ isOpen, onClose, token }: CreatePollDialogProps) {
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
                 action: 'createPoll',
-                token,
+                token: authToken,
                 pollId: urlData.pollId,
                 documentUrl: null,
                 organisedBy: organisedBy.trim() || undefined
@@ -213,7 +217,7 @@ function CreatePollDialog({ isOpen, onClose, token }: CreatePollDialogProps) {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             action: 'getUploadUrl',
-            token,
+            token: authToken,
             pollId: basePollId,
             fileHash
           })
@@ -251,7 +255,7 @@ function CreatePollDialog({ isOpen, onClose, token }: CreatePollDialogProps) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               action: 'createPoll',
-              token,
+              token: authToken,
               pollId: urlData.pollId,
               documentUrl: null,
               organisedBy: organisedBy.trim() || undefined
@@ -277,7 +281,7 @@ function CreatePollDialog({ isOpen, onClose, token }: CreatePollDialogProps) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           action: 'createPoll',
-          token,
+          token: authToken,
           pollId: basePollId,
           documentUrl: null,
           organisedBy: organisedBy.trim() || undefined

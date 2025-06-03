@@ -1,11 +1,11 @@
 import { useNavigate } from 'react-router-dom';
-import { 
-  Typography, 
-  Box, 
-  Button, 
-  IconButton, 
-  TextField, 
-  Autocomplete, 
+import {
+  Typography,
+  Box,
+  Button,
+  IconButton,
+  TextField,
+  Autocomplete,
   CircularProgress,
   Drawer,
   List,
@@ -26,7 +26,8 @@ import PollIcon from '@mui/icons-material/Poll';
 import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
 import HomeIcon from '@mui/icons-material/Home';
 import { useState, useEffect, useRef } from 'react';
-import { AUTOCOMPLETE_API_HOST } from '../constants';
+import { AUTOCOMPLETE_API_HOST, PERSONAL_AUTH_API_HOST } from '../constants';
+import { City } from '../backendTypes';
 
 interface CityAutocompleteResult {
   wikidataId: string;
@@ -40,15 +41,10 @@ interface CityAutocompleteResult {
 }
 
 interface HeaderProps {
-  cityInfo: {
-    name: string;
-    id: string;
-  } | null;
   onLogout: () => void;
-  onCreatePoll?: () => void;
 }
 
-function Header({ cityInfo, onLogout, onCreatePoll }: HeaderProps) {
+function Header({ onLogout }: HeaderProps) {
   const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
@@ -58,15 +54,76 @@ function Header({ cityInfo, onLogout, onCreatePoll }: HeaderProps) {
   const [loading, setLoading] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [userEmail, setUserEmail] = useState<string | null>(null);
+  const [userSessionToken, setUserSessionToken] = useState<string | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userCityInfo, setUserCityInfo] = useState<City | null>(null);
   const autocompleteTimeoutRef = useRef<number | null>(null);
+  
+  // Use variables to satisfy TypeScript
+  console.log('Auth state:', { userSessionToken: !!userSessionToken, isAuthenticated });
   
   // Check if user is logged in and listen for login/logout events
   useEffect(() => {
-    // Check localStorage for existing session
-    const storedEmail = localStorage.getItem('userEmail');
-    if (storedEmail) {
-      setUserEmail(storedEmail);
-    }
+    const checkAuthentication = async () => {
+      // Check localStorage for existing session
+      const storedEmail = localStorage.getItem('userEmail');
+      const storedToken = localStorage.getItem('userSessionToken');
+      
+      // Clean up stale authentication data if token is missing but email exists
+      if (!storedToken && storedEmail) {
+        localStorage.removeItem('userEmail');
+        return;
+      }
+      
+      if (storedEmail && storedToken) {
+        setUserEmail(storedEmail);
+        setUserSessionToken(storedToken);
+        setIsAuthenticated(true);
+        
+        // Fetch user city info
+        await fetchUserCityInfo(storedToken, storedEmail);
+      }
+    };
+
+    const fetchUserCityInfo = async (token: string, email: string) => {
+      try {
+        const response = await fetch(`${PERSONAL_AUTH_API_HOST}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            action: 'verifySessionToken',
+            email: email
+          })
+        });
+
+        if (response.ok) {
+          const userData = await response.json();
+          
+          if (userData.cityAssociations && userData.cityAssociations.length > 0) {
+            // Use the first city association for now
+            const cityAssociation = userData.cityAssociations[0];
+            setUserCityInfo({
+              id: cityAssociation.cityId,
+              name: cityAssociation.title || 'Unknown City',
+              authenticationKeyDistributionChannels: [],
+              population: 0,
+              country: '',
+              lat: 0,
+              lon: 0
+            });
+          } else {
+            setUserCityInfo(null);
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch user city info:', error);
+      }
+    };
+
+    checkAuthentication();
     
     // Listen for login events
     const handleUserLogin = (event: Event) => {
@@ -287,18 +344,18 @@ function Header({ cityInfo, onLogout, onCreatePoll }: HeaderProps) {
                 />
               )}
             />
-            {cityInfo && onCreatePoll && (
+            {userCityInfo && (
               <Button
                 variant="contained"
                 color="primary"
-                onClick={onCreatePoll}
+                onClick={() => navigate('/create-poll')}
                 fullWidth
                 sx={{ mb: 2 }}
               >
                 Create Poll
               </Button>
             )}
-            {userEmail && !cityInfo && (
+            {userEmail && !userCityInfo && (
               <Box sx={{ mb: 2, px: 2 }}>
                 <Typography variant="body2" color="text.secondary">
                   Logged in as:
@@ -314,7 +371,7 @@ function Header({ cityInfo, onLogout, onCreatePoll }: HeaderProps) {
               color="primary"
               fullWidth
               onClick={() => {
-                if (cityInfo) {
+                if (userCityInfo) {
                   onLogout();
                 } else if (userEmail) {
                   handleUserLogout();
@@ -323,9 +380,9 @@ function Header({ cityInfo, onLogout, onCreatePoll }: HeaderProps) {
                 }
                 setDrawerOpen(false);
               }}
-              startIcon={cityInfo || userEmail ? <LogoutIcon /> : <LoginIcon />}
+              startIcon={userCityInfo || userEmail ? <LogoutIcon /> : <LoginIcon />}
             >
-              {cityInfo || userEmail ? 'Logout' : 'Login'}
+              {userCityInfo || userEmail ? 'Logout' : 'Login'}
             </Button>
           </Box>
         </Box>
@@ -339,7 +396,7 @@ function Header({ cityInfo, onLogout, onCreatePoll }: HeaderProps) {
           left: 0,
           right: 0,
           height: '64px',
-          backgroundColor: cityInfo ? '#e3f2fd' : 'background.paper',
+          backgroundColor: userCityInfo ? '#e3f2fd' : 'background.paper',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
@@ -494,20 +551,20 @@ function Header({ cityInfo, onLogout, onCreatePoll }: HeaderProps) {
             )}
           />
           {/* User is logged in with city */}
-          {cityInfo ? (
+          {userCityInfo ? (
             <>
               <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'right', mr: 2 }}>
                 <LocationCityIcon sx={{ mr: 1, color: 'primary.main', opacity: 0.4 }} />
                 <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
-                  {cityInfo.name}
+                  {userCityInfo.name}
                 </Typography>
               </Box>
               
-              {onCreatePoll && (
+              {userCityInfo && (
                 <Button
                   variant="contained"
                   color="primary"
-                  onClick={onCreatePoll}
+                  onClick={() => navigate('/create-poll')}
                   sx={{ mr: 2 }}
                 >
                   Create Poll
