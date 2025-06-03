@@ -99,11 +99,11 @@ async function releaseLock(): Promise<void> {
     }));
 }
 
-async function logAccess(city: City, action: string): Promise<void> {
+async function logAccess(city: Partial<City>, action: string): Promise<void> {
     try {
         const logEntry = {
             time: new Date().toISOString(),
-            city: city.name,
+            city: city.name || city.id,
             action: action
         };
         
@@ -574,7 +574,7 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
         }
 
         // Validate token and get user with city association
-        let resolvedCity: City;
+        let resolvedCity: Partial<City>;
         let userCityAssociation: CityAssociation;
         try {
             const authResult = await validateUserToken(token);
@@ -589,16 +589,8 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
             const { user, cityAssociation } = authResult;
             userCityAssociation = cityAssociation;
 
-            // Create a minimal City object from the city association
-            // Note: In a real implementation, you might want to fetch full city data from another source
             resolvedCity = {
-                id: cityAssociation.cityId,
-                name: cityAssociation.title.replace(/^(Mayor of|Representative of)\s+/i, ''),
-                population: 0, // This would need to be fetched from city data
-                country: '', // This would need to be fetched from city data
-                lat: 0, // This would need to be fetched from city data
-                lon: 0, // This would need to be fetched from city data
-                authenticationKeyDistributionChannels: []
+                id: cityAssociation.cityId
             };
 
             // Log successful access
