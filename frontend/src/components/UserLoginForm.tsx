@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
   Box,
   Button,
@@ -21,11 +21,24 @@ interface UserLoginFormProps {
 
 const UserLoginForm: React.FC<UserLoginFormProps> = ({ onLoginSuccess }) => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
+  const [registrationSuccess, setRegistrationSuccess] = useState(false);
+
+  useEffect(() => {
+    // Check if user was redirected from registration
+    if (searchParams.get('registered') === 'true') {
+      setRegistrationSuccess(true);
+      // Clean up the URL parameter
+      const newSearchParams = new URLSearchParams(searchParams);
+      newSearchParams.delete('registered');
+      navigate(`/login/user${newSearchParams.toString() ? `?${newSearchParams.toString()}` : ''}`, { replace: true });
+    }
+  }, [searchParams, navigate]);
 
   const validateForm = (): boolean => {
     if (!email.trim()) {
@@ -114,6 +127,12 @@ const UserLoginForm: React.FC<UserLoginFormProps> = ({ onLoginSuccess }) => {
         <Typography variant="body1" paragraph align="center" color="text.secondary">
           Sign in to your City Vote account
         </Typography>
+
+        {registrationSuccess && (
+          <Alert severity="success" sx={{ mb: 3 }}>
+            Account created successfully! Please check your email to verify your account before signing in.
+          </Alert>
+        )}
 
         {error && (
           <Alert severity="error" sx={{ mb: 3 }}>

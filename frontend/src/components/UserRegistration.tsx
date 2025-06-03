@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Box,
   Button,
@@ -14,6 +15,7 @@ import {
 import { PERSONAL_AUTH_API_HOST } from '../constants';
 
 const UserRegistration: React.FC = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -100,12 +102,8 @@ const UserRegistration: React.FC = () => {
         throw new Error(data.message || data.details || 'Registration failed');
       }
 
-      setSuccess('Account created successfully! Please check your email to verify your account.');
-      
-      // Reset form
-      setEmail('');
-      setPassword('');
-      setConfirmPassword('');
+      // Redirect to login page with success message
+      navigate('/login/user?registered=true');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Registration failed');
     } finally {
@@ -127,7 +125,7 @@ const UserRegistration: React.FC = () => {
           Register to access the City Vote platform
         </Typography>
         <Typography variant="body2" paragraph align="center" color="text.secondary" sx={{ mb: 3 }}>
-          Already have an account? <Button color="primary" size="small" onClick={() => window.location.href = '/login/user'}>Sign in</Button>
+          Already have an account? <Button color="primary" size="small" onClick={() => navigate('/login/user')}>Sign in</Button>
         </Typography>
 
         {error && (
