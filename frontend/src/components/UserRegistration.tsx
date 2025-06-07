@@ -146,7 +146,7 @@ const UserRegistration: React.FC = () => {
           </Alert>
         )}
 
-        <form onSubmit={handleSubmit} autoComplete="off">
+        <form onSubmit={handleSubmit}>
           <Grid container spacing={3}>
             <Grid item xs={12}>
               <TextField
@@ -157,7 +157,7 @@ const UserRegistration: React.FC = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 disabled={isSubmitting}
-                autoComplete="new-password"
+                autoComplete="email"
               />
             </Grid>
 

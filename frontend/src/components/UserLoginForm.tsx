@@ -140,7 +140,7 @@ const UserLoginForm: React.FC<UserLoginFormProps> = ({ onLoginSuccess }) => {
           </Alert>
         )}
 
-        <form onSubmit={handleSubmit} autoComplete="off">
+        <form onSubmit={handleSubmit}>
           <Grid container spacing={3}>
             <Grid item xs={12}>
               <TextField
@@ -151,7 +151,7 @@ const UserLoginForm: React.FC<UserLoginFormProps> = ({ onLoginSuccess }) => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 disabled={isSubmitting}
-                autoComplete="new-password"
+                autoComplete="username"
               />
             </Grid>
 
@@ -164,7 +164,7 @@ const UserLoginForm: React.FC<UserLoginFormProps> = ({ onLoginSuccess }) => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 disabled={isSubmitting}
-                autoComplete="new-password"
+                autoComplete="current-password"
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
