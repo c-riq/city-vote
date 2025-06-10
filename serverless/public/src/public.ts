@@ -86,51 +86,14 @@ const handleGetPublicVotes = async (cityId?: string): Promise<APIGatewayProxyRes
     }
 };
 
-const handleGetPublicCities = async (): Promise<APIGatewayProxyResult> => {
-    try {
-        const cityData = await s3Client.send(new GetObjectCommand({
-            Bucket: BUCKET_NAME,
-            Key: 'cities/cities.json'
-        }));
-
-        if (!cityData.Body) {
-            return {
-                statusCode: 404,
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: 'Cities data not found' }, null, 2)
-            };
-        }
-
-        const citiesString = await streamToString(cityData.Body as Readable);
-        const cities = JSON.parse(citiesString);
-
-        return {
-            statusCode: 200,
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ cities }, null, 2)
-        };
-    } catch (error: any) {
-        if (error.name === 'NoSuchKey') {
-            return {
-                statusCode: 404,
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: 'Cities data not found' }, null, 2)
-            };
-        }
-        throw error;
-    }
-};
-
 // Public action handlers type
 type PublicActionHandlers = {
     getVotes: (cityId?: string) => Promise<APIGatewayProxyResult>;
-    getCities: () => Promise<APIGatewayProxyResult>;
     register: (cityData: City) => Promise<APIGatewayProxyResult>;
 };
 
 const publicActionHandlers: PublicActionHandlers = {
     getVotes: handleGetPublicVotes,
-    getCities: handleGetPublicCities,
     register: handleRegister,
 };
 
@@ -161,17 +124,14 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
             return await publicActionHandlers.getVotes(cityId);
         } else if (action === 'register') {
             return await publicActionHandlers.register(cityData);
-        } else if (action === 'getCities') {
-            return await publicActionHandlers.getCities();
-        } else {
-            return {
-                statusCode: 400,
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    message: `Invalid action: ${action}. Supported actions are: ${Object.keys(publicActionHandlers).join(', ')}`
-                }, null, 2)
-            };
         }
+        return {
+            statusCode: 400,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                message: `Invalid action: ${action}. Supported actions are: ${Object.keys(publicActionHandlers).join(', ')}`
+            }, null, 2)
+        };
     } catch (error) {
         console.error('Error:', error);
         return {

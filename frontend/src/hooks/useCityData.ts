@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { City, VoteData } from '../backendTypes';
-import { AUTOCOMPLETE_API_HOST, PUBLIC_API_HOST } from '../constants';
+import { AUTOCOMPLETE_API_HOST } from '../constants';
 
 /**
  * Custom hook to manage city data fetching and caching
@@ -11,28 +11,23 @@ export const useCityData = (votesData: VoteData = {}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
-  // Fetch all cities data
+  // Fetch all cities data - now relies on the automatic fetching from votes data
   const fetchAllCities = async () => {
     setError('');
     setIsLoading(true);
     
     try {
-      const citiesResponse = await fetch(`${PUBLIC_API_HOST}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'getCities' })
-      });
-
-      if (!citiesResponse.ok) {
-        throw new Error('Failed to fetch cities');
-      }
-
-      const citiesData = await citiesResponse.json();
-      setCities(citiesData.cities);
-      return citiesData.cities;
+      // Since getCities is deprecated, we'll rely on the automatic city fetching
+      // from vote data via the autocomplete API. This function now just triggers
+      // a refresh of the existing city data.
+      
+      // Reset attempted city IDs to allow refetching
+      setAttemptedCityIds(new Set());
+      
+      // The useEffect will automatically fetch missing cities
+      return cities;
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to fetch cities data');
-      setCities({});
+      setError(err instanceof Error ? err.message : 'Failed to refresh cities data');
       return {};
     } finally {
       setIsLoading(false);

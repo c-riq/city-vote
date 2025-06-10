@@ -8,7 +8,7 @@ import InfoIcon from '@mui/icons-material/Info';
 import VerifiedIcon from '@mui/icons-material/Verified';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { PUBLIC_API_HOST, AUTOCOMPLETE_API_HOST } from '../constants';
+import { AUTOCOMPLETE_API_HOST } from '../constants';
 import { City } from '../backendTypes';
 
 interface ExtendedCity extends City {
@@ -232,12 +232,15 @@ const CityProfile: React.FC = () => {
           // Continue with the regular API call
         }
 
-        // Fetch additional city data if available (fallback)
+        // Fetch city data using autocomplete API
         console.log('Fetching city data for ID:', cityId);
-        const response = await fetch(PUBLIC_API_HOST, {
+        const response = await fetch(AUTOCOMPLETE_API_HOST, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: 'getCities' })
+          body: JSON.stringify({
+            action: 'getByQid',
+            qid: cityId
+          })
         });
 
         if (!response.ok) {
@@ -245,14 +248,25 @@ const CityProfile: React.FC = () => {
         }
 
         const data = await response.json();
-        console.log('Received cities data:', data);
+        console.log('Received city data:', data);
 
-        if (data.cities && data.cities[cityId]) {
+        if (data.results && data.results.length > 0) {
+          const cityResult = data.results[0];
+          // Convert CityResult to City format
+          const cityData = {
+            id: cityResult.wikidataId,
+            name: cityResult.name,
+            country: cityResult.countryName,
+            population: cityResult.population || 0,
+            lat: cityResult.latitude || 0,
+            lon: cityResult.longitude || 0,
+            authenticationKeyDistributionChannels: []
+          };
           // Update with additional data from the API
           setCity(prevCity => ({
-            ...data.cities[cityId],
-            name: prevCity?.name || data.cities[cityId].name,
-            country: prevCity?.country || data.cities[cityId].country,
+            ...cityData,
+            name: prevCity?.name || cityData.name,
+            country: prevCity?.country || cityData.country,
             registered: registeredFromUrl
           }));
         } else {

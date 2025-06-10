@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
   Box,
   Button,
@@ -21,11 +21,24 @@ interface UserLoginFormProps {
 
 const UserLoginForm: React.FC<UserLoginFormProps> = ({ onLoginSuccess }) => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
+  const [registrationSuccess, setRegistrationSuccess] = useState(false);
+
+  useEffect(() => {
+    // Check if user was redirected from registration
+    if (searchParams.get('registered') === 'true') {
+      setRegistrationSuccess(true);
+      // Clean up the URL parameter
+      const newSearchParams = new URLSearchParams(searchParams);
+      newSearchParams.delete('registered');
+      navigate(`/login/user${newSearchParams.toString() ? `?${newSearchParams.toString()}` : ''}`, { replace: true });
+    }
+  }, [searchParams, navigate]);
 
   const validateForm = (): boolean => {
     if (!email.trim()) {
@@ -106,7 +119,7 @@ const UserLoginForm: React.FC<UserLoginFormProps> = ({ onLoginSuccess }) => {
   };
 
   return (
-    <Box sx={{ py: 4, px: 2 }}>
+    <Box sx={{ py: 4, px: 2, mt: 10 }}>
       <Paper elevation={3} sx={{ p: 4, maxWidth: 500, mx: 'auto' }}>
         <Typography variant="h4" component="h1" gutterBottom align="center">
           User Login
@@ -115,13 +128,19 @@ const UserLoginForm: React.FC<UserLoginFormProps> = ({ onLoginSuccess }) => {
           Sign in to your City Vote account
         </Typography>
 
+        {registrationSuccess && (
+          <Alert severity="success" sx={{ mb: 3 }}>
+            Account created successfully! Please check your email to verify your account before signing in.
+          </Alert>
+        )}
+
         {error && (
           <Alert severity="error" sx={{ mb: 3 }}>
             {error}
           </Alert>
         )}
 
-        <form onSubmit={handleSubmit} autoComplete="off">
+        <form onSubmit={handleSubmit}>
           <Grid container spacing={3}>
             <Grid item xs={12}>
               <TextField
@@ -132,7 +151,7 @@ const UserLoginForm: React.FC<UserLoginFormProps> = ({ onLoginSuccess }) => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 disabled={isSubmitting}
-                autoComplete="new-password"
+                autoComplete="username"
               />
             </Grid>
 
@@ -145,7 +164,7 @@ const UserLoginForm: React.FC<UserLoginFormProps> = ({ onLoginSuccess }) => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 disabled={isSubmitting}
-                autoComplete="new-password"
+                autoComplete="current-password"
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">

@@ -6,7 +6,7 @@ import {
   Typography,
   CircularProgress
 } from '@mui/material';
-import { VOTE_HOST, PUBLIC_API_HOST, PUBLIC_DATA_BUCKET_URL } from '../constants';
+import { VOTE_HOST, PUBLIC_API_HOST, PUBLIC_DATA_BUCKET_URL, PERSONAL_AUTH_API_HOST } from '../constants';
 import useCityData from '../hooks/useCityData';
 import {
   City,
@@ -23,8 +23,6 @@ import ResultsSection from './poll/ResultsSection';
 import ConfirmVoteDialog from './poll/ConfirmVoteDialog';
 
 interface PollProps {
-  token?: string;
-  cityInfo?: City;
   pollData?: {
     id: string;
     title: string;
@@ -35,7 +33,7 @@ interface PollProps {
   isLoadingVotes?: boolean;
 }
 
-function Poll({ token, pollData: initialPollData, onVoteComplete, votesData: propVotesData, cityInfo, isLoadingVotes: propIsLoadingVotes }: PollProps) {
+function Poll({ pollData: initialPollData, onVoteComplete, votesData: propVotesData, isLoadingVotes: propIsLoadingVotes }: PollProps) {
   const navigate = useNavigate();
   const { pollId } = useParams();
   const [error, setError] = useState('');
@@ -51,16 +49,76 @@ function Poll({ token, pollData: initialPollData, onVoteComplete, votesData: pro
   
   const effectiveIsLoadingVotes = propIsLoadingVotes !== undefined ? propIsLoadingVotes : isLoadingVotes;
   const [votesData, setVotesData] = useState<VoteData>(propVotesData || {});
-  const [isAuthenticated] = useState(!!token && !!cityInfo);
+  
+  // Check for personal authentication instead of city-based authentication
+  const [userSessionToken] = useState(() => {
+    const token = localStorage.getItem('userSessionToken');
+    const email = localStorage.getItem('userEmail');
+    
+    // Clean up stale authentication data if token is missing but email exists
+    if (!token && email) {
+      localStorage.removeItem('userEmail');
+    }
+    
+    return token;
+  });
+  const [userEmail] = useState(() => localStorage.getItem('userEmail'));
+  const [isAuthenticated] = useState(!!userSessionToken && !!userEmail);
+  const [userCityInfo, setUserCityInfo] = useState<City | null>(null);
   const [attachmentUrl, setAttachmentUrl] = useState<string | null>(null);
   
   // Use the city data hook to manage cities
-  const { 
-    cities, 
-    fetchAllCities, 
-    isLoading: isCitiesLoading, 
-    error: cityError 
+  const {
+    cities,
+    fetchAllCities,
+    isLoading: isCitiesLoading,
+    error: cityError
   } = useCityData(votesData);
+
+  // Fetch user's city information when authenticated
+  useEffect(() => {
+    const fetchUserCityInfo = async () => {
+      if (!isAuthenticated || !userSessionToken || !userEmail) return;
+      
+      try {
+        const response = await fetch(`${PERSONAL_AUTH_API_HOST}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${userSessionToken}`
+          },
+          body: JSON.stringify({
+            action: 'verifySessionToken',
+            email: userEmail
+          })
+        });
+
+        if (response.ok) {
+          const userData = await response.json();
+          
+          if (userData.cityAssociations && userData.cityAssociations.length > 0) {
+            // Use the first city association for now
+            const cityAssociation = userData.cityAssociations[0];
+            setUserCityInfo({
+              id: cityAssociation.cityId,
+              name: cityAssociation.title || 'Unknown City',
+              authenticationKeyDistributionChannels: [],
+              population: 0,
+              country: '',
+              lat: 0,
+              lon: 0
+            });
+          } else {
+            setUserCityInfo(null);
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch user city info:', error);
+      }
+    };
+
+    fetchUserCityInfo();
+  }, [isAuthenticated, userSessionToken, userEmail]);
 
   const fetchData = useCallback(async () => {
     setError('');
@@ -140,24 +198,32 @@ function Poll({ token, pollData: initialPollData, onVoteComplete, votesData: pro
 
 
   const pollVotes = votesData?.[initialPollData?.id || pollId || ''] || { votes: [] };
-  const hasVoted = cityInfo?.id ? pollVotes.votes.some(vote => vote.associatedCityId === cityInfo?.id) : false;
+  // For personal authentication, check if the current user has voted by checking vote author info
+  // Since we don't have a direct user ID in votes yet, we'll use email/name combination
+  const hasVoted = userEmail ? pollVotes.votes.some(vote =>
+    vote.author?.name === personalInfo.name && vote.author?.title === personalInfo.title
+  ) : false;
 
   const handleVote = async (option: string) => {
     setVoting(true);
     setError('');
     try {
-      if (!token) {
-        throw new Error('Authentication token is required to vote');
+      if (!userSessionToken || !userEmail) {
+        throw new Error('Please log in to vote');
       }
+
+      // Create token in the new format: email:sessionToken
+      const authToken = `${userEmail}:${userSessionToken}`;
 
       const voteRequest: VoteRequest = {
         action: 'vote',
-        token,
+        token: authToken,
         pollId: initialPollData?.id || pollId || '',
         option,
         title: personalInfo.title,
         name: personalInfo.name,
-        actingCapacity: isPersonal ? 'individual' : 'representingCityAdministration'
+        actingCapacity: isPersonal ? 'individual' : 'representingCityAdministration',
+        organisationNameFallback: userCityInfo?.name || ''
       };
 
       const response = await fetch(VOTE_HOST, {
@@ -278,16 +344,18 @@ function Poll({ token, pollData: initialPollData, onVoteComplete, votesData: pro
   }
 
   // Count votes by option for the results section
-  const allVotes = pollVotes.votes ? 
+  const allVotes = pollVotes.votes ?
     pollVotes.votes.map(vote => {
       return {
         cityId: vote.associatedCityId || '',
         timestamp: vote.time || 0,
         option: vote.vote,
-      voteInfo: {
-        ...vote.author,
-        externalVerificationSource: vote.externalVerificationSource
-      },
+        voteInfo: {
+          ...vote.author,
+          externalVerificationSource: vote.externalVerificationSource,
+          // Include city association information if available
+          cityAssociation: vote.cityAssociation
+        },
         city: vote.organisationNameFallback
       };
     }).sort((a, b) => b.timestamp - a.timestamp) : [];
@@ -306,8 +374,8 @@ function Poll({ token, pollData: initialPollData, onVoteComplete, votesData: pro
   const documentUrl = pollVotes?.URL || null;
 
   return (
-    <Box sx={{ 
-      mt: 4, 
+    <Box sx={{
+      mt: 10, // Increased top margin to account for header
       mb: 4,
       maxWidth: 800,
       mx: 'auto'
@@ -362,10 +430,10 @@ function Poll({ token, pollData: initialPollData, onVoteComplete, votesData: pro
             <PollAttachment attachmentUrl={attachmentUrl} />
           )}
 
-          {isAuthenticated && cityInfo ? (
+          {isAuthenticated && userCityInfo ? (
             <>
-              <VoteForm 
-                cityInfo={cityInfo}
+              <VoteForm
+                cityInfo={userCityInfo}
                 isPersonal={isPersonal}
                 setIsPersonal={setIsPersonal}
                 personalInfo={personalInfo}
@@ -380,24 +448,56 @@ function Poll({ token, pollData: initialPollData, onVoteComplete, votesData: pro
                 isVoting={voting}
               />
             </>
-          ) : (
-            <Box sx={{ 
-              mt: 4, 
-              mb: 4, 
-              p: 3, 
-              bgcolor: 'action.hover', 
+          ) : isAuthenticated && !userCityInfo ? (
+            <Box sx={{
+              textAlign: 'center',
+              py: 3,
+              px: 2,
+              backgroundColor: 'background.paper',
               borderRadius: 2,
-              textAlign: 'center'
+              border: '1px solid',
+              borderColor: 'divider'
             }}>
-              <Button 
-                variant="contained" 
+              <Typography variant="h6" gutterBottom>
+                Register Your City
+              </Typography>
+              <Typography variant="body2" color="text.secondary" paragraph>
+                To vote on this poll, you need to register your city first.
+              </Typography>
+              <Button
+                variant="contained"
                 color="primary"
                 component={Link}
-                to="/register"
-                startIcon={<span className="material-icons">how_to_reg</span>}
-                sx={{ px: 3, py: 1 }}
+                to="/register/city"
+                sx={{ mt: 1 }}
               >
-                {isJointStatementPoll ? 'Register to sign this statement' : 'Register to vote in this poll'}
+                Register City
+              </Button>
+            </Box>
+          ) : (
+            <Box sx={{
+              textAlign: 'center',
+              py: 3,
+              px: 2,
+              backgroundColor: 'background.paper',
+              borderRadius: 2,
+              border: '1px solid',
+              borderColor: 'divider'
+            }}>
+              <Typography variant="h6" gutterBottom>
+                {isJointStatementPoll ? 'Login to sign this statement' : 'Login to vote in this poll'}
+              </Typography>
+              <Typography variant="body2" color="text.secondary" paragraph>
+                You need to be logged in to vote on this poll.
+              </Typography>
+              <Button
+                variant="contained"
+                color="primary"
+                component={Link}
+                to="/login/user"
+                sx={{ mt: 1 }}
+              >
+                Login
               </Button>
             </Box>
           )}
@@ -417,7 +517,7 @@ function Poll({ token, pollData: initialPollData, onVoteComplete, votesData: pro
             personalInfo={personalInfo}
             isJointStatement={isJointStatementPoll}
             hasVoted={hasVoted}
-            cityInfo={cityInfo}
+            cityInfo={userCityInfo}
             onClose={() => setConfirmDialog({ open: false, option: null })}
             onConfirm={handleConfirmVote}
           />

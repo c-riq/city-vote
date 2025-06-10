@@ -1,3 +1,13 @@
+// City association structure
+export interface CityAssociation {
+  cityId: string;
+  title: string;
+  isAuthorisedRepresentative: boolean;
+  confidence: number; // 0-1
+  identityVerifiedBy: string; // userId
+  time: string; // ISO string
+}
+
 // User data structure
 export interface AuthUserProfile {
   userId: string;
@@ -12,6 +22,7 @@ export interface AuthUserProfile {
     token: string;
     timestamp: string;
   };
+  cityAssociations?: CityAssociation[];
 }
 
 export interface AuthUserSettings {
@@ -77,6 +88,7 @@ export interface AuthSessionVerificationResponse extends AuthBaseResponse {
     token: string;
     timestamp: string;
   } | null;
+  cityAssociations?: CityAssociation[];
 }
 
 export interface AuthLoginResponse extends AuthSessionVerificationResponse {

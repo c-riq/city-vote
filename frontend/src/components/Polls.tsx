@@ -171,6 +171,7 @@ function Polls({ token, cityInfo, votesData: propVotesData, onRefresh }: PollsPr
     <Box
       sx={{
         padding: { xs: 2, sm: 4 },
+        mt: 10, // Add top margin to account for header
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',

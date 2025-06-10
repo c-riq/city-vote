@@ -101,20 +101,12 @@ export interface GetPublicVotesRequest {
     cityId?: string;
 }
 
-export interface GetPublicCitiesRequest {
-    action: 'getCities';
-}
-
 export interface GetVotesResponse {
     // added here for allowing the backend types to be copied to the frontend VoteData is defined in votes/types.ts
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     votes: VoteData;
     message?: string;
-}
-
-export interface GetCitiesResponse {
-    cities: Record<string, City>;
 }
 
 // Registration API Request/Response types
@@ -145,6 +137,12 @@ export interface VoteEntry {
     associatedCityId?: string; // wikidataId
     organisationNameFallback?: string;
     externalVerificationSource?: string; // URL
+    cityAssociation?: {
+        title: string;
+        confidence: number;
+        identityVerifiedBy: string;
+        verificationTime: string;
+    };
 }
 
 export interface PollData {
@@ -157,6 +155,33 @@ export interface PollData {
 
 export type VoteData = Record<string, PollData>;
 
+
+// City association structure (for user authentication)
+export interface CityAssociation {
+    cityId: string;
+    title: string;
+    isAuthorisedRepresentative: boolean;
+    confidence: number; // 0-1
+    identityVerifiedBy: string; // userId
+    time: string; // ISO string
+}
+
+// User profile structure (for authentication)
+export interface UserProfile {
+    userId: string;
+    hashedPassword: string;
+    createdAt: string;
+    lastLogin: string;
+    sessions: string[];
+    emailVerified: boolean;
+    emailVerificationToken?: string;
+    phoneVerification?: {
+        phoneNumber: string;
+        token: string;
+        timestamp: string;
+    };
+    cityAssociations?: CityAssociation[];
+}
 
 // City data format
 export interface City {
@@ -188,16 +213,12 @@ export interface VoteRequest {
     title: string;
     name: string;
     actingCapacity: 'individual' | 'representingCityAdministration';
+    organisationNameFallback?: string;
 }
 
 export interface GetVotesRequest {
     action: 'getVotes';
     cityId?: string;
-    token: string;
-}
-
-export interface GetCitiesRequest {
-    action: 'getCities';
     token: string;
 }
 
@@ -231,7 +252,9 @@ export interface VoteParams {
     title: string;
     name: string;
     actingCapacity: 'individual' | 'representingCityAdministration';
+    organisationNameFallback?: string;
     externalVerificationSource?: string; // Platform that verified this vote
+    userCityAssociation?: CityAssociation; // User's city association for authentication
 }
 
 export interface CreatePollParams {
@@ -274,16 +297,22 @@ export interface GetVotesResponse {
     message?: string;
 }
 
-export interface GetCitiesResponse {
-    cities: Record<string, City>;
-}
-
 export interface CreatePollResponse {
     message: string;
 }
 
 
 // From serverless/personal-auth/src/types.ts
+// City association structure
+export interface CityAssociation {
+  cityId: string;
+  title: string;
+  isAuthorisedRepresentative: boolean;
+  confidence: number; // 0-1
+  identityVerifiedBy: string; // userId
+  time: string; // ISO string
+}
+
 // User data structure
 export interface AuthUserProfile {
   userId: string;
@@ -298,6 +327,7 @@ export interface AuthUserProfile {
     token: string;
     timestamp: string;
   };
+  cityAssociations?: CityAssociation[];
 }
 
 export interface AuthUserSettings {
@@ -363,6 +393,7 @@ export interface AuthSessionVerificationResponse extends AuthBaseResponse {
     token: string;
     timestamp: string;
   } | null;
+  cityAssociations?: CityAssociation[];
 }
 
 export interface AuthLoginResponse extends AuthSessionVerificationResponse {

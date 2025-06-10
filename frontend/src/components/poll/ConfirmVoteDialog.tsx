@@ -8,7 +8,7 @@ interface ConfirmVoteDialogProps {
   personalInfo: { title: string; name: string };
   isJointStatement: boolean;
   hasVoted: boolean;
-  cityInfo?: City;
+  cityInfo?: City | null;
   onClose: () => void;
   onConfirm: () => void;
 }

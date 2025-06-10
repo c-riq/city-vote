@@ -2,7 +2,7 @@ import { Box, FormControl, RadioGroup, FormControlLabel, Radio, TextField, Typog
 import { City } from '../../backendTypes';
 
 interface VoteFormProps {
-  cityInfo: City;
+  cityInfo?: City | null;
   isPersonal: boolean;
   setIsPersonal: (isPersonal: boolean) => void;
   personalInfo: { title: string; name: string };
@@ -19,10 +19,11 @@ function VoteForm({ cityInfo, isPersonal, setIsPersonal, personalInfo, setPerson
           onChange={(e) => setIsPersonal(e.target.value === 'personal')}
           sx={{ mb: 2 }}
         >
-          <FormControlLabel 
-            value="city" 
-            control={<Radio />} 
-            label={<>On behalf of the City Administration of <strong>{cityInfo?.name}</strong></>}
+          <FormControlLabel
+            value="city"
+            control={<Radio />}
+            label={<>On behalf of the City Administration{cityInfo?.name ? ` of ${cityInfo.name}` : ''}</>}
+            disabled={!cityInfo}
           />
           <FormControlLabel 
             value="personal"
