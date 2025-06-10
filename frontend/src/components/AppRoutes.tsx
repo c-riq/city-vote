@@ -50,6 +50,7 @@ function AppRoutes({
       <Route path="/city/:cityId" element={<CityProfile />} />
       <Route path="/city-network/:networkId" element={<CityNetworkProfile />} />
       <Route path="/about" element={<About />} />
+      <Route path="/about.html" element={<About />} /> {/* keep */}
       <Route path="/" element={
         <LandingPage
           votesData={votesData}

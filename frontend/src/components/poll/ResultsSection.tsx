@@ -133,7 +133,7 @@ function ResultsSection({ votesByOption, allVotes, cities, isJointStatement, isL
           {allVotes.length > 0 && (
             <Box sx={{
               width: '100%',
-              height: '300px',
+              aspectRatio: '800/500', // 8:5 ratio to match the map dimensions
               mb: 4,
               border: '1px solid #e0e0e0',
               borderRadius: 2,
@@ -288,73 +288,11 @@ const PollMap: React.FC<{ votes: Vote[], cities: Record<string, City> }> = ({ vo
     return getColorForFraction(fraction);
   };
 
-  // Calculate map bounds based on city coordinates
-  const calculateMapProjection = () => {
-    // Default values centered on Europe if no cities with coordinates
-    if (mapPoints.length === 0) {
-      return {
-        scale: 150,
-        center: [10, 40] as [number, number]
-      };
-    }
-
-    // Find min/max coordinates to determine the bounding box
-    let minLon = Infinity;
-    let maxLon = -Infinity;
-    let minLat = Infinity;
-    let maxLat = -Infinity;
-
-    mapPoints.forEach(point => {
-      const [lon, lat] = point.coordinates;
-      minLon = Math.min(minLon, lon);
-      maxLon = Math.max(maxLon, lon);
-      minLat = Math.min(minLat, lat);
-      maxLat = Math.max(maxLat, lat);
-    });
-
-    // Calculate center point
-    const centerLon = (minLon + maxLon) / 2;
-    const centerLat = (minLat + maxLat) / 2;
-
-    // Calculate appropriate scale based on the spread of coordinates
-    // The wider the spread, the smaller the scale (more zoomed out)
-    const lonSpread = Math.abs(maxLon - minLon);
-    const latSpread = Math.abs(maxLat - minLat);
-    
-    // Base scale on the larger of the two spreads
-    // Add padding to ensure all points are visible
-    const maxSpread = Math.max(lonSpread, latSpread);
-    
-    // Scale calculation - adjust these values based on testing
-    // Smaller spread = larger scale (more zoomed in)
-    let scale = 1200; // Higher default scale for more zoom
-    
-    if (maxSpread > 0) {
-      // Inverse relationship between spread and scale
-      // Adjusted formula to provide more zoom (higher scale values)
-      scale = Math.min(1200, Math.max(300, 400 / maxSpread));
-    }
-    
-    // If we have only one point or points very close together, zoom in more
-    if (maxSpread < 1) {
-      scale = 1200;
-    }
-    
-    // Add padding to the bounding box by adjusting the center slightly
-    // This helps ensure all points are visible with some margin
-    const padding = maxSpread * 0.1; // 10% padding
-    minLon -= padding;
-    maxLon += padding;
-    minLat -= padding;
-    maxLat += padding;
-
-    return {
-      scale,
-      center: [centerLon, centerLat] as [number, number]
-    };
+  // Optimized world map - reduce polar padding and show Australia better
+  const projection = {
+    scale: 200, // Larger scale to reduce polar padding on both ends
+    center: [15, 5] as [number, number] // Shift east to show Australia better, slightly south for polar padding
   };
-
-  const projection = calculateMapProjection();
 
   return (
     <Box sx={{ 
@@ -366,7 +304,7 @@ const PollMap: React.FC<{ votes: Vote[], cities: Record<string, City> }> = ({ vo
       <ComposableMap
         projectionConfig={projection}
         width={800}
-        height={300}
+        height={500}
         style={{
           width: '100%',
           height: '100%'
