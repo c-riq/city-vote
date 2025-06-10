@@ -54,13 +54,8 @@ function Header({ onLogout }: HeaderProps) {
   const [loading, setLoading] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [userEmail, setUserEmail] = useState<string | null>(null);
-  const [userSessionToken, setUserSessionToken] = useState<string | null>(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userCityInfo, setUserCityInfo] = useState<City | null>(null);
   const autocompleteTimeoutRef = useRef<number | null>(null);
-  
-  // Use variables to satisfy TypeScript
-  console.log('Auth state:', { userSessionToken: !!userSessionToken, isAuthenticated });
   
   // Check if user is logged in and listen for login/logout events
   useEffect(() => {
@@ -77,8 +72,6 @@ function Header({ onLogout }: HeaderProps) {
       
       if (storedEmail && storedToken) {
         setUserEmail(storedEmail);
-        setUserSessionToken(storedToken);
-        setIsAuthenticated(true);
         
         // Fetch user city info
         await fetchUserCityInfo(storedToken, storedEmail);
