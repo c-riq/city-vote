@@ -1,5 +1,5 @@
 city_name,country,wikidata_id,mayor_name,mayor_title
-Al-Hamdanyia district,Iraq,NOT_FOUND,Isaam Bahnam Matti,Mayor of Al-Hamdanyia district
+Al-Hamdanyia district,Iraq,,Isaam Bahnam Matti,Mayor of Al-Hamdanyia district
 Amsterdam,the Netherlands,Q727,Femke Halsema,Mayor of Amsterdam
 Antsirabe,Madagascar,Q583184,Honoré Gabriel Rasamimanana,Mayor of Antsirabe
 Artés,Spain,Q16677,Enric Forcada i Valiente,Mayor of Artés
@@ -37,13 +37,13 @@ Charlotte,USA,Q16565,Vi Alexander Lyles,Mayor of Charlotte
 Cherkasy,Ukraine,Q157055,Anatolii Vasyliovych Bondarenko,Mayor of Cherkasy
 Chernivtsi,Ukraine,Q157725,Roman KLICHUK,Mayor of Chernivtsi
 Chervonograd,Ukraine,Q106871027,Andriy Zalivskyy,Mayor of Chervonograd
-Chokhatauri Municipality,Georgia,NOT_FOUND,Davit Sharashidze,Mayor of Chokhatauri Municipality
+Chokhatauri Municipality,Georgia,,Davit Sharashidze,Mayor of Chokhatauri Municipality
 Choloma,Honduras,Q998218,Gustavo Antonio Mejía Escobar,Mayor of Choloma
 Chornomorsk,Ukraine,Q889530,Vasyl Oleksandrovych Huliaiev,Mayor of Chornomorsk
 Cleveland Heights,USA,Q248922,Kahlil Seren,Mayor of Cleveland Heights
 Cololaca,Honduras,Q2234966,Bernandina Henrriquez Marquez,Mayor of Cololaca
 Corquin Copan,Honduras,Q1119909,Amilcar Paz Mejia,Mayor of Corquin Copan
-Corpus,Honduras,NOT_FOUND,Luis Andres Rueda Bellino,Mayor of Corpus
+Corpus,Honduras,,Luis Andres Rueda Bellino,Mayor of Corpus
 Danlí,Honduras,Q1958679,Abrham Kafati Diaz,Mayor of Danlí
 Darmstadt,Germany,Q2973,Jochen Partsch,Lord Mayor of Darmstadt
 Debar/Dibër Municipality,North Macedonia,Q689820,Hekuran Duka,Mayor of Debar/Dibër Municipality
@@ -83,33 +83,33 @@ Hod - Hasharon,Israel,Q152379,Amir Kochavi,Mayor of Hod - Hasharon
 Horishni Plavni,Ukraine,Q998227,Dmytro Bykov,Mayor of Horishni Plavni
 Horodnya,Ukraine,Q1020058,Andrii Bohdan,Mayor of Horodnya
 Iganga,Uganda,Q49298141,Bamulanzeki Derrick,Mayor of Iganga
-ishongororo,Uganda,NOT_FOUND,MUGABE HASSAN,Mayor of ishongororo
+ishongororo,Uganda,,MUGABE HASSAN,Mayor of ishongororo
 Jackson,USA,Q28198,Chokwe Antar Lumumba,Mayor of Jackson
 Jersey City,USA,Q26339,Steven M. Fulop,Mayor of Jersey City
 Jinja,Uganda,Q501709,Kasolo Peter,Mayor of Jinja
 Jutiapa,Honduras,Q775897,Oscar Arnulfo Ayala Bautista,Mayor of Jutiapa
 Jwaneng,Botswana,Q165954,Olga Ditsie,Mayor of Jwaneng
-Kalmunai,Sri Lanka,NOT_FOUND,Rakeeb Aboobucker,Mayor of Kalmunai
+Kalmunai,Sri Lanka,,Rakeeb Aboobucker,Mayor of Kalmunai
 Kalush,Ukraine,Q146453,Andrii Naida,Mayor of Kalush
 Kamianets-Podilskyi,Ukraine,Q193965,Mykhailo Positko,Mayor of Kamianets-Podilskyi
 Kamianske,Ukraine,Q156719,Andrii Bilousov,Mayor of Kamianske
-Kawempe Division,Uganda,NOT_FOUND,Dr. Emmanuel Serunjoji,Mayor of Kawempe Division
-Kanifing Municpal Council,The Gambia,NOT_FOUND,Talib Ahmed Bensouda,Mayor of Kanifing Municpal Council
+Kawempe Division,Uganda,,Dr. Emmanuel Serunjoji,Mayor of Kawempe Division
+Kanifing Municpal Council,The Gambia,,Talib Ahmed Bensouda,Mayor of Kanifing Municpal Council
 Kaniv,Ukraine,Q925340,Ihor Renkas,Mayor of Kaniv
 Kansas City,USA,Q41819,Quinton Lucas,Mayor of Kansas City
 Kaohsiung,Taiwan,Q181557,Chen Chi-Mai,Mayor of Kaohsiung
-Karbinci,North Macedonia,NOT_FOUND,Viktor Paunov,Mayor of Karbinci
+Karbinci,North Macedonia,,Viktor Paunov,Mayor of Karbinci
 Karlsruhe,Germany,Q1040,Dr. Frank Mentrup,Mayor of Karlsruhe
 Katowice,Poland,Q588,Marcin Krupa,Mayor of Katowice
 Kavadarci,North Macedonia,Q158088,Mitko Janchev,Mayor of Kavadarci
 Kearny,USA,Q776648,Alberto Gonzalo Santos,Mayor of Kearny
 Khmilnyk,Ukraine,Q1011310,Yurchyshyn Mykola,Mayor of Khmilnyk
-Klina,Kosovo,NOT_FOUND,Zenun Elezaj,Mayor of Klina
+Klina,Kosovo,,Zenun Elezaj,Mayor of Klina
 Konotop,Ukraine,Q162083,Artem Semenikhin,Mayor of Konotop
 Kraków,Poland,Q31487,Jacek Majchrowski,Mayor of Kraków
 Kriva Palanka,North Macedonia,Q578396,Sashko Mitovski,Mayor of Kriva Palanka
 Kryvyi Rih,Ukraine,Q157137,Yurii Hryhorovych Vilkul,Mayor (Acting) of Kryvyi Rih
-Kuntaur Area Council,The Gambia,NOT_FOUND,Saihou Jawara,Mayor of Kuntaur Area Council
+Kuntaur Area Council,The Gambia,,Saihou Jawara,Mayor of Kuntaur Area Council
 Kyiv,Ukraine,Q1899,Vitaliy Klitschko,Mayor of Kyiv
 La Campa,Honduras,Q2394060,Roberto de Jesus Santos,Mayor of La Campa
 La Lima,Honduras,Q2279521,Santos Virgilio Lainez Rodriguez,Mayor of La Lima
@@ -131,7 +131,7 @@ Mafra,Portugal,Q986419,Helder Sousa Silva,Mayor of Mafra
 Makassar,Indonesia,Q14634,Mohammad Ramdhan Pomanto,Mayor of Makassar
 Mandera,Kenya,Q15917979,Saleh Maalim Alio,Mayor of Mandera
 Mannheim,Germany,Q2119,Peter Kurz,Lord Mayor of Mannheim
-Mansakonko area,The Gambia,NOT_FOUND,Landing B. Sanneh,Mayor Sanneh of Mansakonko area
+Mansakonko area,The Gambia,,Landing B. Sanneh,Mayor Sanneh of Mansakonko area
 Marl,Germany,Q3813,Werner Arndt,Mayor of Marl
 Matosinhos,Portugal,Q841299,Luísa Salgueiro,Mayor of Matosinhos
 Mbale,Uganda,Q1015727,Mamugali Cassim,Mayor of Mbale
@@ -149,7 +149,7 @@ Mount Vernon,USA,Q835831,Shawyn Patterson-Howard,Mayor of the Mount Vernon
 Münster,Germany,Q2742,Markus Lewe,Mayor of Münster
 Myrhorod,Ukraine,Q161961,Solomakha Serhii Pavlovich,Mayor of Myrhorod
 Nadvirna,Ukraine,Q156820,Andreyovych Zinovii Myroslavovych,Mayor of Nadvirna
-Nebbi,Uganda,NOT_FOUND,Geoffrey Ngiriker,Mayor of Nebbi
+Nebbi,Uganda,,Geoffrey Ngiriker,Mayor of Nebbi
 Netishyn,Ukraine,Q997371,Oleksandr Suprunyuk,Mayor of Netishyn
 Neu-Ulm,Germany,Q4120,Katrin Albsteiger,Mayor of Neu-Ulm
 Nezahualcóyotl,Mexico,Q3313478,Adolfo Cerqueda Rebollo,mayor of Nezahualcóyotl
@@ -161,7 +161,7 @@ Ocotepeque,Honduras,Q2182554,Israel orlando aguilar,Mayor of Ocotepeque
 Oklahoma City,USA,Q34863,David Holt,Mayor of Oklahoma City
 Omoa,Honduras,Q520386,Ricardo Alvarado Escobar,Mayor of Omoa
 Oropoli,Honduras,Q2481144,Luis Manuel Osorio,Mayor of Oropoli
-Orzhitsa,Ukraine,NOT_FOUND,Sydorenko Olena,Mayor of Orzhitsa
+Orzhitsa,Ukraine,,Sydorenko Olena,Mayor of Orzhitsa
 Palermo,Italy,Q2656,Leoluca Orlando,Mayor of Palermo
 Paris,France,Q90,Anne Hidalgo,Mayor of Paris
 Pavlograd,Ukraine,Q237206,Anatolii Vershyna,Mayor of Pavlograd
@@ -170,7 +170,7 @@ Peñalolén,Chile,Q51100,Carolina Leitao Álvarez-Salamanca,Mayor of Peñalolén
 Philadelphia,USA,Q1345,James F. Kenney,Mayor of Philadelphia
 Phoenix,United States,Q16556,Kate Gallego,Mayor of Phoenix
 Podgorica,Montenegro,Q23564,Ivan Vuković,Mayor of Podgorica
-Pologi,Ukraine,NOT_FOUND,Yurii Konovalenko,Mayor of Pologi
+Pologi,Ukraine,,Yurii Konovalenko,Mayor of Pologi
 Portland,USA,Q6106,Ted Wheeler,Mayor of Portland
 Potrerillos,Honduras,Q1644959,Carlos Noe Rivera Manzanares,Mayor of Potrerillos
 Prague,Czech Republic,Q1085,Zdeněk Hřib,Mayor of Prague
@@ -206,11 +206,11 @@ Seattle,USA,Q5083,Bruce A. Harrell,Mayor of Seattle
 Sensenti,Honduras,Q582892,Mairon Randolfo Gomez,Mayor of Sensenti
 Seoul,South Korea,Q8684,Sehoon Oh,Mayor of Seoul
 Shepetivka,Ukraine,Q161965,Vitaliy Buzyl,Mayor of Shepetivka
-Shuto Orizari municipality,North Macedonia,NOT_FOUND,Kurto Dudush,Mayor of Shuto Orizari municipality
+Shuto Orizari municipality,North Macedonia,,Kurto Dudush,Mayor of Shuto Orizari municipality
 Skopje,North Macedonia,Q384,Danela Arsovska,Mayor of Skopje
 Slavuta,Ukraine,Q856018,Vasyl SYDOR,Mayor of Slavuta
 St. Louis,USA,Q38022,Tishaura O. Jones,Mayor of St. Louis
-Starokostyantyniv,Ukraine,NOT_FOUND,Mykola Melnychuk,Mayor of Starokostyantyniv
+Starokostyantyniv,Ukraine,,Mykola Melnychuk,Mayor of Starokostyantyniv
 Municipality of Strumica,North Macedonia,Q48814,Kostadin Kostadinov,Mayor of Municipality of Strumica
 Stryi,Ukraine,Q158923,Kanivets Oleg,Mayor of Stryi
 Tainan,Taiwan,Q140631,Huang Wei-che,Mayor of Tainan
@@ -235,8 +235,8 @@ Ulm,Germany,Q3012,Gunter Czisch,Mayor of Ulm
 Union City,USA,Q588834,Brian P. Stack,Mayor of Union City
 Uzhhorod,Ukraine,Q156711,Bohdan Andriyiv,Mayor of Uzhhorod
 Vallecillo,Honduras,Q1645152,Hugo Eleazar Flores Valladares,Mayor of Vallecillo
-Velyka Pysarivka,Ukraine,NOT_FOUND,Lyudmila Biryukova,Mayor of Velyka Pysarivka
-Velykodymersk,Ukraine,NOT_FOUND,Bochkarev Anatoly Borisovych,Mayor of Velykodymersk
+Velyka Pysarivka,Ukraine,,Lyudmila Biryukova,Mayor of Velyka Pysarivka
+Velykodymersk,Ukraine,,Bochkarev Anatoly Borisovych,Mayor of Velykodymersk
 Vila Verde,Portugal,Q551676,Júlia Maria Caridade Rodrigues Fernandes,Mayor of Vila Verde
 Villanueva,Honduras,Q2542686,Walter smelin Perdomo Aguilar,Mayor of Villanueva
 Villeda Morales,Honduras,Q924828,Cesar Arrechavala Galindo,Mayor of Villeda Morales
@@ -247,7 +247,7 @@ Warsaw,Poland,Q270,Rafał Trzaskowski,Mayor of Warsaw
 Willis,USA,Q980252,Leonard R. Reed,Mayor of Willis
 Wrocław,Poland,Q1799,Jacek Zbigniew Sutryk,Mayor of Wrocław
 Yorito,Honduras,Q1647584,Fredy Orlando Murillo Murillo,Mayor of Yorito
-Zakroczymia,Poland,NOT_FOUND,Artur Ciecierski,Mayor of Zakroczymia
+Zakroczymia,Poland,,Artur Ciecierski,Mayor of Zakroczymia
 Zelenodolsk,Ukraine,Q640713,Dmytro Neveselyi,Mayor of Zelenodolsk
-Municipality of Zhelino,North Macedonia,NOT_FOUND,Blerim Sejdi,Mayor of Municipality of Zhelino
+Municipality of Zhelino,North Macedonia,,Blerim Sejdi,Mayor of Municipality of Zhelino
 Zolotonosha,Ukraine,Q219769,Nataliia Somak,Mayor of Zolotonosha

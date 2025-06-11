@@ -7,7 +7,7 @@
       "actingCapacity": "individual"
     },
     "organisationNameFallback": "Al-Hamdanyia district",
-    "associatedCityId": "NOT_FOUND",
+    "associatedCityId": null,
     "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
   },
   {
@@ -425,7 +425,7 @@
       "actingCapacity": "individual"
     },
     "organisationNameFallback": "Chokhatauri Municipality",
-    "associatedCityId": "NOT_FOUND",
+    "associatedCityId": null,
     "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
   },
   {
@@ -491,7 +491,7 @@
       "actingCapacity": "individual"
     },
     "organisationNameFallback": "Corpus",
-    "associatedCityId": "NOT_FOUND",
+    "associatedCityId": null,
     "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
   },
   {
@@ -931,7 +931,7 @@
       "actingCapacity": "individual"
     },
     "organisationNameFallback": "ishongororo",
-    "associatedCityId": "NOT_FOUND",
+    "associatedCityId": null,
     "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
   },
   {
@@ -997,7 +997,7 @@
       "actingCapacity": "individual"
     },
     "organisationNameFallback": "Kalmunai",
-    "associatedCityId": "NOT_FOUND",
+    "associatedCityId": null,
     "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
   },
   {
@@ -1041,7 +1041,7 @@
       "actingCapacity": "individual"
     },
     "organisationNameFallback": "Kawempe Division",
-    "associatedCityId": "NOT_FOUND",
+    "associatedCityId": null,
     "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
   },
   {
@@ -1052,7 +1052,7 @@
       "actingCapacity": "individual"
     },
     "organisationNameFallback": "Kanifing Municpal Council",
-    "associatedCityId": "NOT_FOUND",
+    "associatedCityId": null,
     "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
   },
   {
@@ -1096,7 +1096,7 @@
       "actingCapacity": "individual"
     },
     "organisationNameFallback": "Karbinci",
-    "associatedCityId": "NOT_FOUND",
+    "associatedCityId": null,
     "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
   },
   {
@@ -1162,7 +1162,7 @@
       "actingCapacity": "individual"
     },
     "organisationNameFallback": "Klina",
-    "associatedCityId": "NOT_FOUND",
+    "associatedCityId": null,
     "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
   },
   {
@@ -1217,7 +1217,7 @@
       "actingCapacity": "individual"
     },
     "organisationNameFallback": "Kuntaur Area Council",
-    "associatedCityId": "NOT_FOUND",
+    "associatedCityId": null,
     "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
   },
   {
@@ -1437,7 +1437,7 @@
       "actingCapacity": "individual"
     },
     "organisationNameFallback": "Mandera",
-    "associatedCityId": "Q15917979",
+    "associatedCityId": null,
     "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
   },
   {
@@ -1459,7 +1459,7 @@
       "actingCapacity": "individual"
     },
     "organisationNameFallback": "Mansakonko area",
-    "associatedCityId": "NOT_FOUND",
+    "associatedCityId": null,
     "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
   },
   {
@@ -1657,7 +1657,7 @@
       "actingCapacity": "individual"
     },
     "organisationNameFallback": "Nebbi",
-    "associatedCityId": "NOT_FOUND",
+    "associatedCityId": null,
     "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
   },
   {
@@ -1789,7 +1789,7 @@
       "actingCapacity": "individual"
     },
     "organisationNameFallback": "Orzhitsa",
-    "associatedCityId": "NOT_FOUND",
+    "associatedCityId": null,
     "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
   },
   {
@@ -1888,7 +1888,7 @@
       "actingCapacity": "individual"
     },
     "organisationNameFallback": "Pologi",
-    "associatedCityId": "NOT_FOUND",
+    "associatedCityId": null,
     "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
   },
   {
@@ -2284,7 +2284,7 @@
       "actingCapacity": "individual"
     },
     "organisationNameFallback": "Shuto Orizari municipality",
-    "associatedCityId": "NOT_FOUND",
+    "associatedCityId": null,
     "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
   },
   {
@@ -2328,7 +2328,7 @@
       "actingCapacity": "individual"
     },
     "organisationNameFallback": "Starokostyantyniv",
-    "associatedCityId": "NOT_FOUND",
+    "associatedCityId": null,
     "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
   },
   {
@@ -2603,7 +2603,7 @@
       "actingCapacity": "individual"
     },
     "organisationNameFallback": "Velyka Pysarivka",
-    "associatedCityId": "NOT_FOUND",
+    "associatedCityId": null,
     "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
   },
   {
@@ -2614,7 +2614,7 @@
       "actingCapacity": "individual"
     },
     "organisationNameFallback": "Velykodymersk",
-    "associatedCityId": "NOT_FOUND",
+    "associatedCityId": null,
     "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
   },
   {
@@ -2735,7 +2735,7 @@
       "actingCapacity": "individual"
     },
     "organisationNameFallback": "Zakroczymia",
-    "associatedCityId": "NOT_FOUND",
+    "associatedCityId": null,
     "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
   },
   {
@@ -2757,7 +2757,7 @@
       "actingCapacity": "individual"
     },
     "organisationNameFallback": "Municipality of Zhelino",
-    "associatedCityId": "NOT_FOUND",
+    "associatedCityId": null,
     "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
   },
   {

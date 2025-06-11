@@ -232,7 +232,7 @@ export const countries = {
         ["Turks and Caicos Islands","TC","TCA","796","",null,null],
         ["Tuvalu","TV","TUV","798","Q672",10643,"2022-12-12"],
         ["Uganda","UG","UGA","800","Q1036",47123531,"2021-01-01"],
-        ["Ukraine","UA","UKR","804","Q212",null,null],
+        ["Ukraine","UA","UKR","804","Q212",41167335,"2022-01-01"],
         ["United Arab Emirates","AE","ARE","784","Q878",9890400,"2020-01-01"],
         ["United Kingdom","GB","GBR","826","Q145",67326569,"2021-01-01"],
         ["United States Minor Outlying Islands","UM","UMI","581","",null,null],
