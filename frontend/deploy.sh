@@ -2,12 +2,17 @@ set -x
 trap "exit" INT
 
 aws_profile=rix-admin-chris
-s3_bucket=city-vote-com
-cf_id=E99HKWOVERB2D
 
-echo Profile: $aws_profile
-echo S3_Bucket: $s3_bucket
-echo CloudFront Distribution: $cf_id
+# Check if "dev" argument is provided
+if [ "$1" == "dev" ]; then
+    s3_bucket=city-vote-com-dev
+    cf_id=E2M28VGBBCJ354
+    echo "Deploying to DEV environment..."
+else
+    s3_bucket=city-vote-com
+    cf_id=E99HKWOVERB2D
+    echo "Deploying to PRODUCTION environment..."
+fi
 
 if [ -z "$aws_profile" ]; then
   echo AWS_PROFILE not found

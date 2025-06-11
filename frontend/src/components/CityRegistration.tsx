@@ -36,7 +36,7 @@ const CityRegistration: React.FC = () => {
   const [autocompleteResults, setAutocompleteResults] = useState<CityAutocompleteResult[]>([]);
   const [isLoadingAutocomplete, setIsLoadingAutocomplete] = useState(false);
   const [autocompleteInputValue, setAutocompleteInputValue] = useState('');
-  const autocompleteTimeoutRef = useRef<number | null>(null);
+  const autocompleteTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   
   // Check if user is logged in
   useEffect(() => {
