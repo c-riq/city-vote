@@ -65,7 +65,6 @@ export const useCityData = (votesData: VoteData = {}) => {
       
       // Process in batches of 50 to prevent too many requests
       const BATCH_SIZE = 50;
-      const newCities: Record<string, City> = { ...cities };
       
       // Process missing cities in batches
       for (let i = 0; i < missingCityIds.length; i += BATCH_SIZE) {
@@ -90,8 +89,9 @@ export const useCityData = (votesData: VoteData = {}) => {
           const data = await response.json();
           
           if (data.results && Array.isArray(data.results)) {
-            // Convert the results to the City format and update the cities state
-            data.results.forEach((city: { 
+            // Convert the results to the City format and update cities state immediately
+            const batchCities: Record<string, City> = {};
+            data.results.forEach((city: {
               wikidataId: string;
               name: string;
               countryName: string;
@@ -99,7 +99,7 @@ export const useCityData = (votesData: VoteData = {}) => {
               latitude?: number;
               longitude?: number;
             }) => {
-              newCities[city.wikidataId] = {
+              batchCities[city.wikidataId] = {
                 id: city.wikidataId,
                 name: city.name,
                 country: city.countryName,
@@ -109,14 +109,17 @@ export const useCityData = (votesData: VoteData = {}) => {
                 authenticationKeyDistributionChannels: []
               };
             });
+            
+            // Update cities state immediately with this batch
+            setCities(prevCities => ({
+              ...prevCities,
+              ...batchCities
+            }));
           }
         } catch (error) {
           console.error('Error fetching missing cities batch:', error);
         }
       }
-      
-      // Update cities state with all fetched data
-      setCities(newCities);
     };
     
     fetchMissingCities();
