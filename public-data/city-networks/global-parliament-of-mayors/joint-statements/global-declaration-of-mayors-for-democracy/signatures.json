@@ -1,0 +1,2774 @@
+[
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Al-Hamdanyia district",
+      "name": "Isaam Bahnam Matti",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Al-Hamdanyia district",
+    "associatedCityId": "NOT_FOUND",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Amsterdam",
+      "name": "Femke Halsema",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Amsterdam",
+    "associatedCityId": "Q727",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Antsirabe",
+      "name": "Honoré Gabriel Rasamimanana",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Antsirabe",
+    "associatedCityId": "Q583184",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Artés",
+      "name": "Enric Forcada i Valiente",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Artés",
+    "associatedCityId": "Q16677",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Athens",
+      "name": "Konstantinos Bakogiannis",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Athens",
+    "associatedCityId": "Q1524",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Athens",
+      "name": "Steve Patterson",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Athens",
+    "associatedCityId": "Q755425",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Athienou",
+      "name": "Kyriakos Kareklas",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Athienou",
+    "associatedCityId": "Q570146",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Atlanta",
+      "name": "Andre Dickens",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Atlanta",
+    "associatedCityId": "Q23556",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Bafut",
+      "name": "Ngwakongoh Lawrence",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Bafut",
+    "associatedCityId": "Q4841354",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Balta",
+      "name": "Sergiiy Mazur",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Balta",
+    "associatedCityId": "Q805554",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Banjul",
+      "name": "Rohey Malick Lowe",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Banjul",
+    "associatedCityId": "Q3726",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Bar",
+      "name": "Volodymyr Savoliuk",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Bar",
+    "associatedCityId": "Q737925",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Barcelona",
+      "name": "Ada Colau Ballano",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Barcelona",
+    "associatedCityId": "Q1492",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Belen",
+      "name": "Jesus Amilcar Villanueva Benitez",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Belen",
+    "associatedCityId": "Q2355084",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Belen Gualcho",
+      "name": "Juan Francisco Vasquez",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Belen Gualcho",
+    "associatedCityId": "Q816339",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Bern",
+      "name": "Alec von Graffenried",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Bern",
+    "associatedCityId": "Q70",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Municipality of Berovo",
+      "name": "Zvonko Pekevski",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Berovo",
+    "associatedCityId": "Q827047",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Bila Tserkva",
+      "name": "Hennadii Dykyi",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Bila Tserkva",
+    "associatedCityId": "Q33342",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Bilbao",
+      "name": "Juan Mari Aburto",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Bilbao",
+    "associatedCityId": "Q8692",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of the Bilhorod-Dnistrovskyi",
+      "name": "Vitalii Hrazhdan",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Bilhorod-Dnistrovskyi",
+    "associatedCityId": "Q672990",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Bilopillya",
+      "name": "YURII ZARKO",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Bilopillya",
+    "associatedCityId": "Q58463780",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Bogotá",
+      "name": "Claudia López Hernández",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Bogotá",
+    "associatedCityId": "Q2841",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Bolnisi",
+      "name": "David Sherazadishvili",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Bolnisi",
+    "associatedCityId": "Q653420",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Braga",
+      "name": "Ricardo Rio",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Braga",
+    "associatedCityId": "Q83247",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Bratislava",
+      "name": "Matus Vallo",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Bratislava",
+    "associatedCityId": "Q1780",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Bristol",
+      "name": "Marvin Rees",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Bristol",
+    "associatedCityId": "Q23154",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Brovary",
+      "name": "Igor SAPOZHKO",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Brovary",
+    "associatedCityId": "Q841026",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Brussels",
+      "name": "Philippe Close",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Brussels",
+    "associatedCityId": "Q111901161",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Budapest",
+      "name": "Gergely Karácsony",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Budapest",
+    "associatedCityId": "Q1781",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of the Municipality of Buenos Aires",
+      "name": "José Bernardino Rojas Méndez",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Buenos Aires",
+    "associatedCityId": "Q1648230",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Buenos Aires",
+      "name": "Horacio Rodríguez Larreta",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Buenos Aires",
+    "associatedCityId": "Q1486",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Bukavu",
+      "name": "Meschac Bilubi Ulengabo",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Bukavu",
+    "associatedCityId": "Q222279",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Busia",
+      "name": "Amin Sadik",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Busia",
+    "associatedCityId": "Q1280038",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Cape Town",
+      "name": "Geordin Gwyn Hill-Lewis",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Cape Town",
+    "associatedCityId": "Q5465",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Charlotte",
+      "name": "Vi Alexander Lyles",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Charlotte",
+    "associatedCityId": "Q16565",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Cherkasy",
+      "name": "Anatolii Vasyliovych Bondarenko",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Cherkasy",
+    "associatedCityId": "Q157055",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Chernivtsi",
+      "name": "Roman KLICHUK",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Chernivtsi",
+    "associatedCityId": "Q157725",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Chervonograd",
+      "name": "Andriy Zalivskyy",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Chervonograd",
+    "associatedCityId": "Q106871027",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Chokhatauri Municipality",
+      "name": "Davit Sharashidze",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Chokhatauri Municipality",
+    "associatedCityId": "NOT_FOUND",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Choloma",
+      "name": "Gustavo Antonio Mejía Escobar",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Choloma",
+    "associatedCityId": "Q998218",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Chornomorsk",
+      "name": "Vasyl Oleksandrovych Huliaiev",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Chornomorsk",
+    "associatedCityId": "Q889530",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Cleveland Heights",
+      "name": "Kahlil Seren",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Cleveland Heights",
+    "associatedCityId": "Q248922",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Cololaca",
+      "name": "Bernandina Henrriquez Marquez",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Cololaca",
+    "associatedCityId": "Q2234966",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Corquin Copan",
+      "name": "Amilcar Paz Mejia",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Corquin Copan",
+    "associatedCityId": "Q1119909",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Corpus",
+      "name": "Luis Andres Rueda Bellino",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Corpus",
+    "associatedCityId": "NOT_FOUND",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Danlí",
+      "name": "Abrham Kafati Diaz",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Danlí",
+    "associatedCityId": "Q1958679",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Lord Mayor of Darmstadt",
+      "name": "Jochen Partsch",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Darmstadt",
+    "associatedCityId": "Q2973",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Debar/Dibër Municipality",
+      "name": "Hekuran Duka",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Debar/Dibër Municipality",
+    "associatedCityId": "Q689820",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Denver",
+      "name": "Michael B. Hancock",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Denver",
+    "associatedCityId": "Q16554",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Dmanisi Municipality",
+      "name": "Koba Muradashvili",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Dmanisi Municipality",
+    "associatedCityId": "Q261243",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Dnipro",
+      "name": "Borys Albertovych Filatov",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Dnipro",
+    "associatedCityId": "Q48256",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Dolores el Merendon",
+      "name": "Walter yony martinez",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Dolores el Merendon",
+    "associatedCityId": "Q2138937",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Dortmund",
+      "name": "Thomas Westphal",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Dortmund",
+    "associatedCityId": "Q1295",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Drohobych",
+      "name": "Taras Kuchma",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Drohobych",
+    "associatedCityId": "Q158821",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Lord Mayor of Dublin",
+      "name": "Alison Gilliland",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Dublin",
+    "associatedCityId": "Q1761",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Dulce Nombre",
+      "name": "Jose Misael Ardon",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Dulce Nombre",
+    "associatedCityId": "Q2392425",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Düsseldorf",
+      "name": "Dr. Stephan Keller",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Düsseldorf",
+    "associatedCityId": "Q1718",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Duyure",
+      "name": "Jorge Manrrique Pastrana Sanchez",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Duyure",
+    "associatedCityId": "Q2090091",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of El Paraiso",
+      "name": "Ligia Isabel Lainez",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "El Paraiso",
+    "associatedCityId": "Q597403",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of El Porvernir",
+      "name": "Jose Luis Rubi Acosta",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "El Porvernir",
+    "associatedCityId": "Q1644891",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Entebbe",
+      "name": "Fabrice Brad Rulinda",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Entebbe",
+    "associatedCityId": "Q211970",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Esse",
+      "name": "Ndongo Boune Martin",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Esse",
+    "associatedCityId": "Q5399420",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Fastiv",
+      "name": "Mykhailo Netiazhuk",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Fastiv",
+    "associatedCityId": "Q161984",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Florence",
+      "name": "Dario Nardella",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Florence",
+    "associatedCityId": "Q2044",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Florida Copan",
+      "name": "Rember Isaias Cuestas Valle",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Florida Copan",
+    "associatedCityId": "Q2392006",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Fort Collins",
+      "name": "Jeni Arndt",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Fort Collins",
+    "associatedCityId": "Q490732",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Fraternidad",
+      "name": "Rene jobel pacheco",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Fraternidad",
+    "associatedCityId": "Q945066",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Freetown",
+      "name": "Yvonne Aki-Sawyerr",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Freetown",
+    "associatedCityId": "Q3780",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of the City of Gdańsk",
+      "name": "Aleksandra Dulkiewicz",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Gdańsk",
+    "associatedCityId": "Q1792",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of the City of Georgetown",
+      "name": "Ubraj Narine",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Georgetown",
+    "associatedCityId": "Q10717",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Ghent",
+      "name": "Mathias De Clercq",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Ghent",
+    "associatedCityId": "Q1296",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of the Municipality of Gjakova",
+      "name": "Ardian Gjini",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Gjakova",
+    "associatedCityId": "Q474651",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Municipality of Gjilan",
+      "name": "Alban Hyseni",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Gjilan",
+    "associatedCityId": "Q739808",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Greater Manchester",
+      "name": "Mayor Andy Burnham",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Greater Manchester",
+    "associatedCityId": "Q18125",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Guascoran",
+      "name": "Gaspar Paz",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Guascoran",
+    "associatedCityId": "Q2160059",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Haarlemmermeer",
+      "name": "Marianne Schuurmans-Wijdeven",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Haarlemmermeer",
+    "associatedCityId": "Q9924",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Hebron",
+      "name": "Taysir Abu Snienah",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Hebron",
+    "associatedCityId": "Q168225",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Helsinki",
+      "name": "Juhana Vartiainen",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Helsinki",
+    "associatedCityId": "Q1757",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Hermosillo",
+      "name": "Antonio Francisco Astiazarán Gutiérrez",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Hermosillo",
+    "associatedCityId": "Q189138",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Hoboken",
+      "name": "Ravinder S. Bhalla",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Hoboken",
+    "associatedCityId": "Q138578",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Hod - Hasharon",
+      "name": "Amir Kochavi",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Hod - Hasharon",
+    "associatedCityId": "Q152379",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Horishni Plavni",
+      "name": "Dmytro Bykov",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Horishni Plavni",
+    "associatedCityId": "Q998227",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Horodnya",
+      "name": "Andrii Bohdan",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Horodnya",
+    "associatedCityId": "Q1020058",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Iganga",
+      "name": "Bamulanzeki Derrick",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Iganga",
+    "associatedCityId": "Q49298141",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of ishongororo",
+      "name": "MUGABE HASSAN",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "ishongororo",
+    "associatedCityId": "NOT_FOUND",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Jackson",
+      "name": "Chokwe Antar Lumumba",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Jackson",
+    "associatedCityId": "Q28198",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Jersey City",
+      "name": "Steven M. Fulop",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Jersey City",
+    "associatedCityId": "Q26339",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Jinja",
+      "name": "Kasolo Peter",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Jinja",
+    "associatedCityId": "Q501709",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Jutiapa",
+      "name": "Oscar Arnulfo Ayala Bautista",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Jutiapa",
+    "associatedCityId": "Q775897",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Jwaneng",
+      "name": "Olga Ditsie",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Jwaneng",
+    "associatedCityId": "Q165954",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Kalmunai",
+      "name": "Rakeeb Aboobucker",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Kalmunai",
+    "associatedCityId": "NOT_FOUND",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Kalush",
+      "name": "Andrii Naida",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Kalush",
+    "associatedCityId": "Q146453",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Kamianets-Podilskyi",
+      "name": "Mykhailo Positko",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Kamianets-Podilskyi",
+    "associatedCityId": "Q193965",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Kamianske",
+      "name": "Andrii Bilousov",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Kamianske",
+    "associatedCityId": "Q156719",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Kawempe Division",
+      "name": "Dr. Emmanuel Serunjoji",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Kawempe Division",
+    "associatedCityId": "NOT_FOUND",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Kanifing Municpal Council",
+      "name": "Talib Ahmed Bensouda",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Kanifing Municpal Council",
+    "associatedCityId": "NOT_FOUND",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Kaniv",
+      "name": "Ihor Renkas",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Kaniv",
+    "associatedCityId": "Q925340",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Kansas City",
+      "name": "Quinton Lucas",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Kansas City",
+    "associatedCityId": "Q41819",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Kaohsiung",
+      "name": "Chen Chi-Mai",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Kaohsiung",
+    "associatedCityId": "Q181557",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Karbinci",
+      "name": "Viktor Paunov",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Karbinci",
+    "associatedCityId": "NOT_FOUND",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Karlsruhe",
+      "name": "Dr. Frank Mentrup",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Karlsruhe",
+    "associatedCityId": "Q1040",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Katowice",
+      "name": "Marcin Krupa",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Katowice",
+    "associatedCityId": "Q588",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Kavadarci",
+      "name": "Mitko Janchev",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Kavadarci",
+    "associatedCityId": "Q158088",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Kearny",
+      "name": "Alberto Gonzalo Santos",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Kearny",
+    "associatedCityId": "Q776648",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Khmilnyk",
+      "name": "Yurchyshyn Mykola",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Khmilnyk",
+    "associatedCityId": "Q1011310",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Klina",
+      "name": "Zenun Elezaj",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Klina",
+    "associatedCityId": "NOT_FOUND",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Konotop",
+      "name": "Artem Semenikhin",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Konotop",
+    "associatedCityId": "Q162083",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Kraków",
+      "name": "Jacek Majchrowski",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Kraków",
+    "associatedCityId": "Q31487",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Kriva Palanka",
+      "name": "Sashko Mitovski",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Kriva Palanka",
+    "associatedCityId": "Q578396",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor (Acting) of Kryvyi Rih",
+      "name": "Yurii Hryhorovych Vilkul",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Kryvyi Rih",
+    "associatedCityId": "Q157137",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Kuntaur Area Council",
+      "name": "Saihou Jawara",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Kuntaur Area Council",
+    "associatedCityId": "NOT_FOUND",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Kyiv",
+      "name": "Vitaliy Klitschko",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Kyiv",
+    "associatedCityId": "Q1899",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of La Campa",
+      "name": "Roberto de Jesus Santos",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "La Campa",
+    "associatedCityId": "Q2394060",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of La Lima",
+      "name": "Santos Virgilio Lainez Rodriguez",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "La Lima",
+    "associatedCityId": "Q2279521",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of La Masica",
+      "name": "Ovidio Naun Turcios Calidonio",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "La Masica",
+    "associatedCityId": "Q2358954",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of La Paz",
+      "name": "Milena Paola Quiroga Romero",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "La Paz",
+    "associatedCityId": "Q1861497",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of La Venta",
+      "name": "José Adan Sierra Castro",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "La Venta",
+    "associatedCityId": "Q628829",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Lakewood",
+      "name": "Adam A. Paul",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Lakewood",
+    "associatedCityId": "Q462804",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Larnaka",
+      "name": "Andreas Vyras",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Larnaka",
+    "associatedCityId": "Q55099871",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Lefkoniko",
+      "name": "Zena Lysandrou-Panagides",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Lefkoniko",
+    "associatedCityId": "Q934563",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Lejamani",
+      "name": "Francisco Mende Rodriguez",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Lejamani",
+    "associatedCityId": "Q2148930",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Lipjan Municipality",
+      "name": "Imri Ahmeti",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Lipjan Municipality",
+    "associatedCityId": "Q994730",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Lisbon",
+      "name": "Carlos Moedas",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Lisbon",
+    "associatedCityId": "Q597",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Ljubljana",
+      "name": "Zoran Janković",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Ljubljana",
+    "associatedCityId": "Q437",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of London",
+      "name": "Sadiq Khan",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "London",
+    "associatedCityId": "Q84",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Los Angeles",
+      "name": "Eric Garcetti",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Los Angeles",
+    "associatedCityId": "Q65",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Lubaga Division",
+      "name": "Zacchy Mberaze Mawula",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Lubaga Division",
+    "associatedCityId": "Q6695057",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Madison",
+      "name": "Satya Rhodes-Conway",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Madison",
+    "associatedCityId": "Q43788",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Mafra",
+      "name": "Helder Sousa Silva",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Mafra",
+    "associatedCityId": "Q986419",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Makassar",
+      "name": "Mohammad Ramdhan Pomanto",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Makassar",
+    "associatedCityId": "Q14634",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Mandera",
+      "name": "Saleh Maalim Alio",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Mandera",
+    "associatedCityId": "Q15917979",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Lord Mayor of Mannheim",
+      "name": "Peter Kurz",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Mannheim",
+    "associatedCityId": "Q2119",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor Sanneh of Mansakonko area",
+      "name": "Landing B. Sanneh",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Mansakonko area",
+    "associatedCityId": "NOT_FOUND",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Marl",
+      "name": "Werner Arndt",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Marl",
+    "associatedCityId": "Q3813",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Matosinhos",
+      "name": "Luísa Salgueiro",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Matosinhos",
+    "associatedCityId": "Q841299",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Mbale",
+      "name": "Mamugali Cassim",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Mbale",
+    "associatedCityId": "Q1015727",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Michałowo",
+      "name": "Marek Nazarko",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Michałowo",
+    "associatedCityId": "Q2364639",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Milan",
+      "name": "Giuseppe Sala",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Milan",
+    "associatedCityId": "Q490",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Minneapolis",
+      "name": "Jacob Frey",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Minneapolis",
+    "associatedCityId": "Q36091",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Mińsk Mazowiecki",
+      "name": "Marcin Jakubowski",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Mińsk Mazowiecki",
+    "associatedCityId": "Q648071",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "The Mayor of Mława",
+      "name": "Sławomir Kowalewski",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Mława",
+    "associatedCityId": "Q983868",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Monrovia",
+      "name": "Jefferson T. Koijee",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Monrovia",
+    "associatedCityId": "Q3748",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Monterrey",
+      "name": "Luis Donaldo Colosio Riojas",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Monterrey",
+    "associatedCityId": "Q81033",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Montevideo",
+      "name": "Carolina Cosse",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Montevideo",
+    "associatedCityId": "Q1335",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Montpellier",
+      "name": "Michaël Delafosse",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Montpellier",
+    "associatedCityId": "Q6441",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Morazan",
+      "name": "Denis Mauricio Fuentes Handal",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Morazan",
+    "associatedCityId": "Q2394916",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of the Mount Vernon",
+      "name": "Shawyn Patterson-Howard",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Mount Vernon",
+    "associatedCityId": "Q835831",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Münster",
+      "name": "Markus Lewe",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Münster",
+    "associatedCityId": "Q2742",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Myrhorod",
+      "name": "Solomakha Serhii Pavlovich",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Myrhorod",
+    "associatedCityId": "Q161961",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Nadvirna",
+      "name": "Andreyovych Zinovii Myroslavovych",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Nadvirna",
+    "associatedCityId": "Q156820",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Nebbi",
+      "name": "Geoffrey Ngiriker",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Nebbi",
+    "associatedCityId": "NOT_FOUND",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Netishyn",
+      "name": "Oleksandr Suprunyuk",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Netishyn",
+    "associatedCityId": "Q997371",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Neu-Ulm",
+      "name": "Katrin Albsteiger",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Neu-Ulm",
+    "associatedCityId": "Q4120",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "mayor of Nezahualcóyotl",
+      "name": "Adolfo Cerqueda Rebollo",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Nezahualcóyotl",
+    "associatedCityId": "Q3313478",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Nijmegen",
+      "name": "Hubert Bruls",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Nijmegen",
+    "associatedCityId": "Q47887",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Nikopol",
+      "name": "Oleksandr Saiuk",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Nikopol",
+    "associatedCityId": "Q156760",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Nova Kahovka",
+      "name": "Volodymyr Kovalenko",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Nova Kahovka",
+    "associatedCityId": "Q987491",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Lord Mayor of Nuremberg",
+      "name": "Marcus König",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Nuremberg",
+    "associatedCityId": "Q2090",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Ocotepeque",
+      "name": "Israel orlando aguilar",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Ocotepeque",
+    "associatedCityId": "Q2182554",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Oklahoma City",
+      "name": "David Holt",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Oklahoma City",
+    "associatedCityId": "Q34863",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Omoa",
+      "name": "Ricardo Alvarado Escobar",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Omoa",
+    "associatedCityId": "Q520386",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Oropoli",
+      "name": "Luis Manuel Osorio",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Oropoli",
+    "associatedCityId": "Q2481144",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Orzhitsa",
+      "name": "Sydorenko Olena",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Orzhitsa",
+    "associatedCityId": "NOT_FOUND",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Palermo",
+      "name": "Leoluca Orlando",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Palermo",
+    "associatedCityId": "Q2656",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Paris",
+      "name": "Anne Hidalgo",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Paris",
+    "associatedCityId": "Q90",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Pavlograd",
+      "name": "Anatolii Vershyna",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Pavlograd",
+    "associatedCityId": "Q237206",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Pespire",
+      "name": "Hector Samuel Colindres Garcia",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Pespire",
+    "associatedCityId": "Q2602771",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Peñalolén",
+      "name": "Carolina Leitao Álvarez-Salamanca",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Peñalolén",
+    "associatedCityId": "Q51100",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Philadelphia",
+      "name": "James F. Kenney",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Philadelphia",
+    "associatedCityId": "Q1345",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Phoenix",
+      "name": "Kate Gallego",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Phoenix",
+    "associatedCityId": "Q16556",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Podgorica",
+      "name": "Ivan Vuković",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Podgorica",
+    "associatedCityId": "Q23564",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Pologi",
+      "name": "Yurii Konovalenko",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Pologi",
+    "associatedCityId": "NOT_FOUND",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Portland",
+      "name": "Ted Wheeler",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Portland",
+    "associatedCityId": "Q6106",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Potrerillos",
+      "name": "Carlos Noe Rivera Manzanares",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Potrerillos",
+    "associatedCityId": "Q1644959",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Prague",
+      "name": "Zdeněk Hřib",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Prague",
+    "associatedCityId": "Q1085",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Puerto Cortés",
+      "name": "Maria Luisa Martell Canizales",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Puerto Cortés",
+    "associatedCityId": "Q673089",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Quelimane",
+      "name": "Manuel de Araújo",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Quelimane",
+    "associatedCityId": "Q318306",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Quezon City",
+      "name": "Maria Josefina G. Belmonte",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Quezon City",
+    "associatedCityId": "Q1475",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Quito",
+      "name": "Santiago Guarderas Izquierdo",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Quito",
+    "associatedCityId": "Q2900",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of the Municipality of Rahovec",
+      "name": "Smajl Latifi",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Municipality of Rahovec",
+    "associatedCityId": "Q733155",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Reykjavík",
+      "name": "Dagur B. Eggertsson",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Reykjavík",
+    "associatedCityId": "Q1764",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of the City of Rijeka",
+      "name": "Marko Filipović",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "City of Rijeka",
+    "associatedCityId": "Q1647",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Rio de Janeiro",
+      "name": "Eduardo da Costa Paes",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Rio de Janeiro",
+    "associatedCityId": "Q8678",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Rochester Hills",
+      "name": "Bryan Barnett",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Rochester Hills",
+    "associatedCityId": "Q993444",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Saarbrücken",
+      "name": "Uwe Conradt",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Saarbrücken",
+    "associatedCityId": "Q1724",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of San Antonio",
+      "name": "Ron Nirenberg",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "San Antonio",
+    "associatedCityId": "Q975",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of San Antonio",
+      "name": "Cesar Augusto Nuñez Lagos",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "San Antonio",
+    "associatedCityId": "Q2314026",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of San isidro",
+      "name": "Mario Alberto Canales",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "San isidro",
+    "associatedCityId": "Q1646042",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of San Jeronimo",
+      "name": "Wilmer Evelio Mendoza García",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "San Jeronimo",
+    "associatedCityId": "Q427781",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of San Jose",
+      "name": "Nahun Zambrano Estrada",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "San Jose",
+    "associatedCityId": "Q2394109",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of San José",
+      "name": "Mirsa Samira Dominguez Lorenzo",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "San José",
+    "associatedCityId": "Q2394109",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of San Nicolás",
+      "name": "Angel Antonio Contreras Caballero",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "San Nicolás",
+    "associatedCityId": "Q544415",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of San Pedro Zacapa",
+      "name": "Martin Vasquez",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "San Pedro Zacapa",
+    "associatedCityId": "Q2394316",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of San Sebastian",
+      "name": "Luis Enrrique Giron Martinez",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "San Sebastian",
+    "associatedCityId": "Q3947953",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of San Sebastian",
+      "name": "Lucio Molina Cruz",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "San Sebastian",
+    "associatedCityId": "Q3947953",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Sanniki",
+      "name": "Gabriel Wieczorek",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Sanniki",
+    "associatedCityId": "Q986130",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Santa Fe",
+      "name": "José Ricardo Rosa Mata",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Santa Fe",
+    "associatedCityId": "Q1958069",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Santa Maria",
+      "name": "Gavino argueta galvez",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Santa Maria",
+    "associatedCityId": "Q2394137",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Santa Rita",
+      "name": "Jorge Humberto Pinto",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Santa Rita",
+    "associatedCityId": "Q975496",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of São Paulo",
+      "name": "Ricardo Nunes",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "São Paulo",
+    "associatedCityId": "Q174",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Sapporo",
+      "name": "Akimoto Katsuhiro",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Sapporo",
+    "associatedCityId": "Q37951",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Governor of Santiago",
+      "name": "Claudio Orrego",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Santiago",
+    "associatedCityId": "Q2887",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Savannah",
+      "name": "Van R. Johnson II",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Savannah",
+    "associatedCityId": "Q83813",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Seattle",
+      "name": "Bruce A. Harrell",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Seattle",
+    "associatedCityId": "Q5083",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Sensenti",
+      "name": "Mairon Randolfo Gomez",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Sensenti",
+    "associatedCityId": "Q582892",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Seoul",
+      "name": "Sehoon Oh",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Seoul",
+    "associatedCityId": "Q8684",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Shepetivka",
+      "name": "Vitaliy Buzyl",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Shepetivka",
+    "associatedCityId": "Q161965",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Shuto Orizari municipality",
+      "name": "Kurto Dudush",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Shuto Orizari municipality",
+    "associatedCityId": "NOT_FOUND",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Skopje",
+      "name": "Danela Arsovska",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Skopje",
+    "associatedCityId": "Q384",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Slavuta",
+      "name": "Vasyl SYDOR",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Slavuta",
+    "associatedCityId": "Q856018",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of St. Louis",
+      "name": "Tishaura O. Jones",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "St. Louis",
+    "associatedCityId": "Q38022",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Starokostyantyniv",
+      "name": "Mykola Melnychuk",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Starokostyantyniv",
+    "associatedCityId": "NOT_FOUND",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Municipality of Strumica",
+      "name": "Kostadin Kostadinov",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Municipality of Strumica",
+    "associatedCityId": "Q48814",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Stryi",
+      "name": "Kanivets Oleg",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Stryi",
+    "associatedCityId": "Q158923",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Tainan",
+      "name": "Huang Wei-che",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Tainan",
+    "associatedCityId": "Q140631",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Taipei",
+      "name": "Wan-An Chiang",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Taipei",
+    "associatedCityId": "Q1867",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Talladega",
+      "name": "Timothy L. Ragland",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Talladega",
+    "associatedCityId": "Q79975",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Taoyuan",
+      "name": "San-Cheng Chang",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Taoyuan",
+    "associatedCityId": "Q115256",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Taranto",
+      "name": "Rinaldo Melucci",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Taranto",
+    "associatedCityId": "Q13498",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Taxco de Alarcón",
+      "name": "Mario Figueroa Mundo",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Taxco de Alarcón",
+    "associatedCityId": "Q990095",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Tegucigalpa (Distrito Central)",
+      "name": "Jorge Alejandro Aldana Bardales",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Tegucigalpa (Distrito Central)",
+    "associatedCityId": "Q3238",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Terras de Bouro",
+      "name": "Manuel João Sampaio Tibo",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Terras de Bouro",
+    "associatedCityId": "Q551639",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of The Hague",
+      "name": "Jan van Zanen",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "The Hague",
+    "associatedCityId": "Q36600",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Tirana",
+      "name": "Erion Veliaj",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Tirana",
+    "associatedCityId": "Q19689",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Tkibuli",
+      "name": "David Cherkezishvili",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Tkibuli",
+    "associatedCityId": "Q941980",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Governor of Tokyo",
+      "name": "Yuriko Koike",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Tokyo",
+    "associatedCityId": "Q1490",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Tororo",
+      "name": "Kenneth Namagali",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Tororo",
+    "associatedCityId": "Q1207825",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Trenggalek",
+      "name": "Mochamad Nur Arifin",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Trenggalek",
+    "associatedCityId": "Q11139",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Trostianets",
+      "name": "Yuriy Bova",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Trostianets",
+    "associatedCityId": "Q606706",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Tukwila",
+      "name": "Allan Ekberg",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Tukwila",
+    "associatedCityId": "Q1510339",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Tulchyn",
+      "name": "Valery Vesniani",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Tulchyn",
+    "associatedCityId": "Q997568",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Turin",
+      "name": "Stefano Lo Russo",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Turin",
+    "associatedCityId": "Q495",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Ulm",
+      "name": "Gunter Czisch",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Ulm",
+    "associatedCityId": "Q3012",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Union City",
+      "name": "Brian P. Stack",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Union City",
+    "associatedCityId": "Q588834",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Uzhhorod",
+      "name": "Bohdan Andriyiv",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Uzhhorod",
+    "associatedCityId": "Q156711",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Vallecillo",
+      "name": "Hugo Eleazar Flores Valladares",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Vallecillo",
+    "associatedCityId": "Q1645152",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Velyka Pysarivka",
+      "name": "Lyudmila Biryukova",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Velyka Pysarivka",
+    "associatedCityId": "NOT_FOUND",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Velykodymersk",
+      "name": "Bochkarev Anatoly Borisovych",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Velykodymersk",
+    "associatedCityId": "NOT_FOUND",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Vila Verde",
+      "name": "Júlia Maria Caridade Rodrigues Fernandes",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Vila Verde",
+    "associatedCityId": "Q551676",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Villanueva",
+      "name": "Walter smelin Perdomo Aguilar",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Villanueva",
+    "associatedCityId": "Q2542686",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Villeda Morales",
+      "name": "Cesar Arrechavala Galindo",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Villeda Morales",
+    "associatedCityId": "Q924828",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Vinnytsia",
+      "name": "Serhii Morhunov",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Vinnytsia",
+    "associatedCityId": "Q157144",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Vyas",
+      "name": "Baikuntha Nath Neupane",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Vyas",
+    "associatedCityId": "Q1835777",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Vyzhnytsia",
+      "name": "Oleksiy Georgiyovych Chepil",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Vyzhnytsia",
+    "associatedCityId": "Q149118",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Warsaw",
+      "name": "Rafał Trzaskowski",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Warsaw",
+    "associatedCityId": "Q270",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Willis",
+      "name": "Leonard R. Reed",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Willis",
+    "associatedCityId": "Q980252",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Wrocław",
+      "name": "Jacek Zbigniew Sutryk",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Wrocław",
+    "associatedCityId": "Q1799",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Yorito",
+      "name": "Fredy Orlando Murillo Murillo",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Yorito",
+    "associatedCityId": "Q1647584",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Zakroczymia",
+      "name": "Artur Ciecierski",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Zakroczymia",
+    "associatedCityId": "NOT_FOUND",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Zelenodolsk",
+      "name": "Dmytro Neveselyi",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Zelenodolsk",
+    "associatedCityId": "Q640713",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Municipality of Zhelino",
+      "name": "Blerim Sejdi",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Municipality of Zhelino",
+    "associatedCityId": "NOT_FOUND",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  },
+  {
+    "vote": "Sign",
+    "author": {
+      "title": "Mayor of Zolotonosha",
+      "name": "Nataliia Somak",
+      "actingCapacity": "individual"
+    },
+    "organisationNameFallback": "Zolotonosha",
+    "associatedCityId": "Q219769",
+    "externalVerificationSource": "https://globalparliamentofmayors.org/global-declaration-of-mayors-for-democracy/"
+  }
+]
