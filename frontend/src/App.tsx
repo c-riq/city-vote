@@ -59,22 +59,16 @@ function App() {
     }
   };
 
-  const handleLogout = () => {
-    // No authentication to handle anymore
-  };
-
   return (
     <ThemeProvider theme={theme}>
       <BrowserRouter>
-        <Box sx={{ 
+        <Box sx={{
           bgcolor: 'background.default',
           minHeight: '100vh',
           display: 'flex',
           flexDirection: 'column'
         }}>
-          <Header
-            onLogout={handleLogout}
-          />
+          <Header />
           <Container maxWidth="lg" sx={{ flex: 1, py: 0 }}>
           <AppRoutes
             isLoading={isLoading}
