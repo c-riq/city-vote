@@ -2,11 +2,21 @@ import { useState, useEffect } from 'react';
 import { City, VoteData } from '../backendTypes';
 import { AUTOCOMPLETE_API_HOST } from '../constants';
 
+// Global memory cache for city data to persist across component re-renders
+const globalCityCache = new Map<string, City>();
+
 /**
  * Custom hook to manage city data fetching and caching
  */
 export const useCityData = (votesData: VoteData = {}) => {
-  const [cities, setCities] = useState<Record<string, City>>({});
+  // Initialize cities state with cached data
+  const [cities, setCities] = useState<Record<string, City>>(() => {
+    const cached: Record<string, City> = {};
+    globalCityCache.forEach((city, id) => {
+      cached[id] = city;
+    });
+    return cached;
+  });
   const [attemptedCityIds, setAttemptedCityIds] = useState<Set<string>>(new Set());
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
@@ -48,11 +58,11 @@ export const useCityData = (votesData: VoteData = {}) => {
         });
       });
       
-      // Find missing city IDs (those that are in votes but not in cities object)
+      // Find missing city IDs (those that are in votes but not in cities object or global cache)
       // and that we haven't attempted to fetch before
       const uniqueCityIds = [...new Set(allCityIds)];
-      const missingCityIds = uniqueCityIds.filter(id => 
-        id && !cities[id] && !attemptedCityIds.has(id)
+      const missingCityIds = uniqueCityIds.filter(id =>
+        id && !cities[id] && !globalCityCache.has(id) && !attemptedCityIds.has(id)
       );
       
       // If there are no missing cities, return
@@ -89,7 +99,7 @@ export const useCityData = (votesData: VoteData = {}) => {
           const data = await response.json();
           
           if (data.results && Array.isArray(data.results)) {
-            // Convert the results to the City format and update cities state immediately
+            // Convert the results to the City format and update both cache and state
             const batchCities: Record<string, City> = {};
             data.results.forEach((city: {
               wikidataId: string;
@@ -99,7 +109,7 @@ export const useCityData = (votesData: VoteData = {}) => {
               latitude?: number;
               longitude?: number;
             }) => {
-              batchCities[city.wikidataId] = {
+              const cityData: City = {
                 id: city.wikidataId,
                 name: city.name,
                 country: city.countryName,
@@ -108,6 +118,10 @@ export const useCityData = (votesData: VoteData = {}) => {
                 lon: city.longitude || 0,
                 authenticationKeyDistributionChannels: []
               };
+              
+              batchCities[city.wikidataId] = cityData;
+              // Update global cache
+              globalCityCache.set(city.wikidataId, cityData);
             });
             
             // Update cities state immediately with this batch
