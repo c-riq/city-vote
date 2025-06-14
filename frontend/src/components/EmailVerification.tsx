@@ -76,16 +76,10 @@ const EmailVerification: React.FC = () => {
             <Alert severity="success" sx={{ mb: 3 }}>
               {message}
             </Alert>
-            <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2, mt: 3 }}>
+            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
               <Button
                 variant="contained"
                 color="primary"
-                onClick={() => navigate('/register/city')}
-              >
-                Register Your City
-              </Button>
-              <Button
-                variant="outlined"
                 onClick={() => navigate('/login/user')}
               >
                 Go to Login
