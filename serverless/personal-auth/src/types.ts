@@ -80,6 +80,13 @@ export interface AuthGetAllUsersRequest extends AuthBaseRequest {
   sessionToken: string;
 }
 
+export interface AuthChangePasswordRequest extends AuthBaseRequest {
+  action: 'changePassword';
+  sessionToken: string;
+  currentPassword: string;
+  newPassword: string;
+}
+
 export interface AuthAddCityVerificationRequest extends AuthBaseRequest {
   action: 'addCityVerification';
   sessionToken: string;
@@ -130,6 +137,10 @@ export interface AuthUpdatePhoneVerificationResponse extends AuthBaseResponse {
     token: string;
     timestamp: string;
   };
+}
+
+export interface AuthChangePasswordResponse extends AuthBaseResponse {
+  // No additional fields needed beyond the base response
 }
 
 export interface AuthErrorResponse extends AuthBaseResponse {

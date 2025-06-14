@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import UserRegistration from './UserRegistration';
 import UserLoginForm from './UserLoginForm';
 import EmailVerification from './EmailVerification';
+import ChangePassword from './ChangePassword';
 import CityRegistration from './CityRegistration';
 import Polls from './Polls';
 import Poll from './Poll';
@@ -33,6 +34,7 @@ function AppRoutes({
       <Route path="/register/user" element={<UserRegistration />} />
       <Route path="/register/city" element={<CityRegistration />} />
       <Route path="/verify" element={<EmailVerification />} />
+      <Route path="/change-password" element={<ChangePassword />} />
       <Route path="/login/user" element={<UserLoginForm />} />
       <Route path="/users" element={<Users />} />
       <Route path="/users/:userId" element={<UserDetail />} />

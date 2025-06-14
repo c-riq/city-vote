@@ -14,6 +14,7 @@ import {
   AuthSignupResponse,
   AuthUpdateSettingsResponse,
   AuthUpdatePhoneVerificationResponse,
+  AuthChangePasswordResponse,
   AuthErrorResponse,
   AuthRegisterCityResponse,
   AuthGetAllUsersResponse,
@@ -544,6 +545,75 @@ async function handleUpdateSettings(email: string, sessionToken: string, setting
         time: new Date()
       } as AuthErrorResponse)
     };
+  }
+}
+
+// Handle change password
+async function handleChangePassword(email: string, sessionToken: string, currentPassword: string, newPassword: string): Promise<APIGatewayProxyResult> {
+  const partition = email.charAt(0).toLowerCase();
+  const userFilePath = `${USERS_PATH}/${partition}/users.json`;
+
+  try {
+    const users = await fetchFileFromS3(userFilePath);
+    const user = users[email];
+
+    if (!user) {
+      return createErrorResponse(404, 'User not found');
+    }
+
+    // Validate session token
+    const currentTime = Math.floor(Date.now() / 1000);
+    const isValidToken = user?.sessions?.some(token => {
+      const [tokenValue, expiry] = token.split('_');
+      return token === sessionToken && parseInt(expiry) > currentTime;
+    });
+
+    if (!isValidToken) {
+      return createErrorResponse(401, 'Invalid or expired session');
+    }
+
+    // Verify current password
+    const passwordMatch = await bcrypt.compare(currentPassword, user.hashedPassword);
+    if (!passwordMatch) {
+      return createErrorResponse(400, 'Current password is incorrect');
+    }
+
+    // Validate new password strength
+    const passwordValidation = validatePassword(newPassword);
+    if (!passwordValidation.isValid) {
+      return createErrorResponse(400, passwordValidation.message || 'Invalid new password');
+    }
+
+    // Check if new password is different from current password
+    const samePassword = await bcrypt.compare(newPassword, user.hashedPassword);
+    if (samePassword) {
+      return createErrorResponse(400, 'New password must be different from current password');
+    }
+
+    // Hash the new password
+    const hashedNewPassword = await bcrypt.hash(newPassword, SALT_ROUNDS);
+
+    // Update user's password
+    users[email].hashedPassword = hashedNewPassword;
+
+    // Invalidate all existing sessions except the current one for security
+    users[email].sessions = users[email].sessions.filter(token => {
+      const [, expiry] = token.split('_');
+      return token === sessionToken && parseInt(expiry) > currentTime;
+    });
+
+    await saveFileToS3(userFilePath, users);
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify({
+        message: 'Password changed successfully',
+        time: new Date()
+      } as AuthChangePasswordResponse)
+    };
+  } catch (error) {
+    console.error('Change password error:', error);
+    return createErrorResponse(500, 'Internal server error');
   }
 }
 
@@ -1104,6 +1174,24 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
       }
       
       return handleUpdateSettings(settingsEmail, settingsToken, settings);
+
+    case 'changePassword':
+      const { email: changePasswordEmail, currentPassword, newPassword } = requestData;
+      const changePasswordToken = extractSessionToken(event.headers);
+      
+      if (!changePasswordEmail || !changePasswordToken) {
+        return createErrorResponse(401, 'Missing email or session token');
+      }
+      
+      if (!currentPassword || !newPassword) {
+        return createErrorResponse(400, 'Missing current password or new password');
+      }
+      
+      if (!emailRegex.test(changePasswordEmail)) {
+        return createErrorResponse(400, 'Invalid email format');
+      }
+      
+      return handleChangePassword(changePasswordEmail, changePasswordToken, currentPassword, newPassword);
 
     case 'updatePhoneVerification':
       const { email: phoneEmail, phoneData } = requestData;

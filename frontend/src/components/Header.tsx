@@ -312,6 +312,18 @@ function Header() {
                 <ListItemText primary="Manage Users" />
               </ListItem>
             )}
+            {/* Change Password option for logged-in users */}
+            {userEmail && (
+              <ListItem button onClick={() => {
+                navigate('/change-password');
+                setDrawerOpen(false);
+              }}>
+                <ListItemIcon>
+                  <span className="material-icons">lock</span>
+                </ListItemIcon>
+                <ListItemText primary="Change Password" />
+              </ListItem>
+            )}
           </List>
           <Divider />
           <Box sx={{ p: 2 }}>
