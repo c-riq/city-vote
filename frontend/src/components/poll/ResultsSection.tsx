@@ -173,7 +173,7 @@ const PollMap: React.FC<{ votes: Vote[], cities: Record<string, City> }> = ({ vo
         country: city.country,
         population: city.population || 0,
         // Size based on population if available, or default size
-        size: city.population ? Math.max(3, city.population / 500000) : 3
+        size: city.population ? Math.max(3, Math.log(city.population / 100000 + 1) * 2) : 3
       };
     });
     

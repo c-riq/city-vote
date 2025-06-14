@@ -15,6 +15,9 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { normalizeCharacter } from './character-map';
 
+// Memory cache for city lookups
+const cityCache = new Map<string, CityData | null>();
+
 // CSV parsing and search functions
 export interface CityData {
   wikidataId: string;
@@ -113,6 +116,13 @@ function getQidPrefix(qid: string): string {
 
 // Function to find a city by its Wikidata QID
 async function findCityByQid(qid: string): Promise<CityData | null> {
+  // Check cache first
+  if (cityCache.has(qid)) {
+    console.log(`Cache hit for QID: ${qid}`);
+    return cityCache.get(qid)!;
+  }
+  
+  console.log(`Cache miss for QID: ${qid}, fetching from file`);
   // Determine which split file to use based on QID prefix
   const qidPrefix = getQidPrefix(qid);
   const splitCsvPath = path.join(__dirname, 'split_by_qid', `Q${qidPrefix}.csv`);
@@ -179,7 +189,10 @@ async function findCityByQid(qid: string): Promise<CityData | null> {
       if (supersededByIndex !== -1 && cityData[supersededByIndex] && cityData[supersededByIndex] !== '') {
         // If this city is superseded, recursively find the superseding city
         console.log(`City ${qid} is superseded by ${cityData[supersededByIndex]}, redirecting...`);
-        return findCityByQid(cityData[supersededByIndex]);
+        const supersedingCity = await findCityByQid(cityData[supersededByIndex]);
+        // Cache the result for the original QID as well
+        cityCache.set(qid, supersedingCity);
+        return supersedingCity;
       }
       
       const cityName = cityData[1];
@@ -286,7 +299,7 @@ async function findCityByQid(qid: string): Promise<CityData | null> {
         supersedes_duplicates = cityData[supersededDuplicatesIndex].split('|');
       }
       
-      return {
+      const cityResult = {
         wikidataId: cityWikidataId,
         name: cityName,
         countryWikidataId,
@@ -302,9 +315,15 @@ async function findCityByQid(qid: string): Promise<CityData | null> {
         socialMedia,
         supersedes_duplicates
       };
+      
+      // Cache the result
+      cityCache.set(qid, cityResult);
+      return cityResult;
     }
   }
   
+  // Cache the null result to avoid repeated file reads for non-existent cities
+  cityCache.set(qid, null);
   return null; // City not found
 }
 

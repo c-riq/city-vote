@@ -12,15 +12,17 @@ const AUTOCOMPLETE_API_HOST_DEV = "https://gr5ayb7nuvx4mpuqymzxdj24sa0nrtqz.lamb
 const PERSONAL_AUTH_API_HOST_DEV = "https://l5j4ujxlwnitdfi7cyc342j5fa0qudab.lambda-url.us-east-1.on.aws"
 const PUBLIC_DATA_BUCKET_URL_DEV = "https://city-vote-data-public-dev.s3.amazonaws.com"
 
-// Determine if we're in a local development environment
+// Determine environment based on hostname
 const isLocalDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+const isDevHostname = window.location.hostname === 'dev.city-vote.com';
+const useDev = isLocalDev || isDevHostname;
 
 // Export the appropriate endpoints based on environment
-export const VOTE_HOST = isLocalDev ? VOTE_HOST_DEV : VOTE_HOST_PROD;
-export const PUBLIC_API_HOST = isLocalDev ? PUBLIC_API_HOST_DEV : PUBLIC_API_HOST_PROD;
-export const AUTOCOMPLETE_API_HOST = isLocalDev ? AUTOCOMPLETE_API_HOST_DEV : AUTOCOMPLETE_API_HOST_PROD;
-export const PERSONAL_AUTH_API_HOST = isLocalDev ? PERSONAL_AUTH_API_HOST_DEV : PERSONAL_AUTH_API_HOST_PROD;
-export const PUBLIC_DATA_BUCKET_URL = isLocalDev ? PUBLIC_DATA_BUCKET_URL_DEV : PUBLIC_DATA_BUCKET_URL_PROD;
+export const VOTE_HOST = useDev ? VOTE_HOST_DEV : VOTE_HOST_PROD;
+export const PUBLIC_API_HOST = useDev ? PUBLIC_API_HOST_DEV : PUBLIC_API_HOST_PROD;
+export const AUTOCOMPLETE_API_HOST = useDev ? AUTOCOMPLETE_API_HOST_DEV : AUTOCOMPLETE_API_HOST_PROD;
+export const PERSONAL_AUTH_API_HOST = useDev ? PERSONAL_AUTH_API_HOST_DEV : PERSONAL_AUTH_API_HOST_PROD;
+export const PUBLIC_DATA_BUCKET_URL = useDev ? PUBLIC_DATA_BUCKET_URL_DEV : PUBLIC_DATA_BUCKET_URL_PROD;
 
 // Also export the dev endpoints directly for cases where they might be needed explicitly
 export { VOTE_HOST_DEV, PUBLIC_API_HOST_DEV, AUTOCOMPLETE_API_HOST_DEV, PERSONAL_AUTH_API_HOST_DEV, PUBLIC_DATA_BUCKET_URL_DEV };

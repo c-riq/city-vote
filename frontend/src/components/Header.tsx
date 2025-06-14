@@ -40,11 +40,7 @@ interface CityAutocompleteResult {
   registered?: boolean;
 }
 
-interface HeaderProps {
-  onLogout: () => void;
-}
-
-function Header({ onLogout }: HeaderProps) {
+function Header() {
   const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
@@ -55,7 +51,7 @@ function Header({ onLogout }: HeaderProps) {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [userCityInfo, setUserCityInfo] = useState<City | null>(null);
-  const autocompleteTimeoutRef = useRef<number | null>(null);
+  const autocompleteTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   
   // Check if user is logged in and listen for login/logout events
   useEffect(() => {
@@ -119,22 +115,29 @@ function Header({ onLogout }: HeaderProps) {
     checkAuthentication();
     
     // Listen for login events
-    const handleUserLogin = (event: Event) => {
+    const handleUserLogin = async (event: Event) => {
       const customEvent = event as CustomEvent<{email: string, userId: string}>;
       setUserEmail(customEvent.detail.email);
+      
+      // Fetch user city info after successful login
+      const storedToken = localStorage.getItem('userSessionToken');
+      if (storedToken) {
+        await fetchUserCityInfo(storedToken, customEvent.detail.email);
+      }
     };
     
     // Listen for logout events
-    const handleUserLogout = () => {
+    const handleLogoutEvent = () => {
       setUserEmail(null);
+      setUserCityInfo(null);
     };
     
     window.addEventListener('userLogin', handleUserLogin);
-    window.addEventListener('userLogout', handleUserLogout);
+    window.addEventListener('userLogout', handleLogoutEvent);
     
     return () => {
       window.removeEventListener('userLogin', handleUserLogin);
-      window.removeEventListener('userLogout', handleUserLogout);
+      window.removeEventListener('userLogout', handleLogoutEvent);
     };
   }, []);
   
@@ -144,6 +147,7 @@ function Header({ onLogout }: HeaderProps) {
     localStorage.removeItem('userEmail');
     localStorage.removeItem('userId');
     setUserEmail(null);
+    setUserCityInfo(null);
     
     // Dispatch logout event
     const logoutEvent = new CustomEvent('userLogout');
@@ -364,9 +368,7 @@ function Header({ onLogout }: HeaderProps) {
               color="primary"
               fullWidth
               onClick={() => {
-                if (userCityInfo) {
-                  onLogout();
-                } else if (userEmail) {
+                if (userCityInfo || userEmail) {
                   handleUserLogout();
                 } else {
                   navigate('/login/user');
@@ -564,8 +566,8 @@ function Header({ onLogout }: HeaderProps) {
                 </Button>
               )}
 
-              <IconButton 
-                onClick={onLogout}
+              <IconButton
+                onClick={handleUserLogout}
                 color="inherit"
                 title="Logout"
               >
@@ -581,7 +583,7 @@ function Header({ onLogout }: HeaderProps) {
                 </Typography>
               </Box>
               
-              <IconButton 
+              <IconButton
                 onClick={handleUserLogout}
                 color="inherit"
                 title="Logout"
