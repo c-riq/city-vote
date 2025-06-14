@@ -93,6 +93,7 @@ const UserLoginForm: React.FC<UserLoginFormProps> = ({ onLoginSuccess }) => {
       localStorage.setItem('userSessionToken', data.sessionToken);
       localStorage.setItem('userEmail', email);
       localStorage.setItem('userId', data.userId);
+      localStorage.setItem('userIsAdmin', data.isAdmin ? 'true' : 'false');
       
       // Call the onLoginSuccess callback if provided
       if (onLoginSuccess) {

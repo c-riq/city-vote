@@ -91,6 +91,9 @@ function Header() {
         if (response.ok) {
           const userData = await response.json();
           
+          // Store admin status
+          localStorage.setItem('userIsAdmin', userData.isAdmin ? 'true' : 'false');
+          
           if (userData.cityAssociations && userData.cityAssociations.length > 0) {
             // Use the first city association for now
             const cityAssociation = userData.cityAssociations[0];
@@ -146,6 +149,7 @@ function Header() {
     localStorage.removeItem('userSessionToken');
     localStorage.removeItem('userEmail');
     localStorage.removeItem('userId');
+    localStorage.removeItem('userIsAdmin');
     setUserEmail(null);
     setUserCityInfo(null);
     
@@ -296,6 +300,18 @@ function Header() {
               </ListItemIcon>
               <ListItemText primary="Register City" />
             </ListItem>
+            {/* Admin-only navigation item */}
+            {userEmail && localStorage.getItem('userIsAdmin') === 'true' && (
+              <ListItem button onClick={() => {
+                navigate('/users');
+                setDrawerOpen(false);
+              }}>
+                <ListItemIcon>
+                  <span className="material-icons">admin_panel_settings</span>
+                </ListItemIcon>
+                <ListItemText primary="Manage Users" />
+              </ListItem>
+            )}
           </List>
           <Divider />
           <Box sx={{ p: 2 }}>

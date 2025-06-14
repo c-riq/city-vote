@@ -10,6 +10,8 @@ import CityNetworkProfile from './CityNetworkProfile';
 import LandingPage from './LandingPage';
 import About from './About';
 import CreatePollPage from './CreatePollPage';
+import Users from './Users';
+import UserDetail from './UserDetail';
 import { VoteData } from '../backendTypes';
 
 interface AppRoutesProps {
@@ -32,6 +34,8 @@ function AppRoutes({
       <Route path="/register/city" element={<CityRegistration />} />
       <Route path="/verify" element={<EmailVerification />} />
       <Route path="/login/user" element={<UserLoginForm />} />
+      <Route path="/users" element={<Users />} />
+      <Route path="/users/:userId" element={<UserDetail />} />
       <Route path="/create-poll" element={<CreatePollPage />} />
       <Route path="/polls" element={
         <Polls

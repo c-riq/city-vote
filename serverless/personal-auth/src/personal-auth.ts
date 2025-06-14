@@ -15,7 +15,9 @@ import {
   AuthUpdateSettingsResponse,
   AuthUpdatePhoneVerificationResponse,
   AuthErrorResponse,
-  AuthRegisterCityResponse
+  AuthRegisterCityResponse,
+  AuthGetAllUsersResponse,
+  AuthAddCityVerificationResponse
 } from './types';
 
 const s3Client = new S3Client({ region: 'us-east-1' });
@@ -265,6 +267,7 @@ async function handleSessionVerification(email: string, sessionToken: string): P
         emailVerified: user.emailVerified,
         settings: publicProfile.settings || DEFAULT_SETTINGS,
         userId: user.userId,
+        isAdmin: user.isAdmin || false,
         phoneVerification: user.phoneVerification || null,
         cityAssociations: user.cityAssociations || [],
         time: new Date()
@@ -327,6 +330,7 @@ async function handleLogin(email: string, password: string): Promise<APIGatewayP
         emailVerified: user.emailVerified,
         settings: publicProfile.settings || DEFAULT_SETTINGS,
         userId: user.userId,
+        isAdmin: user.isAdmin || false,
         phoneVerification: user.phoneVerification || null,
         time: new Date()
       } as AuthLoginResponse)
@@ -788,6 +792,217 @@ function extractSessionToken(headers: { [name: string]: string | undefined }): s
   }
 }
 
+// Handle get all users (admin only)
+async function handleGetAllUsers(email: string, sessionToken: string): Promise<APIGatewayProxyResult> {
+  const partition = email.charAt(0).toLowerCase();
+  const userFilePath = `${USERS_PATH}/${partition}/users.json`;
+
+  try {
+    const users = await fetchFileFromS3(userFilePath);
+    const user = users[email];
+
+    if (!user) {
+      return {
+        statusCode: 404,
+        body: JSON.stringify({
+          message: 'User not found',
+          time: new Date()
+        } as AuthErrorResponse)
+      };
+    }
+
+    // Verify session token
+    const currentTime = Math.floor(Date.now() / 1000);
+    const isValidToken = user?.sessions?.some(token => {
+      const [tokenValue, expiry] = token.split('_');
+      return token === sessionToken && parseInt(expiry) > currentTime;
+    });
+
+    if (!isValidToken) {
+      return {
+        statusCode: 401,
+        body: JSON.stringify({
+          message: 'Invalid or expired session',
+          time: new Date()
+        } as AuthErrorResponse)
+      };
+    }
+
+    // Check if user is admin
+    if (!user.isAdmin) {
+      return {
+        statusCode: 403,
+        body: JSON.stringify({
+          message: 'Access denied. Administrator privileges required.',
+          time: new Date()
+        } as AuthErrorResponse)
+      };
+    }
+
+    // Fetch all users from all partitions
+    const allUsers: Array<{
+      email: string;
+      userId: string;
+      createdAt: string;
+      emailVerified: boolean;
+      cityAssociations?: any[];
+    }> = [];
+
+    // Iterate through all possible partitions (a-z, 0-9)
+    const partitions = 'abcdefghijklmnopqrstuvwxyz0123456789'.split('');
+    
+    for (const partition of partitions) {
+      try {
+        const partitionFilePath = `${USERS_PATH}/${partition}/users.json`;
+        const partitionUsers = await fetchFileFromS3(partitionFilePath);
+        
+        // Add users from this partition (excluding sensitive data)
+        for (const [userEmail, userData] of Object.entries(partitionUsers)) {
+          allUsers.push({
+            email: userEmail,
+            userId: userData.userId,
+            createdAt: userData.createdAt,
+            emailVerified: userData.emailVerified,
+            cityAssociations: userData.cityAssociations || []
+          });
+        }
+      } catch (error) {
+        // Partition file doesn't exist or is empty, continue to next partition
+        continue;
+      }
+    }
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify({
+        message: 'Users retrieved successfully',
+        users: allUsers,
+        time: new Date()
+      } as AuthGetAllUsersResponse)
+    };
+
+  } catch (error: any) {
+    console.error('Get all users error:', error);
+    return {
+      statusCode: 500,
+      body: JSON.stringify({
+        message: 'Internal server error',
+        details: error.message,
+        time: new Date()
+      } as AuthErrorResponse)
+    };
+  }
+}
+
+// Handle add city verification (admin only)
+async function handleAddCityVerification(
+  email: string,
+  sessionToken: string,
+  targetUserEmail: string,
+  verification: any
+): Promise<APIGatewayProxyResult> {
+  const partition = email.charAt(0).toLowerCase();
+  const userFilePath = `${USERS_PATH}/${partition}/users.json`;
+
+  try {
+    const users = await fetchFileFromS3(userFilePath);
+    const adminUser = users[email];
+
+    if (!adminUser) {
+      return {
+        statusCode: 404,
+        body: JSON.stringify({
+          message: 'Admin user not found',
+          time: new Date()
+        } as AuthErrorResponse)
+      };
+    }
+
+    // Verify admin session token
+    const currentTime = Math.floor(Date.now() / 1000);
+    const isValidToken = adminUser?.sessions?.some(token => {
+      const [tokenValue, expiry] = token.split('_');
+      return token === sessionToken && parseInt(expiry) > currentTime;
+    });
+
+    if (!isValidToken) {
+      return {
+        statusCode: 401,
+        body: JSON.stringify({
+          message: 'Invalid or expired session',
+          time: new Date()
+        } as AuthErrorResponse)
+      };
+    }
+
+    // Check if user is admin
+    if (!adminUser.isAdmin) {
+      return {
+        statusCode: 403,
+        body: JSON.stringify({
+          message: 'Access denied. Administrator privileges required.',
+          time: new Date()
+        } as AuthErrorResponse)
+      };
+    }
+
+    // Find the target user
+    const targetPartition = targetUserEmail.charAt(0).toLowerCase();
+    const targetUserFilePath = `${USERS_PATH}/${targetPartition}/users.json`;
+    const targetUsers = await fetchFileFromS3(targetUserFilePath);
+    const targetUser = targetUsers[targetUserEmail];
+
+    if (!targetUser) {
+      return {
+        statusCode: 404,
+        body: JSON.stringify({
+          message: 'Target user not found',
+          time: new Date()
+        } as AuthErrorResponse)
+      };
+    }
+
+    // Create the city association
+    const cityAssociation = {
+      cityId: verification.cityId,
+      title: verification.title,
+      isAuthorisedRepresentative: verification.isAuthorisedRepresentative,
+      confidence: verification.confidence,
+      identityVerifiedBy: verification.identityVerifiedBy,
+      time: verification.time
+    };
+
+    // Add the city association to the target user
+    if (!targetUser.cityAssociations) {
+      targetUser.cityAssociations = [];
+    }
+    targetUser.cityAssociations.push(cityAssociation);
+
+    // Save the updated target user data
+    await saveFileToS3(targetUserFilePath, targetUsers);
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify({
+        message: 'City verification added successfully',
+        verification: cityAssociation,
+        time: new Date()
+      } as AuthAddCityVerificationResponse)
+    };
+
+  } catch (error: any) {
+    console.error('Add city verification error:', error);
+    return {
+      statusCode: 500,
+      body: JSON.stringify({
+        message: 'Internal server error',
+        details: error.message,
+        time: new Date()
+      } as AuthErrorResponse)
+    };
+  }
+}
+
 // Lambda handler
 export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   // Handle email verification via query parameters (for email verification links)
@@ -919,6 +1134,38 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
       }
       
       return handleCityRegistration(cityEmail, cityToken, cityId);
+
+    case 'getAllUsers':
+      const { email: adminEmail } = requestData;
+      const adminToken = extractSessionToken(event.headers);
+      
+      if (!adminEmail || !adminToken) {
+        return createErrorResponse(401, 'Missing email or session token');
+      }
+      
+      if (!emailRegex.test(adminEmail)) {
+        return createErrorResponse(400, 'Invalid email format');
+      }
+      
+      return handleGetAllUsers(adminEmail, adminToken);
+
+    case 'addCityVerification':
+      const { email: verifyAdminEmail, targetUserEmail, verification } = requestData;
+      const verifyAdminToken = extractSessionToken(event.headers);
+      
+      if (!verifyAdminEmail || !verifyAdminToken) {
+        return createErrorResponse(401, 'Missing email or session token');
+      }
+      
+      if (!targetUserEmail || !verification) {
+        return createErrorResponse(400, 'Missing target user email or verification data');
+      }
+      
+      if (!emailRegex.test(verifyAdminEmail) || !emailRegex.test(targetUserEmail)) {
+        return createErrorResponse(400, 'Invalid email format');
+      }
+      
+      return handleAddCityVerification(verifyAdminEmail, verifyAdminToken, targetUserEmail, verification);
 
     default:
       return createErrorResponse(400, 'Invalid action');
