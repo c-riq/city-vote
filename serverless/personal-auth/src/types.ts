@@ -18,6 +18,7 @@ export interface AuthUserProfile {
   emailVerified: boolean;
   emailVerificationToken?: string;
   isAdmin?: boolean;
+  representingCityNetwork?: string;
   phoneVerification?: {
     phoneNumber: string;
     token: string;
@@ -88,7 +89,6 @@ export interface AuthAddCityVerificationRequest extends AuthBaseRequest {
     title: string;
     isAuthorisedRepresentative: boolean;
     confidence: number;
-    identityVerifiedBy: string;
     time: string;
   };
 }

@@ -899,7 +899,13 @@ async function handleAddCityVerification(
   email: string,
   sessionToken: string,
   targetUserEmail: string,
-  verification: any
+  verification: {
+    cityId: string;
+    title: string;
+    isAuthorisedRepresentative: boolean;
+    confidence: number;
+    time: string;
+  }
 ): Promise<APIGatewayProxyResult> {
   const partition = email.charAt(0).toLowerCase();
   const userFilePath = `${USERS_PATH}/${partition}/users.json`;
@@ -968,7 +974,7 @@ async function handleAddCityVerification(
       title: verification.title,
       isAuthorisedRepresentative: verification.isAuthorisedRepresentative,
       confidence: verification.confidence,
-      identityVerifiedBy: verification.identityVerifiedBy,
+      identityVerifiedBy: adminUser.representingCityNetwork || 'Unknown',
       time: verification.time
     };
 

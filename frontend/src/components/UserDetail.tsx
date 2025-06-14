@@ -192,7 +192,7 @@ const UserDetail: React.FC<UserDetailProps> = () => {
             title: verificationData.title,
             isAuthorisedRepresentative: verificationData.isAuthorisedRepresentative,
             confidence: verificationData.confidence,
-            identityVerifiedBy: adminUserId,
+            identityVerifiedBy: adminUserId, // This will be overridden by representingCityNetwork in backend
             time: new Date().toISOString(),
           }
         })

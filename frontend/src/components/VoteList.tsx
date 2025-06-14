@@ -172,7 +172,7 @@ const VoteList = ({ votes, cities, containerStyle, isJointStatement = false, isL
                           color: '#6a1b9a',
                           marginLeft: '4px'
                         }}>
-                          Verified ({Math.round(vote.voteInfo.cityAssociation.confidence * 100)}%)
+                          Verified ({Math.round(vote.voteInfo.cityAssociation.confidence * 100)}% by {vote.voteInfo.cityAssociation.identityVerifiedBy})
                         </span>
                       )}
                       {vote.voteInfo?.externalVerificationSource && (

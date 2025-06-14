@@ -323,6 +323,7 @@ export interface AuthUserProfile {
   emailVerified: boolean;
   emailVerificationToken?: string;
   isAdmin?: boolean;
+  representingCityNetwork?: string;
   phoneVerification?: {
     phoneNumber: string;
     token: string;
