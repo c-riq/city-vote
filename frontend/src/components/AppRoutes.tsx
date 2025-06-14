@@ -3,6 +3,8 @@ import UserRegistration from './UserRegistration';
 import UserLoginForm from './UserLoginForm';
 import EmailVerification from './EmailVerification';
 import ChangePassword from './ChangePassword';
+import ForgotPassword from './ForgotPassword';
+import ResetPassword from './ResetPassword';
 import CityRegistration from './CityRegistration';
 import Polls from './Polls';
 import Poll from './Poll';
@@ -35,6 +37,8 @@ function AppRoutes({
       <Route path="/register/city" element={<CityRegistration />} />
       <Route path="/verify" element={<EmailVerification />} />
       <Route path="/change-password" element={<ChangePassword />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
       <Route path="/login/user" element={<UserLoginForm />} />
       <Route path="/users" element={<Users />} />
       <Route path="/users/:userId" element={<UserDetail />} />

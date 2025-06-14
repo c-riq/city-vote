@@ -15,6 +15,8 @@ import {
   AuthUpdateSettingsResponse,
   AuthUpdatePhoneVerificationResponse,
   AuthChangePasswordResponse,
+  AuthForgotPasswordResponse,
+  AuthResetPasswordResponse,
   AuthErrorResponse,
   AuthRegisterCityResponse,
   AuthGetAllUsersResponse,
@@ -617,6 +619,150 @@ async function handleChangePassword(email: string, sessionToken: string, current
   }
 }
 
+// Send password reset email
+async function sendPasswordResetEmail(email: string, resetToken: string): Promise<void> {
+  const resetLink = `${HOST}/reset-password?email=${encodeURIComponent(email)}&token=${resetToken}`;
+  
+  const params = {
+    Destination: {
+      ToAddresses: [email]
+    },
+    Message: {
+      Body: {
+        Text: {
+          Data: `You have requested to reset your password for your city-vote.com account.
+
+Please click the following link to reset your password:
+${resetLink}
+
+This link will expire in 1 hour for security reasons.
+
+If you did not request this password reset, please ignore this email.
+
+Thank you,
+The city-vote.com team`
+        }
+      },
+      Subject: {
+        Data: "Reset your city-vote.com password"
+      }
+    },
+    Source: SES_SENDER
+  };
+
+  const command = new SendEmailCommand(params);
+  await sesClient.send(command);
+}
+
+// Handle forgot password
+async function handleForgotPassword(email: string): Promise<APIGatewayProxyResult> {
+  const partition = email.charAt(0).toLowerCase();
+  const userFilePath = `${USERS_PATH}/${partition}/users.json`;
+
+  try {
+    const users = await fetchFileFromS3(userFilePath);
+    const user = users[email];
+
+    if (!user) {
+      // For security reasons, don't reveal if the email exists or not
+      return {
+        statusCode: 200,
+        body: JSON.stringify({
+          message: 'If an account with that email exists, a password reset link has been sent.',
+          time: new Date()
+        } as AuthForgotPasswordResponse)
+      };
+    }
+
+    if (!user.emailVerified) {
+      return createErrorResponse(403, 'Please verify your email before requesting a password reset');
+    }
+
+    // Generate password reset token (valid for 1 hour)
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    const resetExpiry = new Date(Date.now() + 60 * 60 * 1000).toISOString(); // 1 hour from now
+
+    // Update user with reset token
+    users[email].passwordResetToken = resetToken;
+    users[email].passwordResetExpiry = resetExpiry;
+
+    await saveFileToS3(userFilePath, users);
+
+    try {
+      await sendPasswordResetEmail(email, resetToken);
+    } catch (emailError) {
+      console.error('Error sending password reset email:', emailError);
+      return createErrorResponse(500, 'Failed to send password reset email. Please try again later.');
+    }
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify({
+        message: 'If an account with that email exists, a password reset link has been sent.',
+        time: new Date()
+      } as AuthForgotPasswordResponse)
+    };
+  } catch (error) {
+    console.error('Forgot password error:', error);
+    return createErrorResponse(500, 'Internal server error');
+  }
+}
+
+// Handle reset password
+async function handleResetPassword(email: string, resetToken: string, newPassword: string): Promise<APIGatewayProxyResult> {
+  const partition = email.charAt(0).toLowerCase();
+  const userFilePath = `${USERS_PATH}/${partition}/users.json`;
+
+  try {
+    const users = await fetchFileFromS3(userFilePath);
+    const user = users[email];
+
+    if (!user) {
+      return createErrorResponse(404, 'Invalid or expired reset token');
+    }
+
+    // Check if reset token exists and is valid
+    if (!user.passwordResetToken || user.passwordResetToken !== resetToken) {
+      return createErrorResponse(400, 'Invalid or expired reset token');
+    }
+
+    // Check if reset token has expired
+    if (!user.passwordResetExpiry || new Date() > new Date(user.passwordResetExpiry)) {
+      return createErrorResponse(400, 'Invalid or expired reset token');
+    }
+
+    // Validate new password strength
+    const passwordValidation = validatePassword(newPassword);
+    if (!passwordValidation.isValid) {
+      return createErrorResponse(400, passwordValidation.message || 'Invalid password');
+    }
+
+    // Hash the new password
+    const hashedNewPassword = await bcrypt.hash(newPassword, SALT_ROUNDS);
+
+    // Update user's password and clear reset token
+    users[email].hashedPassword = hashedNewPassword;
+    users[email].passwordResetToken = undefined;
+    users[email].passwordResetExpiry = undefined;
+
+    // Invalidate all existing sessions for security
+    users[email].sessions = [];
+
+    await saveFileToS3(userFilePath, users);
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify({
+        message: 'Password reset successfully. Please log in with your new password.',
+        time: new Date()
+      } as AuthResetPasswordResponse)
+    };
+  } catch (error) {
+    console.error('Reset password error:', error);
+    return createErrorResponse(500, 'Internal server error');
+  }
+}
+
 // Validate phone token
 async function validatePhoneToken(phoneNumber: string, token: string): Promise<boolean> {
   try {
@@ -1192,6 +1338,32 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
       }
       
       return handleChangePassword(changePasswordEmail, changePasswordToken, currentPassword, newPassword);
+
+    case 'forgotPassword':
+      const { email: forgotPasswordEmail } = requestData;
+      
+      if (!forgotPasswordEmail) {
+        return createErrorResponse(400, 'Missing email');
+      }
+      
+      if (!emailRegex.test(forgotPasswordEmail)) {
+        return createErrorResponse(400, 'Invalid email format');
+      }
+      
+      return handleForgotPassword(forgotPasswordEmail);
+
+    case 'resetPassword':
+      const { email: resetPasswordEmail, resetToken, newPassword: resetNewPassword } = requestData;
+      
+      if (!resetPasswordEmail || !resetToken || !resetNewPassword) {
+        return createErrorResponse(400, 'Missing required fields');
+      }
+      
+      if (!emailRegex.test(resetPasswordEmail)) {
+        return createErrorResponse(400, 'Invalid email format');
+      }
+      
+      return handleResetPassword(resetPasswordEmail, resetToken, resetNewPassword);
 
     case 'updatePhoneVerification':
       const { email: phoneEmail, phoneData } = requestData;

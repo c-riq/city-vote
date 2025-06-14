@@ -17,6 +17,8 @@ export interface AuthUserProfile {
   sessions: string[];
   emailVerified: boolean;
   emailVerificationToken?: string;
+  passwordResetToken?: string;
+  passwordResetExpiry?: string;
   isAdmin?: boolean;
   representingCityNetwork?: string;
   phoneVerification?: {
@@ -87,6 +89,17 @@ export interface AuthChangePasswordRequest extends AuthBaseRequest {
   newPassword: string;
 }
 
+export interface AuthForgotPasswordRequest extends AuthBaseRequest {
+  action: 'forgotPassword';
+  // email is inherited from AuthBaseRequest
+}
+
+export interface AuthResetPasswordRequest extends AuthBaseRequest {
+  action: 'resetPassword';
+  resetToken: string;
+  newPassword: string;
+}
+
 export interface AuthAddCityVerificationRequest extends AuthBaseRequest {
   action: 'addCityVerification';
   sessionToken: string;
@@ -140,6 +153,14 @@ export interface AuthUpdatePhoneVerificationResponse extends AuthBaseResponse {
 }
 
 export interface AuthChangePasswordResponse extends AuthBaseResponse {
+  // No additional fields needed beyond the base response
+}
+
+export interface AuthForgotPasswordResponse extends AuthBaseResponse {
+  // No additional fields needed beyond the base response
+}
+
+export interface AuthResetPasswordResponse extends AuthBaseResponse {
   // No additional fields needed beyond the base response
 }
 
