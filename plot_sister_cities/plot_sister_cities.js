@@ -443,7 +443,7 @@ function generateHTML(cities, connections, citiesWithSisters) {
         .city-circle {
             fill: #1a237e;
             stroke: none;
-            opacity: 0.6;
+            opacity: 0.8;
             cursor: pointer;
             transition: none;
         }
@@ -569,7 +569,53 @@ function generateHTML(cities, connections, citiesWithSisters) {
         <div class="info">
             <h3>Sister City Connections</h3>
             <p>This visualization shows sister city relationships from Wikidata. Hover over any city to see its connections highlighted.</p>
-            <p><strong>Complete dataset:</strong> All ${citiesArray.length} cities with sister city relationships are displayed. City size indicates number of connections.</p>
+            <p><strong>Complete dataset:</strong> All ${citiesArray.length} cities with sister city relationships are displayed.</p>
+            
+            <div style="margin-top: 20px;">
+                <h4>Legend</h4>
+                <div style="display: flex; gap: 30px; flex-wrap: wrap;">
+                    <div>
+                        <h5 style="margin: 10px 0 5px 0;">City Circles</h5>
+                        <div style="display: flex; align-items: center; gap: 10px; margin: 5px 0;">
+                            <svg width="20" height="20">
+                                <circle cx="10" cy="10" r="2" fill="#1a237e" opacity="0.8"/>
+                            </svg>
+                            <span>Few connections (1-2)</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px; margin: 5px 0;">
+                            <svg width="20" height="20">
+                                <circle cx="10" cy="10" r="3" fill="#1a237e" opacity="0.8"/>
+                            </svg>
+                            <span>Some connections (3-5)</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px; margin: 5px 0;">
+                            <svg width="20" height="20">
+                                <circle cx="10" cy="10" r="4" fill="#1a237e" opacity="0.8"/>
+                            </svg>
+                            <span>Many connections (6+)</span>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h5 style="margin: 10px 0 5px 0;">Connection Lines</h5>
+                        <div style="display: flex; align-items: center; gap: 10px; margin: 5px 0;">
+                            <svg width="30" height="20">
+                                <path d="M5 10 L25 10" stroke="#1a237e" stroke-width="0.5" opacity="0.2"/>
+                            </svg>
+                            <span>Sister city relationship</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px; margin: 5px 0;">
+                            <svg width="30" height="20">
+                                <path d="M5 10 L25 10" stroke="#ff5722" stroke-width="4" opacity="0.9"/>
+                            </svg>
+                            <span>Highlighted connection</span>
+                        </div>
+                        <div style="margin: 5px 0;">
+                            <small><em>Lines follow great circle paths (shortest distance on globe)</em></small>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         
         <div class="controls">
