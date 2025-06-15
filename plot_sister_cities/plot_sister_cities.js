@@ -345,6 +345,31 @@ function pathToSVG(points) {
 function generateHTML(cities, connections, citiesWithSisters) {
   const citiesArray = Array.from(citiesWithSisters).map(id => cities[id]).filter(Boolean);
   
+  // Build connection counts for all cities
+  const connectionCounts = new Map();
+  connections.forEach(conn => {
+    connectionCounts.set(conn.from.id, (connectionCounts.get(conn.from.id) || 0) + 1);
+    connectionCounts.set(conn.to.id, (connectionCounts.get(conn.to.id) || 0) + 1);
+  });
+  
+  // Build connection data as JavaScript object for fast lookup
+  const connectionData = {};
+  connections.forEach((conn, index) => {
+    if (!connectionData[conn.from.id]) connectionData[conn.from.id] = [];
+    if (!connectionData[conn.to.id]) connectionData[conn.to.id] = [];
+    
+    connectionData[conn.from.id].push({
+      connectedCityId: conn.to.id,
+      pathIndex: index,
+      name: conn.to.name
+    });
+    connectionData[conn.to.id].push({
+      connectedCityId: conn.from.id,
+      pathIndex: index,
+      name: conn.from.name
+    });
+  });
+  
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -405,29 +430,49 @@ function generateHTML(cities, connections, citiesWithSisters) {
             padding: 20px;
             line-height: 1.6;
         }
-        .connection-list {
-            max-height: 300px;
-            overflow-y: auto;
-            border: 1px solid #dee2e6;
-            border-radius: 4px;
-            margin-top: 10px;
+        
+        /* Efficient CSS-only highlighting using data attributes */
+        .connection-path {
+            stroke: #1a237e;
+            stroke-width: 0.5;
+            opacity: 0.05;
+            fill: none;
+            transition: none; /* Remove transitions for performance */
         }
-        .connection-item {
-            padding: 10px;
-            border-bottom: 1px solid #eee;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        
+        .city-circle {
+            fill: #1a237e;
+            stroke: none;
+            opacity: 0.6;
+            cursor: pointer;
+            transition: none;
         }
-        .connection-item:last-child {
-            border-bottom: none;
+        
+        .city-label {
+            font-size: 8px;
+            fill: #333;
+            text-anchor: middle;
+            pointer-events: none;
+            opacity: 0;
+            transition: none;
         }
-        .connection-cities {
+        
+        /* Highlighting styles - applied via data attributes for performance */
+        [data-highlight="true"] .connection-path {
+            stroke: #ff5722;
+            stroke-width: 2;
+            opacity: 0.8;
+        }
+        
+        [data-highlight="true"] .city-circle {
+            fill: #ff5722;
+            opacity: 1;
+            stroke: none;
+        }
+        
+        [data-highlight="true"] .city-label {
+            opacity: 1;
             font-weight: bold;
-        }
-        .connection-distance {
-            color: #666;
-            font-size: 0.9em;
         }
     </style>
 </head>
@@ -435,7 +480,8 @@ function generateHTML(cities, connections, citiesWithSisters) {
     <div class="container">
         <div class="header">
             <h1>Sister Cities Network</h1>
-            <p>Global partnerships between cities visualized</p>
+            <p>Global partnerships between cities visualized - Hover over cities to see their connections</p>
+            <p><small>Showing all ${citiesArray.length} cities with sister city relationships</small></p>
         </div>
         
         <div class="stats">
@@ -457,10 +503,9 @@ function generateHTML(cities, connections, citiesWithSisters) {
             <!-- World map background -->
             <rect width="800" height="400" fill="#e3f2fd"/>
             
-            
             <!-- Sister city connections -->
             <g id="connections">
-                ${connections.map(conn => {
+                ${connections.map((conn, index) => {
                     const pathPoints = generateGreatCirclePath(
                         conn.from.latitude, conn.from.longitude,
                         conn.to.latitude, conn.to.longitude,
@@ -469,30 +514,41 @@ function generateHTML(cities, connections, citiesWithSisters) {
                     
                     const pathData = pathToSVG(pathPoints);
                     
-                    
                     return `<path d="${pathData}"
-                                  stroke="#1a237e" stroke-width="0.5" opacity="0.2" fill="none"
-                                  data-from="${conn.from.name}" data-to="${conn.to.name}"
-                                  data-distance="${Math.round(conn.distance)}">
+                                  class="connection-path"
+                                  data-path-index="${index}"
+                                  data-from-id="${conn.from.id}"
+                                  data-to-id="${conn.to.id}">
                                 <title>${conn.from.name} ↔ ${conn.to.name} (${Math.round(conn.distance)} km)</title>
                             </path>`;
+                }).join('')}
+            </g>
+            
+            <!-- All city circles -->
+            <g id="cities">
+                ${citiesArray.map(city => {
+                    const x = (city.longitude + 180) * (800 / 360);
+                    const y = (90 - city.latitude) * (400 / 180);
+                    const connectionCount = connectionCounts.get(city.id) || 0;
+                    // Even smaller radius for cleaner look
+                    const radius = Math.min(2.5, Math.max(1, 1 + connectionCount * 0.05));
+                    
+                    return `<g data-city-id="${city.id}">
+                                <circle cx="${x}" cy="${y}" r="${radius}"
+                                       class="city-circle">
+                                    <title>${city.name} (${connectionCount} connections)</title>
+                                </circle>
+                                <text x="${x}" y="${y - radius - 1}"
+                                      class="city-label">${city.name}</text>
+                            </g>`;
                 }).join('')}
             </g>
         </svg>
         
         <div class="info">
             <h3>Sister City Connections</h3>
-            <p>This visualization shows sister city relationships from Wikidata. Lines connect cities that have formal sister city partnerships.</p>
-            
-            <div class="connection-list">
-                ${connections.slice(0, 50).map(conn => `
-                    <div class="connection-item">
-                        <div class="connection-cities">${conn.from.name} ↔ ${conn.to.name}</div>
-                        <div class="connection-distance">${Math.round(conn.distance)} km</div>
-                    </div>
-                `).join('')}
-                ${connections.length > 50 ? `<div class="connection-item"><em>... and ${connections.length - 50} more connections</em></div>` : ''}
-            </div>
+            <p>This visualization shows sister city relationships from Wikidata. Hover over any city to see its connections highlighted.</p>
+            <p><strong>Complete dataset:</strong> All ${citiesArray.length} cities with sister city relationships are displayed. City size indicates number of connections.</p>
         </div>
         
         <div class="controls">
@@ -502,17 +558,83 @@ function generateHTML(cities, connections, citiesWithSisters) {
     </div>
     
     <script>
-        // Add interactivity
-        document.querySelectorAll('#connections path').forEach(path => {
-            path.addEventListener('mouseenter', function() {
-                this.style.strokeWidth = '1';
-                this.style.opacity = '0.6';
-            });
-            path.addEventListener('mouseleave', function() {
-                this.style.strokeWidth = '0.5';
-                this.style.opacity = '0.1';
-            });
+        // Ultra-fast highlighting using data attributes and CSS
+        const connectionData = ${JSON.stringify(connectionData)};
+        const svg = document.getElementById('map');
+        let currentHighlighted = null;
+        
+        // Single event listener using event delegation
+        svg.addEventListener('mouseover', function(e) {
+            const cityGroup = e.target.closest('[data-city-id]');
+            if (!cityGroup) return;
+            
+            const cityId = cityGroup.getAttribute('data-city-id');
+            highlightCity(cityId);
         });
+        
+        svg.addEventListener('mouseout', function(e) {
+            const cityGroup = e.target.closest('[data-city-id]');
+            if (cityGroup) {
+                clearHighlight();
+            }
+        });
+        
+        function highlightCity(cityId) {
+            clearHighlight();
+            
+            const connections = connectionData[cityId];
+            if (!connections) return;
+            
+            // Highlight the hovered city
+            const cityElement = document.querySelector(\`[data-city-id="\${cityId}"]\`);
+            if (cityElement) {
+                cityElement.setAttribute('data-highlight', 'true');
+            }
+            
+            // Highlight connected cities and paths
+            connections.forEach(conn => {
+                // Highlight connected city
+                const connectedCity = document.querySelector(\`[data-city-id="\${conn.connectedCityId}"]\`);
+                if (connectedCity) {
+                    connectedCity.setAttribute('data-highlight', 'true');
+                }
+                
+                // Highlight connection path
+                const path = document.querySelector(\`[data-path-index="\${conn.pathIndex}"]\`);
+                if (path) {
+                    path.setAttribute('data-highlight', 'true');
+                }
+            });
+            
+            currentHighlighted = { cityId, connections };
+        }
+        
+        function clearHighlight() {
+            if (!currentHighlighted) return;
+            
+            // Clear city highlight
+            const cityElement = document.querySelector(\`[data-city-id="\${currentHighlighted.cityId}"]\`);
+            if (cityElement) {
+                cityElement.removeAttribute('data-highlight');
+            }
+            
+            // Clear connected cities and paths
+            currentHighlighted.connections.forEach(conn => {
+                const connectedCity = document.querySelector(\`[data-city-id="\${conn.connectedCityId}"]\`);
+                if (connectedCity) {
+                    connectedCity.removeAttribute('data-highlight');
+                }
+                
+                const path = document.querySelector(\`[data-path-index="\${conn.pathIndex}"]\`);
+                if (path) {
+                    path.removeAttribute('data-highlight');
+                }
+            });
+            
+            currentHighlighted = null;
+        }
+        
+        console.log('Complete visualization ready! Showing all', ${citiesArray.length}, 'cities');
     </script>
 </body>
 </html>`;
