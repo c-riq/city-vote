@@ -1039,11 +1039,6 @@ function generateHTML(cities, connections, citiesWithSisters) {
                 return;
             }
             
-            // Debug: Log first few cities to see their country data
-            if (countryId) {
-                console.log('Sample city data:', allCities.slice(0, 3).map(c => ({name: c.name, country: c.country})));
-                console.log('Looking for country ID:', countryId);
-            }
             
             // Filter cities
             allCities.forEach(city => {
@@ -1066,11 +1061,6 @@ function generateHTML(cities, connections, citiesWithSisters) {
                 }
             });
             
-            console.log('Filter applied - cityQuery:', cityQuery, 'countryId:', countryId, 'filtered cities:', filteredCities.size);
-            if (countryId && filteredCities.size === 0) {
-                console.log('No cities found for country. Available countries in data:',
-                    [...new Set(allCities.map(c => c.country))].slice(0, 10));
-            }
             
             // Apply visual filters
             updateVisualization();
@@ -1218,7 +1208,6 @@ function generateHTML(cities, connections, citiesWithSisters) {
             filterStatus.textContent = \`Showing \${visibleCities} cities and \${visibleConnections} connections (filtered from \${allCities.length} cities and \${allConnections.length} connections)\`;
         }
         
-        console.log('Complete visualization ready! Showing all', ${citiesArray.length}, 'cities');
     </script>
 </body>
 </html>`;
