@@ -14,8 +14,13 @@ import {
   AuthSignupResponse,
   AuthUpdateSettingsResponse,
   AuthUpdatePhoneVerificationResponse,
+  AuthChangePasswordResponse,
+  AuthForgotPasswordResponse,
+  AuthResetPasswordResponse,
   AuthErrorResponse,
-  AuthRegisterCityResponse
+  AuthRegisterCityResponse,
+  AuthGetAllUsersResponse,
+  AuthAddCityVerificationResponse
 } from './types';
 
 const s3Client = new S3Client({ region: 'us-east-1' });
@@ -265,6 +270,7 @@ async function handleSessionVerification(email: string, sessionToken: string): P
         emailVerified: user.emailVerified,
         settings: publicProfile.settings || DEFAULT_SETTINGS,
         userId: user.userId,
+        isAdmin: user.isAdmin || false,
         phoneVerification: user.phoneVerification || null,
         cityAssociations: user.cityAssociations || [],
         time: new Date()
@@ -327,6 +333,7 @@ async function handleLogin(email: string, password: string): Promise<APIGatewayP
         emailVerified: user.emailVerified,
         settings: publicProfile.settings || DEFAULT_SETTINGS,
         userId: user.userId,
+        isAdmin: user.isAdmin || false,
         phoneVerification: user.phoneVerification || null,
         time: new Date()
       } as AuthLoginResponse)
@@ -540,6 +547,219 @@ async function handleUpdateSettings(email: string, sessionToken: string, setting
         time: new Date()
       } as AuthErrorResponse)
     };
+  }
+}
+
+// Handle change password
+async function handleChangePassword(email: string, sessionToken: string, currentPassword: string, newPassword: string): Promise<APIGatewayProxyResult> {
+  const partition = email.charAt(0).toLowerCase();
+  const userFilePath = `${USERS_PATH}/${partition}/users.json`;
+
+  try {
+    const users = await fetchFileFromS3(userFilePath);
+    const user = users[email];
+
+    if (!user) {
+      return createErrorResponse(404, 'User not found');
+    }
+
+    // Validate session token
+    const currentTime = Math.floor(Date.now() / 1000);
+    const isValidToken = user?.sessions?.some(token => {
+      const [tokenValue, expiry] = token.split('_');
+      return token === sessionToken && parseInt(expiry) > currentTime;
+    });
+
+    if (!isValidToken) {
+      return createErrorResponse(401, 'Invalid or expired session');
+    }
+
+    // Verify current password
+    const passwordMatch = await bcrypt.compare(currentPassword, user.hashedPassword);
+    if (!passwordMatch) {
+      return createErrorResponse(400, 'Current password is incorrect');
+    }
+
+    // Validate new password strength
+    const passwordValidation = validatePassword(newPassword);
+    if (!passwordValidation.isValid) {
+      return createErrorResponse(400, passwordValidation.message || 'Invalid new password');
+    }
+
+    // Check if new password is different from current password
+    const samePassword = await bcrypt.compare(newPassword, user.hashedPassword);
+    if (samePassword) {
+      return createErrorResponse(400, 'New password must be different from current password');
+    }
+
+    // Hash the new password
+    const hashedNewPassword = await bcrypt.hash(newPassword, SALT_ROUNDS);
+
+    // Update user's password
+    users[email].hashedPassword = hashedNewPassword;
+
+    // Invalidate all existing sessions except the current one for security
+    users[email].sessions = users[email].sessions.filter(token => {
+      const [, expiry] = token.split('_');
+      return token === sessionToken && parseInt(expiry) > currentTime;
+    });
+
+    await saveFileToS3(userFilePath, users);
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify({
+        message: 'Password changed successfully',
+        time: new Date()
+      } as AuthChangePasswordResponse)
+    };
+  } catch (error) {
+    console.error('Change password error:', error);
+    return createErrorResponse(500, 'Internal server error');
+  }
+}
+
+// Send password reset email
+async function sendPasswordResetEmail(email: string, resetToken: string): Promise<void> {
+  const resetLink = `${HOST}/reset-password?email=${encodeURIComponent(email)}&token=${resetToken}`;
+  
+  const params = {
+    Destination: {
+      ToAddresses: [email]
+    },
+    Message: {
+      Body: {
+        Text: {
+          Data: `You have requested to reset your password for your city-vote.com account.
+
+Please click the following link to reset your password:
+${resetLink}
+
+This link will expire in 1 hour for security reasons.
+
+If you did not request this password reset, please ignore this email.
+
+Thank you,
+The city-vote.com team`
+        }
+      },
+      Subject: {
+        Data: "Reset your city-vote.com password"
+      }
+    },
+    Source: SES_SENDER
+  };
+
+  const command = new SendEmailCommand(params);
+  await sesClient.send(command);
+}
+
+// Handle forgot password
+async function handleForgotPassword(email: string): Promise<APIGatewayProxyResult> {
+  const partition = email.charAt(0).toLowerCase();
+  const userFilePath = `${USERS_PATH}/${partition}/users.json`;
+
+  try {
+    const users = await fetchFileFromS3(userFilePath);
+    const user = users[email];
+
+    if (!user) {
+      // For security reasons, don't reveal if the email exists or not
+      return {
+        statusCode: 200,
+        body: JSON.stringify({
+          message: 'If an account with that email exists, a password reset link has been sent.',
+          time: new Date()
+        } as AuthForgotPasswordResponse)
+      };
+    }
+
+    if (!user.emailVerified) {
+      return createErrorResponse(403, 'Please verify your email before requesting a password reset');
+    }
+
+    // Generate password reset token (valid for 1 hour)
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    const resetExpiry = new Date(Date.now() + 60 * 60 * 1000).toISOString(); // 1 hour from now
+
+    // Update user with reset token
+    users[email].passwordResetToken = resetToken;
+    users[email].passwordResetExpiry = resetExpiry;
+
+    await saveFileToS3(userFilePath, users);
+
+    try {
+      await sendPasswordResetEmail(email, resetToken);
+    } catch (emailError) {
+      console.error('Error sending password reset email:', emailError);
+      return createErrorResponse(500, 'Failed to send password reset email. Please try again later.');
+    }
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify({
+        message: 'If an account with that email exists, a password reset link has been sent.',
+        time: new Date()
+      } as AuthForgotPasswordResponse)
+    };
+  } catch (error) {
+    console.error('Forgot password error:', error);
+    return createErrorResponse(500, 'Internal server error');
+  }
+}
+
+// Handle reset password
+async function handleResetPassword(email: string, resetToken: string, newPassword: string): Promise<APIGatewayProxyResult> {
+  const partition = email.charAt(0).toLowerCase();
+  const userFilePath = `${USERS_PATH}/${partition}/users.json`;
+
+  try {
+    const users = await fetchFileFromS3(userFilePath);
+    const user = users[email];
+
+    if (!user) {
+      return createErrorResponse(404, 'Invalid or expired reset token');
+    }
+
+    // Check if reset token exists and is valid
+    if (!user.passwordResetToken || user.passwordResetToken !== resetToken) {
+      return createErrorResponse(400, 'Invalid or expired reset token');
+    }
+
+    // Check if reset token has expired
+    if (!user.passwordResetExpiry || new Date() > new Date(user.passwordResetExpiry)) {
+      return createErrorResponse(400, 'Invalid or expired reset token');
+    }
+
+    // Validate new password strength
+    const passwordValidation = validatePassword(newPassword);
+    if (!passwordValidation.isValid) {
+      return createErrorResponse(400, passwordValidation.message || 'Invalid password');
+    }
+
+    // Hash the new password
+    const hashedNewPassword = await bcrypt.hash(newPassword, SALT_ROUNDS);
+
+    // Update user's password and clear reset token
+    users[email].hashedPassword = hashedNewPassword;
+    users[email].passwordResetToken = undefined;
+    users[email].passwordResetExpiry = undefined;
+
+    // Invalidate all existing sessions for security
+    users[email].sessions = [];
+
+    await saveFileToS3(userFilePath, users);
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify({
+        message: 'Password reset successfully. Please log in with your new password.',
+        time: new Date()
+      } as AuthResetPasswordResponse)
+    };
+  } catch (error) {
+    console.error('Reset password error:', error);
+    return createErrorResponse(500, 'Internal server error');
   }
 }
 
@@ -788,6 +1008,223 @@ function extractSessionToken(headers: { [name: string]: string | undefined }): s
   }
 }
 
+// Handle get all users (admin only)
+async function handleGetAllUsers(email: string, sessionToken: string): Promise<APIGatewayProxyResult> {
+  const partition = email.charAt(0).toLowerCase();
+  const userFilePath = `${USERS_PATH}/${partition}/users.json`;
+
+  try {
+    const users = await fetchFileFromS3(userFilePath);
+    const user = users[email];
+
+    if (!user) {
+      return {
+        statusCode: 404,
+        body: JSON.stringify({
+          message: 'User not found',
+          time: new Date()
+        } as AuthErrorResponse)
+      };
+    }
+
+    // Verify session token
+    const currentTime = Math.floor(Date.now() / 1000);
+    const isValidToken = user?.sessions?.some(token => {
+      const [tokenValue, expiry] = token.split('_');
+      return token === sessionToken && parseInt(expiry) > currentTime;
+    });
+
+    if (!isValidToken) {
+      return {
+        statusCode: 401,
+        body: JSON.stringify({
+          message: 'Invalid or expired session',
+          time: new Date()
+        } as AuthErrorResponse)
+      };
+    }
+
+    // Check if user is admin
+    if (!user.isAdmin) {
+      return {
+        statusCode: 403,
+        body: JSON.stringify({
+          message: 'Access denied. Administrator privileges required.',
+          time: new Date()
+        } as AuthErrorResponse)
+      };
+    }
+
+    // Fetch all users from all partitions
+    const allUsers: Array<{
+      email: string;
+      userId: string;
+      createdAt: string;
+      emailVerified: boolean;
+      cityAssociations?: any[];
+    }> = [];
+
+    // Iterate through all possible partitions (a-z, 0-9)
+    const partitions = 'abcdefghijklmnopqrstuvwxyz0123456789'.split('');
+    
+    for (const partition of partitions) {
+      try {
+        const partitionFilePath = `${USERS_PATH}/${partition}/users.json`;
+        const partitionUsers = await fetchFileFromS3(partitionFilePath);
+        
+        // Add users from this partition (excluding sensitive data)
+        for (const [userEmail, userData] of Object.entries(partitionUsers)) {
+          allUsers.push({
+            email: userEmail,
+            userId: userData.userId,
+            createdAt: userData.createdAt,
+            emailVerified: userData.emailVerified,
+            cityAssociations: userData.cityAssociations || []
+          });
+        }
+      } catch (error) {
+        // Partition file doesn't exist or is empty, continue to next partition
+        continue;
+      }
+    }
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify({
+        message: 'Users retrieved successfully',
+        users: allUsers,
+        time: new Date()
+      } as AuthGetAllUsersResponse)
+    };
+
+  } catch (error: any) {
+    console.error('Get all users error:', error);
+    return {
+      statusCode: 500,
+      body: JSON.stringify({
+        message: 'Internal server error',
+        details: error.message,
+        time: new Date()
+      } as AuthErrorResponse)
+    };
+  }
+}
+
+// Handle add city verification (admin only)
+async function handleAddCityVerification(
+  email: string,
+  sessionToken: string,
+  targetUserEmail: string,
+  verification: {
+    cityId: string;
+    title: string;
+    isAuthorisedRepresentative: boolean;
+    confidence: number;
+    time: string;
+  }
+): Promise<APIGatewayProxyResult> {
+  const partition = email.charAt(0).toLowerCase();
+  const userFilePath = `${USERS_PATH}/${partition}/users.json`;
+
+  try {
+    const users = await fetchFileFromS3(userFilePath);
+    const adminUser = users[email];
+
+    if (!adminUser) {
+      return {
+        statusCode: 404,
+        body: JSON.stringify({
+          message: 'Admin user not found',
+          time: new Date()
+        } as AuthErrorResponse)
+      };
+    }
+
+    // Verify admin session token
+    const currentTime = Math.floor(Date.now() / 1000);
+    const isValidToken = adminUser?.sessions?.some(token => {
+      const [tokenValue, expiry] = token.split('_');
+      return token === sessionToken && parseInt(expiry) > currentTime;
+    });
+
+    if (!isValidToken) {
+      return {
+        statusCode: 401,
+        body: JSON.stringify({
+          message: 'Invalid or expired session',
+          time: new Date()
+        } as AuthErrorResponse)
+      };
+    }
+
+    // Check if user is admin
+    if (!adminUser.isAdmin) {
+      return {
+        statusCode: 403,
+        body: JSON.stringify({
+          message: 'Access denied. Administrator privileges required.',
+          time: new Date()
+        } as AuthErrorResponse)
+      };
+    }
+
+    // Find the target user
+    const targetPartition = targetUserEmail.charAt(0).toLowerCase();
+    const targetUserFilePath = `${USERS_PATH}/${targetPartition}/users.json`;
+    const targetUsers = await fetchFileFromS3(targetUserFilePath);
+    const targetUser = targetUsers[targetUserEmail];
+
+    if (!targetUser) {
+      return {
+        statusCode: 404,
+        body: JSON.stringify({
+          message: 'Target user not found',
+          time: new Date()
+        } as AuthErrorResponse)
+      };
+    }
+
+    // Create the city association
+    const cityAssociation = {
+      cityId: verification.cityId,
+      title: verification.title,
+      isAuthorisedRepresentative: verification.isAuthorisedRepresentative,
+      confidence: verification.confidence,
+      identityVerifiedBy: adminUser.representingCityNetwork || 'Unknown',
+      time: verification.time
+    };
+
+    // Add the city association to the target user
+    if (!targetUser.cityAssociations) {
+      targetUser.cityAssociations = [];
+    }
+    targetUser.cityAssociations.push(cityAssociation);
+
+    // Save the updated target user data
+    await saveFileToS3(targetUserFilePath, targetUsers);
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify({
+        message: 'City verification added successfully',
+        verification: cityAssociation,
+        time: new Date()
+      } as AuthAddCityVerificationResponse)
+    };
+
+  } catch (error: any) {
+    console.error('Add city verification error:', error);
+    return {
+      statusCode: 500,
+      body: JSON.stringify({
+        message: 'Internal server error',
+        details: error.message,
+        time: new Date()
+      } as AuthErrorResponse)
+    };
+  }
+}
+
 // Lambda handler
 export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   // Handle email verification via query parameters (for email verification links)
@@ -884,6 +1321,50 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
       
       return handleUpdateSettings(settingsEmail, settingsToken, settings);
 
+    case 'changePassword':
+      const { email: changePasswordEmail, currentPassword, newPassword } = requestData;
+      const changePasswordToken = extractSessionToken(event.headers);
+      
+      if (!changePasswordEmail || !changePasswordToken) {
+        return createErrorResponse(401, 'Missing email or session token');
+      }
+      
+      if (!currentPassword || !newPassword) {
+        return createErrorResponse(400, 'Missing current password or new password');
+      }
+      
+      if (!emailRegex.test(changePasswordEmail)) {
+        return createErrorResponse(400, 'Invalid email format');
+      }
+      
+      return handleChangePassword(changePasswordEmail, changePasswordToken, currentPassword, newPassword);
+
+    case 'forgotPassword':
+      const { email: forgotPasswordEmail } = requestData;
+      
+      if (!forgotPasswordEmail) {
+        return createErrorResponse(400, 'Missing email');
+      }
+      
+      if (!emailRegex.test(forgotPasswordEmail)) {
+        return createErrorResponse(400, 'Invalid email format');
+      }
+      
+      return handleForgotPassword(forgotPasswordEmail);
+
+    case 'resetPassword':
+      const { email: resetPasswordEmail, resetToken, newPassword: resetNewPassword } = requestData;
+      
+      if (!resetPasswordEmail || !resetToken || !resetNewPassword) {
+        return createErrorResponse(400, 'Missing required fields');
+      }
+      
+      if (!emailRegex.test(resetPasswordEmail)) {
+        return createErrorResponse(400, 'Invalid email format');
+      }
+      
+      return handleResetPassword(resetPasswordEmail, resetToken, resetNewPassword);
+
     case 'updatePhoneVerification':
       const { email: phoneEmail, phoneData } = requestData;
       const phoneToken = extractSessionToken(event.headers);
@@ -919,6 +1400,38 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
       }
       
       return handleCityRegistration(cityEmail, cityToken, cityId);
+
+    case 'getAllUsers':
+      const { email: adminEmail } = requestData;
+      const adminToken = extractSessionToken(event.headers);
+      
+      if (!adminEmail || !adminToken) {
+        return createErrorResponse(401, 'Missing email or session token');
+      }
+      
+      if (!emailRegex.test(adminEmail)) {
+        return createErrorResponse(400, 'Invalid email format');
+      }
+      
+      return handleGetAllUsers(adminEmail, adminToken);
+
+    case 'addCityVerification':
+      const { email: verifyAdminEmail, targetUserEmail, verification } = requestData;
+      const verifyAdminToken = extractSessionToken(event.headers);
+      
+      if (!verifyAdminEmail || !verifyAdminToken) {
+        return createErrorResponse(401, 'Missing email or session token');
+      }
+      
+      if (!targetUserEmail || !verification) {
+        return createErrorResponse(400, 'Missing target user email or verification data');
+      }
+      
+      if (!emailRegex.test(verifyAdminEmail) || !emailRegex.test(targetUserEmail)) {
+        return createErrorResponse(400, 'Invalid email format');
+      }
+      
+      return handleAddCityVerification(verifyAdminEmail, verifyAdminToken, targetUserEmail, verification);
 
     default:
       return createErrorResponse(400, 'Invalid action');

@@ -17,6 +17,10 @@ export interface AuthUserProfile {
   sessions: string[];
   emailVerified: boolean;
   emailVerificationToken?: string;
+  passwordResetToken?: string;
+  passwordResetExpiry?: string;
+  isAdmin?: boolean;
+  representingCityNetwork?: string;
   phoneVerification?: {
     phoneNumber: string;
     token: string;
@@ -73,6 +77,42 @@ export interface AuthUpdatePhoneVerificationRequest extends AuthBaseRequest {
   };
 }
 
+export interface AuthGetAllUsersRequest extends AuthBaseRequest {
+  action: 'getAllUsers';
+  sessionToken: string;
+}
+
+export interface AuthChangePasswordRequest extends AuthBaseRequest {
+  action: 'changePassword';
+  sessionToken: string;
+  currentPassword: string;
+  newPassword: string;
+}
+
+export interface AuthForgotPasswordRequest extends AuthBaseRequest {
+  action: 'forgotPassword';
+  // email is inherited from AuthBaseRequest
+}
+
+export interface AuthResetPasswordRequest extends AuthBaseRequest {
+  action: 'resetPassword';
+  resetToken: string;
+  newPassword: string;
+}
+
+export interface AuthAddCityVerificationRequest extends AuthBaseRequest {
+  action: 'addCityVerification';
+  sessionToken: string;
+  targetUserEmail: string;
+  verification: {
+    cityId: string;
+    title: string;
+    isAuthorisedRepresentative: boolean;
+    confidence: number;
+    time: string;
+  };
+}
+
 // Response types
 export interface AuthBaseResponse {
   message: string;
@@ -83,6 +123,7 @@ export interface AuthSessionVerificationResponse extends AuthBaseResponse {
   emailVerified: boolean;
   settings: AuthUserSettings;
   userId: string;
+  isAdmin?: boolean;
   phoneVerification: {
     phoneNumber: string;
     token: string;
@@ -111,6 +152,18 @@ export interface AuthUpdatePhoneVerificationResponse extends AuthBaseResponse {
   };
 }
 
+export interface AuthChangePasswordResponse extends AuthBaseResponse {
+  // No additional fields needed beyond the base response
+}
+
+export interface AuthForgotPasswordResponse extends AuthBaseResponse {
+  // No additional fields needed beyond the base response
+}
+
+export interface AuthResetPasswordResponse extends AuthBaseResponse {
+  // No additional fields needed beyond the base response
+}
+
 export interface AuthErrorResponse extends AuthBaseResponse {
   details?: string;
 }
@@ -123,4 +176,18 @@ export interface AuthRegisterCityRequest extends AuthBaseRequest {
 
 export interface AuthRegisterCityResponse extends AuthBaseResponse {
   cityId: string;
+}
+
+export interface AuthGetAllUsersResponse extends AuthBaseResponse {
+  users: Array<{
+    email: string;
+    userId: string;
+    createdAt: string;
+    emailVerified: boolean;
+    cityAssociations?: CityAssociation[];
+  }>;
+}
+
+export interface AuthAddCityVerificationResponse extends AuthBaseResponse {
+  verification: CityAssociation;
 }

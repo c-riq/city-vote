@@ -322,6 +322,8 @@ export interface AuthUserProfile {
   sessions: string[];
   emailVerified: boolean;
   emailVerificationToken?: string;
+  isAdmin?: boolean;
+  representingCityNetwork?: string;
   phoneVerification?: {
     phoneNumber: string;
     token: string;
@@ -378,6 +380,25 @@ export interface AuthUpdatePhoneVerificationRequest extends AuthBaseRequest {
   };
 }
 
+export interface AuthGetAllUsersRequest extends AuthBaseRequest {
+  action: 'getAllUsers';
+  sessionToken: string;
+}
+
+export interface AuthAddCityVerificationRequest extends AuthBaseRequest {
+  action: 'addCityVerification';
+  sessionToken: string;
+  targetUserEmail: string;
+  verification: {
+    cityId: string;
+    title: string;
+    isAuthorisedRepresentative: boolean;
+    confidence: number;
+    identityVerifiedBy: string;
+    time: string;
+  };
+}
+
 // Response types
 export interface AuthBaseResponse {
   message: string;
@@ -388,6 +409,7 @@ export interface AuthSessionVerificationResponse extends AuthBaseResponse {
   emailVerified: boolean;
   settings: AuthUserSettings;
   userId: string;
+  isAdmin?: boolean;
   phoneVerification: {
     phoneNumber: string;
     token: string;
@@ -428,6 +450,20 @@ export interface AuthRegisterCityRequest extends AuthBaseRequest {
 
 export interface AuthRegisterCityResponse extends AuthBaseResponse {
   cityId: string;
+}
+
+export interface AuthGetAllUsersResponse extends AuthBaseResponse {
+  users: Array<{
+    email: string;
+    userId: string;
+    createdAt: string;
+    emailVerified: boolean;
+    cityAssociations?: CityAssociation[];
+  }>;
+}
+
+export interface AuthAddCityVerificationResponse extends AuthBaseResponse {
+  verification: CityAssociation;
 }
 
 

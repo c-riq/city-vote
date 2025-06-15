@@ -28,6 +28,7 @@ const UserLoginForm: React.FC<UserLoginFormProps> = ({ onLoginSuccess }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
+  const [resetSuccess, setResetSuccess] = useState(false);
 
   useEffect(() => {
     // Check if user was redirected from registration
@@ -36,6 +37,16 @@ const UserLoginForm: React.FC<UserLoginFormProps> = ({ onLoginSuccess }) => {
       // Clean up the URL parameter
       const newSearchParams = new URLSearchParams(searchParams);
       newSearchParams.delete('registered');
+      navigate(`/login/user${newSearchParams.toString() ? `?${newSearchParams.toString()}` : ''}`, { replace: true });
+    }
+    
+    // Check if user was redirected from successful password reset
+    if (searchParams.get('reset') === 'success') {
+      setResetSuccess(true);
+      setError(''); // Clear any existing errors
+      // Clean up the URL parameter
+      const newSearchParams = new URLSearchParams(searchParams);
+      newSearchParams.delete('reset');
       navigate(`/login/user${newSearchParams.toString() ? `?${newSearchParams.toString()}` : ''}`, { replace: true });
     }
   }, [searchParams, navigate]);
@@ -93,6 +104,7 @@ const UserLoginForm: React.FC<UserLoginFormProps> = ({ onLoginSuccess }) => {
       localStorage.setItem('userSessionToken', data.sessionToken);
       localStorage.setItem('userEmail', email);
       localStorage.setItem('userId', data.userId);
+      localStorage.setItem('userIsAdmin', data.isAdmin ? 'true' : 'false');
       
       // Call the onLoginSuccess callback if provided
       if (onLoginSuccess) {
@@ -131,6 +143,12 @@ const UserLoginForm: React.FC<UserLoginFormProps> = ({ onLoginSuccess }) => {
         {registrationSuccess && (
           <Alert severity="success" sx={{ mb: 3 }}>
             Account created successfully! Please check your email to verify your account before signing in.
+          </Alert>
+        )}
+
+        {resetSuccess && (
+          <Alert severity="success" sx={{ mb: 3 }}>
+            Password reset successfully! You can now sign in with your new password.
           </Alert>
         )}
 
@@ -208,6 +226,17 @@ const UserLoginForm: React.FC<UserLoginFormProps> = ({ onLoginSuccess }) => {
         <Divider sx={{ my: 3 }} />
         
         <Box sx={{ textAlign: 'center' }}>
+          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+            Forgot your password?
+          </Typography>
+          <Button
+            variant="text"
+            onClick={() => navigate('/forgot-password')}
+            sx={{ mb: 2 }}
+          >
+            Reset Password
+          </Button>
+          
           <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
             Don't have an account yet?
           </Typography>
