@@ -45,6 +45,15 @@ echo "Copy images..."
 mkdir -p dist/public/img
 cp -r public/img/* dist/public/img/
 
+echo "Copy sister cities visualization..."
+if [ -f "../plot_sister_cities/sister_cities_map.html" ]; then
+    cp ../plot_sister_cities/sister_cities_map.html dist/sister-cities.html
+    echo "Sister cities map copied to dist/sister-cities.html"
+else
+    echo "Warning: Sister cities map not found at ../plot_sister_cities/sister_cities_map.html"
+    echo "Run 'node plot_sister_cities/plot_sister_cities.js' to generate it first"
+fi
+
 # Sync all files with minimal cache duration
 echo Synching Build Folder: $s3_bucket...
 aws s3 sync dist/ s3://$s3_bucket --delete --exclude "**/.DS_Store" --cache-control "max-age=60,no-cache,must-revalidate,public"
