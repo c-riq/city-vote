@@ -370,6 +370,153 @@ function generateHTML(cities, connections, citiesWithSisters) {
     });
   });
   
+  // Extract countries data for filter
+  const countries = [
+    ["Afghanistan","AF","AFG","004","Q889"],
+    ["Albania","AL","ALB","008","Q222"],
+    ["Algeria","DZ","DZA","012","Q262"],
+    ["Andorra","AD","AND","020","Q228"],
+    ["Angola","AO","AGO","024","Q916"],
+    ["Argentina","AR","ARG","032","Q414"],
+    ["Armenia","AM","ARM","051","Q399"],
+    ["Australia","AU","AUS","036","Q408"],
+    ["Austria","AT","AUT","040","Q40"],
+    ["Azerbaijan","AZ","AZE","031","Q227"],
+    ["Bahrain","BH","BHR","048","Q398"],
+    ["Bangladesh","BD","BGD","050","Q902"],
+    ["Belarus","BY","BLR","112","Q184"],
+    ["Belgium","BE","BEL","056","Q31"],
+    ["Benin","BJ","BEN","204","Q962"],
+    ["Bhutan","BT","BTN","064","Q917"],
+    ["Bolivia","BO","BOL","068","Q750"],
+    ["Bosnia and Herzegovina","BA","BIH","070","Q225"],
+    ["Botswana","BW","BWA","072","Q963"],
+    ["Brazil","BR","BRA","076","Q155"],
+    ["Brunei Darussalam","BN","BRN","096","Q921"],
+    ["Bulgaria","BG","BGR","100","Q219"],
+    ["Burkina Faso","BF","BFA","854","Q965"],
+    ["Burundi","BI","BDI","108","Q967"],
+    ["Cambodia","KH","KHM","116","Q424"],
+    ["Cameroon","CM","CMR","120","Q1009"],
+    ["Canada","CA","CAN","124","Q16"],
+    ["Central African Republic","CF","CAF","140","Q929"],
+    ["Chad","TD","TCD","148","Q657"],
+    ["Chile","CL","CHL","152","Q298"],
+    ["China","CN","CHN","156","Q148"],
+    ["Colombia","CO","COL","170","Q739"],
+    ["Democratic Republic of the Congo","CD","COD","180","Q974"],
+    ["Congo","CG","COG","178","Q971"],
+    ["Costa Rica","CR","CRI","188","Q800"],
+    ["Croatia","HR","HRV","191","Q224"],
+    ["Cuba","CU","CUB","192","Q241"],
+    ["Cyprus","CY","CYP","196","Q229"],
+    ["Czechia","CZ","CZE","203","Q213"],
+    ["Denmark","DK","DNK","208","Q35"],
+    ["Djibouti","DJ","DJI","262","Q977"],
+    ["Dominican Republic","DO","DOM","214","Q786"],
+    ["Ecuador","EC","ECU","218","Q736"],
+    ["Egypt","EG","EGY","818","Q79"],
+    ["El Salvador","SV","SLV","222","Q792"],
+    ["Estonia","EE","EST","233","Q191"],
+    ["Ethiopia","ET","ETH","231","Q115"],
+    ["Finland","FI","FIN","246","Q33"],
+    ["France","FR","FRA","250","Q142"],
+    ["Gabon","GA","GAB","266","Q1000"],
+    ["Georgia","GE","GEO","268","Q230"],
+    ["Germany","DE","DEU","276","Q183"],
+    ["Ghana","GH","GHA","288","Q117"],
+    ["Greece","GR","GRC","300","Q41"],
+    ["Guatemala","GT","GTM","320","Q774"],
+    ["Guinea","GN","GIN","324","Q1006"],
+    ["Hungary","HU","HUN","348","Q28"],
+    ["Iceland","IS","ISL","352","Q189"],
+    ["India","IN","IND","356","Q668"],
+    ["Indonesia","ID","IDN","360","Q252"],
+    ["Iran","IR","IRN","364","Q794"],
+    ["Iraq","IQ","IRQ","368","Q796"],
+    ["Ireland","IE","IRL","372","Q27"],
+    ["Israel","IL","ISR","376","Q801"],
+    ["Italy","IT","ITA","380","Q38"],
+    ["Japan","JP","JPN","392","Q17"],
+    ["Jordan","JO","JOR","400","Q810"],
+    ["Kazakhstan","KZ","KAZ","398","Q232"],
+    ["Kenya","KE","KEN","404","Q114"],
+    ["South Korea","KR","KOR","410","Q884"],
+    ["Kyrgyzstan","KG","KGZ","417","Q813"],
+    ["Latvia","LV","LVA","428","Q211"],
+    ["Lebanon","LB","LBN","422","Q822"],
+    ["Liberia","LR","LBR","430","Q1014"],
+    ["Libya","LY","LBY","434","Q1016"],
+    ["Lithuania","LT","LTU","440","Q37"],
+    ["Luxembourg","LU","LUX","442","Q32"],
+    ["Madagascar","MG","MDG","450","Q1019"],
+    ["Malawi","MW","MWI","454","Q1020"],
+    ["Malaysia","MY","MYS","458","Q833"],
+    ["Mali","ML","MLI","466","Q912"],
+    ["Malta","MT","MLT","470","Q233"],
+    ["Mauritania","MR","MRT","478","Q1025"],
+    ["Mexico","MX","MEX","484","Q96"],
+    ["Moldova","MD","MDA","498","Q217"],
+    ["Mongolia","MN","MNG","496","Q711"],
+    ["Montenegro","ME","MNE","499","Q236"],
+    ["Morocco","MA","MAR","504","Q1028"],
+    ["Mozambique","MZ","MOZ","508","Q1029"],
+    ["Myanmar","MM","MMR","104","Q836"],
+    ["Namibia","NA","NAM","516","Q1030"],
+    ["Nepal","NP","NPL","524","Q837"],
+    ["Netherlands","NL","NLD","528","Q55"],
+    ["New Zealand","NZ","NZL","554","Q664"],
+    ["Nicaragua","NI","NIC","558","Q811"],
+    ["Niger","NE","NER","562","Q1032"],
+    ["Nigeria","NG","NGA","566","Q1033"],
+    ["Norway","NO","NOR","578","Q20"],
+    ["Pakistan","PK","PAK","586","Q843"],
+    ["Palestine","PS","PSE","275","Q219060"],
+    ["Paraguay","PY","PRY","600","Q733"],
+    ["Philippines","PH","PHL","608","Q928"],
+    ["Poland","PL","POL","616","Q36"],
+    ["Portugal","PT","PRT","620","Q45"],
+    ["Qatar","QA","QAT","634","Q846"],
+    ["North Macedonia","MK","MKD","807","Q221"],
+    ["Romania","RO","ROU","642","Q218"],
+    ["Russia","RU","RUS","643","Q159"],
+    ["Rwanda","RW","RWA","646","Q1037"],
+    ["Saudi Arabia","SA","SAU","682","Q851"],
+    ["Senegal","SN","SEN","686","Q1041"],
+    ["Sierra Leone","SL","SLE","694","Q1044"],
+    ["Singapore","SG","SGP","702","Q334"],
+    ["Slovakia","SK","SVK","703","Q214"],
+    ["Slovenia","SI","SVN","705","Q215"],
+    ["Somalia","SO","SOM","706","Q1045"],
+    ["South Africa","ZA","ZAF","710","Q258"],
+    ["South Sudan","SS","SSD","728","Q958"],
+    ["Spain","ES","ESP","724","Q29"],
+    ["Sri Lanka","LK","LKA","144","Q854"],
+    ["Sudan","SD","SDN","729","Q1049"],
+    ["Sweden","SE","SWE","752","Q34"],
+    ["Switzerland","CH","CHE","756","Q39"],
+    ["Taiwan","TW","TWN","158","Q865"],
+    ["Tajikistan","TJ","TJK","762","Q863"],
+    ["Tanzania, United Republic of","TZ","TZA","834","Q924"],
+    ["Thailand","TH","THA","764","Q869"],
+    ["Togo","TG","TGO","768","Q945"],
+    ["Tunisia","TN","TUN","788","Q948"],
+    ["Turkey","TR","TUR","792","Q43"],
+    ["Turkmenistan","TM","TKM","795","Q874"],
+    ["Uganda","UG","UGA","800","Q1036"],
+    ["Ukraine","UA","UKR","804","Q212"],
+    ["United Arab Emirates","AE","ARE","784","Q878"],
+    ["United Kingdom","GB","GBR","826","Q145"],
+    ["United States of America","US","USA","840","Q30"],
+    ["Uruguay","UY","URY","858","Q77"],
+    ["Uzbekistan","UZ","UZB","860","Q265"],
+    ["Venezuela","VE","VEN","862","Q717"],
+    ["Viet Nam","VN","VNM","704","Q881"],
+    ["Yemen","YE","YEM","887","Q805"],
+    ["Zambia","ZM","ZMB","894","Q953"],
+    ["Zimbabwe","ZW","ZWE","716","Q954"]
+  ];
+  
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -448,6 +595,22 @@ function generateHTML(cities, connections, citiesWithSisters) {
             transition: none;
         }
         
+        .city-circle.filtered-match {
+            fill: #ff5722;
+            opacity: 0.8;
+        }
+        
+        .city-circle.filtered-connection {
+            fill: #2196f3;
+            opacity: 0.6;
+        }
+        
+        .connection-path.filtered-connection {
+            stroke: #2196f3;
+            stroke-width: 1;
+            opacity: 0.3;
+        }
+        
         .city-label {
             font-size: 9px;
             fill: white;
@@ -489,8 +652,37 @@ function generateHTML(cities, connections, citiesWithSisters) {
     <div class="container">
         <div class="header">
             <h1>Sister Cities Network</h1>
-            <p>Global partnerships between cities visualized - Hover over cities to see their connections</p>
-            <p><small>Showing all ${citiesArray.length} cities with sister city relationships</small></p>
+            <p>Sister city relationships from Wikidata - Hover over cities to see their connections</p>
+            <p><small>Displaying ${citiesArray.length} cities with documented sister city relationships</small></p>
+        </div>
+        
+        <div class="controls">
+            <h4>Filters</h4>
+            <div style="display: flex; gap: 20px; margin-bottom: 15px; flex-wrap: wrap;">
+                <div style="flex: 1; min-width: 250px;">
+                    <label for="cityFilter" style="display: block; margin-bottom: 5px; font-weight: bold;">Filter by City:</label>
+                    <input type="text" id="cityFilter" placeholder="Type exact city name..."
+                           style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                    <div id="cityAutocomplete" style="position: relative; background: white; border: 1px solid #ddd; border-top: none; max-height: 200px; overflow-y: auto; display: none;"></div>
+                </div>
+                <div style="flex: 1; min-width: 250px;">
+                    <label for="countryFilter" style="display: block; margin-bottom: 5px; font-weight: bold;">Filter by Country:</label>
+                    <select id="countryFilter" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                        <option value="">All Countries</option>
+                        ${countries.map(country => `<option value="${country[4]}">${country[0]}</option>`).join('')}
+                    </select>
+                </div>
+                <div style="display: flex; align-items: end; gap: 10px;">
+                    <button id="clearFilters" style="padding: 8px 16px; background: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer;">Clear Filters</button>
+                </div>
+            </div>
+            <div id="filterStatus" style="margin-bottom: 15px; font-style: italic; color: #666;"></div>
+            <div style="margin-bottom: 15px;">
+                <strong>Filter Legend:</strong>
+                <span style="color: #ff5722;">● Matches filter</span> |
+                <span style="color: #2196f3;">● Connected cities</span> |
+                <span style="color: #1a237e;">● Other cities</span>
+            </div>
         </div>
         
         <div class="stats">
@@ -566,6 +758,20 @@ function generateHTML(cities, connections, citiesWithSisters) {
             </g>
         </svg>
         
+        <div id="hoverInfo" style="padding: 15px; background: #f8f9fa; border: 1px solid #dee2e6; margin: 10px 0; min-height: 60px; display: none;">
+            <h4 style="margin: 0 0 10px 0;">City Information</h4>
+            <div style="display: flex; gap: 30px;">
+                <div style="flex: 1;">
+                    <strong>Hovered City:</strong>
+                    <div id="hoveredCity" style="margin-top: 5px; font-size: 14px;"></div>
+                </div>
+                <div style="flex: 2;">
+                    <strong>Sister Cities:</strong>
+                    <div id="sisterCities" style="margin-top: 5px; font-size: 14px; max-height: 100px; overflow-y: auto;"></div>
+                </div>
+            </div>
+        </div>
+        
         <div class="info">
             <h3>Sister City Connections</h3>
             <p>This visualization shows sister city relationships from Wikidata. Hover over any city to see its connections highlighted.</p>
@@ -618,7 +824,9 @@ function generateHTML(cities, connections, citiesWithSisters) {
             </div>
         </div>
         
-        <div class="controls">
+        <div class="info">
+            <h3>About This Visualization</h3>
+            <p>This visualization shows sister city relationships documented in Wikidata. The data may not be complete as it depends on community contributions to Wikidata.</p>
             <p><strong>Data Source:</strong> Wikidata sister city relationships (P190)</p>
             <p><strong>Generated:</strong> ${new Date().toISOString().split('T')[0]}</p>
         </div>
@@ -664,6 +872,9 @@ function generateHTML(cities, connections, citiesWithSisters) {
             const connections = connectionData[cityId];
             if (!connections) return;
             
+            // Show hover information
+            showHoverInfo(cityId, connections);
+            
             // Highlight the hovered city (circle and label)
             const cityElement = document.querySelector(\`#cities [data-city-id="\${cityId}"]\`);
             const cityLabel = document.querySelector(\`#labels [data-city-id="\${cityId}"]\`);
@@ -699,6 +910,9 @@ function generateHTML(cities, connections, citiesWithSisters) {
         function clearHighlight() {
             if (!currentHighlighted) return;
             
+            // Hide hover information
+            document.getElementById('hoverInfo').style.display = 'none';
+            
             // Clear city highlight (circle and label)
             const cityElement = document.querySelector(\`#cities [data-city-id="\${currentHighlighted.cityId}"]\`);
             const cityLabel = document.querySelector(\`#labels [data-city-id="\${currentHighlighted.cityId}"]\`);
@@ -727,6 +941,281 @@ function generateHTML(cities, connections, citiesWithSisters) {
             });
             
             currentHighlighted = null;
+        }
+        
+        function showHoverInfo(cityId, connections) {
+            const city = allCities.find(c => c.id === cityId);
+            if (!city) return;
+            
+            // Show hover info panel
+            document.getElementById('hoverInfo').style.display = 'block';
+            
+            // Update hovered city info
+            document.getElementById('hoveredCity').innerHTML = \`
+                <strong>\${city.name}</strong><br>
+                <small>Population: \${city.population ? city.population.toLocaleString() : 'Unknown'}</small>
+            \`;
+            
+            // Update sister cities list
+            const sisterCitiesList = connections.map(conn => conn.name).sort().join(', ');
+            document.getElementById('sisterCities').innerHTML = \`
+                <div>\${connections.length} sister cities: \${sisterCitiesList}</div>
+            \`;
+        }
+        
+        // Filter functionality
+        const allCities = ${JSON.stringify(citiesArray)};
+        const allConnections = ${JSON.stringify(connections)};
+        let filteredCities = new Set();
+        let isFiltered = false;
+        
+        const cityFilter = document.getElementById('cityFilter');
+        const countryFilter = document.getElementById('countryFilter');
+        const clearFiltersBtn = document.getElementById('clearFilters');
+        const filterStatus = document.getElementById('filterStatus');
+        const cityAutocomplete = document.getElementById('cityAutocomplete');
+        
+        // City autocomplete functionality
+        cityFilter.addEventListener('input', function() {
+            const query = this.value.toLowerCase().trim();
+            
+            if (query.length < 2) {
+                cityAutocomplete.style.display = 'none';
+                return;
+            }
+            
+            const matches = allCities
+                .filter(city => city.name.toLowerCase().includes(query))
+                .slice(0, 10)
+                .sort((a, b) => a.name.localeCompare(b.name));
+            
+            if (matches.length > 0) {
+                cityAutocomplete.innerHTML = matches
+                    .map(city => \`<div style="padding: 8px; cursor: pointer; border-bottom: 1px solid #eee;"
+                                       onmouseover="this.style.background='#f0f0f0'"
+                                       onmouseout="this.style.background='white'"
+                                       onclick="selectCity('\${city.id}', '\${city.name.replace(/'/g, "\\\\'")}')">
+                                       \${city.name}
+                                   </div>\`)
+                    .join('');
+                cityAutocomplete.style.display = 'block';
+            } else {
+                cityAutocomplete.style.display = 'none';
+            }
+        });
+        
+        // Hide autocomplete when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!cityFilter.contains(e.target) && !cityAutocomplete.contains(e.target)) {
+                cityAutocomplete.style.display = 'none';
+            }
+        });
+        
+        window.selectCity = function(cityId, cityName) {
+            cityFilter.value = cityName;
+            cityAutocomplete.style.display = 'none';
+            applyFilters();
+        };
+        
+        // Country filter
+        countryFilter.addEventListener('change', applyFilters);
+        
+        // Clear filters
+        clearFiltersBtn.addEventListener('click', function() {
+            cityFilter.value = '';
+            countryFilter.value = '';
+            clearFilters();
+        });
+        
+        function applyFilters() {
+            const cityQuery = cityFilter.value.toLowerCase().trim();
+            const countryId = countryFilter.value;
+            
+            filteredCities.clear();
+            isFiltered = cityQuery || countryId;
+            
+            if (!isFiltered) {
+                clearFilters();
+                return;
+            }
+            
+            // Debug: Log first few cities to see their country data
+            if (countryId) {
+                console.log('Sample city data:', allCities.slice(0, 3).map(c => ({name: c.name, country: c.country})));
+                console.log('Looking for country ID:', countryId);
+            }
+            
+            // Filter cities
+            allCities.forEach(city => {
+                let matches = true;
+                
+                if (cityQuery && city.name.toLowerCase() !== cityQuery) {
+                    matches = false;
+                }
+                
+                if (countryId) {
+                    // More robust country matching - handle potential data inconsistencies
+                    const cityCountry = city.country;
+                    if (cityCountry !== countryId) {
+                        matches = false;
+                    }
+                }
+                
+                if (matches) {
+                    filteredCities.add(city.id);
+                }
+            });
+            
+            console.log('Filter applied - cityQuery:', cityQuery, 'countryId:', countryId, 'filtered cities:', filteredCities.size);
+            if (countryId && filteredCities.size === 0) {
+                console.log('No cities found for country. Available countries in data:',
+                    [...new Set(allCities.map(c => c.country))].slice(0, 10));
+            }
+            
+            // Apply visual filters
+            updateVisualization();
+            updateFilterStatus();
+        }
+        
+        function clearFilters() {
+            filteredCities.clear();
+            isFiltered = false;
+            
+            // Reset all city colors to default
+            document.querySelectorAll('#cities [data-city-id]').forEach(cityElement => {
+                const circle = cityElement.querySelector('.city-circle') || cityElement.querySelector('circle');
+                cityElement.style.display = 'block';
+                if (circle) {
+                    circle.setAttribute('class', 'city-circle');
+                    circle.style.fill = '#1a237e';
+                    circle.style.opacity = '0.8';
+                }
+            });
+            
+            // Show all labels
+            document.querySelectorAll('#labels [data-city-id]').forEach(labelElement => {
+                labelElement.style.display = 'block';
+            });
+            
+            // Reset all connections
+            document.querySelectorAll('.connection-path').forEach(pathElement => {
+                pathElement.style.display = 'block';
+                pathElement.className = 'connection-path';
+            });
+            
+            updateFilterStatus();
+        }
+        
+        function updateVisualization() {
+            if (!isFiltered) {
+                // No filter - show all cities normally
+                document.querySelectorAll('#cities [data-city-id]').forEach(cityElement => {
+                    const circle = cityElement.querySelector('.city-circle');
+                    cityElement.style.display = 'block';
+                    circle.className = 'city-circle';
+                });
+                
+                document.querySelectorAll('#labels [data-city-id]').forEach(labelElement => {
+                    labelElement.style.display = 'block';
+                });
+                
+                document.querySelectorAll('.connection-path').forEach(pathElement => {
+                    pathElement.style.display = 'block';
+                    pathElement.className = 'connection-path';
+                });
+                return;
+            }
+            
+            // Build set of all connected cities
+            const connectedCities = new Set();
+            filteredCities.forEach(cityId => {
+                const connections = connectionData[cityId];
+                if (connections) {
+                    connections.forEach(conn => {
+                        connectedCities.add(conn.connectedCityId);
+                    });
+                }
+            });
+            
+            // Update city circles with different colors
+            document.querySelectorAll('#cities [data-city-id]').forEach(cityElement => {
+                const cityId = cityElement.getAttribute('data-city-id');
+                const circle = cityElement.querySelector('.city-circle') || cityElement.querySelector('circle');
+                
+                if (filteredCities.has(cityId)) {
+                    // City matches filter - show in orange
+                    cityElement.style.display = 'block';
+                    if (circle) {
+                        circle.setAttribute('class', 'city-circle filtered-match');
+                        // Also set inline styles as fallback
+                        circle.style.fill = '#ff5722';
+                        circle.style.opacity = '0.8';
+                    }
+                } else if (connectedCities.has(cityId)) {
+                    // City is connected to filtered cities - show in blue
+                    cityElement.style.display = 'block';
+                    if (circle) {
+                        circle.setAttribute('class', 'city-circle filtered-connection');
+                        // Also set inline styles as fallback
+                        circle.style.fill = '#2196f3';
+                        circle.style.opacity = '0.6';
+                    }
+                } else {
+                    // Hide other cities
+                    cityElement.style.display = 'none';
+                    if (circle) {
+                        circle.setAttribute('class', 'city-circle');
+                        circle.style.fill = '#1a237e';
+                        circle.style.opacity = '0.8';
+                    }
+                }
+            });
+            
+            // Update labels
+            document.querySelectorAll('#labels [data-city-id]').forEach(labelElement => {
+                const cityId = labelElement.getAttribute('data-city-id');
+                
+                if (filteredCities.has(cityId) || connectedCities.has(cityId)) {
+                    labelElement.style.display = 'block';
+                } else {
+                    labelElement.style.display = 'none';
+                }
+            });
+            
+            // Update connections - show connections between visible cities
+            document.querySelectorAll('.connection-path').forEach(pathElement => {
+                const fromId = pathElement.getAttribute('data-from-id');
+                const toId = pathElement.getAttribute('data-to-id');
+                
+                const fromVisible = filteredCities.has(fromId) || connectedCities.has(fromId);
+                const toVisible = filteredCities.has(toId) || connectedCities.has(toId);
+                
+                if (fromVisible && toVisible) {
+                    pathElement.style.display = 'block';
+                    // Highlight connections involving filtered cities
+                    if (filteredCities.has(fromId) || filteredCities.has(toId)) {
+                        pathElement.className = 'connection-path filtered-connection';
+                    } else {
+                        pathElement.className = 'connection-path';
+                    }
+                } else {
+                    pathElement.style.display = 'none';
+                }
+            });
+        }
+        
+        function updateFilterStatus() {
+            if (!isFiltered) {
+                filterStatus.textContent = '';
+                return;
+            }
+            
+            const visibleCities = filteredCities.size;
+            const visibleConnections = allConnections.filter(conn =>
+                filteredCities.has(conn.from.id) && filteredCities.has(conn.to.id)
+            ).length;
+            
+            filterStatus.textContent = \`Showing \${visibleCities} cities and \${visibleConnections} connections (filtered from \${allCities.length} cities and \${allConnections.length} connections)\`;
         }
         
         console.log('Complete visualization ready! Showing all', ${citiesArray.length}, 'cities');

@@ -186,7 +186,7 @@ export const countries = {
         ["Qatar","QA","QAT","634","Q846",2639211,"2017-01-01"],
         ["North Macedonia","MK","MKD","807","Q221",1836713,"2021-01-01"],
         ["Romania","RO","ROU","642","Q218",19053815,"2022-01-01"],
-        ["Russian","RU","RUS","643","Q159",146119928,"2025-01-01"],
+        ["Russia","RU","RUS","643","Q159",146119928,"2025-01-01"],
         ["Rwanda","RW","RWA","646","Q1037",14569341,"2025-01-01"],
         ["Réunion","RE","REU","638","",null,null],
         ["Saint Barthélemy","BL","BLM","652","",null,null],
