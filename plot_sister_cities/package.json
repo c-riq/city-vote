@@ -1,0 +1,21 @@
+{
+  "name": "plot-sister-cities",
+  "version": "1.0.0",
+  "description": "Simple visualization of sister cities relationships from Wikidata",
+  "main": "plot_sister_cities.js",
+  "scripts": {
+    "start": "node plot_sister_cities.js",
+    "plot": "node plot_sister_cities.js"
+  },
+  "keywords": [
+    "sister-cities",
+    "wikidata",
+    "visualization",
+    "mapping"
+  ],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
