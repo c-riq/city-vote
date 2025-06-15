@@ -449,19 +449,25 @@ function generateHTML(cities, connections, citiesWithSisters) {
         }
         
         .city-label {
-            font-size: 8px;
-            fill: #333;
+            font-size: 9px;
+            fill: white;
+            stroke: black;
+            stroke-width: 0.8;
+            stroke-linejoin: round;
+            stroke-linecap: round;
             text-anchor: middle;
             pointer-events: none;
             opacity: 0;
             transition: none;
+            paint-order: stroke fill; /* Stroke behind fill for better readability */
+            filter: drop-shadow(1px 1px 1px rgba(0,0,0,0.8));
         }
         
-        /* Highlighting styles - applied via data attributes for performance */
-        [data-highlight="true"] .connection-path {
+        /* Highlighting styles - applied directly to elements */
+        .connection-path[data-highlight="true"] {
             stroke: #ff5722;
-            stroke-width: 2;
-            opacity: 0.8;
+            stroke-width: 1;
+            opacity: 0.9;
         }
         
         [data-highlight="true"] .city-circle {
@@ -470,9 +476,12 @@ function generateHTML(cities, connections, citiesWithSisters) {
             stroke: none;
         }
         
-        [data-highlight="true"] .city-label {
+        .city-label[data-highlight="true"] {
             opacity: 1;
             font-weight: bold;
+            fill: white;
+            stroke: #ff5722;
+            stroke-width: 0.5;
         }
     </style>
 </head>
@@ -503,7 +512,25 @@ function generateHTML(cities, connections, citiesWithSisters) {
             <!-- World map background -->
             <rect width="800" height="400" fill="#e3f2fd"/>
             
-            <!-- Sister city connections -->
+            <!-- City circles (bottom layer) -->
+            <g id="cities">
+                ${citiesArray.map(city => {
+                    const x = (city.longitude + 180) * (800 / 360);
+                    const y = (90 - city.latitude) * (400 / 180);
+                    const connectionCount = connectionCounts.get(city.id) || 0;
+                    // Even smaller radius for cleaner look
+                    const radius = Math.min(2.5, Math.max(1, 1 + connectionCount * 0.05));
+                    
+                    return `<g data-city-id="${city.id}">
+                                <circle cx="${x}" cy="${y}" r="${radius}"
+                                       class="city-circle">
+                                    <title>${city.name} (${connectionCount} connections)</title>
+                                </circle>
+                            </g>`;
+                }).join('')}
+            </g>
+            
+            <!-- Sister city connections (middle layer) -->
             <g id="connections">
                 ${connections.map((conn, index) => {
                     const pathPoints = generateGreatCirclePath(
@@ -518,29 +545,23 @@ function generateHTML(cities, connections, citiesWithSisters) {
                                   class="connection-path"
                                   data-path-index="${index}"
                                   data-from-id="${conn.from.id}"
-                                  data-to-id="${conn.to.id}">
-                                <title>${conn.from.name} ↔ ${conn.to.name} (${Math.round(conn.distance)} km)</title>
+                                  data-to-id="${conn.to.id}"
+                                  pointer-events="none">
                             </path>`;
                 }).join('')}
             </g>
             
-            <!-- All city circles -->
-            <g id="cities">
+            <!-- City labels (top layer) -->
+            <g id="labels">
                 ${citiesArray.map(city => {
                     const x = (city.longitude + 180) * (800 / 360);
                     const y = (90 - city.latitude) * (400 / 180);
                     const connectionCount = connectionCounts.get(city.id) || 0;
-                    // Even smaller radius for cleaner look
                     const radius = Math.min(2.5, Math.max(1, 1 + connectionCount * 0.05));
                     
-                    return `<g data-city-id="${city.id}">
-                                <circle cx="${x}" cy="${y}" r="${radius}"
-                                       class="city-circle">
-                                    <title>${city.name} (${connectionCount} connections)</title>
-                                </circle>
-                                <text x="${x}" y="${y - radius - 1}"
-                                      class="city-label">${city.name}</text>
-                            </g>`;
+                    return `<text x="${x}" y="${y - radius - 1}"
+                                  class="city-label"
+                                  data-city-id="${city.id}">${city.name}</text>`;
                 }).join('')}
             </g>
         </svg>
@@ -565,16 +586,28 @@ function generateHTML(cities, connections, citiesWithSisters) {
         
         // Single event listener using event delegation
         svg.addEventListener('mouseover', function(e) {
-            const cityGroup = e.target.closest('[data-city-id]');
-            if (!cityGroup) return;
+            // Check if we're hovering over a city circle or label
+            const cityCircle = e.target.closest('#cities [data-city-id]');
+            const cityLabel = e.target.closest('#labels [data-city-id]');
             
-            const cityId = cityGroup.getAttribute('data-city-id');
-            highlightCity(cityId);
+            let cityId = null;
+            if (cityCircle) {
+                cityId = cityCircle.getAttribute('data-city-id');
+            } else if (cityLabel) {
+                cityId = cityLabel.getAttribute('data-city-id');
+            }
+            
+            if (cityId) {
+                highlightCity(cityId);
+            }
         });
         
         svg.addEventListener('mouseout', function(e) {
-            const cityGroup = e.target.closest('[data-city-id]');
-            if (cityGroup) {
+            // Check if we're leaving a city circle or label
+            const cityCircle = e.target.closest('#cities [data-city-id]');
+            const cityLabel = e.target.closest('#labels [data-city-id]');
+            
+            if (cityCircle || cityLabel) {
                 clearHighlight();
             }
         });
@@ -585,18 +618,26 @@ function generateHTML(cities, connections, citiesWithSisters) {
             const connections = connectionData[cityId];
             if (!connections) return;
             
-            // Highlight the hovered city
-            const cityElement = document.querySelector(\`[data-city-id="\${cityId}"]\`);
+            // Highlight the hovered city (circle and label)
+            const cityElement = document.querySelector(\`#cities [data-city-id="\${cityId}"]\`);
+            const cityLabel = document.querySelector(\`#labels [data-city-id="\${cityId}"]\`);
             if (cityElement) {
                 cityElement.setAttribute('data-highlight', 'true');
+            }
+            if (cityLabel) {
+                cityLabel.setAttribute('data-highlight', 'true');
             }
             
             // Highlight connected cities and paths
             connections.forEach(conn => {
-                // Highlight connected city
-                const connectedCity = document.querySelector(\`[data-city-id="\${conn.connectedCityId}"]\`);
+                // Highlight connected city (circle and label)
+                const connectedCity = document.querySelector(\`#cities [data-city-id="\${conn.connectedCityId}"]\`);
+                const connectedLabel = document.querySelector(\`#labels [data-city-id="\${conn.connectedCityId}"]\`);
                 if (connectedCity) {
                     connectedCity.setAttribute('data-highlight', 'true');
+                }
+                if (connectedLabel) {
+                    connectedLabel.setAttribute('data-highlight', 'true');
                 }
                 
                 // Highlight connection path
@@ -612,17 +653,25 @@ function generateHTML(cities, connections, citiesWithSisters) {
         function clearHighlight() {
             if (!currentHighlighted) return;
             
-            // Clear city highlight
-            const cityElement = document.querySelector(\`[data-city-id="\${currentHighlighted.cityId}"]\`);
+            // Clear city highlight (circle and label)
+            const cityElement = document.querySelector(\`#cities [data-city-id="\${currentHighlighted.cityId}"]\`);
+            const cityLabel = document.querySelector(\`#labels [data-city-id="\${currentHighlighted.cityId}"]\`);
             if (cityElement) {
                 cityElement.removeAttribute('data-highlight');
+            }
+            if (cityLabel) {
+                cityLabel.removeAttribute('data-highlight');
             }
             
             // Clear connected cities and paths
             currentHighlighted.connections.forEach(conn => {
-                const connectedCity = document.querySelector(\`[data-city-id="\${conn.connectedCityId}"]\`);
+                const connectedCity = document.querySelector(\`#cities [data-city-id="\${conn.connectedCityId}"]\`);
+                const connectedLabel = document.querySelector(\`#labels [data-city-id="\${conn.connectedCityId}"]\`);
                 if (connectedCity) {
                     connectedCity.removeAttribute('data-highlight');
+                }
+                if (connectedLabel) {
+                    connectedLabel.removeAttribute('data-highlight');
                 }
                 
                 const path = document.querySelector(\`[data-path-index="\${conn.pathIndex}"]\`);
