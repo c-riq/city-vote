@@ -202,6 +202,144 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
 }
 
 /**
+ * Generate great circle path points between two coordinates
+ */
+function generateGreatCirclePath(lat1, lon1, lat2, lon2, numPoints = 20) {
+  // Check if the path crosses the 180th meridian
+  const lonDiff = Math.abs(lon2 - lon1);
+  const crossesDateLine = lonDiff > 180;
+  
+  
+  // If crossing the date line, create two separate path segments
+  if (crossesDateLine) {
+    return generateDateLineCrossingPath(lat1, lon1, lat2, lon2, numPoints);
+  }
+  
+  // Normal case - no date line crossing
+  return generateGreatCircleSegment(lat1, lon1, lat2, lon2, numPoints);
+}
+
+/**
+ * Generate path that crosses the date line as two separate segments
+ */
+function generateDateLineCrossingPath(lat1, lon1, lat2, lon2, numPoints) {
+  // Determine which way is shorter around the globe
+  const eastwardDistance = lon2 > lon1 ? lon2 - lon1 : (360 + lon2) - lon1;
+  const westwardDistance = lon1 > lon2 ? lon1 - lon2 : (360 + lon1) - lon2;
+  
+  // Choose the shorter path
+  if (eastwardDistance <= westwardDistance) {
+    // Go eastward, crossing 180 to -180
+    if (lon1 > lon2) {
+      // Adjust lon2 to be on the correct side
+      lon2 += 360;
+    }
+  } else {
+    // Go westward, crossing -180 to 180
+    if (lon2 > lon1) {
+      // Adjust lon1 to be on the correct side
+      lon1 += 360;
+    }
+  }
+  
+  // Now generate the path normally with adjusted coordinates
+  const points = generateGreatCircleSegment(lat1, lon1, lat2, lon2, numPoints);
+  
+  // Normalize longitudes back to -180 to 180 range
+  return points.map(([lon, lat]) => {
+    while (lon > 180) lon -= 360;
+    while (lon < -180) lon += 360;
+    return [lon, lat];
+  });
+}
+
+/**
+ * Generate great circle segment without date line crossing
+ */
+function generateGreatCircleSegment(lat1, lon1, lat2, lon2, numPoints) {
+  const points = [];
+  
+  // Convert to radians
+  const lat1Rad = lat1 * Math.PI / 180;
+  const lon1Rad = lon1 * Math.PI / 180;
+  const lat2Rad = lat2 * Math.PI / 180;
+  const lon2Rad = lon2 * Math.PI / 180;
+  
+  // Calculate the angular distance
+  const d = Math.acos(Math.max(-1, Math.min(1,
+    Math.sin(lat1Rad) * Math.sin(lat2Rad) +
+    Math.cos(lat1Rad) * Math.cos(lat2Rad) * Math.cos(lon2Rad - lon1Rad)
+  )));
+  
+  // If points are very close, just return straight line
+  if (d < 0.01) {
+    points.push([lon1, lat1]);
+    points.push([lon2, lat2]);
+    return points;
+  }
+  
+  for (let i = 0; i <= numPoints; i++) {
+    const f = i / numPoints;
+    
+    const A = Math.sin((1 - f) * d) / Math.sin(d);
+    const B = Math.sin(f * d) / Math.sin(d);
+    
+    const x = A * Math.cos(lat1Rad) * Math.cos(lon1Rad) + B * Math.cos(lat2Rad) * Math.cos(lon2Rad);
+    const y = A * Math.cos(lat1Rad) * Math.sin(lon1Rad) + B * Math.cos(lat2Rad) * Math.sin(lon2Rad);
+    const z = A * Math.sin(lat1Rad) + B * Math.sin(lat2Rad);
+    
+    const lat = Math.atan2(z, Math.sqrt(x * x + y * y));
+    const lon = Math.atan2(y, x);
+    
+    points.push([lon * 180 / Math.PI, lat * 180 / Math.PI]);
+  }
+  
+  return points;
+}
+
+/**
+ * Convert great circle path to SVG path string, handling date line crossings
+ */
+function pathToSVG(points) {
+  if (points.length < 2) return '';
+  
+  let pathData = '';
+  let currentPath = '';
+  let lastX = null;
+  
+  for (let i = 0; i < points.length; i++) {
+    const [lon, lat] = points[i];
+    const x = (lon + 180) * (800 / 360);
+    const y = (90 - lat) * (400 / 180);
+    
+    // Check for large jumps in X coordinate (date line crossing)
+    if (lastX !== null && Math.abs(x - lastX) > 400) {
+      // End current path and start a new one
+      if (currentPath) {
+        pathData += currentPath;
+        currentPath = '';
+      }
+      currentPath += ` M ${x} ${y}`;
+    } else {
+      if (i === 0 || currentPath === '') {
+        currentPath += `M ${x} ${y}`;
+      } else {
+        currentPath += ` L ${x} ${y}`;
+      }
+    }
+    
+    lastX = x;
+  }
+  
+  // Add the final path segment
+  if (currentPath) {
+    pathData += currentPath;
+  }
+  
+  return pathData;
+}
+
+/**
  * Generate HTML visualization
  */
 function generateHTML(cities, connections, citiesWithSisters) {
@@ -319,47 +457,25 @@ function generateHTML(cities, connections, citiesWithSisters) {
             <!-- World map background -->
             <rect width="800" height="400" fill="#e3f2fd"/>
             
-            <!-- Simplified world map -->
-            <g id="countries" fill="#cfd8dc" stroke="#90a4ae" stroke-width="0.5">
-                <!-- Simplified continent shapes -->
-                <path d="M 100 100 L 300 80 L 350 150 L 280 200 L 120 180 Z" opacity="0.7"/>
-                <path d="M 400 120 L 600 100 L 650 180 L 580 220 L 420 200 Z" opacity="0.7"/>
-                <path d="M 150 250 L 250 240 L 280 300 L 200 320 L 160 290 Z" opacity="0.7"/>
-                <path d="M 500 250 L 650 240 L 680 300 L 550 320 L 510 290 Z" opacity="0.7"/>
-                <path d="M 50 300 L 150 290 L 180 350 L 100 370 L 60 340 Z" opacity="0.7"/>
-                <path d="M 600 300 L 750 290 L 780 350 L 650 370 L 610 340 Z" opacity="0.7"/>
-            </g>
             
             <!-- Sister city connections -->
             <g id="connections">
                 ${connections.map(conn => {
-                    const x1 = (conn.from.longitude + 180) * (800 / 360);
-                    const y1 = (90 - conn.from.latitude) * (400 / 180);
-                    const x2 = (conn.to.longitude + 180) * (800 / 360);
-                    const y2 = (90 - conn.to.latitude) * (400 / 180);
+                    const pathPoints = generateGreatCirclePath(
+                        conn.from.latitude, conn.from.longitude,
+                        conn.to.latitude, conn.to.longitude,
+                        Math.max(5, Math.min(20, Math.floor(conn.distance / 500)))
+                    );
                     
-                    return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" 
-                                  stroke="#ff5722" stroke-width="1" opacity="0.6"
-                                  data-from="${conn.from.name}" data-to="${conn.to.name}" 
+                    const pathData = pathToSVG(pathPoints);
+                    
+                    
+                    return `<path d="${pathData}"
+                                  stroke="#1a237e" stroke-width="0.5" opacity="0.2" fill="none"
+                                  data-from="${conn.from.name}" data-to="${conn.to.name}"
                                   data-distance="${Math.round(conn.distance)}">
                                 <title>${conn.from.name} ↔ ${conn.to.name} (${Math.round(conn.distance)} km)</title>
-                            </line>`;
-                }).join('')}
-            </g>
-            
-            <!-- Cities -->
-            <g id="cities">
-                ${citiesArray.map(city => {
-                    const x = (city.longitude + 180) * (800 / 360);
-                    const y = (90 - city.latitude) * (400 / 180);
-                    const size = Math.max(3, Math.min(8, (city.population || 100000) / 500000));
-                    
-                    return `<circle cx="${x}" cy="${y}" r="${size}" 
-                                   fill="#1a237e" stroke="white" stroke-width="1" opacity="0.8"
-                                   data-city="${city.name}" data-country="${city.country}" 
-                                   data-population="${city.population || 'Unknown'}">
-                                <title>${city.name} (${city.population ? city.population.toLocaleString() : 'Unknown population'})</title>
-                            </circle>`;
+                            </path>`;
                 }).join('')}
             </g>
         </svg>
@@ -387,25 +503,14 @@ function generateHTML(cities, connections, citiesWithSisters) {
     
     <script>
         // Add interactivity
-        document.querySelectorAll('#connections line').forEach(line => {
-            line.addEventListener('mouseenter', function() {
-                this.style.strokeWidth = '2';
-                this.style.opacity = '1';
-            });
-            line.addEventListener('mouseleave', function() {
+        document.querySelectorAll('#connections path').forEach(path => {
+            path.addEventListener('mouseenter', function() {
                 this.style.strokeWidth = '1';
                 this.style.opacity = '0.6';
             });
-        });
-        
-        document.querySelectorAll('#cities circle').forEach(circle => {
-            circle.addEventListener('mouseenter', function() {
-                this.style.r = parseFloat(this.getAttribute('r')) * 1.5;
-                this.style.opacity = '1';
-            });
-            circle.addEventListener('mouseleave', function() {
-                this.style.r = parseFloat(this.getAttribute('r')) / 1.5;
-                this.style.opacity = '0.8';
+            path.addEventListener('mouseleave', function() {
+                this.style.strokeWidth = '0.5';
+                this.style.opacity = '0.1';
             });
         });
     </script>
