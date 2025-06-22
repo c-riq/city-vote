@@ -790,7 +790,7 @@ function generateHTML(cities, connections, citiesWithSisters) {
             <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
                 <p style="margin: 0; font-size: 12px; color: #666;">Generated: ${new Date().toISOString().split('T')[0]} • Data source: Wikidata P190 (sister city relationships)</p>
                 <a href="https://city-vote.com/about" target="_blank" style="display: flex; align-items: center; text-decoration: none; color: #1a237e;">
-                    <img src="../frontend/public/img/logo.png" alt="City Vote" style="height: 18px; margin-right: 6px;">
+                    <img src="img/logo.png" alt="City Vote" style="height: 18px; margin-right: 6px;">
                     <span style="font-size: 12px; font-weight: bold;">City Vote</span>
                 </a>
             </div>
