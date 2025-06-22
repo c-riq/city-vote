@@ -803,6 +803,201 @@ function generateHTML(cities, connections, citiesWithSisters) {
         const svg = document.getElementById('map');
         let currentHighlighted = null;
         
+        // SVG zoom and pan functionality
+        let isZooming = false;
+        let isPanning = false;
+        let startX, startY;
+        let scale = 1;
+        let translateX = 0;
+        let translateY = 0;
+        
+        // Create a group element to contain all map content for transformations
+        const mapGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        mapGroup.id = 'mapGroup';
+        
+        // Move all existing content into the group
+        const existingContent = Array.from(svg.children);
+        existingContent.forEach(child => {
+            if (child.tagName !== 'defs') {
+                mapGroup.appendChild(child);
+            }
+        });
+        svg.appendChild(mapGroup);
+        
+        function updateTransform() {
+            mapGroup.setAttribute('transform', \`translate(\${translateX}, \${translateY}) scale(\${scale})\`);
+            
+            // Adjust visual elements based on zoom level
+            const inverseScale = 1 / scale;
+            const minStrokeWidth = 0.2;
+            const maxStrokeWidth = 1;
+            
+            // Adjust connection line thickness
+            document.querySelectorAll('.connection-path').forEach(path => {
+                const baseWidth = path.classList.contains('filtered-connection') ? 1 : 0.5;
+                const newWidth = Math.max(minStrokeWidth, Math.min(maxStrokeWidth, baseWidth * inverseScale));
+                path.style.strokeWidth = newWidth;
+            });
+            
+            // Adjust highlighted connection lines
+            document.querySelectorAll('.connection-path[data-highlight="true"]').forEach(path => {
+                const newWidth = Math.max(minStrokeWidth, Math.min(maxStrokeWidth, 1 * inverseScale));
+                path.style.strokeWidth = newWidth;
+            });
+            
+            // Adjust city circle sizes - only make smaller when zoomed in, not larger when zoomed out
+            document.querySelectorAll('.city-circle').forEach(circle => {
+                const baseRadius = parseFloat(circle.getAttribute('data-base-radius')) || parseFloat(circle.getAttribute('r')) || 2;
+                if (!circle.hasAttribute('data-base-radius')) {
+                    circle.setAttribute('data-base-radius', baseRadius);
+                }
+                
+                // Only apply scaling if zoomed in (scale > 1), otherwise keep original size
+                if (scale > 1) {
+                    // Very aggressive scaling for high zoom levels
+                    let scaleFactor = inverseScale;
+                    if (scale > 4) {
+                        // Extreme reduction for very high zoom levels
+                        scaleFactor = scaleFactor * 0.4;
+                    } else if (scale > 3) {
+                        // Heavy reduction for high zoom levels
+                        scaleFactor = scaleFactor * 0.5;
+                    } else if (scale > 2) {
+                        // Moderate reduction for medium zoom levels
+                        scaleFactor = scaleFactor * 0.7;
+                    } else {
+                        // Light reduction for low zoom levels
+                        scaleFactor = scaleFactor * 0.85;
+                    }
+                    const newRadius = Math.max(0.2, baseRadius * scaleFactor);
+                    circle.setAttribute('r', newRadius);
+                } else {
+                    circle.setAttribute('r', baseRadius);
+                }
+            });
+            
+            // Adjust city label font sizes - only make smaller when zoomed in
+            document.querySelectorAll('.city-label').forEach(label => {
+                const baseFontSize = 9;
+                const scaleFactor = scale > 1 ? inverseScale : 1;
+                const newFontSize = Math.max(6, baseFontSize * scaleFactor);
+                label.style.fontSize = newFontSize + 'px';
+                
+                // Adjust stroke width for labels
+                const newStrokeWidth = Math.max(0.3, 0.8 * scaleFactor);
+                label.style.strokeWidth = newStrokeWidth;
+            });
+        }
+        
+        // Mouse wheel zoom
+        svg.addEventListener('wheel', function(e) {
+            e.preventDefault();
+            const rect = svg.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+            
+            const zoomFactor = e.deltaY > 0 ? 0.9 : 1.1;
+            const newScale = Math.max(0.5, Math.min(5, scale * zoomFactor));
+            
+            if (newScale !== scale) {
+                // Zoom towards mouse position
+                const scaleChange = newScale / scale;
+                translateX = mouseX - (mouseX - translateX) * scaleChange;
+                translateY = mouseY - (mouseY - translateY) * scaleChange;
+                scale = newScale;
+                updateTransform();
+            }
+        });
+        
+        // Mouse drag pan
+        svg.addEventListener('mousedown', function(e) {
+            if (e.button === 0) { // Left mouse button
+                isPanning = true;
+                startX = e.clientX - translateX;
+                startY = e.clientY - translateY;
+                svg.style.cursor = 'grabbing';
+            }
+        });
+        
+        document.addEventListener('mousemove', function(e) {
+            if (isPanning) {
+                translateX = e.clientX - startX;
+                translateY = e.clientY - startY;
+                updateTransform();
+            }
+        });
+        
+        document.addEventListener('mouseup', function(e) {
+            if (isPanning) {
+                isPanning = false;
+                svg.style.cursor = 'grab';
+            }
+        });
+        
+        // Touch support for mobile
+        let lastTouchDistance = 0;
+        
+        svg.addEventListener('touchstart', function(e) {
+            if (e.touches.length === 1) {
+                isPanning = true;
+                startX = e.touches[0].clientX - translateX;
+                startY = e.touches[0].clientY - translateY;
+            } else if (e.touches.length === 2) {
+                isPanning = false;
+                const touch1 = e.touches[0];
+                const touch2 = e.touches[1];
+                lastTouchDistance = Math.sqrt(
+                    Math.pow(touch2.clientX - touch1.clientX, 2) +
+                    Math.pow(touch2.clientY - touch1.clientY, 2)
+                );
+            }
+            e.preventDefault();
+        });
+        
+        svg.addEventListener('touchmove', function(e) {
+            if (e.touches.length === 1 && isPanning) {
+                translateX = e.touches[0].clientX - startX;
+                translateY = e.touches[0].clientY - startY;
+                updateTransform();
+            } else if (e.touches.length === 2) {
+                const touch1 = e.touches[0];
+                const touch2 = e.touches[1];
+                const currentDistance = Math.sqrt(
+                    Math.pow(touch2.clientX - touch1.clientX, 2) +
+                    Math.pow(touch2.clientY - touch1.clientY, 2)
+                );
+                
+                if (lastTouchDistance > 0) {
+                    const zoomFactor = currentDistance / lastTouchDistance;
+                    const newScale = Math.max(0.5, Math.min(5, scale * zoomFactor));
+                    
+                    if (newScale !== scale) {
+                        const centerX = (touch1.clientX + touch2.clientX) / 2;
+                        const centerY = (touch1.clientY + touch2.clientY) / 2;
+                        const rect = svg.getBoundingClientRect();
+                        const mouseX = centerX - rect.left;
+                        const mouseY = centerY - rect.top;
+                        
+                        const scaleChange = newScale / scale;
+                        translateX = mouseX - (mouseX - translateX) * scaleChange;
+                        translateY = mouseY - (mouseY - translateY) * scaleChange;
+                        scale = newScale;
+                        updateTransform();
+                    }
+                }
+                lastTouchDistance = currentDistance;
+            }
+            e.preventDefault();
+        });
+        
+        svg.addEventListener('touchend', function(e) {
+            isPanning = false;
+            lastTouchDistance = 0;
+        });
+        
+        // Set initial cursor
+        svg.style.cursor = 'grab';
+        
         // Single event listener using event delegation
         svg.addEventListener('mouseover', function(e) {
             // Check if we're hovering over a city circle or label
