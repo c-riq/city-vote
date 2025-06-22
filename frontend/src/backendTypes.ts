@@ -322,6 +322,8 @@ export interface AuthUserProfile {
   sessions: string[];
   emailVerified: boolean;
   emailVerificationToken?: string;
+  passwordResetToken?: string;
+  passwordResetExpiry?: string;
   isAdmin?: boolean;
   representingCityNetwork?: string;
   phoneVerification?: {
@@ -385,6 +387,24 @@ export interface AuthGetAllUsersRequest extends AuthBaseRequest {
   sessionToken: string;
 }
 
+export interface AuthChangePasswordRequest extends AuthBaseRequest {
+  action: 'changePassword';
+  sessionToken: string;
+  currentPassword: string;
+  newPassword: string;
+}
+
+export interface AuthForgotPasswordRequest extends AuthBaseRequest {
+  action: 'forgotPassword';
+  // email is inherited from AuthBaseRequest
+}
+
+export interface AuthResetPasswordRequest extends AuthBaseRequest {
+  action: 'resetPassword';
+  resetToken: string;
+  newPassword: string;
+}
+
 export interface AuthAddCityVerificationRequest extends AuthBaseRequest {
   action: 'addCityVerification';
   sessionToken: string;
@@ -394,7 +414,6 @@ export interface AuthAddCityVerificationRequest extends AuthBaseRequest {
     title: string;
     isAuthorisedRepresentative: boolean;
     confidence: number;
-    identityVerifiedBy: string;
     time: string;
   };
 }
@@ -436,6 +455,18 @@ export interface AuthUpdatePhoneVerificationResponse extends AuthBaseResponse {
     token: string;
     timestamp: string;
   };
+}
+
+export interface AuthChangePasswordResponse extends AuthBaseResponse {
+  // No additional fields needed beyond the base response
+}
+
+export interface AuthForgotPasswordResponse extends AuthBaseResponse {
+  // No additional fields needed beyond the base response
+}
+
+export interface AuthResetPasswordResponse extends AuthBaseResponse {
+  // No additional fields needed beyond the base response
 }
 
 export interface AuthErrorResponse extends AuthBaseResponse {
