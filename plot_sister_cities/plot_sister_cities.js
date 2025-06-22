@@ -787,7 +787,13 @@ function generateHTML(cities, connections, citiesWithSisters) {
         
         <div class="info">
             <p style="margin: 0 0 10px 0; font-size: 14px;">Sister city relationships from <a href="https://www.wikidata.org" target="_blank">Wikidata</a>. Hover over cities to see connections. Circle size indicates connection count.</p>
-            <p style="margin: 0; font-size: 12px; color: #666;">Generated: ${new Date().toISOString().split('T')[0]} • Data source: Wikidata P190 (sister city relationships)</p>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+                <p style="margin: 0; font-size: 12px; color: #666;">Generated: ${new Date().toISOString().split('T')[0]} • Data source: Wikidata P190 (sister city relationships)</p>
+                <a href="https://city-vote.com/about" target="_blank" style="display: flex; align-items: center; text-decoration: none; color: #1a237e;">
+                    <img src="../frontend/public/img/logo.png" alt="City Vote" style="height: 18px; margin-right: 6px;">
+                    <span style="font-size: 12px; font-weight: bold;">City Vote</span>
+                </a>
+            </div>
         </div>
     </div>
     
