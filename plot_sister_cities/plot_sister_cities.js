@@ -527,7 +527,7 @@ function generateHTML(cities, connections, citiesWithSisters) {
         body {
             font-family: Arial, sans-serif;
             margin: 0;
-            padding: 20px;
+            padding: 10px;
             background-color: #f5f5f5;
         }
         .container {
@@ -538,16 +538,20 @@ function generateHTML(cities, connections, citiesWithSisters) {
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             overflow: hidden;
         }
+        .map-container {
+            margin: 0;
+            padding: 0;
+        }
         .header {
             background: #1a237e;
             color: white;
-            padding: 20px;
+            padding: 12px;
             text-align: center;
         }
         .stats {
             display: flex;
             justify-content: space-around;
-            padding: 20px;
+            padding: 8px;
             background: #f8f9fa;
             border-bottom: 1px solid #dee2e6;
         }
@@ -555,27 +559,34 @@ function generateHTML(cities, connections, citiesWithSisters) {
             text-align: center;
         }
         .stat-number {
-            font-size: 2em;
+            font-size: 1.4em;
             font-weight: bold;
             color: #1a237e;
         }
         .stat-label {
             color: #666;
-            margin-top: 5px;
+            margin-top: 2px;
+            font-size: 12px;
         }
         #map {
             width: 100%;
-            height: 600px;
+            height: auto;
+            max-height: 60vh;
             border: none;
         }
+        @media (max-width: 768px) {
+            #map {
+                max-height: 50vh;
+            }
+        }
         .controls {
-            padding: 20px;
+            padding: 15px;
             border-top: 1px solid #dee2e6;
             background: #f8f9fa;
         }
         .info {
-            padding: 20px;
-            line-height: 1.6;
+            padding: 15px;
+            line-height: 1.5;
         }
         
         /* Efficient CSS-only highlighting using data attributes */
@@ -651,56 +662,58 @@ function generateHTML(cities, connections, citiesWithSisters) {
 <body>
     <div class="container">
         <div class="header">
-            <h1>Sister Cities Network</h1>
-            <p>Sister city relationships from Wikidata - Hover over cities to see their connections</p>
-            <p><small>Displaying ${citiesArray.length} cities with documented sister city relationships</small></p>
+            <h2 style="margin: 0 0 8px 0;">Sister Cities Network</h2>
+            <p style="margin: 0; font-size: 14px;">Data from <a href="https://www.wikidata.org" target="_blank" style="color: #90caf9;">Wikidata</a> • Hover over cities to see connections</p>
         </div>
         
         <div class="controls">
-            <h4>Filters</h4>
-            <div style="display: flex; gap: 20px; margin-bottom: 15px; flex-wrap: wrap;">
-                <div style="flex: 1; min-width: 250px;">
-                    <label for="cityFilter" style="display: block; margin-bottom: 5px; font-weight: bold;">Filter by City:</label>
-                    <input type="text" id="cityFilter" placeholder="Type exact city name..."
-                           style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
-                    <div id="cityAutocomplete" style="position: relative; background: white; border: 1px solid #ddd; border-top: none; max-height: 200px; overflow-y: auto; display: none;"></div>
+            <div style="display: flex; gap: 15px; margin-bottom: 10px; flex-wrap: wrap; align-items: end;">
+                <div style="flex: 1; min-width: 200px;">
+                    <label for="cityFilter" style="display: block; margin-bottom: 3px; font-size: 13px; font-weight: bold;">Filter by City:</label>
+                    <input type="text" id="cityFilter" placeholder="Type city name..."
+                           style="width: 100%; padding: 6px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px;">
+                    <div id="cityAutocomplete" style="position: relative; background: white; border: 1px solid #ddd; border-top: none; max-height: 150px; overflow-y: auto; display: none; font-size: 13px;"></div>
                 </div>
-                <div style="flex: 1; min-width: 250px;">
-                    <label for="countryFilter" style="display: block; margin-bottom: 5px; font-weight: bold;">Filter by Country:</label>
-                    <select id="countryFilter" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                <div style="flex: 1; min-width: 200px;">
+                    <label for="countryFilter" style="display: block; margin-bottom: 3px; font-size: 13px; font-weight: bold;">Filter by Country:</label>
+                    <select id="countryFilter" style="width: 100%; padding: 6px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px;">
                         <option value="">All Countries</option>
                         ${countries.map(country => `<option value="${country[4]}">${country[0]}</option>`).join('')}
                     </select>
                 </div>
-                <div style="display: flex; align-items: end; gap: 10px;">
-                    <button id="clearFilters" style="padding: 8px 16px; background: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer;">Clear Filters</button>
+                <div>
+                    <button id="clearFilters" style="padding: 6px 12px; background: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 13px;">Clear</button>
                 </div>
             </div>
-            <div id="filterStatus" style="margin-bottom: 15px; font-style: italic; color: #666;"></div>
-            <div style="margin-bottom: 15px;">
-                <strong>Filter Legend:</strong>
-                <span style="color: #ff5722;">● Matches filter</span> |
-                <span style="color: #2196f3;">● Connected cities</span> |
-                <span style="color: #1a237e;">● Other cities</span>
+            <div style="font-size: 12px;">
+                <span style="color: #ff5722;">● Matches</span> | <span style="color: #2196f3;">● Connected</span> | <span style="color: #1a237e;">● Other</span>
             </div>
         </div>
         
         <div class="stats">
             <div class="stat">
-                <div class="stat-number">${citiesArray.length}</div>
+                <div class="stat-number" id="totalCities">${citiesArray.length}</div>
                 <div class="stat-label">Cities with Sister Cities</div>
             </div>
             <div class="stat">
-                <div class="stat-number">${connections.length}</div>
+                <div class="stat-number" id="totalConnections">${connections.length}</div>
                 <div class="stat-label">Sister City Connections</div>
             </div>
             <div class="stat">
-                <div class="stat-number">${Math.round(connections.reduce((sum, c) => sum + c.distance, 0) / connections.length)}</div>
-                <div class="stat-label">Average Distance (km)</div>
+                <div class="stat-number" id="totalPopulation">${(() => {
+                    const totalPop = citiesArray.reduce((sum, city) => sum + (city.population || 0), 0);
+                    if (totalPop >= 1000000000) {
+                        return (totalPop / 1000000000).toFixed(1) + 'B';
+                    } else {
+                        return Math.round(totalPop / 1000000) + 'M';
+                    }
+                })()}</div>
+                <div class="stat-label">Total Population</div>
             </div>
         </div>
         
-        <svg id="map" viewBox="0 0 800 400">
+        <div class="map-container">
+            <svg id="map" viewBox="0 0 800 400" preserveAspectRatio="xMidYMid meet">
             <!-- World map background -->
             <rect width="800" height="400" fill="#e3f2fd"/>
             
@@ -757,78 +770,24 @@ function generateHTML(cities, connections, citiesWithSisters) {
                 }).join('')}
             </g>
         </svg>
+        </div>
         
-        <div id="hoverInfo" style="padding: 15px; background: #f8f9fa; border: 1px solid #dee2e6; margin: 10px 0; min-height: 60px; display: none;">
-            <h4 style="margin: 0 0 10px 0;">City Information</h4>
-            <div style="display: flex; gap: 30px;">
+        <div id="hoverInfo" style="padding: 12px; background: #f8f9fa; border: 1px solid #dee2e6; margin: 8px 0; min-height: 50px; display: none;">
+            <div style="display: flex; gap: 20px;">
                 <div style="flex: 1;">
-                    <strong>Hovered City:</strong>
-                    <div id="hoveredCity" style="margin-top: 5px; font-size: 14px;"></div>
+                    <strong style="font-size: 13px;">Hovered City:</strong>
+                    <div id="hoveredCity" style="margin-top: 3px; font-size: 13px;"></div>
                 </div>
                 <div style="flex: 2;">
-                    <strong>Sister Cities:</strong>
-                    <div id="sisterCities" style="margin-top: 5px; font-size: 14px; max-height: 100px; overflow-y: auto;"></div>
+                    <strong style="font-size: 13px;">Sister Cities:</strong>
+                    <div id="sisterCities" style="margin-top: 3px; font-size: 13px; max-height: 80px; overflow-y: auto;"></div>
                 </div>
             </div>
         </div>
         
         <div class="info">
-            <h3>Sister City Connections</h3>
-            <p>This visualization shows sister city relationships from Wikidata. Hover over any city to see its connections highlighted.</p>
-            <p><strong>Complete dataset:</strong> All ${citiesArray.length} cities with sister city relationships are displayed.</p>
-            
-            <div style="margin-top: 20px;">
-                <h4>Legend</h4>
-                <div style="display: flex; gap: 30px; flex-wrap: wrap;">
-                    <div>
-                        <h5 style="margin: 10px 0 5px 0;">City Circles</h5>
-                        <div style="display: flex; align-items: center; gap: 10px; margin: 5px 0;">
-                            <svg width="20" height="20">
-                                <circle cx="10" cy="10" r="2" fill="#1a237e" opacity="0.8"/>
-                            </svg>
-                            <span>Few connections (1-2)</span>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 10px; margin: 5px 0;">
-                            <svg width="20" height="20">
-                                <circle cx="10" cy="10" r="3" fill="#1a237e" opacity="0.8"/>
-                            </svg>
-                            <span>Some connections (3-5)</span>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 10px; margin: 5px 0;">
-                            <svg width="20" height="20">
-                                <circle cx="10" cy="10" r="4" fill="#1a237e" opacity="0.8"/>
-                            </svg>
-                            <span>Many connections (6+)</span>
-                        </div>
-                    </div>
-                    
-                    <div>
-                        <h5 style="margin: 10px 0 5px 0;">Connection Lines</h5>
-                        <div style="display: flex; align-items: center; gap: 10px; margin: 5px 0;">
-                            <svg width="30" height="20">
-                                <path d="M5 10 L25 10" stroke="#1a237e" stroke-width="0.5" opacity="0.2"/>
-                            </svg>
-                            <span>Sister city relationship</span>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 10px; margin: 5px 0;">
-                            <svg width="30" height="20">
-                                <path d="M5 10 L25 10" stroke="#ff5722" stroke-width="4" opacity="0.9"/>
-                            </svg>
-                            <span>Highlighted connection</span>
-                        </div>
-                        <div style="margin: 5px 0;">
-                            <small><em>Lines follow great circle paths (shortest distance on globe)</em></small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="info">
-            <h3>About This Visualization</h3>
-            <p>This visualization shows sister city relationships documented in Wikidata. The data may not be complete as it depends on community contributions to Wikidata.</p>
-            <p><strong>Data Source:</strong> Wikidata sister city relationships (P190)</p>
-            <p><strong>Generated:</strong> ${new Date().toISOString().split('T')[0]}</p>
+            <p style="margin: 0 0 10px 0; font-size: 14px;">Sister city relationships from <a href="https://www.wikidata.org" target="_blank">Wikidata</a>. Hover over cities to see connections. Circle size indicates connection count.</p>
+            <p style="margin: 0; font-size: 12px; color: #666;">Generated: ${new Date().toISOString().split('T')[0]} • Data source: Wikidata P190 (sister city relationships)</p>
         </div>
     </div>
     
@@ -972,7 +931,6 @@ function generateHTML(cities, connections, citiesWithSisters) {
         const cityFilter = document.getElementById('cityFilter');
         const countryFilter = document.getElementById('countryFilter');
         const clearFiltersBtn = document.getElementById('clearFilters');
-        const filterStatus = document.getElementById('filterStatus');
         const cityAutocomplete = document.getElementById('cityAutocomplete');
         
         // City autocomplete functionality
@@ -1194,7 +1152,12 @@ function generateHTML(cities, connections, citiesWithSisters) {
         
         function updateFilterStatus() {
             if (!isFiltered) {
-                filterStatus.textContent = '';
+                // Reset to original stats
+                document.getElementById('totalCities').textContent = '${citiesArray.length}';
+                document.getElementById('totalConnections').textContent = '${connections.length}';
+                const totalPop = ${citiesArray.reduce((sum, city) => sum + (city.population || 0), 0)};
+                const popDisplay = totalPop >= 1000000000 ? (totalPop / 1000000000).toFixed(1) + 'B' : Math.round(totalPop / 1000000) + 'M';
+                document.getElementById('totalPopulation').textContent = popDisplay;
                 return;
             }
             
@@ -1203,7 +1166,19 @@ function generateHTML(cities, connections, citiesWithSisters) {
                 filteredCities.has(conn.from.id) || filteredCities.has(conn.to.id)
             ).length;
             
-            filterStatus.textContent = \`Showing \${visibleCities} cities and \${visibleConnections} connections (filtered from \${allCities.length} cities and \${allConnections.length} connections)\`;
+            // Calculate filtered population
+            const filteredPopulation = Array.from(filteredCities).reduce((sum, cityId) => {
+                const city = allCities.find(c => c.id === cityId);
+                return sum + (city?.population || 0);
+            }, 0);
+            const filteredPopDisplay = filteredPopulation >= 1000000000 ?
+                (filteredPopulation / 1000000000).toFixed(1) + 'B' :
+                Math.round(filteredPopulation / 1000000) + 'M';
+            
+            // Update main stats to show filtered values
+            document.getElementById('totalCities').textContent = visibleCities;
+            document.getElementById('totalConnections').textContent = visibleConnections;
+            document.getElementById('totalPopulation').textContent = filteredPopDisplay;
         }
         
     </script>
