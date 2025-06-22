@@ -1200,7 +1200,7 @@ function generateHTML(cities, connections, citiesWithSisters) {
             
             const visibleCities = filteredCities.size;
             const visibleConnections = allConnections.filter(conn =>
-                filteredCities.has(conn.from.id) && filteredCities.has(conn.to.id)
+                filteredCities.has(conn.from.id) || filteredCities.has(conn.to.id)
             ).length;
             
             filterStatus.textContent = \`Showing \${visibleCities} cities and \${visibleConnections} connections (filtered from \${allCities.length} cities and \${allConnections.length} connections)\`;
