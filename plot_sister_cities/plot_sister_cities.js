@@ -1172,23 +1172,21 @@ function generateHTML(cities, connections, citiesWithSisters) {
                 }
             });
             
-            // Update connections - show connections between visible cities
+            // Update connections - only show connections that involve at least one matching city
             document.querySelectorAll('.connection-path').forEach(pathElement => {
                 const fromId = pathElement.getAttribute('data-from-id');
                 const toId = pathElement.getAttribute('data-to-id');
                 
-                const fromVisible = filteredCities.has(fromId) || connectedCities.has(fromId);
-                const toVisible = filteredCities.has(toId) || connectedCities.has(toId);
+                // Only show connections where at least one city matches the filter
+                const fromMatches = filteredCities.has(fromId);
+                const toMatches = filteredCities.has(toId);
+                const connectionInvolvesMatch = fromMatches || toMatches;
                 
-                if (fromVisible && toVisible) {
+                if (connectionInvolvesMatch) {
                     pathElement.style.display = 'block';
-                    // Highlight connections involving filtered cities
-                    if (filteredCities.has(fromId) || filteredCities.has(toId)) {
-                        pathElement.className = 'connection-path filtered-connection';
-                    } else {
-                        pathElement.className = 'connection-path';
-                    }
+                    pathElement.className = 'connection-path filtered-connection';
                 } else {
+                    // Hide connections between non-matching cities (even if they're visible as connected cities)
                     pathElement.style.display = 'none';
                 }
             });
