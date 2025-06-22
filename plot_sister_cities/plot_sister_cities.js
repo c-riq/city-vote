@@ -897,7 +897,7 @@ function generateHTML(cities, connections, citiesWithSisters) {
             const mouseY = e.clientY - rect.top;
             
             const zoomFactor = e.deltaY > 0 ? 0.9 : 1.1;
-            const newScale = Math.max(0.5, Math.min(5, scale * zoomFactor));
+            const newScale = Math.max(1.0, Math.min(5, scale * zoomFactor));
             
             if (newScale !== scale) {
                 // Zoom towards mouse position
@@ -969,7 +969,7 @@ function generateHTML(cities, connections, citiesWithSisters) {
                 
                 if (lastTouchDistance > 0) {
                     const zoomFactor = currentDistance / lastTouchDistance;
-                    const newScale = Math.max(0.5, Math.min(5, scale * zoomFactor));
+                    const newScale = Math.max(1.0, Math.min(5, scale * zoomFactor));
                     
                     if (newScale !== scale) {
                         const centerX = (touch1.clientX + touch2.clientX) / 2;
